@@ -11,6 +11,7 @@ namespace SpaceFab
 
         private void Start()
         {
+            DontDestroyOnLoad(this);
             SceneManager.LoadScene(m_FirstScene);
         }
     }

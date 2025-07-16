@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8077139945884778328}
   - component: {fileID: 3392961661134702050}
+  - component: {fileID: 4193450160006952466}
   m_Layer: 0
   m_Name: Boot
   m_TagString: Untagged
@@ -45,3 +46,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstScene: Title
+--- !u!114 &4193450160006952466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7270505331316502950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91ad058123d5feb48bb6503d794a905f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SingleFrameAllocBufferSize: 256
+  m_TargetFramerate: 60
+  m_DefaultLanguage:
+    m_Raw: 28261
+  m_DefaultPixelSprite: {fileID: 0}
+  m_AllowMultiTouchInput: 0
+  m_ReflectionData: {fileID: 0}
+  m_AudioConfig:
+    Is3D: 0
+    DefaultEmitterProfile: {fileID: 0}
+    PreloadWorkerTimeSlice: 0
+  m_MemoryConfig:
+    MeshCapacity: 16
+    MaterialCapacity: 16
+    UnmanagedBudgetMB: 2
+  m_GuiConfig:
+    FaderPrefab: {fileID: 0}
+  m_FileSystemConfig:
+    MaxInFlightRequests: 0
+    MaxRetryCount: 0
+    RetryDelay: 0
+  m_RenderConfig:
+    FallbackCamera: {fileID: 0}
+  m_GlobalAssetPacks: []
