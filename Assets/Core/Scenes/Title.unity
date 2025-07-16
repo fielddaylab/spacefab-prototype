@@ -279,8 +279,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5044273745549716929, guid: 67043a83a20504241bf0fca5dd9a32c0, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 5974906060304899783}
+    - target: {fileID: 5044273745549716929, guid: 67043a83a20504241bf0fca5dd9a32c0, type: 3}
       propertyPath: m_RenderMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6400519972205743984, guid: 67043a83a20504241bf0fca5dd9a32c0, type: 3}
       propertyPath: m_Name
@@ -348,6 +352,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 26ba46b8a2648664c8be1e6903b5daf9, type: 3}
+--- !u!20 &5974906060304899783 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 8846507215224620638, guid: 26ba46b8a2648664c8be1e6903b5daf9, type: 3}
+  m_PrefabInstance: {fileID: 5974906060304899782}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
