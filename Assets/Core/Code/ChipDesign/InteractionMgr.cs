@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace SpaceFab.ChipDesign
         public static InteractionMgr Instance;
 
         public GridInteractionLayer ActiveLayer { get; private set; }
+        public ToolType ActiveTool = ToolType.None;
 
         [SerializeField] private GameObject LinkPrefab;
         [HideInInspector] public Link CurrLink = null;
@@ -38,7 +40,7 @@ namespace SpaceFab.ChipDesign
 
         private void ProcessInteractions()
         {
-            switch (ToolbarMgr.Instance.ActiveTool)
+            switch (ActiveTool)
             {
                 case ToolType.None:
                     break;
@@ -76,6 +78,7 @@ namespace SpaceFab.ChipDesign
                         CurrLink = Instantiate(LinkPrefab).GetComponent<Link>();
                         CurrLink.transform.position = new Vector3(mousePos.x, mousePos.y, CurrLink.transform.position.z);
                         CurrLink.SideA = startNode;
+                        CurrLink.LineRenderer.SetPosition(0, CurrLink.transform.position);
                     }
                 }
                 else
@@ -90,8 +93,13 @@ namespace SpaceFab.ChipDesign
                 {
                     // update endpoint
                     var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    var offset = CurrLink.transform.InverseTransformPoint(mousePos);
-                    CurrLink.LineRenderer.SetPosition(1, new Vector3(offset.x, offset.y, 0));
+                    var mousePos2D = new Vector3(mousePos.x, mousePos.y, CurrLink.transform.position.z);
+                    CurrLink.LineRenderer.SetPosition(1, mousePos2D);
+
+                    // rotate box collider
+                    Vector3 relativePos = mousePos2D - CurrLink.transform.position;
+                    float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
+                    CurrLink.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
                 }
             }
              
@@ -106,7 +114,7 @@ namespace SpaceFab.ChipDesign
                         var endNode = hit.GetComponent<Node>();
                         if (endNode)
                         {
-                            FinalizeLink(CurrLink, endNode);
+                            FinalizeLink(CurrLink, endNode, new Vector3(mousePos.x, mousePos.y, CurrLink.transform.position.z));
                         }
                     }
                     else
@@ -124,7 +132,22 @@ namespace SpaceFab.ChipDesign
 
         private void ProcessEraseLinks()
         {
-
+            if (Input.GetMouseButtonDown(0))
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Links"));
+                if (hit != null)
+                {
+                    Debug.Log("valid link to erase");
+                    var toErase = hit.GetComponent<Link>();
+                    DeleteLink(toErase);
+                }
+                else
+                {
+                    Debug.Log("invalid link to erase");
+                }
+            }
         }
 
         #endregion // Interactions
@@ -139,13 +162,30 @@ namespace SpaceFab.ChipDesign
             Destroy(link.gameObject);
         }
 
-        private void FinalizeLink(Link link, Node end)
+        private void FinalizeLink(Link link, Node end, Vector3 endPos)
         {
             link.SideB = end;
             CurrLink = null;
+            link.EndAnchor.position = endPos;
+
+            // adjust collider
+            link.Collider.size = new Vector2(Vector3.Distance(link.StartAnchor.position, link.EndAnchor.position), link.LineRenderer.startWidth);
+            var offset = link.Collider.offset;
+            offset.x = link.Collider.size.x / 2;
+            link.Collider.offset = offset;
         }
 
         #endregion // Helpers
+
+        #region Tools
+
+        public void SetActiveTool(ToolType tool)
+        {
+            ActiveTool = tool;
+            Game.Events.Dispatch(GameEvents.OnToolChanged);
+        }
+
+        #endregion // Tools
 
         #region Layers
 

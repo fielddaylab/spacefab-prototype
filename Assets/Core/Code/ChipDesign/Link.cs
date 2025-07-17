@@ -9,6 +9,11 @@ namespace SpaceFab.ChipDesign
         public Node SideA;
         public Node SideB;
 
+        public Transform StartAnchor;
+        public Transform EndAnchor;
+
+        public BoxCollider2D Collider;
+
         public LineRenderer LineRenderer;
     }
 }

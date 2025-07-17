@@ -11,6 +11,8 @@ namespace SpaceFab.ChipDesign
     public enum ToolType
     {
         None,
+        DrawNNodes,
+        DrawPNodes,
         DrawLinks,
         Erase
     }
@@ -19,10 +21,23 @@ namespace SpaceFab.ChipDesign
     {
         public static ToolbarMgr Instance;
 
+
+        [Header("Layer")]
         [SerializeField] private Button LayerButton;
         [SerializeField] private TMP_Text LayerText;
+        [SerializeField] private TMP_Text LayerLabelText;
 
-        public ToolType ActiveTool = ToolType.None;
+        [Header("Common")]
+        [SerializeField] private Button EraseButton;
+
+        [Header("Nodes")]
+        [SerializeField] private GameObject DrawNodesGroup;
+        [SerializeField] private Button DrawNNodesButton;
+        [SerializeField] private Button DrawPNodesButton;
+
+        [Header("Links")]
+        [SerializeField] private GameObject DrawLinksGroup;
+        [SerializeField] private Button DrawLinksButton;
 
         private void Awake()
         {
@@ -30,6 +45,10 @@ namespace SpaceFab.ChipDesign
 
             Game.Events.Register(GameEvents.OnLayerChanged, HandleLayerChanged);
             LayerButton.onClick.AddListener(HandleLayerClicked);
+            DrawNNodesButton.onClick.AddListener(HandleDrawNNodesClicked);
+            DrawPNodesButton.onClick.AddListener(HandleDrawPNodesClicked);
+            EraseButton.onClick.AddListener(HandleEraseClicked);
+            DrawLinksButton.onClick.AddListener(HandleDrawLinksClicked);
         }
 
         private void OnDestroy()
@@ -38,6 +57,10 @@ namespace SpaceFab.ChipDesign
 
             Game.Events.Deregister(GameEvents.OnLayerChanged, HandleLayerChanged);
             LayerButton.onClick.RemoveListener(HandleLayerClicked);
+            DrawNNodesButton.onClick.RemoveListener(HandleDrawNNodesClicked);
+            DrawPNodesButton.onClick.RemoveListener(HandleDrawPNodesClicked);
+            EraseButton.onClick.RemoveListener(HandleEraseClicked);
+            DrawLinksButton.onClick.RemoveListener(HandleDrawLinksClicked);
         }
 
         #region Handlers
@@ -53,13 +76,40 @@ namespace SpaceFab.ChipDesign
             {
                 case GridInteractionLayer.Nodes:
                     LayerText.SetText("+");
+                    LayerLabelText.SetText("Nodes");
+                    DrawNodesGroup.SetActive(true);
+                    DrawLinksGroup.SetActive(false);
                     break;
                 case GridInteractionLayer.Links:
                     LayerText.SetText("-");
+                    LayerLabelText.SetText("Links");
+                    DrawNodesGroup.SetActive(false);
+                    DrawLinksGroup.SetActive(true);
                     break;
                 default:
                     break;
             }
+            InteractionMgr.Instance.SetActiveTool(ToolType.None);
+        }
+
+        private void HandleDrawNNodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawNNodes);
+        }
+
+        private void HandleDrawPNodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawPNodes);
+        }
+
+        private void HandleEraseClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.Erase);
+        }
+
+        private void HandleDrawLinksClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawLinks);
         }
 
         #endregion // Handlers
