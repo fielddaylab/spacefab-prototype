@@ -179,7 +179,22 @@ namespace SpaceFab.ChipDesign
 
         private void ProcessEraseNodes()
         {
-
+            if (Input.GetMouseButtonDown(0))
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("valid node to erase");
+                    var toErase = hit.GetComponent<NodeBase>();
+                    DeleteNode(toErase);
+                }
+                else
+                {
+                    Debug.Log("invalid node to erase");
+                }
+            }
         }
 
         private void ProcessEraseLinks()
@@ -212,6 +227,20 @@ namespace SpaceFab.ChipDesign
             link.SideB?.RemoveLink(link);
             if (CurrLink == link) { CurrLink = null; }
             Destroy(link.gameObject);
+        }
+
+        private void DeleteNode(NodeBase node)
+        {
+            // TODO: handle special nodes
+
+            // clear links
+            while (node.Links.Count > 0)
+            {
+                DeleteLink(node.Links[0]);
+            }
+
+            // delete Node
+            Destroy(node.gameObject);
         }
 
         private void FinalizeLink(Link link, NodeBase end, Vector3 endPos)
