@@ -1,3 +1,4 @@
+using FieldDay;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,16 +14,28 @@ namespace SpaceFab.ChipDesign
         P
     }
 
-    public class Node : MonoBehaviour
+    public abstract class NodeBase : MonoBehaviour
     {
         public NodeType NodeType;
         [NonSerialized] public List<Link> Links = new List<Link>();
+        [HideInInspector] public bool Visited;
 
-        [Header("Input")]
-        public float InputVal; // for Input Nodes
+        private void Awake()
+        {
+            Game.Events.Register(GameEvents.EvaluationStarted, HandleEvaluationStarted);
+        }
 
-        [Header("Output")]
-        public float OutputTarget; // for Output Nodes
+        private void OnDestroy()
+        {
+            Game.Events?.Deregister(GameEvents.EvaluationStarted, HandleEvaluationStarted);
+        }
+
+        public abstract float Evaluate(out bool unstable);
+
+        private void HandleEvaluationStarted()
+        {
+            Visited = false;
+        }
 
         public void RemoveLink(Link link)
         {

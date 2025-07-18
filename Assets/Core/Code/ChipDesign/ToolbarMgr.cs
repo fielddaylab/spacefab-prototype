@@ -29,6 +29,7 @@ namespace SpaceFab.ChipDesign
 
         [Header("Common")]
         [SerializeField] private Button EraseButton;
+        [SerializeField] private TMP_Text ActiveToolText;
 
         [Header("Nodes")]
         [SerializeField] private GameObject DrawNodesGroup;
@@ -44,6 +45,7 @@ namespace SpaceFab.ChipDesign
             if (Instance == null) { Instance = this; }
 
             Game.Events.Register(GameEvents.OnLayerChanged, HandleLayerChanged);
+            Game.Events.Register(GameEvents.OnToolChanged, HandleToolChanged);
             LayerButton.onClick.AddListener(HandleLayerClicked);
             DrawNNodesButton.onClick.AddListener(HandleDrawNNodesClicked);
             DrawPNodesButton.onClick.AddListener(HandleDrawPNodesClicked);
@@ -56,6 +58,7 @@ namespace SpaceFab.ChipDesign
             if (Game.IsShuttingDown) { return; }
 
             Game.Events.Deregister(GameEvents.OnLayerChanged, HandleLayerChanged);
+            Game.Events.Deregister(GameEvents.OnToolChanged, HandleToolChanged);
             LayerButton.onClick.RemoveListener(HandleLayerClicked);
             DrawNNodesButton.onClick.RemoveListener(HandleDrawNNodesClicked);
             DrawPNodesButton.onClick.RemoveListener(HandleDrawPNodesClicked);
@@ -90,6 +93,11 @@ namespace SpaceFab.ChipDesign
                     break;
             }
             InteractionMgr.Instance.SetActiveTool(ToolType.None);
+        }
+
+        private void HandleToolChanged()
+        {
+            ActiveToolText.SetText(InteractionMgr.Instance.ActiveTool.ToString());
         }
 
         private void HandleDrawNNodesClicked()

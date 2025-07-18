@@ -6,8 +6,8 @@ namespace SpaceFab.ChipDesign
 {
     public class Link : MonoBehaviour
     {
-        public Node SideA;
-        public Node SideB;
+        public NodeBase SideA;
+        public NodeBase SideB;
 
         public Transform StartAnchor;
         public Transform EndAnchor;

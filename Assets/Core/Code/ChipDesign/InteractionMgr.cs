@@ -72,7 +72,7 @@ namespace SpaceFab.ChipDesign
                 if (hit != null)
                 {
                     Debug.Log("valid start");
-                    var startNode = hit.GetComponent<Node>();
+                    var startNode = hit.GetComponent<NodeBase>();
                     if (startNode)
                     {
                         CurrLink = Instantiate(LinkPrefab).GetComponent<Link>();
@@ -111,7 +111,7 @@ namespace SpaceFab.ChipDesign
                     var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
                     if (hit != null)
                     {
-                        var endNode = hit.GetComponent<Node>();
+                        var endNode = hit.GetComponent<NodeBase>();
                         if (endNode)
                         {
                             FinalizeLink(CurrLink, endNode, new Vector3(mousePos.x, mousePos.y, CurrLink.transform.position.z));
@@ -162,11 +162,14 @@ namespace SpaceFab.ChipDesign
             Destroy(link.gameObject);
         }
 
-        private void FinalizeLink(Link link, Node end, Vector3 endPos)
+        private void FinalizeLink(Link link, NodeBase end, Vector3 endPos)
         {
             link.SideB = end;
             CurrLink = null;
             link.EndAnchor.position = endPos;
+
+            link.SideA.Links.Add(link);
+            link.SideB.Links.Add(link);
 
             // adjust collider
             link.Collider.size = new Vector2(Vector3.Distance(link.StartAnchor.position, link.EndAnchor.position), link.LineRenderer.startWidth);
