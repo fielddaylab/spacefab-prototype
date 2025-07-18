@@ -74,6 +74,9 @@ namespace SpaceFab.ChipDesign
                 if (links[i].SideA == currNode) { otherNode = links[i].SideB; }
                 else { otherNode = links[i].SideA; }
 
+                // do not handle empty points
+                if (otherNode == null) { continue; }
+
                 // do not go back to parent node
                 if (otherNode == prevNode) { continue; }
 

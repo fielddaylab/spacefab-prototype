@@ -145,5 +145,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NodeType: 3
   Visited: 0
+  VisitedVal: 0
+  DefaultVal: 0
   Dependency: {fileID: 0}
   ConnectedSource: {fileID: 0}
