@@ -45,7 +45,7 @@ namespace SpaceFab.ChipDesign
         private void Evaluate()
         {
             // Start at Output node and work backward
-            float actual = m_OutNode.Evaluate(out bool unstable);
+            float actual = m_OutNode.Evaluate(null, out bool unstable);
 
             bool result = (actual == m_OutNode.OutputTarget) && !unstable;
             UpdateEvaluationText(result, actual, unstable);
@@ -56,15 +56,15 @@ namespace SpaceFab.ChipDesign
         /// </summary>
         /// <param name="currNode"></param>
         /// <returns></returns>
-        public static float EvaluateNode(NodeBase currNode, out bool unstable)
+        public static float EvaluateNode(NodeBase currNode, NodeBase prevNode, float defaultVal, out bool unstable)
         {
             unstable = false;
             currNode.Visited = true;
 
             // Gather all links at current node
             List<Link> links = currNode.Links;
-            float checkVal = 0;
-            float otherVal = 0;
+            float checkVal = defaultVal;
+            float otherVal = defaultVal;
             NodeBase otherNode = null;
             for (int i = 0; i <  links.Count; i++)
             {
@@ -72,14 +72,19 @@ namespace SpaceFab.ChipDesign
                 if (links[i].SideA == currNode) { otherNode = links[i].SideB; }
                 else { otherNode = links[i].SideA; }
 
+                // do not go back to parent node
+                if (otherNode == prevNode) { continue; }
+
                 // if node is already visited, mark unstable
+                /*
                 if (otherNode.Visited) {
                     unstable = true;
-                    return 0;
+                    return -29;
                 }
+                */
 
                 // Evaluate. Ensure they all have the same value.
-                otherVal = otherNode.Evaluate(out unstable);
+                otherVal = otherNode.Evaluate(currNode, out unstable);
                 if (i == 0)
                 {
                     checkVal = otherVal;
@@ -88,7 +93,7 @@ namespace SpaceFab.ChipDesign
                 {
                     // unstable
                     unstable = true;
-                    return 0;
+                    return -29;
                 }
 
             }

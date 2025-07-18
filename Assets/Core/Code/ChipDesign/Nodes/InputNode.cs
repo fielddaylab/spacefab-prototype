@@ -9,7 +9,7 @@ namespace SpaceFab.ChipDesign
         [Header("Input")]
         public float InputVal; // for Input Nodes
 
-        public override float Evaluate(out bool unstable)
+        public override float Evaluate(NodeBase prevNode, out bool unstable)
         {
             unstable = false;
             return InputVal;

@@ -9,9 +9,9 @@ namespace SpaceFab.ChipDesign
         [Header("Output")]
         public float OutputTarget; // for Output Nodes
 
-        public override float Evaluate(out bool unstable)
+        public override float Evaluate(NodeBase prevNode, out bool unstable)
         {
-            return EvaluationMgr.EvaluateNode(this, out unstable);
+            return EvaluationMgr.EvaluateNode(this, prevNode, -29, out unstable);
         }
     }
 }
