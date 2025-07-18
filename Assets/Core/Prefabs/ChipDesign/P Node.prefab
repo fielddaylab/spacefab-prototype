@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8284953221866086836}
   - component: {fileID: 8439380717056621734}
-  - component: {fileID: 5053297504282092031}
-  - component: {fileID: 9197551950232687194}
+  - component: {fileID: 8597020647345486060}
+  - component: {fileID: 2686194331787279650}
   m_Layer: 7
   m_Name: P Node
   m_TagString: Untagged
@@ -86,8 +86,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!58 &5053297504282092031
-CircleCollider2D:
+--- !u!61 &8597020647345486060
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -119,9 +119,19 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.5, y: 0.5}
+    newSize: {x: 0.2, y: 0.2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.1
---- !u!114 &9197551950232687194
+  m_Size: {x: 0.5, y: 0.5}
+  m_EdgeRadius: 0
+--- !u!114 &2686194331787279650
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,8 +140,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2788611669963745696}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d63d2775c0b1004cba5b62baa67e82d, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d7199f21aeed8a43892919636094d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NodeType: 3
   Visited: 0
+  Dependency: {fileID: 0}
+  ConnectedSource: {fileID: 0}

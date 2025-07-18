@@ -3,6 +3,7 @@ using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SpaceFab.ChipDesign
 {
@@ -22,6 +23,9 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private GameObject LinkPrefab;
         [HideInInspector] public Link CurrLink = null;
 
+        [SerializeField] private GameObject NPrefab;
+        [SerializeField] private GameObject PPrefab;
+
         #region Unity Callbacks
 
         private void Awake()
@@ -32,6 +36,8 @@ namespace SpaceFab.ChipDesign
         private void Update()
         {
             ProcessInteractions();
+            var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Debug.Log("[Mouse] " + mousePos);
         }
 
         #endregion // Unity Callbacks
@@ -44,6 +50,12 @@ namespace SpaceFab.ChipDesign
             {
                 case ToolType.None:
                     break;
+                case ToolType.DrawNNodes:
+                    ProcessDrawNNodes();
+                    break;
+                case ToolType.DrawPNodes:
+                    ProcessDrawPNodes();
+                    break;
                 case ToolType.DrawLinks:
                     ProcessDrawLinks();
                     break;
@@ -53,6 +65,46 @@ namespace SpaceFab.ChipDesign
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void ProcessDrawNNodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newNNode = Instantiate(NPrefab).GetComponent<NNode>();
+                    newNNode.transform.position = new Vector3(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f), newNNode.transform.position.z);
+                }
+            }
+        }
+
+        private void ProcessDrawPNodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newPNode = Instantiate(PPrefab).GetComponent<PNode>();
+                    newPNode.transform.position = new Vector3(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f), newPNode.transform.position.z);
+                }
             }
         }
 

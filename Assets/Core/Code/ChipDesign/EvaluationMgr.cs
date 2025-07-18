@@ -66,6 +66,7 @@ namespace SpaceFab.ChipDesign
             float checkVal = defaultVal;
             float otherVal = defaultVal;
             NodeBase otherNode = null;
+            bool firstValid = false;
             for (int i = 0; i <  links.Count; i++)
             {
                 // Get other side
@@ -85,9 +86,10 @@ namespace SpaceFab.ChipDesign
 
                 // Evaluate. Ensure they all have the same value.
                 otherVal = otherNode.Evaluate(currNode, out unstable);
-                if (i == 0)
+                if (!firstValid)
                 {
                     checkVal = otherVal;
+                    firstValid = true;
                 }
                 else if (checkVal != otherVal)
                 {
