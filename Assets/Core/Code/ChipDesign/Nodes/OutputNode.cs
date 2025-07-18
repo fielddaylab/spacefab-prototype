@@ -9,9 +9,14 @@ namespace SpaceFab.ChipDesign
         [Header("Output")]
         public float OutputTarget; // for Output Nodes
 
+        private void Awake()
+        {
+            DefaultVal = GameConsts.DEFFERED_CODE;
+        }
+
         public override float Evaluate(NodeBase prevNode, out bool unstable)
         {
-            return EvaluationMgr.EvaluateNode(this, prevNode, 0, out unstable);
+            return EvaluationMgr.EvaluateNode(this, prevNode, DefaultVal, out unstable);
         }
     }
 }

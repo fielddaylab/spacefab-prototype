@@ -9,6 +9,11 @@ namespace SpaceFab.ChipDesign
         public NodeBase Dependency; // In an NPN, the P. In an NP, the P.
         public NodeBase ConnectedSource; // In an NPN, the other N. In an NP, the P.
 
+        private void Awake()
+        {
+            DefaultVal = GameConsts.DEFFERED_CODE;
+        }
+
         public override float Evaluate(NodeBase prevNode, out bool unstable)
         {
             unstable = false;
@@ -19,14 +24,14 @@ namespace SpaceFab.ChipDesign
 
                 if (ConnectedSource == null)
                 {
-                    // Use direct value from links. If no links, default to 0.
+                    // Use direct value from links. If no links, default to deffered.
                     if (Links.Count == 0)
                     {
-                        return 0;
+                        return DefaultVal;
                     }
                     else
                     {
-                        return EvaluationMgr.EvaluateNode(this, prevNode, 0, out unstable);
+                        return EvaluationMgr.EvaluateNode(this, prevNode, DefaultVal, out unstable);
                     }
                 }
                 else

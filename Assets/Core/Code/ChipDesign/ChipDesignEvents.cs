@@ -11,4 +11,10 @@ namespace SpaceFab.ChipDesign
         public static StringHash32 OnToolChanged = "on-tool-changed";
         public static StringHash32 EvaluationStarted = "evaluation-started";
     }
+
+    public static class GameConsts
+    {
+        public static float UNSTABLE_CODE = -29584;
+        public static float DEFFERED_CODE = float.MinValue;
+    }
 }

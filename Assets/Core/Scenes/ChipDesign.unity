@@ -881,7 +881,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2926936533537702593, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
       propertyPath: InputVal
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4561953586126569017, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
       propertyPath: m_Layer
@@ -895,7 +895,7 @@ PrefabInstance:
       propertyPath: m_text
       value: 'In
 
-        5'
+        V+'
       objectReference: {fileID: 0}
     - target: {fileID: 8152565022220735432, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1738,6 +1738,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2926936533537702593, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
+      propertyPath: InputVal
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 4561953586126569017, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -1750,7 +1754,7 @@ PrefabInstance:
       propertyPath: m_text
       value: 'In
 
-        0'
+        V-'
       objectReference: {fileID: 0}
     - target: {fileID: 8152565022220735432, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1852,7 +1856,7 @@ PrefabInstance:
       propertyPath: m_text
       value: 'Out
 
-        5'
+        1'
       objectReference: {fileID: 0}
     - target: {fileID: 4430876971557084118, guid: 9381b8cd2dd0401428bd327bebb26b3f, type: 3}
       propertyPath: m_Layer
@@ -1864,7 +1868,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7754272060660909457, guid: 9381b8cd2dd0401428bd327bebb26b3f, type: 3}
       propertyPath: OutputTarget
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

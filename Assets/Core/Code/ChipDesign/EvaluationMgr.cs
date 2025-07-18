@@ -46,6 +46,7 @@ namespace SpaceFab.ChipDesign
         {
             // Start at Output node and work backward
             float actual = m_OutNode.Evaluate(null, out bool unstable);
+            if (actual == GameConsts.DEFFERED_CODE) { actual = 0; }
 
             bool result = (actual == m_OutNode.OutputTarget) && !unstable;
             UpdateEvaluationText(result, actual, unstable);
@@ -67,7 +68,7 @@ namespace SpaceFab.ChipDesign
             float otherVal = defaultVal;
             NodeBase otherNode = null;
             bool firstValid = false;
-            for (int i = 0; i <  links.Count; i++)
+            for (int i = 0; i < links.Count; i++)
             {
                 // Get other side
                 if (links[i].SideA == currNode) { otherNode = links[i].SideB; }
@@ -77,29 +78,30 @@ namespace SpaceFab.ChipDesign
                 if (otherNode == prevNode) { continue; }
 
                 // if node is already visited, mark unstable
-                /*
-                if (otherNode.Visited) {
-                    unstable = true;
-                    return -29;
+                if (!otherNode.Visited) {
+                    // Evaluate. Ensure they all have the same value.
+                    otherVal = otherNode.Evaluate(currNode, out unstable);
                 }
-                */
+                else
+                {
+                    otherVal = otherNode.VisitedVal;
+                }
 
-                // Evaluate. Ensure they all have the same value.
-                otherVal = otherNode.Evaluate(currNode, out unstable);
-                if (!firstValid)
+                if (!firstValid && otherVal != GameConsts.DEFFERED_CODE)
                 {
                     checkVal = otherVal;
                     firstValid = true;
                 }
-                else if (checkVal != otherVal)
+                else if (checkVal != otherVal && otherVal != GameConsts.DEFFERED_CODE)
                 {
                     // unstable
                     unstable = true;
-                    return -29;
+                    return GameConsts.UNSTABLE_CODE;
                 }
 
             }
 
+            currNode.VisitedVal = checkVal;
             return checkVal;
         }
 

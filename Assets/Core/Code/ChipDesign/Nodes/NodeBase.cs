@@ -19,8 +19,10 @@ namespace SpaceFab.ChipDesign
         public NodeType NodeType;
         [NonSerialized] public List<Link> Links = new List<Link>();
         [HideInInspector] public bool Visited;
+        [HideInInspector] public float VisitedVal;
+        public float DefaultVal;
 
-        private void Awake()
+        private void Start()
         {
             Game.Events.Register(GameEvents.EvaluationStarted, HandleEvaluationStarted);
         }
@@ -35,6 +37,7 @@ namespace SpaceFab.ChipDesign
         private void HandleEvaluationStarted()
         {
             Visited = false;
+            VisitedVal = DefaultVal;
         }
 
         public void RemoveLink(Link link)
