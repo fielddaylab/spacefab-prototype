@@ -301,7 +301,7 @@ namespace SpaceFab.ChipDesign
         {
             var colliderExtents = newNode.GetComponent<Collider2D>().bounds.extents;
             var size = new Vector2(colliderExtents.x * newNode.transform.lossyScale.x, colliderExtents.y * newNode.transform.lossyScale.x);
-            var linkHits = Physics2D.OverlapBoxAll(mousePos, size, 1 << LayerMask.NameToLayer("Links"));
+            var linkHits = Physics2D.OverlapBoxAll(mousePos, size, 0, 1 << LayerMask.NameToLayer("Links"));
             
             if (linkHits.Length > 0)
             {
