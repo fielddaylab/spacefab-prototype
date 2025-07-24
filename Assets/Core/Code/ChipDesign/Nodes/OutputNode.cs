@@ -16,7 +16,7 @@ namespace SpaceFab.ChipDesign
 
         public override float Evaluate(NodeBase prevNode, out bool unstable)
         {
-            return EvaluationMgr.EvaluateNode(this, prevNode, DefaultVal, out unstable);
+            return EvaluationMgr.EvaluateNode(this, prevNode, null, DefaultVal, out unstable);
         }
     }
 }

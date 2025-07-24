@@ -375,7 +375,6 @@ namespace SpaceFab.ChipDesign
                     var hit = Physics2D.OverlapPoint(node.transform.position + dirVector, 1 << LayerMask.NameToLayer("Nodes"));
                     if (hit != null)
                     {
-                        Debug.Log("[InteractionMgr] Found new adj node");
 
                         var hitNode = hit.GetComponent<NodeBase>();
                         bool alreadyHandled = true;
@@ -387,11 +386,11 @@ namespace SpaceFab.ChipDesign
 
                         if (node.NodeType == NodeType.N)
                         {
-                            TryMergeNNode(node, hitNode);
+                            alreadyHandled = !TryMergeNNode(node.GetComponent<NNode>(), hitNode);
                         }
                         else if (node.NodeType == NodeType.P)
                         {
-                            TryMergePNode(node, hitNode);
+                            alreadyHandled = !TryMergePNode(node.GetComponent<PNode>(), hitNode);
                         }
 
                         if (!alreadyHandled)
@@ -430,28 +429,160 @@ namespace SpaceFab.ChipDesign
             }
         }
 
-        private bool TryMergePNode(NodeBase primaryNode, NodeBase secondaryNode)
+        private bool TryMergePNode(PNode primaryNode, NodeBase secondaryNode)
         {
-                            // if 1 node
-                                // form a 2-node junction
-                                // push all involved nodes back for second pass
-                                // flag another pass necessary
-                            // if 2 node junction
-                                // form a 3-node junction
-                            // if 3 node junction, flag unsupported!
+            if (secondaryNode.NodeType == NodeType.P)
+            {
+                // TODO: same node type
+                
+                Debug.Log("[InteractionMgr] Found new adj node");
+            }
+            else if (secondaryNode.NodeType == NodeType.N)
+            {
+                if (secondaryNode == primaryNode.ConnectedSource || secondaryNode == primaryNode.Dependency)
+                {
+                    // already connected
+                    return false;
+                }
+
+                Debug.Log("[InteractionMgr] Found new adj node");
+
+                var secondaryNodeN = secondaryNode.GetComponent<NNode>();
+
+                // different node type
+                // if 1 node
+                if (primaryNode.JunctionCount == 1)
+                {
+                    // form a 2-node junction
+                    // push all involved nodes back for second pass
+                    // flag another pass necessary
+
+                    if (secondaryNodeN.JunctionCount == 1)
+                    {
+                        // connecting to 1 node = 2 total
+                        primaryNode.Dependency = secondaryNodeN;
+                        primaryNode.ConnectedSource = secondaryNodeN;
+
+                        secondaryNodeN.Dependency = primaryNode;
+                        secondaryNodeN.ConnectedSource = primaryNode;
+
+                        primaryNode.JunctionCount = secondaryNodeN.JunctionCount = 2;
+
+                        return true;
+                    }
+                    else if (secondaryNodeN.JunctionCount == 2)
+                    {
+                        // TODO: connecting to 2 nodes = 3 total
+
+                    }
+                    else if (secondaryNodeN.JunctionCount >= 3)
+                    {
+                        // connecting to 3+ nodes -- not supported!
+
+                    }
+                }
+                // if 2 nodes
+                else if (primaryNode.JunctionCount == 2)
+                {
+                    // form a 3-node junction
+
+                    if (secondaryNodeN.JunctionCount == 1)
+                    {
+                        // TODO: connecting to 1 node = 3 total
+
+                    }
+                    else if (secondaryNodeN.JunctionCount >= 2)
+                    {
+                        // connecting to 2+ nodes = 4+ total -- not supported!
+
+                    }
+                }
+                // if 3 nodes
+                else
+                {
+                    // additional mergings not supported!
+                }
+            }
 
             return false;
         }
 
-        private bool TryMergeNNode(NodeBase primaryNode, NodeBase secondaryNode)
+        private bool TryMergeNNode(NNode primaryNode, NodeBase secondaryNode)
         {
-                            // if 1 node
-                                // form a 2-node junction
-                                // push all involved nodes back for second pass
-                                // flag another pass necessary
-                            // if 2 node junction
-                                // form a 3-node junction
-                            // if 3 node junction, flag unsupported!
+            if (secondaryNode.NodeType == NodeType.N)
+            {
+                // TODO: same node type
+
+                Debug.Log("[InteractionMgr] Found new adj node");
+
+            }
+            else if (secondaryNode.NodeType == NodeType.P)
+            {
+                if (secondaryNode == primaryNode.ConnectedSource || secondaryNode == primaryNode.Dependency)
+                {
+                    // already connected
+                    return false;
+                }
+
+                Debug.Log("[InteractionMgr] Found new adj node");
+
+                var secondaryNodeP = secondaryNode.GetComponent<PNode>();
+
+                // different node type
+                // if 1 node
+                if (primaryNode.JunctionCount == 1)
+                {
+                    // form a 2-node junction
+                    // push all involved nodes back for second pass
+                    // flag another pass necessary
+
+                    if (secondaryNodeP.JunctionCount == 1)
+                    {
+                        // connecting to 1 node = 2 total
+                        primaryNode.Dependency = secondaryNodeP;
+                        primaryNode.ConnectedSource = secondaryNodeP;
+
+                        secondaryNodeP.Dependency = primaryNode;
+                        secondaryNodeP.ConnectedSource = primaryNode;
+
+                        primaryNode.JunctionCount = secondaryNodeP.JunctionCount = 2;
+
+                        return true;
+                    }
+                    else if (secondaryNodeP.JunctionCount == 2)
+                    {
+                        // TODO: connecting to 2 nodes = 3 total
+
+                    }
+                    else if (secondaryNodeP.JunctionCount >= 3)
+                    {
+                        // connecting to 3+ nodes -- not supported!
+
+                    }
+                }
+                // if 2 nodes
+                else if (primaryNode.JunctionCount == 2)
+                {
+                    // form a 3-node junction
+
+                    if (secondaryNodeP.JunctionCount == 1)
+                    {
+                        // TODO: connecting to 1 node = 3 total
+
+                    }
+                    else if (secondaryNodeP.JunctionCount >= 2)
+                    {
+                        // connecting to 2+ nodes = 4+ total -- not supported!
+
+                    }
+                }
+                // if 3 nodes
+                else
+                {
+                    // additional mergings not supported!
+                }
+            }
+
             return false;
         }
 

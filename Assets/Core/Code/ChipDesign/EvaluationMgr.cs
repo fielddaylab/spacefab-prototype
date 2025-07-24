@@ -57,7 +57,7 @@ namespace SpaceFab.ChipDesign
         /// </summary>
         /// <param name="currNode"></param>
         /// <returns></returns>
-        public static float EvaluateNode(NodeBase currNode, NodeBase prevNode, float defaultVal, out bool unstable)
+        public static float EvaluateNode(NodeBase currNode, NodeBase prevNode, NodeBase dependency, float defaultVal, out bool unstable)
         {
             unstable = false;
             currNode.Visited = true;
@@ -79,6 +79,9 @@ namespace SpaceFab.ChipDesign
 
                 // do not go back to parent node
                 if (otherNode == prevNode) { continue; }
+
+                // do not check links through dependency
+                if (otherNode == dependency) { continue; }
 
                 // if node is already visited, mark unstable
                 if (!otherNode.Visited) {
