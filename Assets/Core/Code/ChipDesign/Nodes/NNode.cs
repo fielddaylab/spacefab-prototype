@@ -8,6 +8,7 @@ namespace SpaceFab.ChipDesign
     {
         public NodeBase Dependency; // In an NPN, the P. In an NP, the P.
         public NodeBase ConnectedSource; // In an NPN, the other N. In an NP, the P.
+        // public List<NodeBase> ConnectedLikeNodes; // In NN, the other N.
 
         private void Awake()
         {
@@ -36,7 +37,7 @@ namespace SpaceFab.ChipDesign
                 }
                 else
                 {
-                    // Use direct value from connected source
+                    // Use direct value from connected source (same type of node)
                 }
             }
             else

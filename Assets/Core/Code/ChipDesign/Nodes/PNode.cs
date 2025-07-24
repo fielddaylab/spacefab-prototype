@@ -8,6 +8,7 @@ namespace SpaceFab.ChipDesign
     {
         public NodeBase Dependency; // In an PNP, the N. In an PN, the N.
         public NodeBase ConnectedSource; // In an PNP, the other P. In an PN, the N.
+        // public List<NodeBase> ConnectedLikeNodes; // In PP, the other P.
 
         private void Awake()
         {
@@ -34,7 +35,7 @@ namespace SpaceFab.ChipDesign
                 }
                 else
                 {
-                    // Use direct value from connected source
+                    // Use direct value from connected source (same type of node)
                 }
             }
             else
@@ -44,7 +45,7 @@ namespace SpaceFab.ChipDesign
                 if (ConnectedSource == null)
                 {
                     // Should not occur!
-                    Debug.LogWarning("[NNode] An N Node has a dependancy but no source!");
+                    Debug.LogWarning("[PNode] A P Node has a dependancy but no source!");
                 }
                 else
                 {

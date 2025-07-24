@@ -26,6 +26,8 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private GameObject NPrefab;
         [SerializeField] private GameObject PPrefab;
 
+        private List<NodeBase> AllNodes = new List<NodeBase>();
+
         #region Unity Callbacks
 
         private void Awake()
@@ -33,7 +35,7 @@ namespace SpaceFab.ChipDesign
             if (Instance == null) { Instance = this; }
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             ProcessInteractions();
         }
@@ -84,8 +86,16 @@ namespace SpaceFab.ChipDesign
                     var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
                     newNNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNNode.transform.position.z);
 
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    AllNodes.Add(newNNode);
+
                     // Try to attach to Link
                     AddNodeToExistingLink(flooredMousePos, newNNode);
+
+                    // Combine nearby nodes
+                    CombineNodePass();
                 }
             }
         }
@@ -108,8 +118,16 @@ namespace SpaceFab.ChipDesign
                     var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
                     newPNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newPNode.transform.position.z);
 
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    AllNodes.Add(newPNode);
+
                     // Try to attach to Link
                     AddNodeToExistingLink(flooredMousePos, newPNode);
+
+                    // Combine nearby nodes
+                    CombineNodePass();
                 }
             }
         }
@@ -256,45 +274,18 @@ namespace SpaceFab.ChipDesign
                 if (node.Links[i].SideA == node)
                 {
                     node.Links[i].SideA = null;
-
-                    /*
-                    if (node.Links[i].SideB != null)
-                    {
-                        RemoveNodeFromConnectedLink(node, node.Links[i].SideB, i);
-                    }
-                    */
                 }
                 else
                 {
                     node.Links[i].SideB = null;
-
-                    /*
-                    if (node.Links[i].SideA != null)
-                    {
-                        RemoveNodeFromConnectedLink(node, node.Links[i].SideA, i);
-                    }
-                    */
                 }
             }
+
+            // remove from list
+            AllNodes.Remove(node);
 
             // delete Node
             Destroy(node.gameObject);
-        }
-
-        private void RemoveNodeFromConnectedLink(NodeBase origNode, NodeBase connectedNode, int i)
-        {
-            // find link from other node and remove it
-            for (int j = 0; j < connectedNode.Links.Count; j++)
-            {
-                if (connectedNode.Links[j].SideB == origNode)
-                {
-                    connectedNode.Links[j].SideB = null;
-                }
-                else if (connectedNode.Links[j].SideA == origNode)
-                {
-                    connectedNode.Links[j].SideA = null;
-                }
-            }
         }
 
         private void AddNodeToExistingLink(Vector3 mousePos, NodeBase newNode)
@@ -340,6 +331,128 @@ namespace SpaceFab.ChipDesign
             var offset = link.Collider.offset;
             offset.x = link.Collider.size.x / 2;
             link.Collider.offset = offset;
+        }
+
+        private void CombineNodePass()
+        {
+            List<NodeBase> checkList = new List<NodeBase>();
+            foreach(var node in AllNodes)
+            {
+                checkList.Add(node);
+            }
+
+            bool anyFound = false;
+
+            while (checkList.Count > 0)
+            {
+                var node = checkList[0];
+
+                // check surroundings for an adjacent node
+                var dirVector = Vector3.zero;
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    switch (dir) {
+                        case 0:
+                            // up
+                            dirVector = new Vector3(0, 1, 0);
+                            break;
+                        case 1:
+                            // right
+                            dirVector = new Vector3(1, 0, 0);
+                            break;
+                        case 2:
+                            // down
+                            dirVector = new Vector3(0, -1, 0);
+                            break;
+                        case 3:
+                            // left
+                            dirVector = new Vector3(-1, 0, 0);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    var hit = Physics2D.OverlapPoint(node.transform.position + dirVector, 1 << LayerMask.NameToLayer("Nodes"));
+                    if (hit != null)
+                    {
+                        Debug.Log("[InteractionMgr] Found new adj node");
+
+                        var hitNode = hit.GetComponent<NodeBase>();
+                        bool alreadyHandled = true;
+
+                        if (hitNode.NodeType == NodeType.Input || hitNode.NodeType == NodeType.Output)
+                        {
+                            continue;
+                        }
+
+                        if (node.NodeType == NodeType.N)
+                        {
+                            TryMergeNNode(node, hitNode);
+                        }
+                        else if (node.NodeType == NodeType.P)
+                        {
+                            TryMergePNode(node, hitNode);
+                        }
+
+                        if (!alreadyHandled)
+                        {
+                            checkList.Remove(node);
+                            checkList.Add(node);
+                            if (checkList.Contains(hitNode))
+                            {
+                                checkList.Remove(hitNode);
+                                checkList.Add(hitNode);
+                            }
+                            else
+                            {
+                                checkList.Add(hitNode);
+                            }
+
+                            anyFound = true;
+                        }
+                    }
+
+                    if (anyFound)
+                    {
+                        break;
+                    }
+                }
+
+                if (anyFound)
+                {
+                    anyFound = false;
+                    continue;
+                }
+                else
+                {
+                    checkList.Remove(node);
+                }
+            }
+        }
+
+        private bool TryMergePNode(NodeBase primaryNode, NodeBase secondaryNode)
+        {
+                            // if 1 node
+                                // form a 2-node junction
+                                // push all involved nodes back for second pass
+                                // flag another pass necessary
+                            // if 2 node junction
+                                // form a 3-node junction
+                            // if 3 node junction, flag unsupported!
+
+            return false;
+        }
+
+        private bool TryMergeNNode(NodeBase primaryNode, NodeBase secondaryNode)
+        {
+                            // if 1 node
+                                // form a 2-node junction
+                                // push all involved nodes back for second pass
+                                // flag another pass necessary
+                            // if 2 node junction
+                                // form a 3-node junction
+                            // if 3 node junction, flag unsupported!
+            return false;
         }
 
         #endregion // Helpers
