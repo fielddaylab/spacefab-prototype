@@ -57,7 +57,7 @@ namespace SpaceFab.ChipDesign
                     // If dependency evaluates to <0 (and src val agrees with links), use source value. Else use default value from links.
                     if (!unstable)
                     {
-                        if (dependencyVal <= 0)
+                        if (dependencyVal < 0 && dependencyVal != GameConsts.DEFFERED_CODE)
                         {
                             var srcVal = EvaluationMgr.EvaluateNode(ConnectedSource, null, null, GameConsts.DEFFERED_CODE, out unstable);
 

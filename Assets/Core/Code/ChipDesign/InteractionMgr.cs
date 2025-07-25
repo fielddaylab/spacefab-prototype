@@ -425,11 +425,11 @@ namespace SpaceFab.ChipDesign
 
                         if (node.NodeType == NodeType.N)
                         {
-                            alreadyHandled = !TryMergeNNode(node.GetComponent<NNode>(), hitNode);
+                            alreadyHandled = !TryMergeNNode(node.GetComponent<NNode>(), hitNode, ref checkList);
                         }
                         else if (node.NodeType == NodeType.P)
                         {
-                            alreadyHandled = !TryMergePNode(node.GetComponent<PNode>(), hitNode);
+                            alreadyHandled = !TryMergePNode(node.GetComponent<PNode>(), hitNode, ref checkList);
                         }
 
                         if (!alreadyHandled)
@@ -468,7 +468,7 @@ namespace SpaceFab.ChipDesign
             }
         }
 
-        private bool TryMergePNode(PNode primaryNode, NodeBase secondaryNode)
+        private bool TryMergePNode(PNode primaryNode, NodeBase secondaryNode, ref List<NodeBase> checkList)
         {
             if (secondaryNode.NodeType == NodeType.P)
             {
@@ -489,13 +489,13 @@ namespace SpaceFab.ChipDesign
                 var secondaryNodeN = secondaryNode.GetComponent<NNode>();
 
                 // different node type
+                // form a junction
+                // push all involved nodes back for second pass
+                // flag another pass necessary
+
                 // if 1 node
                 if (primaryNode.JunctionCount == 1)
                 {
-                    // form a 2-node junction
-                    // push all involved nodes back for second pass
-                    // flag another pass necessary
-
                     if (secondaryNodeN.JunctionCount == 1)
                     {
                         // connecting to 1 node = 2 total
@@ -511,8 +511,22 @@ namespace SpaceFab.ChipDesign
                     }
                     else if (secondaryNodeN.JunctionCount == 2)
                     {
-                        // TODO: connecting to 2 nodes = 3 total
+                        // connecting to 2 nodes = 3 total
+                        // forming PNP junction
 
+                        // update junction counts
+                        primaryNode.JunctionCount = secondaryNodeN.JunctionCount = secondaryNodeN.Dependency.GetComponent<PNode>().JunctionCount = 3;
+
+                        // 1. connect new node to existing pair
+                        primaryNode.Dependency = secondaryNodeN;
+                        primaryNode.ConnectedSource = secondaryNodeN.Dependency;
+
+                        // 2. rewire opposite (connected source) node
+                        secondaryNodeN.Dependency.GetComponent<PNode>().ConnectedSource = primaryNode;
+
+                        // 3. rewire middle (dependency) node
+                        secondaryNodeN.Dependency = null;
+                        secondaryNodeN.ConnectedSource = null;
                     }
                     else if (secondaryNodeN.JunctionCount >= 3)
                     {
@@ -524,11 +538,15 @@ namespace SpaceFab.ChipDesign
                 else if (primaryNode.JunctionCount == 2)
                 {
                     // form a 3-node junction
-
                     if (secondaryNodeN.JunctionCount == 1)
                     {
-                        // TODO: connecting to 1 node = 3 total
-
+                        // connecting to 1 node = 3 total
+                        // forming NPN junction
+                        // (handle in 1 node junction merges)
+                        if (!checkList.Contains(secondaryNodeN))
+                        {
+                            checkList.Add(secondaryNodeN);
+                        }
                     }
                     else if (secondaryNodeN.JunctionCount >= 2)
                     {
@@ -546,7 +564,7 @@ namespace SpaceFab.ChipDesign
             return false;
         }
 
-        private bool TryMergeNNode(NNode primaryNode, NodeBase secondaryNode)
+        private bool TryMergeNNode(NNode primaryNode, NodeBase secondaryNode, ref List<NodeBase> checkList)
         {
             if (secondaryNode.NodeType == NodeType.N)
             {
@@ -590,8 +608,22 @@ namespace SpaceFab.ChipDesign
                     }
                     else if (secondaryNodeP.JunctionCount == 2)
                     {
-                        // TODO: connecting to 2 nodes = 3 total
+                        // connecting to 2 nodes = 3 total
+                        // forming NPN junction
 
+                        // update junction counts
+                        primaryNode.JunctionCount = secondaryNodeP.JunctionCount = secondaryNodeP.Dependency.GetComponent<NNode>().JunctionCount = 3;
+
+                        // 1. connect new node to existing pair
+                        primaryNode.Dependency = secondaryNodeP;
+                        primaryNode.ConnectedSource = secondaryNodeP.Dependency;
+
+                        // 2. rewire opposite (connected source) node
+                        secondaryNodeP.Dependency.GetComponent<NNode>().ConnectedSource = primaryNode;
+
+                        // 3. rewire middle (dependency) node
+                        secondaryNodeP.Dependency = null;
+                        secondaryNodeP.ConnectedSource = null;
                     }
                     else if (secondaryNodeP.JunctionCount >= 3)
                     {
@@ -606,8 +638,13 @@ namespace SpaceFab.ChipDesign
 
                     if (secondaryNodeP.JunctionCount == 1)
                     {
-                        // TODO: connecting to 1 node = 3 total
-
+                        // connecting to 1 node = 3 total
+                        // forming PNP junction
+                        // (handle in 1 node junction merges)
+                        if (!checkList.Contains(secondaryNodeP))
+                        {
+                            checkList.Add(secondaryNodeP);
+                        }
                     }
                     else if (secondaryNodeP.JunctionCount >= 2)
                     {
