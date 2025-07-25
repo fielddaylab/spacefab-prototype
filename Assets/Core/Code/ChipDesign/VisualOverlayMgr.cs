@@ -84,7 +84,7 @@ namespace SpaceFab.ChipDesign
                             var hitNode = hit.GetComponent<NNode>();
 
                             if (hitNode == null || hitNode.JunctionCount <= 1 || hitNode.JunctionCount != nodeP.JunctionCount) { continue; }
-                            if (nodeP.JunctionCount == 3 && !nodeP.WingNodes.Contains(hitNode)) { continue; }
+                            if (nodeP.JunctionCount == 3 && !nodeP.WingNodes.Contains(hitNode) && nodeP.WingNodes.Count > 0) { continue; }
 
                             // Spawn an Arrow pointing away from P
                             var arrow = Instantiate(ArrowPrefab);
