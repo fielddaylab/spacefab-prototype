@@ -266,7 +266,47 @@ namespace SpaceFab.ChipDesign
 
         private void DeleteNode(NodeBase node)
         {
-            // TODO: handle special nodes
+            // handle special nodes
+            if (node.NodeType == NodeType.N)
+            {
+                var nodeN = node.GetComponent<NNode>();
+                if (nodeN.JunctionCount == 2)
+                {
+                    // always connected with opposite node (P)
+                    PNode pDependencySrc = nodeN.ConnectedSource.GetComponent<PNode>();
+                    if (pDependencySrc.ConnectedSource == nodeN) { pDependencySrc.ConnectedSource = null; }
+                    if (pDependencySrc.Dependency == nodeN) { pDependencySrc.Dependency = null; }
+
+                    nodeN.Dependency = null;
+                    nodeN.ConnectedSource = null;
+
+                    nodeN.JunctionCount = pDependencySrc.JunctionCount = 1;
+                }
+                else if (nodeN.JunctionCount == 3)
+                {
+                    // TODO: 
+                }
+            }
+            else if (node.NodeType == NodeType.P)
+            {
+                var nodeP = node.GetComponent<PNode>();
+                if (nodeP.JunctionCount == 2)
+                {
+                    // always connected with opposite node (N)
+                    NNode nDependencySrc = nodeP.ConnectedSource.GetComponent<NNode>();
+                    if (nDependencySrc.ConnectedSource == nodeP) { nDependencySrc.ConnectedSource = null; }
+                    if (nDependencySrc.Dependency == nodeP) { nDependencySrc.Dependency = null; }
+
+                    nodeP.Dependency = null;
+                    nodeP.ConnectedSource = null;
+
+                    nodeP.JunctionCount = nDependencySrc.JunctionCount = 1;
+                }
+                else if (nodeP.JunctionCount == 3)
+                {
+                    // TODO: 
+                }
+            }
 
             // clear from links
             for (int i = 0; i < node.Links.Count; i++)
@@ -375,7 +415,6 @@ namespace SpaceFab.ChipDesign
                     var hit = Physics2D.OverlapPoint(node.transform.position + dirVector, 1 << LayerMask.NameToLayer("Nodes"));
                     if (hit != null)
                     {
-
                         var hitNode = hit.GetComponent<NodeBase>();
                         bool alreadyHandled = true;
 

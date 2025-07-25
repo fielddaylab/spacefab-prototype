@@ -43,7 +43,6 @@ namespace SpaceFab.ChipDesign
             else
             {
                 // Has a dependency
-
                 if (ConnectedSource == null)
                 {
                     // Should not occur!
