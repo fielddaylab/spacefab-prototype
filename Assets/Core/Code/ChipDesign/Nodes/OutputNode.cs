@@ -14,6 +14,8 @@ namespace SpaceFab.ChipDesign
             DefaultVal = GameConsts.DEFFERED_CODE;
         }
 
+        public override void UpdateNodeText() { }
+
         public override float Evaluate(NodeBase prevNode, out bool unstable)
         {
             return EvaluationMgr.EvaluateNode(this, prevNode, null, DefaultVal, out unstable);

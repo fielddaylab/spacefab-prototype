@@ -32,6 +32,8 @@ namespace SpaceFab.ChipDesign
             Game.Events?.Deregister(GameEvents.EvaluationStarted, HandleEvaluationStarted);
         }
 
+        public abstract void UpdateNodeText();
+
         public abstract float Evaluate(NodeBase prevNode, out bool unstable);
 
         private void HandleEvaluationStarted()

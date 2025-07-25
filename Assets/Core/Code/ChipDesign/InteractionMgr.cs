@@ -224,6 +224,11 @@ namespace SpaceFab.ChipDesign
                     Debug.Log("valid node to erase");
                     var toErase = hit.GetComponent<NodeBase>();
                     DeleteNode(toErase);
+
+                    foreach (var node in AllNodes)
+                    {
+                        node.UpdateNodeText();
+                    }
                 }
                 else
                 {
@@ -284,7 +289,31 @@ namespace SpaceFab.ChipDesign
                 }
                 else if (nodeN.JunctionCount == 3)
                 {
-                    // TODO: 
+                    if (nodeN.Dependency == null)
+                    {
+                        // erasing middle node
+                        for (int i = 0; i < nodeN.WingNodes.Count; i++)
+                        {
+                            var wingNode = nodeN.WingNodes[i].GetComponent<PNode>();
+                            wingNode.Dependency = null;
+                            wingNode.ConnectedSource = null;
+                            wingNode.JunctionCount = 1;
+                        }
+                    }
+                    else
+                    {
+                        // erasing edge node
+                        var middleNode = nodeN.Dependency.GetComponent<PNode>();
+                        middleNode.Dependency = nodeN.ConnectedSource;
+                        middleNode.ConnectedSource = nodeN.ConnectedSource;
+                        middleNode.WingNodes.Clear();
+
+                        var oppositeNode = nodeN.ConnectedSource.GetComponent<NNode>();
+                        oppositeNode.Dependency = nodeN.Dependency;
+                        oppositeNode.ConnectedSource = nodeN.Dependency;
+
+                        middleNode.JunctionCount = oppositeNode.JunctionCount = 2;
+                    }
                 }
             }
             else if (node.NodeType == NodeType.P)
@@ -304,7 +333,31 @@ namespace SpaceFab.ChipDesign
                 }
                 else if (nodeP.JunctionCount == 3)
                 {
-                    // TODO: 
+                    if (nodeP.Dependency == null)
+                    {
+                        // erasing middle node
+                        for (int i = 0; i < nodeP.WingNodes.Count; i++)
+                        {
+                            var wingNode = nodeP.WingNodes[i].GetComponent<NNode>();
+                            wingNode.Dependency = null;
+                            wingNode.ConnectedSource = null;
+                            wingNode.JunctionCount = 1;
+                        }
+                    }
+                    else
+                    {
+                        // erasing edge node
+                        var middleNode = nodeP.Dependency.GetComponent<NNode>();
+                        middleNode.Dependency = nodeP.ConnectedSource;
+                        middleNode.ConnectedSource = nodeP.ConnectedSource;
+                        middleNode.WingNodes.Clear();
+
+                        var oppositeNode = nodeP.ConnectedSource.GetComponent<PNode>();
+                        oppositeNode.Dependency = nodeP.Dependency;
+                        oppositeNode.ConnectedSource = nodeP.Dependency;
+
+                        middleNode.JunctionCount = oppositeNode.JunctionCount = 2;
+                    }
                 }
             }
 
@@ -466,6 +519,11 @@ namespace SpaceFab.ChipDesign
                     checkList.Remove(node);
                 }
             }
+
+            foreach(var node in AllNodes)
+            {
+                node.UpdateNodeText();
+            }
         }
 
         private bool TryMergePNode(PNode primaryNode, NodeBase secondaryNode, ref List<NodeBase> checkList)
@@ -525,6 +583,9 @@ namespace SpaceFab.ChipDesign
                         secondaryNodeN.Dependency.GetComponent<PNode>().ConnectedSource = primaryNode;
 
                         // 3. rewire middle (dependency) node
+                        secondaryNodeN.WingNodes.Clear();
+                        secondaryNodeN.WingNodes.Add(primaryNode);
+                        secondaryNodeN.WingNodes.Add(primaryNode.ConnectedSource);
                         secondaryNodeN.Dependency = null;
                         secondaryNodeN.ConnectedSource = null;
                     }
@@ -622,6 +683,9 @@ namespace SpaceFab.ChipDesign
                         secondaryNodeP.Dependency.GetComponent<NNode>().ConnectedSource = primaryNode;
 
                         // 3. rewire middle (dependency) node
+                        secondaryNodeP.WingNodes.Clear();
+                        secondaryNodeP.WingNodes.Add(primaryNode);
+                        secondaryNodeP.WingNodes.Add(primaryNode.ConnectedSource);
                         secondaryNodeP.Dependency = null;
                         secondaryNodeP.ConnectedSource = null;
                     }

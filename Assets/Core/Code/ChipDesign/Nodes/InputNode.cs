@@ -14,6 +14,8 @@ namespace SpaceFab.ChipDesign
             DefaultVal = InputVal;
         }
 
+        public override void UpdateNodeText() { }
+
         public override float Evaluate(NodeBase prevNode, out bool unstable)
         {
             unstable = false;

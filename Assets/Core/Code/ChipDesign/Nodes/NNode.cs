@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.ChipDesign
@@ -9,12 +10,19 @@ namespace SpaceFab.ChipDesign
         [HideInInspector] public int JunctionCount = 1;
         public NodeBase Dependency; // In an NPN, the P. In an NP, the P.
         public NodeBase ConnectedSource; // In an NPN, the other N. In an NP, the P.
+        public List<NodeBase> WingNodes = new List<NodeBase>(); // In an PNP, the P's.
+        [SerializeField] private TMP_Text JunctionText;
         // public List<NodeBase> ConnectedLikeNodes; // In NN, the other N.
 
         private void Awake()
         {
             DefaultVal = GameConsts.DEFFERED_CODE;
             JunctionCount = 1;
+        }
+
+        public override void UpdateNodeText()
+        {
+            JunctionText.SetText(JunctionCount.ToString());
         }
 
         public override float Evaluate(NodeBase prevNode, out bool unstable)
