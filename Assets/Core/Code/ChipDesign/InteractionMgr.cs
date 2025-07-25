@@ -27,6 +27,7 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private GameObject PPrefab;
 
         private List<NodeBase> AllNodes = new List<NodeBase>();
+        private List<Link> AllLinks = new List<Link>();
 
         #region Unity Callbacks
 
@@ -45,6 +46,11 @@ namespace SpaceFab.ChipDesign
         public List<NodeBase> GetAllNodes()
         {
             return AllNodes;
+        }
+
+        public List<Link> GetAllLinks()
+        {
+            return AllLinks;
         }
 
         #region Interactions
@@ -280,7 +286,11 @@ namespace SpaceFab.ChipDesign
             link.SideA?.RemoveLink(link);
             link.SideB?.RemoveLink(link);
             if (CurrLink == link) { CurrLink = null; }
+
+            if (AllLinks.Contains(link)) { AllLinks.Remove(link); }
             Destroy(link.gameObject);
+
+            Game.Events.Dispatch(GameEvents.OnLayoutChanged);
         }
 
         private void DeleteNode(NodeBase node)
@@ -438,6 +448,13 @@ namespace SpaceFab.ChipDesign
             var offset = link.Collider.offset;
             offset.x = link.Collider.size.x / 2;
             link.Collider.offset = offset;
+
+            if (!AllLinks.Contains(link))
+            {
+                AllLinks.Add(link);
+            }
+
+            Game.Events.Dispatch(GameEvents.OnLayoutChanged);
         }
 
         private void CombineNodePass()

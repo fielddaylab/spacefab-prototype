@@ -19,6 +19,12 @@ namespace SpaceFab.ChipDesign
 
         private void HandleLayoutChanged()
         {
+            RefreshArrowVisuals();
+            RefreshLinkVisuals();
+        }
+
+        private void RefreshArrowVisuals()
+        {
             // clear old visuals
             foreach (var arrow in ArrowVisuals)
             {
@@ -38,7 +44,7 @@ namespace SpaceFab.ChipDesign
 
                     /*
                      * For all P nodes
-                     *  If there is an adjacent N Node, and both this node and adj node have JunctionCount > 1:
+                     *  If there is an adjacent N Node, and both this node and adj node have JunctionCount > 1 and in same junction:
 	                 *      Spawn an Arrow pointing away from P
                      */
                     var dirVector = Vector3.zero;
@@ -92,6 +98,25 @@ namespace SpaceFab.ChipDesign
                 else
                 {
                     continue;
+                }
+            }
+        }
+
+        private void RefreshLinkVisuals()
+        {
+            var allLinks = InteractionMgr.Instance.GetAllLinks();
+
+            foreach (var link in allLinks)
+            {
+                if (link.SideA && link.SideB)
+                {
+                    link.LineRenderer.startColor = Color.gray;
+                    link.LineRenderer.endColor = Color.gray;
+                }
+                else
+                {
+                    link.LineRenderer.startColor = Color.red;
+                    link.LineRenderer.endColor = Color.red;
                 }
             }
         }
