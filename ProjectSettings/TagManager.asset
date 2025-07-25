@@ -44,3 +44,9 @@ TagManager:
   - name: Grid Base
     uniqueID: 1979389103
     locked: 0
+  - name: Grid Nodes
+    uniqueID: 1845702645
+    locked: 0
+  - name: Grid Overlay
+    uniqueID: 114194533
+    locked: 0

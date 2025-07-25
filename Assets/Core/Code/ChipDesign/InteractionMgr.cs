@@ -42,6 +42,11 @@ namespace SpaceFab.ChipDesign
 
         #endregion // Unity Callbacks
 
+        public List<NodeBase> GetAllNodes()
+        {
+            return AllNodes;
+        }
+
         #region Interactions
 
         private void ProcessInteractions()
@@ -96,6 +101,9 @@ namespace SpaceFab.ChipDesign
 
                     // Combine nearby nodes
                     CombineNodePass();
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
                 }
             }
         }
@@ -128,6 +136,9 @@ namespace SpaceFab.ChipDesign
 
                     // Combine nearby nodes
                     CombineNodePass();
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
                 }
             }
         }
@@ -229,6 +240,9 @@ namespace SpaceFab.ChipDesign
                     {
                         node.UpdateNodeText();
                     }
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
                 }
                 else
                 {
