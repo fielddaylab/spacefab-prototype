@@ -9,9 +9,12 @@ EditorBuildSettings:
     path: Assets/Core/Scenes/Boot.unity
     guid: a219238dc7e41b44c9af4d47ce198e3c
   - enabled: 1
+    path: Assets/Core/Scenes/Title.unity
+    guid: 94d712eaa68115140a1f241002c4fa22
+  - enabled: 1
     path: Assets/Core/Scenes/ChipDesign.unity
     guid: f80c004d1479711409dc1c126bf4f6a8
   - enabled: 1
-    path: Assets/Core/Scenes/Title.unity
-    guid: 94d712eaa68115140a1f241002c4fa22
+    path: Assets/Core/Scenes/Floorplan.unity
+    guid: fe63d9b498051f04fa5757d5f4728781
   m_configObjects: {}
