@@ -26,10 +26,8 @@ namespace SpaceFab.ChipDesign
 
             // Find output node
             var outNode = GameObject.Find("Out");
-            if (outNode == null) {
-                Debug.LogError("[EvaluationMgr] No output node named \"Out\" found in level!");
-            }
-            else {
+            if (outNode != null)
+            {
                 m_OutNode = outNode.GetComponent<OutputNode>();
                 ExpectedResultText.SetText(m_OutNode.OutputTarget.ToString());
             }
@@ -44,6 +42,18 @@ namespace SpaceFab.ChipDesign
 
         private void Evaluate()
         {
+            // Find output node
+            var outNode = GameObject.Find("Out");
+            if (outNode == null)
+            {
+                Debug.LogError("[EvaluationMgr] No output node named \"Out\" found in level!");
+            }
+            else
+            {
+                m_OutNode = outNode.GetComponent<OutputNode>();
+                ExpectedResultText.SetText(m_OutNode.OutputTarget.ToString());
+            }
+
             // Start at Output node and work backward
             float actual = m_OutNode.Evaluate(null, out bool unstable);
             if (actual == GameConsts.DEFFERED_CODE) { actual = 0; }

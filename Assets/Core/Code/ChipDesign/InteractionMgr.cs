@@ -23,8 +23,15 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private GameObject LinkPrefab;
         [HideInInspector] public Link CurrLink = null;
 
+        [SerializeField] private GameObject BlankInPrefab;
+        [SerializeField] private GameObject ABPrefab;
+        [SerializeField] private GameObject VPlusPrefab;
+        [SerializeField] private GameObject VMinusPrefab;
+        [SerializeField] private GameObject OutPrefab;
         [SerializeField] private GameObject NPrefab;
         [SerializeField] private GameObject PPrefab;
+
+        public TransistorLevelData CurrLevelData;
 
         private List<NodeBase> AllNodes = new List<NodeBase>();
         private List<Link> AllLinks = new List<Link>();
@@ -66,6 +73,24 @@ namespace SpaceFab.ChipDesign
                     break;
                 case ToolType.DrawPNodes:
                     ProcessDrawPNodes();
+                    break;
+                case ToolType.DrawInNodes:
+                    ProcessDrawInNodes();
+                    break;
+                case ToolType.DrawOutNodes:
+                    ProcessDrawOutNodes();
+                    break;
+                case ToolType.DrawVPlusNodes:
+                    ProcessDrawVPlusNodes();
+                    break;
+                case ToolType.DrawVMinusNodes:
+                    ProcessDrawVMinusNodes();
+                    break;
+                case ToolType.DrawANodes:
+                    ProcessDrawANodes();
+                    break;
+                case ToolType.DrawBNodes:
+                    ProcessDrawBNodes();
                     break;
                 case ToolType.DrawLinks:
                     ProcessDrawLinks();
@@ -142,6 +167,195 @@ namespace SpaceFab.ChipDesign
 
                     // Combine nearby nodes
                     CombineNodePass();
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
+                }
+            }
+        }
+
+        private void ProcessDrawInNodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newNode = Instantiate(BlankInPrefab).GetComponent<InputNode>();
+                    newNode.InputVal = CurrLevelData.GetInVal();
+                    var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
+                    newNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNode.transform.position.z);
+
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    // Try to attach to Link
+                    AddNodeToExistingLink(flooredMousePos, newNode);
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
+                }
+            }
+        }
+
+        private void ProcessDrawOutNodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newNode = Instantiate(OutPrefab).GetComponent<OutputNode>();
+                    newNode.OutputTarget = CurrLevelData.GetOutVal();
+                    newNode.gameObject.name = "Out";
+                    var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
+                    newNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNode.transform.position.z);
+
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    // Try to attach to Link
+                    AddNodeToExistingLink(flooredMousePos, newNode);
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
+                }
+            }
+        }
+
+        private void ProcessDrawVPlusNodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newNode = Instantiate(VPlusPrefab).GetComponent<InputNode>();
+                    newNode.InputVal = 1;
+                    var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
+                    newNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNode.transform.position.z);
+
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    // Try to attach to Link
+                    AddNodeToExistingLink(flooredMousePos, newNode);
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
+                }
+            }
+        }
+
+        private void ProcessDrawVMinusNodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newNode = Instantiate(VMinusPrefab).GetComponent<InputNode>();
+                    newNode.InputVal = -1;
+                    var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
+                    newNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNode.transform.position.z);
+
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    // Try to attach to Link
+                    AddNodeToExistingLink(flooredMousePos, newNode);
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
+                }
+            }
+        }
+
+        private void ProcessDrawANodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newNode = Instantiate(ABPrefab).GetComponent<InputNode>();
+                    newNode.InputVal = CurrLevelData.GetAVal();
+                    newNode.LabelText.SetText("A");
+                    var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
+                    newNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNode.transform.position.z);
+
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    // Try to attach to Link
+                    AddNodeToExistingLink(flooredMousePos, newNode);
+
+                    // Refresh visual overlays
+                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
+                }
+            }
+        }
+
+        private void ProcessDrawBNodes()
+        {
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+            {
+                // check if valid start
+                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+                if (hit != null)
+                {
+                    Debug.Log("invalid start");
+                }
+                else
+                {
+                    Debug.Log("valid start");
+                    var newNode = Instantiate(ABPrefab).GetComponent<InputNode>();
+                    newNode.InputVal = CurrLevelData.GetBVal();
+                    newNode.LabelText.SetText("B");
+                    var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
+                    newNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNode.transform.position.z);
+
+                    // move box collider to new position
+                    Physics2D.SyncTransforms();
+
+                    // Try to attach to Link
+                    AddNodeToExistingLink(flooredMousePos, newNode);
 
                     // Refresh visual overlays
                     Game.Events.Dispatch(GameEvents.OnLayoutChanged);

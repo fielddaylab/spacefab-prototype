@@ -14,7 +14,13 @@ namespace SpaceFab.ChipDesign
         DrawNNodes,
         DrawPNodes,
         DrawLinks,
-        Erase
+        Erase,
+        DrawInNodes,
+        DrawOutNodes,
+        DrawVPlusNodes,
+        DrawVMinusNodes,
+        DrawANodes,
+        DrawBNodes
     }
 
     public class ToolbarMgr : MonoBehaviour
@@ -36,6 +42,14 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private Button DrawNNodesButton;
         [SerializeField] private Button DrawPNodesButton;
 
+        [SerializeField] private Button DrawInNodesButton;
+        [SerializeField] private Button DrawVPlusNodesButton;
+        [SerializeField] private Button DrawVMinusNodesButton;
+        [SerializeField] private Button DrawANodesButton;
+        [SerializeField] private Button DrawBNodesButton;
+        [SerializeField] private Button DrawOutNodesButton;
+
+
         [Header("Links")]
         [SerializeField] private GameObject DrawLinksGroup;
         [SerializeField] private Button DrawLinksButton;
@@ -49,6 +63,12 @@ namespace SpaceFab.ChipDesign
             LayerButton.onClick.AddListener(HandleLayerClicked);
             DrawNNodesButton.onClick.AddListener(HandleDrawNNodesClicked);
             DrawPNodesButton.onClick.AddListener(HandleDrawPNodesClicked);
+            DrawInNodesButton.onClick.AddListener(HandleDrawInNodesClicked);
+            DrawOutNodesButton.onClick.AddListener(HandleDrawOutNodesClicked);
+            DrawVPlusNodesButton.onClick.AddListener(HandleDrawVPlusNodesClicked);
+            DrawVMinusNodesButton.onClick.AddListener(HandleDrawVMinusNodesClicked);
+            DrawANodesButton.onClick.AddListener(HandleDrawANodesClicked);
+            DrawBNodesButton.onClick.AddListener(HandleDrawBNodesClicked);
             EraseButton.onClick.AddListener(HandleEraseClicked);
             DrawLinksButton.onClick.AddListener(HandleDrawLinksClicked);
         }
@@ -62,8 +82,27 @@ namespace SpaceFab.ChipDesign
             LayerButton.onClick.RemoveListener(HandleLayerClicked);
             DrawNNodesButton.onClick.RemoveListener(HandleDrawNNodesClicked);
             DrawPNodesButton.onClick.RemoveListener(HandleDrawPNodesClicked);
+            DrawInNodesButton.onClick.RemoveListener(HandleDrawInNodesClicked);
+            DrawOutNodesButton.onClick.RemoveListener(HandleDrawOutNodesClicked);
+            DrawVPlusNodesButton.onClick.RemoveListener(HandleDrawVPlusNodesClicked);
+            DrawVMinusNodesButton.onClick.RemoveListener(HandleDrawVMinusNodesClicked);
+            DrawANodesButton.onClick.RemoveListener(HandleDrawANodesClicked);
+            DrawBNodesButton.onClick.RemoveListener(HandleDrawBNodesClicked);
             EraseButton.onClick.RemoveListener(HandleEraseClicked);
             DrawLinksButton.onClick.RemoveListener(HandleDrawLinksClicked);
+        }
+
+        private void Start()
+        {
+            DrawInNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.IN));
+            DrawOutNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.OUT));
+            DrawVPlusNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VPLUS));
+            DrawVMinusNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VMINUS));
+            DrawANodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.A));
+            DrawBNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.B));
+            DrawNNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.NNODE));
+            DrawPNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.PNODE));
+
         }
 
         #region Handlers
@@ -108,6 +147,36 @@ namespace SpaceFab.ChipDesign
         private void HandleDrawPNodesClicked()
         {
             InteractionMgr.Instance.SetActiveTool(ToolType.DrawPNodes);
+        }
+
+        private void HandleDrawInNodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawInNodes);
+        }
+
+        private void HandleDrawOutNodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawOutNodes);
+        }
+
+        private void HandleDrawVPlusNodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawVPlusNodes);
+        }
+
+        private void HandleDrawVMinusNodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawVMinusNodes);
+        }
+
+        private void HandleDrawANodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawANodes);
+        }
+
+        private void HandleDrawBNodesClicked()
+        {
+            InteractionMgr.Instance.SetActiveTool(ToolType.DrawBNodes);
         }
 
         private void HandleEraseClicked()

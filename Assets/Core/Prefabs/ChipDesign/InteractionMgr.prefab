@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3498658930765280096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5615047294326695665}
+  - component: {fileID: 8237799995216346730}
+  m_Layer: 0
+  m_Name: InteractionMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5615047294326695665
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3498658930765280096}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8237799995216346730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3498658930765280096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76acbbe646a8a34a9fc3988302e2166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ActiveTool: 0
+  LinkPrefab: {fileID: 4887771120382315005, guid: b463343ec7ba3d644b6afd68948e005f, type: 3}
+  CurrLink: {fileID: 0}
+  BlankInPrefab: {fileID: 6165886716864824853, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
+  ABPrefab: {fileID: 6165886716864824853, guid: 9902c7295eebc484f9d26f00a988ef6d, type: 3}
+  VPlusPrefab: {fileID: 1426681045463995008, guid: fba9a527b372a8948af3b102fca94120, type: 3}
+  VMinusPrefab: {fileID: 1999627889020590288, guid: d0661be528b0e654898a0c164eea8cdf, type: 3}
+  OutPrefab: {fileID: 5882616109539076356, guid: 9381b8cd2dd0401428bd327bebb26b3f, type: 3}
+  NPrefab: {fileID: 2365132895965842755, guid: 3413b57d7a9a8a646a533bc844a076c7, type: 3}
+  PPrefab: {fileID: 2788611669963745696, guid: b65581ac0b17c6a4597a0f3ebf555b3f, type: 3}
+  CurrLevelData: {fileID: 11400000, guid: fd12ee1389cb92141aba4f63ff05eb2d, type: 2}

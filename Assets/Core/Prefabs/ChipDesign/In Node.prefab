@@ -306,5 +306,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NodeType: 0
+  Visited: 0
+  VisitedVal: 0
+  DefaultVal: 0
   InputVal: 0
-  OutputTarget: 0
+  LabelText: {fileID: 6231113097268786984}

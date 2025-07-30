@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.ChipDesign
@@ -8,6 +9,7 @@ namespace SpaceFab.ChipDesign
     {
         [Header("Input")]
         public float InputVal; // for Input Nodes
+        public TMP_Text LabelText;
 
         private void Awake()
         {
