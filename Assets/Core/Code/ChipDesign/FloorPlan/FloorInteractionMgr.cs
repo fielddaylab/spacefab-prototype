@@ -13,6 +13,7 @@ namespace SpaceFab.ChipDesign
 
         public GridInteractionLayer ActiveLayer { get; private set; }
         public ToolType ActiveTool = ToolType.None;
+        public LinkType ActiveLinkType = LinkType.Grey;
 
         [SerializeField] private GameObject LinkPrefab;
         [HideInInspector] public Link CurrLink = null;
@@ -56,8 +57,7 @@ namespace SpaceFab.ChipDesign
                     ProcessDrawLinks();
                     break;
                 case ToolType.Erase:
-                    if (ActiveLayer == GridInteractionLayer.Nodes) { ProcessEraseNodes(); }
-                    else { ProcessEraseLinks(); }
+                    ProcessEraseLinks();
                     break;
                 default:
                     break;
@@ -79,6 +79,9 @@ namespace SpaceFab.ChipDesign
                 CurrLink = Instantiate(LinkPrefab).GetComponent<Link>();
                 CurrLink.transform.position = new Vector3(mousePos.x, mousePos.y, CurrLink.transform.position.z);
                 CurrLink.LineRenderer.SetPosition(0, CurrLink.transform.position);
+                CurrLink.LineRenderer.startColor = ActiveLinkType == LinkType.Grey ? Color.grey : Color.yellow;
+                CurrLink.LineRenderer.endColor = ActiveLinkType == LinkType.Grey ? Color.grey : Color.yellow;
+                CurrLink.LinkType = ActiveLinkType;
                 CurrLink.SideA = null;
 
                 var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
@@ -140,34 +143,6 @@ namespace SpaceFab.ChipDesign
                 else if (CurrLink != null)
                 {
                     DeleteLink(CurrLink);
-                }
-            }
-        }
-
-        private void ProcessEraseNodes()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                // check if valid start
-                var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
-                if (hit != null)
-                {
-                    Debug.Log("valid node to erase");
-                    var toErase = hit.GetComponent<NodeBase>();
-                    DeleteNode(toErase);
-
-                    foreach (var node in AllNodes)
-                    {
-                        node.UpdateNodeText();
-                    }
-
-                    // Refresh visual overlays
-                    Game.Events.Dispatch(GameEvents.OnLayoutChanged);
-                }
-                else
-                {
-                    Debug.Log("invalid node to erase");
                 }
             }
         }

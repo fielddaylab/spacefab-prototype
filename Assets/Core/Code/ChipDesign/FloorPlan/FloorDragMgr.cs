@@ -22,7 +22,10 @@ namespace SpaceFab.ChipDesign
 
         void Update()
         {
-            HandleMouseInput();
+            if (FloorInteractionMgr.Instance.ActiveLayer == GridInteractionLayer.Nodes)
+            { 
+                HandleMouseInput();
+            }
         }
 
         void HandleMouseInput()

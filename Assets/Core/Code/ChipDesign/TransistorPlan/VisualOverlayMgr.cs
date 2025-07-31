@@ -19,7 +19,10 @@ namespace SpaceFab.ChipDesign
 
         private void HandleLayoutChanged()
         {
-            RefreshArrowVisuals();
+            if (InteractionMgr.Instance != null)
+            {
+                RefreshArrowVisuals();
+            }
             RefreshLinkVisuals();
         }
 
@@ -104,14 +107,14 @@ namespace SpaceFab.ChipDesign
 
         private void RefreshLinkVisuals()
         {
-            var allLinks = InteractionMgr.Instance.GetAllLinks();
+            List<Link> allLinks = InteractionMgr.Instance != null ? InteractionMgr.Instance.GetAllLinks() : FloorInteractionMgr.Instance.GetAllLinks();
 
             foreach (var link in allLinks)
             {
                 if (link.SideA && link.SideB)
                 {
-                    link.LineRenderer.startColor = Color.gray;
-                    link.LineRenderer.endColor = Color.gray;
+                    link.LineRenderer.startColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
+                    link.LineRenderer.endColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
                 }
                 else
                 {

@@ -15,5 +15,7 @@ namespace SpaceFab.ChipDesign
         public BoxCollider2D Collider;
 
         public LineRenderer LineRenderer;
+
+        public LinkType LinkType;
     }
 }
