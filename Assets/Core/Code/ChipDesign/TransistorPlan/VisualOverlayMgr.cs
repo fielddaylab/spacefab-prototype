@@ -107,19 +107,40 @@ namespace SpaceFab.ChipDesign
 
         private void RefreshLinkVisuals()
         {
-            List<Link> allLinks = InteractionMgr.Instance != null ? InteractionMgr.Instance.GetAllLinks() : FloorInteractionMgr.Instance.GetAllLinks();
-
-            foreach (var link in allLinks)
+            if (InteractionMgr.Instance != null)
             {
-                if (link.SideA && link.SideB)
+                List<Link> allLinks = InteractionMgr.Instance.GetAllLinks();
+
+                foreach (var link in allLinks)
                 {
-                    link.LineRenderer.startColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
-                    link.LineRenderer.endColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
+                    if (link.SideA && link.SideB)
+                    {
+                        link.LineRenderer.startColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
+                        link.LineRenderer.endColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
+                    }
+                    else
+                    {
+                        link.LineRenderer.startColor = Color.red;
+                        link.LineRenderer.endColor = Color.red;
+                    }
                 }
-                else
+            }
+            else
+            {
+                List<FloorLink> allLinks = FloorInteractionMgr.Instance.GetAllLinks();
+
+                foreach (var link in allLinks)
                 {
-                    link.LineRenderer.startColor = Color.red;
-                    link.LineRenderer.endColor = Color.red;
+                    if ((link.SideA || link.StartAnchorNode.Links.Count > 0) && (link.SideB || link.EndAnchorNode.Links.Count > 0))
+                    {
+                        link.LineRenderer.startColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
+                        link.LineRenderer.endColor = link.LinkType == LinkType.Grey ? Color.gray : Color.yellow;
+                    }
+                    else
+                    {
+                        link.LineRenderer.startColor = Color.red;
+                        link.LineRenderer.endColor = Color.red;
+                    }
                 }
             }
         }

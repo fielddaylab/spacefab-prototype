@@ -15,8 +15,8 @@ TagManager:
   - Nodes
   - Links
   - FloorplanDrag
-  - 
-  - 
+  - FloorLinkNodes
+  - FloorNodes
   - 
   - 
   - 

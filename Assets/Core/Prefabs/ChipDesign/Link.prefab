@@ -85,6 +85,7 @@ MonoBehaviour:
   EndAnchor: {fileID: 3118714285144697274}
   Collider: {fileID: 8002257345232610519}
   LineRenderer: {fileID: 1206692121284527315}
+  LinkType: 0
 --- !u!120 &1206692121284527315
 LineRenderer:
   serializedVersion: 2
