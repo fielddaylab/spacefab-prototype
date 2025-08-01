@@ -94,7 +94,8 @@ namespace SpaceFab.ChipDesign
                         if (iter == 0)
                         {
                             // at least 1 space between inputs/outputs
-                            return false;
+                            // return false;
+                            return true;
                         }
                         else
                         {

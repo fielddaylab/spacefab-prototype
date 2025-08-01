@@ -16,6 +16,12 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private TMP_Text ExpectedResultText;
         [SerializeField] private TMP_Text ActualResultText;
 
+        [SerializeField] private GameObject EvaluatePanel;
+        [SerializeField] private TMP_Text EvaluatePanelTitleText;
+        [SerializeField] private Button ReviseButton;
+        [SerializeField] private Button ContinueButton;
+
+
         private OutputNode m_OutNode;
 
         private void Awake()
@@ -31,6 +37,10 @@ namespace SpaceFab.ChipDesign
                 m_OutNode = outNode.GetComponent<OutputNode>();
                 ExpectedResultText.SetText(m_OutNode.OutputTarget.ToString());
             }
+
+            EvaluatePanel.SetActive(false);
+            ReviseButton.onClick.AddListener(HandleReviseClicked);
+            ContinueButton.onClick.AddListener(HandleContinueClicked);
         }
 
         private void OnDestroy()
@@ -52,14 +62,14 @@ namespace SpaceFab.ChipDesign
             {
                 m_OutNode = outNode.GetComponent<OutputNode>();
                 ExpectedResultText.SetText(m_OutNode.OutputTarget.ToString());
+
+                // Start at Output node and work backward
+                float actual = m_OutNode.Evaluate(null, out bool unstable);
+                if (actual == GameConsts.DEFFERED_CODE) { actual = 0; }
+
+                bool result = (actual == m_OutNode.OutputTarget) && !unstable;
+                UpdateEvaluationText(result, actual, unstable);
             }
-
-            // Start at Output node and work backward
-            float actual = m_OutNode.Evaluate(null, out bool unstable);
-            if (actual == GameConsts.DEFFERED_CODE) { actual = 0; }
-
-            bool result = (actual == m_OutNode.OutputTarget) && !unstable;
-            UpdateEvaluationText(result, actual, unstable);
         }
 
         /// <summary>
@@ -129,6 +139,11 @@ namespace SpaceFab.ChipDesign
 
             if (success) { EvaluateText.SetText("Correct!"); }
             else { EvaluateText.SetText("Incorrect"); }
+
+            EvaluatePanel.SetActive(true);
+            if (success) { EvaluatePanelTitleText.SetText("Design Validated!"); }
+            else { EvaluatePanelTitleText.SetText("Back to the\nDrawing Board..."); }
+            ContinueButton.interactable = success;
         }
 
         #endregion // Evaluation
@@ -139,6 +154,16 @@ namespace SpaceFab.ChipDesign
         {
             Game.Events.Dispatch(GameEvents.EvaluationStarted);
             Evaluate();
+        }
+
+        private void HandleReviseClicked()
+        {
+            EvaluatePanel.SetActive(false);
+        }
+
+        private void HandleContinueClicked()
+        {
+            // EvaluatePanel.SetActive(false);
         }
 
         #endregion // Handlers
