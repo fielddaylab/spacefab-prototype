@@ -128,6 +128,7 @@ namespace SpaceFab.ChipDesign
                 DrawBNodesButton.gameObject.SetActive(false);
                 DrawNNodesButton.gameObject.SetActive(false);
                 DrawPNodesButton.gameObject.SetActive(false);
+                EraseButton.gameObject.SetActive(FloorInteractionMgr.Instance.ActiveLayer == GridInteractionLayer.Links);
             }
         }
 
@@ -155,14 +156,20 @@ namespace SpaceFab.ChipDesign
                     LayerLabelText.SetText("Nodes");
                     DrawNodesGroup.SetActive(true);
                     if (InteractionMgr.Instance != null) { DrawLinksGroup.SetActive(false); }
-                    if (FloorInteractionMgr.Instance != null) { DrawFloorLinksGroup.SetActive(false); }
+                    if (FloorInteractionMgr.Instance != null) { 
+                        EraseButton.gameObject.SetActive(false);
+                        DrawFloorLinksGroup.SetActive(false); 
+                    }
                     break;
                 case GridInteractionLayer.Links:
                     LayerText.SetText("-");
                     LayerLabelText.SetText("Links");
                     DrawNodesGroup.SetActive(false);
                     if (InteractionMgr.Instance != null) { DrawLinksGroup.SetActive(true); }
-                    if (FloorInteractionMgr.Instance != null) { DrawFloorLinksGroup.SetActive(true); }
+                    if (FloorInteractionMgr.Instance != null) {
+                        EraseButton.gameObject.SetActive(true);
+                        DrawFloorLinksGroup.SetActive(true);
+                    }
                     break;
                 default:
                     break;

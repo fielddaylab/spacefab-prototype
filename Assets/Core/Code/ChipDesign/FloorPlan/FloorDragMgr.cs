@@ -1,3 +1,4 @@
+using FieldDay;
 using UnityEngine;
 
 namespace SpaceFab.ChipDesign
@@ -15,12 +16,14 @@ namespace SpaceFab.ChipDesign
         private Vector3 offset; // grid offset
         private Vector3 objOffset; // obj offset
 
+        private Vector3 lastKnownPos = Vector3.zero;
+
         void Start()
         {
             mainCamera = Camera.main;
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (FloorInteractionMgr.Instance.ActiveLayer == GridInteractionLayer.Nodes)
             { 
@@ -50,6 +53,8 @@ namespace SpaceFab.ChipDesign
                     offsetCalcY /= 100;
 
                     objOffset = new Vector3(offsetCalcX, offsetCalcY, 0);
+
+                    lastKnownPos = SnapToGrid(hit.transform.position) + objOffset;
                 }
             }
 
@@ -57,6 +62,14 @@ namespace SpaceFab.ChipDesign
             {
                 Vector3 targetPos = mouseWorldPos + offset;
                 selectedObject.position = SnapToGrid(targetPos) + objOffset;
+                if (selectedObject.position != lastKnownPos)
+                {
+                    // handle disconnecting links
+                    Debug.Log("[FloorDragMgr] Reconnecting all links!");
+                    Physics.SyncTransforms();
+                    Game.Events.Dispatch(GameEvents.OnFloorLinksChanged);
+                }
+                lastKnownPos = selectedObject.position;
             }
 
             if (Input.GetMouseButtonUp(0))

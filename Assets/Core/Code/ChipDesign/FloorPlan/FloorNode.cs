@@ -14,6 +14,7 @@ namespace SpaceFab.ChipDesign
         public NodeType NodeType; // input or output
         public string TerminusID;
         public string RequiredID; // target other side to connect
+        public LinkType RequiredLinkType;
 
         private void Awake()
         {

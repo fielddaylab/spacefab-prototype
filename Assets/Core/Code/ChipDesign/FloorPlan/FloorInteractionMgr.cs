@@ -29,6 +29,11 @@ namespace SpaceFab.ChipDesign
             if (Instance == null) { Instance = this; }
         }
 
+        private void Start()
+        {
+            Game.Events.Register(GameEvents.OnFloorLinksChanged, HandleFloorLinksChanged);
+        }
+
         public void AddNode(FloorNode toAdd)
         {
             AllNodes.Add(toAdd);
@@ -86,33 +91,8 @@ namespace SpaceFab.ChipDesign
                         // update endpoint
                         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         var mouseSnapped = SnapToGrid(mousePos);
-                        float offsetAmt = 0.25f;
                         if (mouseSnapped.x != CurrLink.transform.position.x || mouseSnapped.y != CurrLink.transform.position.y)
                         {
-                            // get dir
-                            var dirMousSnapped = mouseSnapped;
-                            var dirOffset = Vector3.zero;
-                            if (mouseSnapped.x > CurrLink.transform.position.x)
-                            {
-                                // snapped to the right
-                                dirOffset.x = -offsetAmt;
-                            }
-                            else if (mouseSnapped.x < CurrLink.transform.position.x)
-                            {
-                                // snapped to the left
-                                dirOffset.x = offsetAmt;
-                            }
-                            else if (mouseSnapped.y > CurrLink.transform.position.y)
-                            {
-                                // snapped to the up
-                                dirOffset.y = -offsetAmt;
-                            }
-                            else if (mouseSnapped.y < CurrLink.transform.position.y)
-                            {
-                                // snapped to the down
-                                dirOffset.y = offsetAmt;
-                            }
-
                             // terminate link
                             var mousePos2D = new Vector3(mouseSnapped.x, mouseSnapped.y, CurrLink.transform.position.z);
                             CurrLink.LineRenderer.SetPosition(1, mousePos2D);
@@ -129,14 +109,9 @@ namespace SpaceFab.ChipDesign
                             Physics2D.SyncTransforms();
 
                             // connect to existing nodes and links
-                            var startNodeHits = Physics2D.OverlapPointAll(CurrLink.transform.position - dirOffset, 1 << LayerMask.NameToLayer("FloorNodes"));
-                            var startLinkHits = Physics2D.OverlapPointAll(CurrLink.transform.position, 1 << LayerMask.NameToLayer("FloorLinkNodes"));
+                            FloorInteractionUtility.SetLinkConnections(CurrLink, mouseSnapped, true, out bool endNodeHasHits);
 
-                            var endNodeHits = Physics2D.OverlapPointAll(mouseSnapped + dirOffset, 1 << LayerMask.NameToLayer("FloorNodes"));
-                            var endLinkHits = Physics2D.OverlapPointAll(mouseSnapped, 1 << LayerMask.NameToLayer("FloorLinkNodes"));
-                            FinalizeLink(CurrLink, startNodeHits, startLinkHits, endNodeHits, endLinkHits);
-
-                            if ((endNodeHits.Length == 0) && (endLinkHits.Length <= 1))
+                            if (endNodeHasHits)
                             {
                                 BeginNewLink();
                             }
@@ -182,6 +157,7 @@ namespace SpaceFab.ChipDesign
                     Debug.Log("valid link to erase");
                     var toErase = hit.GetComponent<FloorLink>();
                     DeleteLink(toErase);
+                    // Game.Events.Dispatch(GameEvents.OnFloorLinksChanged);
                 }
                 else
                 {
@@ -244,7 +220,7 @@ namespace SpaceFab.ChipDesign
             return new Vector3(x, y, position.z);
         }
 
-        private void FinalizeLink(FloorLink link, Collider2D[] startNodes, Collider2D[] startLinks, Collider2D[] endNodes, Collider2D[] endLinks)
+        public void FinalizeLink(FloorLink link, Collider2D[] startNodes, Collider2D[] startLinks, Collider2D[] endNodes, Collider2D[] endLinks, bool addToAll = true)
         {
             FloorNode currNode;
             bool anyStartNodeFound = false;
@@ -270,7 +246,6 @@ namespace SpaceFab.ChipDesign
                         link.SideA = currNode;
                         link.SideA?.Links.Add(link);
 
-                        // TODO: add back to the newly found link node
                         anyStartLinkFound = true;
                         anyStartNodeFound = true;
                     }
@@ -308,8 +283,6 @@ namespace SpaceFab.ChipDesign
                         link.SideB = currNode;
                         link.SideB?.Links.Add(link);
 
-                        // TODO: add back to the newly found link node
-
                         anyEndLinkFound = true;
                         anyEndNodeFound = true;
                     }
@@ -330,9 +303,12 @@ namespace SpaceFab.ChipDesign
             offset.x = link.Collider.size.x / 2;
             link.Collider.offset = offset;
 
-            if (!AllLinks.Contains(link))
+            if (addToAll)
             {
-                AllLinks.Add(link);
+                if (!AllLinks.Contains(link))
+                {
+                    AllLinks.Add(link);
+                }
             }
 
             Game.Events.Dispatch(GameEvents.OnLayoutChanged);
@@ -359,5 +335,72 @@ namespace SpaceFab.ChipDesign
         }
 
         #endregion // Layers
+
+        private void HandleFloorLinksChanged()
+        {
+            for (int i = 0; i < AllNodes.Count; i++)
+            {
+                AllNodes[i].Links.Clear();
+            }
+
+            // remove all links -- too unstable
+            while (AllLinks.Count > 0)
+            {
+                DeleteLink(AllLinks[0]);
+            }
+            AllLinks.Clear();
+
+            /*
+            for (int i = 0; i < AllLinks.Count; i++)
+            {
+                FloorInteractionUtility.SetLinkConnections(AllLinks[i], AllLinks[i].EndAnchor.position, false, out bool endNodeHasHits);
+            }
+            */
+        }
     }
+
+    public static class FloorInteractionUtility
+    {
+        public static void SetLinkConnections(FloorLink link, Vector3 termination, bool addToAll, out bool endNodeHasHits)
+        {
+            // get dir
+            float offsetAmt = 0.25f;
+            var dirMousSnapped = termination;
+            var dirOffset = Vector3.zero;
+            if (termination.x > link.transform.position.x)
+            {
+                // snapped to the right
+                dirOffset.x = -offsetAmt;
+            }
+            else if (termination.x < link.transform.position.x)
+            {
+                // snapped to the left
+                dirOffset.x = offsetAmt;
+            }
+            else if (termination.y > link.transform.position.y)
+            {
+                // snapped up
+                dirOffset.y = -offsetAmt;
+            }
+            else if (termination.y < link.transform.position.y)
+            {
+                // snapped down
+                dirOffset.y = offsetAmt;
+            }
+
+            endNodeHasHits = false;
+
+            var startNodeHits = Physics2D.OverlapPointAll(link.transform.position - dirOffset, 1 << LayerMask.NameToLayer("FloorNodes"));
+            var startLinkHits = Physics2D.OverlapPointAll(link.transform.position, 1 << LayerMask.NameToLayer("FloorLinkNodes"));
+
+            var endNodeHits = Physics2D.OverlapPointAll(termination + dirOffset, 1 << LayerMask.NameToLayer("FloorNodes"));
+            var endLinkHits = Physics2D.OverlapPointAll(termination, 1 << LayerMask.NameToLayer("FloorLinkNodes"));
+            FloorInteractionMgr.Instance.FinalizeLink(link, startNodeHits, startLinkHits, endNodeHits, endLinkHits, addToAll);
+
+            if ((endNodeHits.Length == 0) && (endLinkHits.Length <= 1)) {
+                endNodeHasHits = true;
+            }
+        }
+    }
+
 }

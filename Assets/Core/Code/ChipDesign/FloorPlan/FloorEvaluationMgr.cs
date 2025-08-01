@@ -41,7 +41,7 @@ namespace SpaceFab.ChipDesign
             {
                 if (node.NodeType == NodeType.Input)
                 {
-                    if (!IsInputConnectedToOutput(node, null, node.RequiredID))
+                    if (!IsInputConnectedToOutput(node, null, node.RequiredID, node.RequiredLinkType, 0))
                     {
                         result = false;
                         // break;
@@ -57,7 +57,7 @@ namespace SpaceFab.ChipDesign
             UpdateEvaluationText(result);
         }
 
-        private bool IsInputConnectedToOutput(FloorNode currNode, FloorNode prevNode, string requiredID)
+        private bool IsInputConnectedToOutput(FloorNode currNode, FloorNode prevNode, string requiredID, LinkType requiredType, int iter)
         {
             bool anyFound = false;
             // check all connected links (exclude prev node linkage)
@@ -81,7 +81,15 @@ namespace SpaceFab.ChipDesign
                 {
                     if (nextNode.TerminusID == requiredID)
                     {
-                        return true;
+                        if (iter == 0)
+                        {
+                            // at least 1 space between inputs/outputs
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
                     }
                     else { 
                         // either flat out wrong or unstable
@@ -90,10 +98,17 @@ namespace SpaceFab.ChipDesign
                 }
                 else
                 {
-                    // recurse
-                    if (IsInputConnectedToOutput(nextNode, currNode, requiredID))
+                    if (link.LinkType == requiredType)
                     {
-                        anyFound = true;
+                        // recurse
+                        if (IsInputConnectedToOutput(nextNode, currNode, requiredID, requiredType, iter + 1))
+                        {
+                            anyFound = true;
+                        }
+                    }
+                    else {
+                        // conflicting materials
+                        return false;
                     }
                 }
             }
