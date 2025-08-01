@@ -121,8 +121,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsLink: 1
-  NodeType: 0
+  NodeType: 4
   TerminusID: 
+  RequiredID: 
 --- !u!61 &6421925763073218861
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -196,8 +197,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsLink: 1
-  NodeType: 0
+  NodeType: 4
   TerminusID: 
+  RequiredID: 
 --- !u!61 &8661564728073377101
 BoxCollider2D:
   m_ObjectHideFlags: 0

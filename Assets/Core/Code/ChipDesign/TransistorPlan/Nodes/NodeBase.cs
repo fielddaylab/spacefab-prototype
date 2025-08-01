@@ -11,7 +11,8 @@ namespace SpaceFab.ChipDesign
         Input,
         Output,
         N,
-        P
+        P,
+        LinkAnchor
     }
 
     public abstract class NodeBase : MonoBehaviour

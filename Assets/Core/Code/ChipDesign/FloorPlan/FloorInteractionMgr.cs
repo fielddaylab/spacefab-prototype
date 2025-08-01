@@ -74,32 +74,7 @@ namespace SpaceFab.ChipDesign
         {
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
-                if (CurrLink != null)
-                {
-                    // clear last link
-                    DeleteLink(CurrLink);
-                }
-
-                var mousePos = SnapToGrid(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-
-                CurrLink = Instantiate(LinkPrefab).GetComponent<FloorLink>();
-                CurrLink.transform.position = new Vector3(mousePos.x, mousePos.y, CurrLink.transform.position.z);
-                CurrLink.LineRenderer.SetPosition(0, CurrLink.transform.position);
-                CurrLink.LineRenderer.SetPosition(1, CurrLink.transform.position);
-                CurrLink.LineRenderer.startColor = ActiveLinkType == LinkType.Grey ? Color.grey : Color.yellow;
-                CurrLink.LineRenderer.endColor = ActiveLinkType == LinkType.Grey ? Color.grey : Color.yellow;
-                CurrLink.LinkType = ActiveLinkType;
-                CurrLink.SideA = null;
-
-                var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
-                if (hit != null)
-                {
-                    var startNode = hit.GetComponent<FloorNode>();
-                    if (startNode)
-                    {
-                        CurrLink.SideA = startNode;
-                    }
-                }
+                BeginNewLink();
             }
 
             if (Input.GetMouseButton(0))
@@ -111,8 +86,33 @@ namespace SpaceFab.ChipDesign
                         // update endpoint
                         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         var mouseSnapped = SnapToGrid(mousePos);
+                        float offsetAmt = 0.25f;
                         if (mouseSnapped.x != CurrLink.transform.position.x || mouseSnapped.y != CurrLink.transform.position.y)
                         {
+                            // get dir
+                            var dirMousSnapped = mouseSnapped;
+                            var dirOffset = Vector3.zero;
+                            if (mouseSnapped.x > CurrLink.transform.position.x)
+                            {
+                                // snapped to the right
+                                dirOffset.x = -offsetAmt;
+                            }
+                            else if (mouseSnapped.x < CurrLink.transform.position.x)
+                            {
+                                // snapped to the left
+                                dirOffset.x = offsetAmt;
+                            }
+                            else if (mouseSnapped.y > CurrLink.transform.position.y)
+                            {
+                                // snapped to the up
+                                dirOffset.y = -offsetAmt;
+                            }
+                            else if (mouseSnapped.y < CurrLink.transform.position.y)
+                            {
+                                // snapped to the down
+                                dirOffset.y = offsetAmt;
+                            }
+
                             // terminate link
                             var mousePos2D = new Vector3(mouseSnapped.x, mouseSnapped.y, CurrLink.transform.position.z);
                             CurrLink.LineRenderer.SetPosition(1, mousePos2D);
@@ -129,12 +129,17 @@ namespace SpaceFab.ChipDesign
                             Physics2D.SyncTransforms();
 
                             // connect to existing nodes and links
-                            var startNodeHits = Physics2D.OverlapPointAll(CurrLink.transform.position, 1 << LayerMask.NameToLayer("FloorNodes"));
+                            var startNodeHits = Physics2D.OverlapPointAll(CurrLink.transform.position - dirOffset, 1 << LayerMask.NameToLayer("FloorNodes"));
                             var startLinkHits = Physics2D.OverlapPointAll(CurrLink.transform.position, 1 << LayerMask.NameToLayer("FloorLinkNodes"));
 
-                            var endNodeHits = Physics2D.OverlapPointAll(mouseSnapped, 1 << LayerMask.NameToLayer("FloorNodes"));
+                            var endNodeHits = Physics2D.OverlapPointAll(mouseSnapped + dirOffset, 1 << LayerMask.NameToLayer("FloorNodes"));
                             var endLinkHits = Physics2D.OverlapPointAll(mouseSnapped, 1 << LayerMask.NameToLayer("FloorLinkNodes"));
                             FinalizeLink(CurrLink, startNodeHits, startLinkHits, endNodeHits, endLinkHits);
+
+                            if ((endNodeHits.Length == 0) && (endLinkHits.Length <= 1))
+                            {
+                                BeginNewLink();
+                            }
                         }
                         else
                         {
@@ -155,7 +160,7 @@ namespace SpaceFab.ChipDesign
                 {
                     if (CurrLink != null)
                     {
-
+                        DeleteLink(CurrLink);
                     }
                 }
                 else if (CurrLink != null)
@@ -189,6 +194,36 @@ namespace SpaceFab.ChipDesign
 
         #region Helpers
 
+        private void BeginNewLink()
+        {
+            if (CurrLink != null)
+            {
+                // clear last link
+                DeleteLink(CurrLink);
+            }
+
+            var mousePos = SnapToGrid(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+            CurrLink = Instantiate(LinkPrefab).GetComponent<FloorLink>();
+            CurrLink.transform.position = new Vector3(mousePos.x, mousePos.y, CurrLink.transform.position.z);
+            CurrLink.LineRenderer.SetPosition(0, CurrLink.transform.position);
+            CurrLink.LineRenderer.SetPosition(1, CurrLink.transform.position);
+            CurrLink.LineRenderer.startColor = ActiveLinkType == LinkType.Grey ? Color.grey : Color.yellow;
+            CurrLink.LineRenderer.endColor = ActiveLinkType == LinkType.Grey ? Color.grey : Color.yellow;
+            CurrLink.LinkType = ActiveLinkType;
+            CurrLink.SideA = null;
+
+            var hit = Physics2D.OverlapPoint(mousePos, 1 << LayerMask.NameToLayer("Nodes"));
+            if (hit != null)
+            {
+                var startNode = hit.GetComponent<FloorNode>();
+                if (startNode)
+                {
+                    CurrLink.SideA = startNode;
+                }
+            }
+        }
+
         private void DeleteLink(FloorLink link)
         {
             link.SideA?.RemoveLink(link);
@@ -212,8 +247,8 @@ namespace SpaceFab.ChipDesign
         private void FinalizeLink(FloorLink link, Collider2D[] startNodes, Collider2D[] startLinks, Collider2D[] endNodes, Collider2D[] endLinks)
         {
             FloorNode currNode;
-            bool anyNodeFound = false;
-            bool anyLinkFound = false;
+            bool anyStartNodeFound = false;
+            bool anyStartLinkFound = false;
             foreach (var startCollider in startNodes)
             {
                 currNode = startCollider.GetComponent<FloorNode>();
@@ -222,10 +257,10 @@ namespace SpaceFab.ChipDesign
                     link.SideA = currNode;
                     link.SideA?.Links.Add(link);
 
-                    anyNodeFound = true;
+                    anyStartNodeFound = true;
                 }
             }
-            if (!anyNodeFound)
+            if (!anyStartNodeFound)
             {
                 foreach (var startCollider in startLinks)
                 {
@@ -236,20 +271,20 @@ namespace SpaceFab.ChipDesign
                         link.SideA?.Links.Add(link);
 
                         // TODO: add back to the newly found link node
-                        anyLinkFound = true;
-                        anyNodeFound = true;
+                        anyStartLinkFound = true;
+                        anyStartNodeFound = true;
                     }
                 }
 
-                if (!anyLinkFound)
+                if (!anyStartLinkFound)
                 {
                     link.SideA = link.StartAnchorNode;
                     link.SideA?.Links.Add(link);
                 }
             }
 
-            anyLinkFound = false;
-            anyNodeFound = false;
+            bool anyEndNodeFound = false;
+            bool anyEndLinkFound = false;
             foreach (var endCollider in endNodes)
             {
                 currNode = endCollider.GetComponent<FloorNode>();
@@ -258,10 +293,10 @@ namespace SpaceFab.ChipDesign
                     link.SideB = currNode;
                     link.SideB?.Links.Add(link);
 
-                    anyNodeFound = true;
+                    anyEndNodeFound = true;
                 }
             }
-            if (!anyNodeFound)
+            if (!anyEndNodeFound)
             {
                 link.SideB = link.EndAnchorNode;
 
@@ -275,12 +310,12 @@ namespace SpaceFab.ChipDesign
 
                         // TODO: add back to the newly found link node
 
-                        anyLinkFound = true;
-                        anyNodeFound = true;
+                        anyEndLinkFound = true;
+                        anyEndNodeFound = true;
                     }
                 }
 
-                if (!anyLinkFound)
+                if (!anyEndLinkFound)
                 {
                     link.SideB = link.EndAnchorNode;
                     link.SideB?.Links.Add(link);

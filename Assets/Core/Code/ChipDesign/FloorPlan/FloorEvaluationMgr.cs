@@ -17,8 +17,6 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private TMP_Text ExpectedResultText;
         [SerializeField] private TMP_Text ActualResultText;
 
-        private OutputNode m_OutNode;
-
         private void Awake()
         {
             EvaluateButton.onClick.AddListener(HandleEvaluateClicked);
@@ -36,26 +34,32 @@ namespace SpaceFab.ChipDesign
         private void Evaluate()
         {
             bool result = true;
+            int successfulChecks = 0;
 
             // for each input, check if connected to target output ID
             foreach (var node in FloorInteractionMgr.Instance.GetAllNodes())
             {
                 if (node.NodeType == NodeType.Input)
                 {
-                    if (!IsInputConnectedToOutput(node, null, node.TerminusID))
+                    if (!IsInputConnectedToOutput(node, null, node.RequiredID))
                     {
                         result = false;
                         // break;
                     }
+                    else
+                    {
+                        successfulChecks++;
+                    }
                 }
             }
 
-            Debug.Log("Evaluation: " + result);
+            Debug.Log("Evaluation: " + result + " with " + successfulChecks + " successful connections");
             UpdateEvaluationText(result);
         }
 
-        private bool IsInputConnectedToOutput(FloorNode currNode, FloorNode prevNode, string outputID)
+        private bool IsInputConnectedToOutput(FloorNode currNode, FloorNode prevNode, string requiredID)
         {
+            bool anyFound = false;
             // check all connected links (exclude prev node linkage)
             foreach (var link in currNode.Links)
             {
@@ -75,7 +79,7 @@ namespace SpaceFab.ChipDesign
 
                 if (nextNode.NodeType == NodeType.Output)
                 {
-                    if (nextNode.TerminusID == outputID)
+                    if (nextNode.TerminusID == requiredID)
                     {
                         return true;
                     }
@@ -87,11 +91,14 @@ namespace SpaceFab.ChipDesign
                 else
                 {
                     // recurse
-                    return IsInputConnectedToOutput(nextNode, currNode, outputID);
+                    if (IsInputConnectedToOutput(nextNode, currNode, requiredID))
+                    {
+                        anyFound = true;
+                    }
                 }
             }
 
-            return false;
+            return anyFound;
         }
 
         private void UpdateEvaluationText(bool success)
