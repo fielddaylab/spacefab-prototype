@@ -10,6 +10,8 @@ namespace SpaceFab.ChipDesign
 {
     public class FloorEvaluationMgr : MonoBehaviour
     {
+        public static FloorEvaluationMgr Instance;
+
         [SerializeField] private Button EvaluateButton;
 
         [SerializeField] private GameObject ResultGroup;
@@ -17,8 +19,13 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private TMP_Text ExpectedResultText;
         [SerializeField] private TMP_Text ActualResultText;
 
+        public List<FloorShape> AllShapes;
+        public List<BoxCollider2D> BoundsColliders;
+
         private void Awake()
         {
+            Instance = this;
+
             EvaluateButton.onClick.AddListener(HandleEvaluateClicked);
             ResultGroup.SetActive(false);
             EvaluateText.SetText(string.Empty);
@@ -53,7 +60,10 @@ namespace SpaceFab.ChipDesign
                 }
             }
 
-            Debug.Log("Evaluation: " + result + " with " + successfulChecks + " successful connections");
+            bool boundsResult = EvaluateBounds();
+
+            Debug.Log("[FloorEvaluationMgr] Grid Evaluation: " + result + " with " + successfulChecks + " successful connections");
+            Debug.Log("[FloorEvaluationMgr] Bounds Evaluation: " + boundsResult);
             UpdateEvaluationText(result);
         }
 
@@ -122,6 +132,22 @@ namespace SpaceFab.ChipDesign
 
             if (success) { EvaluateText.SetText("Correct!"); }
             else { EvaluateText.SetText("Incorrect"); }
+        }
+
+        public bool EvaluateBounds()
+        {
+            foreach (var shape in AllShapes)
+            {
+                foreach (var boundCol in BoundsColliders)
+                {
+                    if (shape.Collider.bounds.Intersects(boundCol.bounds))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         #endregion // Evaluation
