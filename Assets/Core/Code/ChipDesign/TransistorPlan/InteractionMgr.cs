@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace SpaceFab.ChipDesign
 {
@@ -31,16 +32,68 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private GameObject NPrefab;
         [SerializeField] private GameObject PPrefab;
 
-        public TransistorLevelData CurrLevelData;
+        public TransistorLevelData CURR_LEVEL_DATA;
+        public TransistorLevelDataCopy CurrLevelData { get; private set; }
 
         private List<NodeBase> AllNodes = new List<NodeBase>();
         private List<Link> AllLinks = new List<Link>();
+
+        public GameObject ConfigureGroup;
+        public Button OpenConfigureButton;
+        public Button CloseConfigureButton;
+
+        [Header("Configure In")]
+        public Button CInLoButton;
+        public Button CInHiButton;
+
+        [Header("Configure Out")]
+        public Button COutLoButton;
+        public Button COutHiButton;
+
+        [Header("Configure A")]
+        public Button CALoButton;
+        public Button CAHiButton;
+
+        [Header("Configure B")]
+        public Button CBLoButton;
+        public Button CBHiButton;
 
         #region Unity Callbacks
 
         private void Awake()
         {
             if (Instance == null) { Instance = this; }
+
+            CurrLevelData = new TransistorLevelDataCopy();
+            CurrLevelData.LoadData(CURR_LEVEL_DATA);
+            ConfigureGroup.SetActive(false);
+
+            OpenConfigureButton.onClick.AddListener(HandleOpenConfigureClicked);
+            CloseConfigureButton.onClick.AddListener(HandleCloseConfigureClicked);
+
+            CInLoButton.onClick.AddListener(HandleCInLoClicked);
+            CInHiButton.onClick.AddListener(HandleCInHiClicked);
+            COutLoButton.onClick.AddListener(HandleCOutLoClicked);
+            COutHiButton.onClick.AddListener(HandleCOutHiClicked);
+            CALoButton.onClick.AddListener(HandleCALoClicked);
+            CAHiButton.onClick.AddListener(HandleCAHiClicked);
+            CBLoButton.onClick.AddListener(HandleCBLoClicked);
+            CBHiButton.onClick.AddListener(HandleCBHiClicked);
+        }
+
+        private void OnDestroy()
+        {
+            OpenConfigureButton.onClick.RemoveAllListeners();
+            CloseConfigureButton.onClick.RemoveAllListeners();
+
+            CInLoButton.onClick.RemoveAllListeners();
+            CInHiButton.onClick.RemoveAllListeners();
+            COutLoButton.onClick.RemoveAllListeners();
+            COutHiButton.onClick.RemoveAllListeners();
+            CALoButton.onClick.RemoveAllListeners();
+            CAHiButton.onClick.RemoveAllListeners();
+            CBLoButton.onClick.RemoveAllListeners();
+            CBHiButton.onClick.RemoveAllListeners();
         }
 
         private void FixedUpdate()
@@ -992,5 +1045,59 @@ namespace SpaceFab.ChipDesign
         }
 
         #endregion // Layers
+
+        #region Configure
+
+        private void HandleOpenConfigureClicked()
+        {
+            ConfigureGroup.SetActive(true);
+        }
+
+        private void HandleCloseConfigureClicked()
+        {
+            ConfigureGroup.SetActive(false);
+        }
+
+        void HandleCInLoClicked()
+        {
+            CurrLevelData.InVal = -1;
+        }
+
+        void HandleCInHiClicked()
+        {
+            CurrLevelData.InVal = 1;
+        }
+
+        void HandleCOutLoClicked()
+        {
+            CurrLevelData.OutVal = -1;
+        }
+
+        void HandleCOutHiClicked()
+        {
+            CurrLevelData.OutVal = 1;
+        }
+
+        void HandleCALoClicked()
+        {
+            CurrLevelData.AVal = -1;
+        }
+
+        void HandleCAHiClicked()
+        {
+            CurrLevelData.AVal = 1;
+        }
+
+        void HandleCBLoClicked()
+        {
+            CurrLevelData.BVal = -1;
+        }
+
+        void HandleCBHiClicked()
+        {
+            CurrLevelData.BVal = 1;
+        }
+
+        #endregion // Configure
     }
 }

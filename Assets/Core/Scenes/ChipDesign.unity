@@ -1507,9 +1507,9 @@ MonoBehaviour:
   ValueText: {fileID: 903491658}
   ProfitText: {fileID: 641074051}
   CostPerLinkUnit: 1
-  CostPerNode: 2
+  CostPerNode: 1.5
   CostPerSpace: 1
-  ProjectValue: 10
+  ProjectValue: 12
 --- !u!4 &734349031
 Transform:
   m_ObjectHideFlags: 0
@@ -4089,6 +4089,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 9006697580977103, guid: b815b92451f7af04491174513c4da096, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 79.999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1466698414089690193, guid: b815b92451f7af04491174513c4da096, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 106.91998
+      objectReference: {fileID: 0}
+    - target: {fileID: 2182456633023527682, guid: b815b92451f7af04491174513c4da096, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1191330578}
+    - target: {fileID: 3320921171672154952, guid: b815b92451f7af04491174513c4da096, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 79.999985
+      objectReference: {fileID: 0}
     - target: {fileID: 3498658930765280096, guid: b815b92451f7af04491174513c4da096, type: 3}
       propertyPath: m_Name
       value: InteractionMgr
@@ -4132,6 +4148,10 @@ PrefabInstance:
     - target: {fileID: 5615047294326695665, guid: b815b92451f7af04491174513c4da096, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8020138439078589222, guid: b815b92451f7af04491174513c4da096, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 79.999985
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

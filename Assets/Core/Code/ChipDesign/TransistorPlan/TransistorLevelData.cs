@@ -34,4 +34,31 @@ namespace SpaceFab.ChipDesign
         public float GetBVal() { return BVal; }
         public float GetOutVal() { return OutVal; }
     }
+
+    public class TransistorLevelDataCopy
+    {
+        [SerializeField] private List<Placeable> m_allowedPlacables;
+
+        public float InVal;
+        public float AVal;
+        public float BVal;
+        public float OutVal;
+
+        public List<Placeable> GetPlaceables() { return m_allowedPlacables; }
+
+        public float GetInVal() { return InVal; }
+        public float GetAVal() { return AVal; }
+        public float GetBVal() { return BVal; }
+        public float GetOutVal() { return OutVal; }
+
+        public void LoadData(TransistorLevelData data)
+        {
+            InVal = data.GetInVal();
+            AVal = data.GetAVal();
+            BVal = data.GetBVal();
+            OutVal = data.GetOutVal();
+
+            m_allowedPlacables = data.GetPlaceables();
+        }
+    }
 }
