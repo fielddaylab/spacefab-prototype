@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,6 +15,9 @@ namespace SpaceFab.ChipDesign
         private void Awake()
         {
             DefaultVal = InputVal;
+
+            Game.Events.Register(GameEvents.OnConfigChanged, HandleConfigChanged);
+
         }
 
         public override void UpdateNodeText() { }
@@ -22,6 +26,22 @@ namespace SpaceFab.ChipDesign
         {
             unstable = false;
             return InputVal;
+        }
+
+        private void HandleConfigChanged()
+        {
+            if (this.LabelText.text.Equals("A"))
+            {
+                InputVal = DefaultVal = InteractionMgr.Instance.CurrLevelData.GetAVal();
+            }
+            else if (this.LabelText.text.Equals("B"))
+            {
+                InputVal = DefaultVal = InteractionMgr.Instance.CurrLevelData.GetBVal();
+            }
+            else if (this.LabelText.text.ToUpper().Equals("IN"))
+            {
+                InputVal = DefaultVal = InteractionMgr.Instance.CurrLevelData.GetInVal();
+            }
         }
     }
 }

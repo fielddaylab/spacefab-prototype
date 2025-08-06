@@ -243,6 +243,7 @@ namespace SpaceFab.ChipDesign
                     Debug.Log("valid start");
                     var newNode = Instantiate(BlankInPrefab).GetComponent<InputNode>();
                     newNode.InputVal = CurrLevelData.GetInVal();
+                    newNode.LabelText.SetText("In");
                     var flooredMousePos = new Vector2(Mathf.Floor(mousePos.x + 0.5f), Mathf.Floor(mousePos.y + 0.5f));
                     newNode.transform.position = new Vector3(flooredMousePos.x, flooredMousePos.y, newNode.transform.position.z);
 
@@ -1050,7 +1051,7 @@ namespace SpaceFab.ChipDesign
 
         private void HandleOpenConfigureClicked()
         {
-            ConfigureGroup.SetActive(true);
+            ConfigureGroup.SetActive(!ConfigureGroup.activeInHierarchy);
         }
 
         private void HandleCloseConfigureClicked()
@@ -1061,41 +1062,49 @@ namespace SpaceFab.ChipDesign
         void HandleCInLoClicked()
         {
             CurrLevelData.InVal = -1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         void HandleCInHiClicked()
         {
             CurrLevelData.InVal = 1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         void HandleCOutLoClicked()
         {
             CurrLevelData.OutVal = -1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         void HandleCOutHiClicked()
         {
             CurrLevelData.OutVal = 1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         void HandleCALoClicked()
         {
             CurrLevelData.AVal = -1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         void HandleCAHiClicked()
         {
             CurrLevelData.AVal = 1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         void HandleCBLoClicked()
         {
             CurrLevelData.BVal = -1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         void HandleCBHiClicked()
         {
             CurrLevelData.BVal = 1;
+            Game.Events.Dispatch(GameEvents.OnConfigChanged);
         }
 
         #endregion // Configure
