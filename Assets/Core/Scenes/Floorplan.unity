@@ -1343,7 +1343,7 @@ MonoBehaviour:
   NodeType: 0
   TerminusID: 
   RequiredID: PRO-IN
-  RequiredLinkType: 0
+  RequiredLinkType: 1
 --- !u!1 &803177283
 GameObject:
   m_ObjectHideFlags: 0
