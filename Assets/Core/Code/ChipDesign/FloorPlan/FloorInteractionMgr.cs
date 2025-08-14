@@ -91,7 +91,7 @@ namespace SpaceFab.ChipDesign
                         // update endpoint
                         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         var mouseSnapped = SnapToGrid(mousePos);
-                        if (mouseSnapped.x != CurrLink.transform.position.x || mouseSnapped.y != CurrLink.transform.position.y)
+                        if (mouseSnapped.x != CurrLink.transform.position.x ^ mouseSnapped.y != CurrLink.transform.position.y)
                         {
                             // terminate link
                             var mousePos2D = new Vector3(mouseSnapped.x, mouseSnapped.y, CurrLink.transform.position.z);
@@ -202,14 +202,43 @@ namespace SpaceFab.ChipDesign
 
         private void DeleteLink(FloorLink link)
         {
-            link.SideA?.RemoveLink(link);
-            link.SideB?.RemoveLink(link);
+            // gather all connected links
+            List<FloorLink> toDelete = new List<FloorLink>();
+            GatherConnectedLinks(link, ref toDelete);
+
+            // erase them all
+            for (int i = 0; i < toDelete.Count; i++)
+            {
+                if (AllLinks.Contains(toDelete[i])) {
+                    AllLinks.Remove(toDelete[i]);
+
+                    Destroy(toDelete[i].gameObject);
+                }
+            }
+
             if (CurrLink == link) { CurrLink = null; }
 
-            if (AllLinks.Contains(link)) { AllLinks.Remove(link); }
-            Destroy(link.gameObject);
-
             Game.Events.Dispatch(GameEvents.OnLayoutChanged);
+        }
+
+        private void GatherConnectedLinks(FloorLink source, ref List<FloorLink> alreadyGathered) { 
+            GatherConnectedLinksRecursive(source.SideA, ref alreadyGathered);
+            GatherConnectedLinksRecursive(source.SideB, ref alreadyGathered);
+        }
+
+        private void GatherConnectedLinksRecursive(FloorNode source, ref List<FloorLink> alreadyGathered)
+        {
+            for (int i = 0; i < AllLinks.Count; i++)
+            {
+                if (AllLinks[i].SideA == source || AllLinks[i].SideB == source)
+                {
+                    if (!alreadyGathered.Contains(AllLinks[i]))
+                    {
+                        alreadyGathered.Add(AllLinks[i]);
+                        GatherConnectedLinks(AllLinks[i], ref alreadyGathered);
+                    }
+                }
+            }
         }
 
         private Vector3 SnapToGrid(Vector3 position)
