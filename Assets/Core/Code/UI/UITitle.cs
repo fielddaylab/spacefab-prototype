@@ -14,10 +14,14 @@ namespace SpaceFab
         [SerializeField] private Button m_FloorPlanButton;
         [SerializeField] private string m_FloorPlanScene;
 
+        [SerializeField] private Button m_ChipFabButton;
+        [SerializeField] private string m_ChipFabScene;
+
         private void Awake()
         {
             m_ChipDesignButton.onClick.AddListener(OnStartClicked);
             m_FloorPlanButton.onClick.AddListener(OnFloorPlanClicked);
+            m_ChipFabButton.onClick.AddListener(OnChipFabClicked);
         }
 
 
@@ -31,6 +35,11 @@ namespace SpaceFab
         private void OnFloorPlanClicked()
         {
             SceneManager.LoadScene(m_FloorPlanScene);
+        }
+
+        private void OnChipFabClicked()
+        {
+            SceneManager.LoadScene(m_ChipFabScene);
         }
 
         #endregion // Handlers
