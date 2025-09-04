@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 141616271200877828}
   - component: {fileID: 9131084937301617353}
   - component: {fileID: 4197092741632977751}
+  - component: {fileID: 7876805867053219277}
   m_Layer: 12
   m_Name: Dopant Vial
   m_TagString: Untagged
@@ -215,3 +216,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &7876805867053219277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4910371639360917310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ad6585dc5057c47996a73787b520d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 2

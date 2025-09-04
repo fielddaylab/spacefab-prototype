@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6009064404672354751}
   - component: {fileID: 8550324716459331863}
   - component: {fileID: 5571858307156218374}
+  - component: {fileID: 3521985312689842794}
   m_Layer: 12
   m_Name: Metal Vial
   m_TagString: Untagged
@@ -131,6 +132,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
+--- !u!114 &3521985312689842794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958280808084277676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6ad6585dc5057c47996a73787b520d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
 --- !u!1 &6825211176328708718
 GameObject:
   m_ObjectHideFlags: 0

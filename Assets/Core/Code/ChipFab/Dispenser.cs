@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,18 @@ namespace SpaceFab.ChipFab
         {
             var newObj = Instantiate(ToDispense);
             DragMgr.Instance.SetCurrDrag(newObj.transform);
+
+            var dispensable = newObj.GetComponent<Dispensable>();
+            if (dispensable && dispensable.Type == DispensableType.Wafer)
+            {
+                // set wafer instance
+                if (DragMgr.WaferInstance)
+                {
+                    Game.Events.Dispatch(GameEvents.NewWaferCreated);
+                    Destroy(DragMgr.WaferInstance.gameObject);
+                }
+                DragMgr.WaferInstance = dispensable;
+            }
         }
     }
 }

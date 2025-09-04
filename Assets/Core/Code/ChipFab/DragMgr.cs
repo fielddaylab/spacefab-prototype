@@ -1,3 +1,5 @@
+using BeauUtil.Editor;
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,11 +10,16 @@ namespace SpaceFab.ChipFab
     {
         public static DragMgr Instance;
 
+        public static Dispensable WaferInstance;
+
         private Camera MainCamera;
 
         public LayerMask draggableLayer;
+        public LayerMask clickBoxLayer;
 
         public Transform CurrDrag { get; private set; }
+
+        public DropZone CurrDropZone { get; private set; }
 
         private void Awake()
         {
@@ -36,6 +43,27 @@ namespace SpaceFab.ChipFab
             Vector3 mouseWorldPos = GetMouseWorldPosition();
             newDrag.position = mouseWorldPos;
         }
+        
+        public void SetCurrDropZone(DropZone newZone)
+        {
+            if (CurrDropZone)
+            {
+                // handle existing drop zone
+            }
+
+            CurrDropZone = newZone;
+        }
+
+        public void UnsetCurrDropZone(DropZone prevZone)
+        {
+            if (CurrDropZone != prevZone)
+            {
+                // handle mismatch drop zone
+                return;
+            }
+
+            CurrDropZone = null;
+        }
 
         private void Update()
         {
@@ -54,6 +82,12 @@ namespace SpaceFab.ChipFab
                 if (hit != null)
                 {
                     CurrDrag = hit.transform;
+                    var dispensable = CurrDrag.GetComponent<Dispensable>();
+                    if (dispensable && dispensable.Type == DispensableType.Wafer)
+                    {
+                        dispensable.transform.rotation = default;
+                        Game.Events.Dispatch(GameEvents.WaferPickedUp);
+                    }
                 }
             }
 
@@ -65,6 +99,32 @@ namespace SpaceFab.ChipFab
 
             if (Input.GetMouseButtonUp(0))
             {
+                Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, clickBoxLayer);
+                if (hit != null)
+                {
+                    // if dispenser, destroy dragged object
+                    if (hit.GetComponent<ClickBox>().BoxType == ClickBoxType.Dispenser)
+                    {
+                        Destroy(CurrDrag.gameObject);
+                    }
+                    // else if drop zone
+                    else if (hit.GetComponent<ClickBox>().BoxType == ClickBoxType.DropZone && CurrDrag != null)
+                    {
+                        var dispensable = CurrDrag.GetComponent<Dispensable>();
+                        if (dispensable && dispensable.Type == DispensableType.Wafer)
+                        {
+                            // handle wafer
+                            // set InUse
+                            if (CurrDropZone != null)
+                            {
+                                // only allow one at a time
+                                CurrDropZone.AssignToDropZone(CurrDrag);
+                            }
+                        }
+                    }
+                }
+
+                // release dragged item
                 CurrDrag = null;
             }
         }

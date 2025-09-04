@@ -6,8 +6,16 @@ using UnityEngine.EventSystems;
 
 namespace  SpaceFab.ChipFab
 {
+    public enum ClickBoxType
+    {
+        Dispenser,
+        DropZone
+    }
+
     public class ClickBox : MonoBehaviour
     {
+        public ClickBoxType BoxType;
+
         private bool isHovering;
 
         [HideInInspector] public UnityEvent OnHoverEnter;
@@ -24,7 +32,7 @@ namespace  SpaceFab.ChipFab
             var screenPos = Input.mousePosition;
             screenPos.z = -Camera.main.transform.position.z;
             Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(screenPos);
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos);
+            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, DragMgr.Instance.clickBoxLayer);
 
             if (hit != null && hit.gameObject == this.gameObject)
             {
