@@ -13,6 +13,8 @@ namespace SpaceFab.ChipFab
         [HideInInspector] public Transform UsingTransform;
         public Transform SlotPos;
 
+        public StationMicrogame Microgame;
+
         private void Start()
         {
             ClickBox.OnHoverEnter.AddListener(HandleMouseEnter);
@@ -46,41 +48,32 @@ namespace SpaceFab.ChipFab
 
         private void HandleNewWaferCreated()
         {
-            if (UsingTransform == DragMgr.WaferInstance.transform)
-            {
-                UsingTransform = null;
-                InUse = false;
-            }
+            RemoveFromDropZone(false);
         }
 
         private void HandleWaferPickedUp()
         {
-            if (UsingTransform == DragMgr.WaferInstance.transform)
-            {
-                UsingTransform = null;
-                InUse = false;
-            }
+            RemoveFromDropZone(false);
         }
 
         private void HandleMouseDown()
         {
+            /*
             if (InUse)
             {
                 Vector3 mouseWorldPos = GetMouseWorldPosition();
 
-                if (Input.GetMouseButtonDown(0))
+                Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, DragMgr.Instance.draggableLayer);
+                if (hit != null)
                 {
-                    Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, DragMgr.Instance.draggableLayer);
-                    if (hit != null)
+                    var dispensable = hit.GetComponent<Dispensable>();
+                    if (dispensable && dispensable.Type == DispensableType.Wafer)
                     {
-                        var dispensable = hit.GetComponent<Dispensable>();
-                        if (dispensable && dispensable.Type == DispensableType.Wafer)
-                        {
-                            RemoveFromDropZone();
-                        }
+                        RemoveFromDropZone(true);
                     }
                 }
             }
+            */
         }
 
         private void CheckTriggerHoverDisplays()
@@ -101,16 +94,26 @@ namespace SpaceFab.ChipFab
 
                 toAssign.transform.position = SlotPos.transform.position;
                 toAssign.transform.rotation = SlotPos.transform.rotation;
+
+                Microgame.Activate(DragMgr.WaferInstance);
             }
         }
 
-        public void RemoveFromDropZone()
+        public void RemoveFromDropZone(bool setDrag)
         {
             // remove wafer from station
-            InUse = false;
-            DragMgr.Instance.SetCurrDrag(UsingTransform);
+            if (InUse)
+            {
+                InUse = false;
+                if (setDrag)
+                {
+                    DragMgr.Instance.SetCurrDrag(UsingTransform);
+                }
 
-            UsingTransform = null;
+                UsingTransform = null;
+
+                Microgame.Deactivate();
+            }
         }
 
         Vector3 GetMouseWorldPosition()

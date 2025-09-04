@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 7194628768507926910}
   - component: {fileID: 5389426916206581836}
   - component: {fileID: 7545263840203398033}
+  - component: {fileID: 1378654006705606712}
   m_Layer: 12
   m_Name: Wafer
   m_TagString: Untagged
@@ -176,3 +177,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Type: 0
+--- !u!114 &1378654006705606712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8743138206345966335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87902ec75298db54dbc5c6dddca86bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

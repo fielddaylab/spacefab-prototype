@@ -10,7 +10,7 @@ namespace SpaceFab.ChipFab
     {
         public static DragMgr Instance;
 
-        public static Dispensable WaferInstance;
+        public static WaferState WaferInstance;
 
         private Camera MainCamera;
 

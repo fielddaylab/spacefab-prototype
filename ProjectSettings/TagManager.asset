@@ -53,3 +53,6 @@ TagManager:
   - name: UI
     uniqueID: 1132335069
     locked: 0
+  - name: ChipFab Microgame
+    uniqueID: 1897548539
+    locked: 0

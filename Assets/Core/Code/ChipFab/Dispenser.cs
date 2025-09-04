@@ -29,7 +29,7 @@ namespace SpaceFab.ChipFab
                     Game.Events.Dispatch(GameEvents.NewWaferCreated);
                     Destroy(DragMgr.WaferInstance.gameObject);
                 }
-                DragMgr.WaferInstance = dispensable;
+                DragMgr.WaferInstance = newObj.GetComponent<WaferState>();
             }
         }
     }
