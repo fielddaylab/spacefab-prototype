@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using BeauUtil;
+using FieldDay;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,19 +11,15 @@ namespace SpaceFab
     public class UITitle : MonoBehaviour
     {
         [SerializeField] private Button m_ChipDesignButton;
-        [SerializeField] private string m_ChipDesignScene;
+        [SerializeField] private SceneReference m_ChipDesignScene;
 
         [SerializeField] private Button m_FloorPlanButton;
-        [SerializeField] private string m_FloorPlanScene;
-
-        [SerializeField] private Button m_ChipFabButton;
-        [SerializeField] private string m_ChipFabScene;
+        [SerializeField] private SceneReference m_FloorPlanScene;
 
         private void Awake()
         {
             m_ChipDesignButton.onClick.AddListener(OnStartClicked);
             m_FloorPlanButton.onClick.AddListener(OnFloorPlanClicked);
-            m_ChipFabButton.onClick.AddListener(OnChipFabClicked);
         }
 
 
@@ -29,17 +27,12 @@ namespace SpaceFab
 
         private void OnStartClicked()
         {
-            SceneManager.LoadScene(m_ChipDesignScene);
+            Game.Scenes.LoadMainScene(m_ChipDesignScene);
         }
 
         private void OnFloorPlanClicked()
         {
-            SceneManager.LoadScene(m_FloorPlanScene);
-        }
-
-        private void OnChipFabClicked()
-        {
-            SceneManager.LoadScene(m_ChipFabScene);
+            Game.Scenes.LoadMainScene(m_FloorPlanScene);
         }
 
         #endregion // Handlers

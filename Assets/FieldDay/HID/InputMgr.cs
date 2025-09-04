@@ -42,6 +42,9 @@ namespace FieldDay.HID {
         private uint m_DevicePauseCounter;
         private bool m_InputConsumed;
 
+        private PointerInputMode m_InputMode;
+        private Vector2 m_LastKnownMousePosition;
+
 #if DEVELOPMENT
         private bool m_DebugEventPauseOverride;
 #endif // DEVELOPMENT
@@ -184,6 +187,13 @@ namespace FieldDay.HID {
         #region Raycasts
 
         /// <summary>
+        /// Returns if a mouse cursor is present or a touch is active.
+        /// </summary>
+        public bool HasPointer() {
+            return m_InputMode == PointerInputMode.Mouse || Input.touchCount > 0;
+        }
+
+        /// <summary>
         /// Returns the object the pointer is currently over.
         /// </summary>
         public GameObject CurrentPointerOver() {
@@ -231,6 +241,11 @@ namespace FieldDay.HID {
 
             if (!m_ExposedInputModule) {
                 Log.Warn("[InputMgr] Could not find ExposedInputInputModule");
+                m_ExposedInputModule = null;
+                m_InputMode = !Input.mousePresent || Input.touchSupported ? PointerInputMode.Touch : PointerInputMode.Mouse;
+            } else {
+                m_InputMode = m_ExposedInputModule.Mode;
+                m_ExposedInputModule.OnModeChanged += OnInputModeChanged;
             }
             if (!m_DefaultInputModule) {
                 Log.Warn("[InputMgr] Could not find any input module");
@@ -246,6 +261,22 @@ namespace FieldDay.HID {
         internal void BeginFrame() {
             if (Input.GetMouseButtonDown(0)) {
                 m_ClickTimestampBuffer.PushFront(InputTimestamp.Now());
+            }
+
+            if (ReferenceEquals(m_ExposedInputModule, null)) {
+                Vector2 newMousePos = Input.mousePosition;
+                
+                if (m_InputMode == PointerInputMode.Mouse) {
+                    if (Input.touchCount > 0 || !Input.mousePresent) {
+                        OnInputModeChanged(PointerInputMode.Touch);
+                    }
+                } else {
+                    if (newMousePos != m_LastKnownMousePosition || Input.GetMouseButton(0) || Input.GetMouseButton(1) || Input.GetMouseButton(2)) {
+                        OnInputModeChanged(PointerInputMode.Mouse);
+                    }
+                }
+
+                m_LastKnownMousePosition = newMousePos;
             }
 
             m_InputConsumed = false;
@@ -277,6 +308,11 @@ namespace FieldDay.HID {
 
             m_EventSystem = null;
             m_ExposedInputModule = null;
+        }
+
+        private void OnInputModeChanged(PointerInputMode mode) {
+            m_InputMode = mode;
+            Log.Msg("[InputMgr] Input mode changed to '{0}'", mode);
         }
 
         #endregion // Events

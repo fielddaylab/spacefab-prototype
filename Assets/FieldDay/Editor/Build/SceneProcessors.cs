@@ -30,18 +30,38 @@ namespace FieldDay.Editor {
         public int callbackOrder { get { return 10000; } }
 
         public void OnProcessScene(Scene scene, BuildReport report) {
-            if (!BuildPipeline.isBuildingPlayer) {
-                return;
+            List<IEditModeOnly> editModeOnly = new List<IEditModeOnly>(256);
+            scene.GetAllComponents(true, editModeOnly);
+            if (editModeOnly.Count > 0) {
+                Debug.LogFormat("[StripEditorDataSceneProcessor] Found {0} edit-mode only components...", editModeOnly.Count);
+                using (Profiling.Time("stripping edit-mode only components")) {
+                    foreach (var obj in editModeOnly) {
+                        GameObject.DestroyImmediate(obj as Component);
+                    }
+                }
             }
 
-            List<IEditorOnlyData> toStrip = new List<IEditorOnlyData>(256);
-            scene.GetAllComponents(true, toStrip);
+            if (BuildPipeline.isBuildingPlayer) {
+                List<IEditorOnlyData> editorData = new List<IEditorOnlyData>(256);
+                scene.GetAllComponents(true, editorData);
 
-            if (toStrip.Count > 0) {
-                Debug.LogFormat("[StripEditorDataSceneProcessor] Found {0} objects with editor-only data...", toStrip.Count);
-                using(Profiling.Time("stripping editor-only data")) {
-                    foreach(var obj in toStrip) {
-                        obj.ClearEditorData(EditorUserBuildSettings.development);
+                if (editorData.Count > 0) {
+                    Debug.LogFormat("[StripEditorDataSceneProcessor] Found {0} objects with editor-only data...", editorData.Count);
+                    using (Profiling.Time("stripping editor-only data")) {
+                        foreach (var obj in editorData) {
+                            obj.ClearEditorData(EditorUserBuildSettings.development);
+                        }
+                    }
+                }
+
+                List<IEditorOnly> editorOnly = new List<IEditorOnly>(256);
+                scene.GetAllComponents(true, editorOnly);
+                if (editorOnly.Count > 0) {
+                    Debug.LogFormat("[StripEditorDataSceneProcessor] Found {0} editor-only components...", editorOnly.Count);
+                    using (Profiling.Time("stripping editor-only components")) {
+                        foreach (var obj in editModeOnly) {
+                            GameObject.DestroyImmediate(obj as Component);
+                        }
                     }
                 }
             }

@@ -3,16 +3,16 @@
     "com.beauprime.beaudata": "0.3.1",
     "com.beauprime.beaupools": "0.3.1",
     "com.beauprime.beauroutine": "0.11.1",
+    "com.beauprime.beauroutine-extensions": "0.1.2",
     "com.beauprime.beauutil": "0.11.0",
+    "com.beauprime.leaf": "0.3.18",
+    "com.beauprime.tinyil-mono": "0.2.1",
     "com.unity.collab-proxy": "2.8.2",
     "com.unity.feature.2d": "2.0.1",
-    "com.unity.ide.rider": "3.0.31",
-    "com.unity.ide.visualstudio": "2.0.22",
+    "com.unity.ide.visualstudio": "2.0.23",
     "com.unity.test-framework": "1.1.33",
-    "com.unity.textmeshpro": "3.0.7",
-    "com.unity.timeline": "1.7.6",
+    "com.unity.textmeshpro": "3.0.9",
     "com.unity.ugui": "1.0.0",
-    "com.unity.visualscripting": "1.9.4",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
@@ -43,9 +43,7 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.beauprime.beauroutine-extensions": "0.1.2",
-    "com.beauprime.tinyil-mono": "0.2.1"
+    "com.unity.modules.xr": "1.0.0"
   },
   "scopedRegistries": [
     {
@@ -57,6 +55,7 @@
         "com.beauprime.beauroutine",
         "com.beauprime.beauroutine-extensions",
         "com.beauprime.beauutil",
+        "com.beauprime.leaf",
         "com.beauprime.tinyil-mono"
       ]
     }

@@ -16,6 +16,7 @@ using EasyAssetStreaming;
 using FieldDay.Debugging;
 using FieldDay.Threading;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -155,6 +156,7 @@ namespace FieldDay.Scenes {
         private readonly RingBuffer<SceneDataExt> m_AuxScenes = new RingBuffer<SceneDataExt>(16, RingBufferMode.Expand);
         private readonly RingBuffer<SceneDataExt> m_PersistentScenes = new RingBuffer<SceneDataExt>(16, RingBufferMode.Expand);
         private readonly RingBuffer<int> m_MainSceneIndexHistory = new RingBuffer<int>(4, RingBufferMode.Overwrite);
+        private readonly HashSet<int> m_TrackedScenes = new HashSet<int>(16, CompareUtils.DefaultEquals<int>());
 
         // queues
         private readonly RingBuffer<LoadProcessArgs> m_LoadProcessQueue = new RingBuffer<LoadProcessArgs>();
@@ -180,6 +182,7 @@ namespace FieldDay.Scenes {
         private Routine m_AdditionalSceneLoadProcess;
         private Routine m_MainSceneTransition;
         private int m_AssetUnloadLock;
+        private bool m_InitialSceneWasRedirected = true;
 
         // handlers
         private SceneTransitionHandler m_MainTransitionUnload;
@@ -740,14 +743,16 @@ namespace FieldDay.Scenes {
         #region Events
 
         internal void Prepare() {
-            if (m_MainScene == null && !m_MainSceneLoadProcess) {
-                QueueMainLoadInternal(SceneManager.GetActiveScene().path, false, true, default);
+            if (m_MainScene == null && !m_MainSceneLoadProcess && !IsLoadQueued(SceneType.Main)) {
+                m_InitialSceneWasRedirected = false;
+                QueueMainLoadInternal(SceneManager.GetActiveScene().path, false, true, default, true);
             }
 
             // need to ensure we still have a scene remaining when unloading,
             // even if it's just an empty dummy scene
             Scene dummyScene = SceneManager.CreateScene("__DummyScene");
             m_DummyScene = dummyScene;
+            TrackScene(dummyScene);
         }
 
         internal void Update() {
@@ -846,6 +851,28 @@ namespace FieldDay.Scenes {
 
         #region Internal
 
+        private bool IsSceneTracked(Scene scene) {
+            return scene.buildIndex < 0 || m_TrackedScenes.Contains(scene.handle);
+        }
+
+        private void TrackScene(Scene scene) {
+            //Log.Msg("[SceneMgr] Tracking scene {0}...", scene.name);
+            bool inserted = m_TrackedScenes.Add(scene.handle);
+            Assert.True(inserted, "Tracked scene '{0}' tracked multiple times", scene.name);
+        }
+
+        private void TryTrackScene(Scene scene) {
+            if (m_TrackedScenes.Add(scene.handle)) {
+                //Log.Msg("[SceneMgr] Tracking scene {0}...", scene.name);
+            }
+        }
+
+        private void UntrackScene(Scene scene) {
+            //Log.Msg("[SceneMgr] Untracking scene {0}...", scene.name);
+            bool removed = m_TrackedScenes.Remove(scene.handle);
+            Assert.True(removed, "Tracked scene '{0}' removed multiple times", scene.name);
+        }
+
         static private bool IsLoadingOrLoaded(Scene scene) {
             SceneHelper.LoadingState loadingState = scene.GetLoadingState();
             return loadingState == SceneHelper.LoadingState.Loading || loadingState == SceneHelper.LoadingState.Loaded;
@@ -871,7 +898,7 @@ namespace FieldDay.Scenes {
             }
         }
 
-        private void QueueMainLoadInternal(string path, bool killNonPersistentLoads, bool forceReload, in MainSceneTransitionArgs transition) {
+        private void QueueMainLoadInternal(string path, bool killNonPersistentLoads, bool forceReload, in MainSceneTransitionArgs transition, bool isDefaultScene = false) {
             SceneDataExt data = SceneDataExt.GetByPath(path);
 
             if (!forceReload && data != null && data.IsVisited(SceneDataExt.VisitFlags.Loaded)) {
@@ -892,7 +919,7 @@ namespace FieldDay.Scenes {
             }
             m_LoadProcessQueue.PushFront(args);
 
-            if (!killNonPersistentLoads) {
+            if (!isDefaultScene) {
                 DebugFlags.MarkNewSceneLoaded();
             }
         }
@@ -979,7 +1006,8 @@ namespace FieldDay.Scenes {
             if (m_CurrentLoadOperation.Active) {
                 LoadSceneArgs args = m_CurrentLoadOperation.Args;
                 if (IsDoneLoading(m_CurrentLoadOperation.UnityOp, args, out Scene scene)) {
-                    Log.Msg("[SceneMgr] Additive load of '{0}' complete", args.ScenePath);
+                    Log.Msg("[SceneMgr] Additive load of '{0}' (build index {1}) complete", args.ScenePath, scene.buildIndex);
+                    TrackScene(scene);
                     EnqueueSceneProcessors(scene, args);
                     m_CurrentLoadOperation.Clear();
                     return true;
@@ -991,13 +1019,11 @@ namespace FieldDay.Scenes {
                 Scene currentScene = SafeGetSceneByPath(args.ScenePath);
                 if (!IsLoadingOrLoaded(currentScene)) {
                     Log.Msg("[SceneMgr] Starting additive load of '{0}'", args.ScenePath);
-#if UNITY_EDITOR
-                    m_CurrentLoadOperation.UnityOp = EditorSceneManager.LoadSceneAsyncInPlayMode(args.ScenePath, new LoadSceneParameters(LoadSceneMode.Additive));
-#else
+                    // NOTE: EditorSceneManager.LoadSceneAsyncInPlayMode will mess up buildIndex, that's why we aren't using it
                     m_CurrentLoadOperation.UnityOp = SceneManager.LoadSceneAsync(args.ScenePath, LoadSceneMode.Additive);
-#endif // UNITY_EDITOR
                 } else if (currentScene.isLoaded) {
                     Log.Msg("[SceneMgr] Scene '{0}' already loaded", args.ScenePath);
+                    TryTrackScene(currentScene);
                     EnqueueSceneProcessors(currentScene, args);
                     m_CurrentLoadOperation.Clear();
                 }
@@ -1117,7 +1143,15 @@ namespace FieldDay.Scenes {
             } else if (m_UnloadQueue.TryPopFront(out UnloadSceneArgs args)) {
                 if (args.Data) {
                     // if the scene hasn't finished loading, then push this off until later
-                    if (!args.Data.IsVisited(SceneDataExt.VisitFlags.Readied)) {
+                    if (!args.Data.IsVisited(SceneDataExt.VisitFlags.Loaded)) {
+                        m_CurrentUnloadOperation.Fill(args);
+                        UntrackScene(args.Data.Scene);
+                        Log.Msg("[SceneMgr] Unloading '{0}'", args.Data.Scene.path);
+                        m_CurrentUnloadOperation.UnityOp = SceneManager.UnloadSceneAsync(args.Data.Scene, args.Options);
+                        return true;
+                    }
+                    // if the scene hasn't finished loading, then push this off until later
+                    else if (!args.Data.IsVisited(SceneDataExt.VisitFlags.Readied)) {
                         Log.Warn("[SceneMgr] Delaying unload of scene '{0}' until scene is finished with load process", args.Data.Scene.path);
                         m_UnloadQueue.PushBack(args);
                         return false;
@@ -1148,6 +1182,7 @@ namespace FieldDay.Scenes {
                                 args.Counter.Increment();
                             }
                         }
+                        UntrackScene(scene);
                         Log.Msg("[SceneMgr] Unloading '{0}'", args.Data.Scene.path);
                         m_CurrentUnloadOperation.UnityOp = SceneManager.UnloadSceneAsync(scene, args.Options);
                     } else { // otherwise, it's already done and we can move on
@@ -1290,7 +1325,23 @@ namespace FieldDay.Scenes {
             }
         }
 
-        #endregion // Operations
+        private void UnloadUntrackedScenes(CounterHandle counter) {
+            // unload all untracked scenes
+            int sceneCount = SceneManager.sceneCount;
+            while (sceneCount-- > 0) {
+                var potentialScene = SceneManager.GetSceneAt(sceneCount);
+                if (!IsSceneTracked(potentialScene)) {
+                    m_UnloadQueue.PushBack(new UnloadSceneArgs() {
+                        Data = SceneDataExt.Get(potentialScene),
+                        Options = UnloadSceneOptions.None,
+                        Counter = counter
+                    });
+                    counter.Increment();
+                }
+            }
+        }
+
+#endregion // Operations
 
         #region Routines
 
@@ -1303,6 +1354,9 @@ namespace FieldDay.Scenes {
         }
 
         private IEnumerator SceneLoadProcess(LoadProcessArgs args) {
+            bool isRedirect = m_InitialSceneWasRedirected;
+            m_InitialSceneWasRedirected = false;
+
             using (CounterHandle counter = CounterHandle.Alloc()) {
 
                 // validate
@@ -1353,6 +1407,10 @@ namespace FieldDay.Scenes {
                             Counter = counter
                         });
                         counter.Increment();
+                    }
+
+                    if (isRedirect) {
+                        UnloadUntrackedScenes(counter);
                     }
 
                     while (!counter.IsDone()) {
@@ -1607,6 +1665,14 @@ namespace FieldDay.Scenes {
         }
 
         #endregion // Dependencies
+
+        #region SceneManager API Override
+
+        private sealed class UnityAPIOverride : SceneManagerAPI {
+
+        }
+
+        #endregion // SceneManager API Override
 
         #region Debug
 

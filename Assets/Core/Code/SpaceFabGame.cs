@@ -19,6 +19,7 @@ namespace SpaceFab
         [InvokePreBoot]
         static private void OnPreBoot()
         {
+            SetEventDispatcher(new EventDispatcher<EvtArgs>());
             Rendering.EnableAspectClamping(4, 3);
         }
     }
