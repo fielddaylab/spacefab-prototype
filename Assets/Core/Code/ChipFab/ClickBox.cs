@@ -9,7 +9,8 @@ namespace  SpaceFab.ChipFab
     public enum ClickBoxType
     {
         Dispenser,
-        DropZone
+        DropZone,
+        Button
     }
 
     public class ClickBox : MonoBehaviour
