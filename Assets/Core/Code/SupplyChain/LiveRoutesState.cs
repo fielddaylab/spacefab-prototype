@@ -2,16 +2,19 @@ using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay;
 using FieldDay.SharedState;
+using System;
 using System.Collections.Generic;
 
 namespace SpaceFab.SupplyChain {
     public sealed class LiveRoutesState : SharedStateComponent, IRegistrationCallbacks {
-        public const int MaxShips = 8;
+        public const int MaxShips = 4;
 
-        public LiveRouteData[] Routes = new LiveRouteData[MaxShips];
-        public int RouteCount;
+        public RouteLineRenderer[] RouteLines;
+        
+        [NonSerialized] public LiveRouteData[] Routes = new LiveRouteData[MaxShips];
+        [NonSerialized] public int RouteCount;
+        [NonSerialized] public HashSet<Port> UsedPorts = SetUtils.Create<Port>(16);
 
-        public HashSet<Port> UsedPorts = SetUtils.Create<Port>(16);
 
         void IRegistrationCallbacks.OnDeregister() {
         }
@@ -19,6 +22,7 @@ namespace SpaceFab.SupplyChain {
         void IRegistrationCallbacks.OnRegister() {
             for (int i = 0; i < Routes.Length; i++) {
                 Routes[i] = new LiveRouteData();
+                Routes[i].Line = RouteLines[i];
             }
         }
     }
@@ -58,6 +62,7 @@ namespace SpaceFab.SupplyChain {
 
             Assert.True(state.RouteCount < LiveRoutesState.MaxShips, "Exceeded maximum number of ships allowed");
             LiveRouteData route = state.Routes[state.RouteCount++];
+            route.ShipId = shipId;
             return route;
         }
     
@@ -72,6 +77,8 @@ namespace SpaceFab.SupplyChain {
                 state.UsedPorts.Remove(route.Ports[i]);
                 route.Ports[i] = null;
             }
+
+            route.Line.gameObject.SetActive(false);
 
             route.PortCount = route.NodeCount = 0;
         }

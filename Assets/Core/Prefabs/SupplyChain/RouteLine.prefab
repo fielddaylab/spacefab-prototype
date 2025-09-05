@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1585954627722140333}
   - component: {fileID: 2281025534429307428}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: Dotted
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 1
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 2, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
@@ -146,7 +146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2800699919538444886}
   - component: {fileID: 7975420728730172066}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: Tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,9 +209,9 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -11
+  m_SortingOrder: -12
   m_Positions:
-  - {x: 0, y: 4, z: 0}
+  - {x: 3, y: 4, z: 0}
   - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
@@ -265,13 +265,88 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 1
-    textureScale: {x: 1, y: 1}
+    textureScale: {x: 2, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &2578327699106023654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5061432897577317087}
+  - component: {fileID: 1721834607213735749}
+  m_Layer: 29
+  m_Name: Collider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5061432897577317087
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2578327699106023654}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2730052152849183642}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!68 &1721834607213735749
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2578327699106023654}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0.34
+  m_Points:
+  - {x: 0, y: 0}
+  - {x: 3, y: 0}
+  - {x: 3, y: 4}
+  - {x: 0, y: 0}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &4629997786934883461
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +357,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1316468560994438604}
   - component: {fileID: 2373850104157972880}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: Line
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -419,7 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2730052152849183642}
   - component: {fileID: 4061817201762562712}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: RouteLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,6 +517,7 @@ Transform:
   - {fileID: 1316468560994438604}
   - {fileID: 1585954627722140333}
   - {fileID: 2800699919538444886}
+  - {fileID: 5061432897577317087}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4061817201762562712
@@ -459,3 +535,4 @@ MonoBehaviour:
   Solid: {fileID: 2373850104157972880}
   Drawing: {fileID: 2281025534429307428}
   Tail: {fileID: 7975420728730172066}
+  Collider: {fileID: 1721834607213735749}

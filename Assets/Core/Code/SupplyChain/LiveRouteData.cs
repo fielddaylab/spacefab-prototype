@@ -53,6 +53,7 @@ namespace SpaceFab.SupplyChain {
 
             liveRoute.Nodes[liveRoute.NodeCount++] = node;
             SetNodeOwner(node, liveRoute);
+            LiveRouteLineUtility.AddSolid(liveRoute.Line, node.transform.position);
             return true;
         }
 
@@ -64,6 +65,7 @@ namespace SpaceFab.SupplyChain {
             liveRoute.Nodes[idx] = null;
             liveRoute.NodeCount--;
             SetNodeOwner(node, null);
+            LiveRouteLineUtility.PopSolid(liveRoute.Line);
             return node;
         }
 

@@ -2,18 +2,18 @@
 #define DEVELOPMENT
 #endif
 
-using System.Text;
 using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
-using FieldDay.HID;
 using FieldDay.Scenes;
 using FieldDay.Vox;
+using System.Text;
 using UnityEngine;
 
 namespace FieldDay.Scripting {
     static public class ScriptDebugHooks {
+#if DEVELOPMENT
         [DebugMenuFactory]
         static private DMInfo CreateDebugMenu() {
             DMInfo menu = new DMInfo("Scripting", 16);
@@ -28,7 +28,6 @@ namespace FieldDay.Scripting {
             return menu;
         }
 
-#if DEVELOPMENT
         [InvokeOnBoot]
         static private void OnBoot() {
             GameLoop.OnDebugUpdate.Register(DebugUpdate);
@@ -109,7 +108,6 @@ namespace FieldDay.Scripting {
                 }
             }
         }
-#endif // DEVELOPMENT
 
         static public void DumpAllNamedActors() {
             StringBuilder sb = new StringBuilder(1024);
@@ -119,6 +117,7 @@ namespace FieldDay.Scripting {
             }
             Log.Msg(sb.ToString());
         }
+#endif // DEVELOPMENT
     }
 
     public enum ScriptDebugFlags {

@@ -1,5 +1,8 @@
 using FieldDay.Scenes;
+using ScriptableBake;
 using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace FieldDay {
@@ -13,6 +16,13 @@ namespace FieldDay {
         /// Called during OnValidate.
         /// </summary>
         protected virtual void ApplyChanges() {
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static protected void PrepareChange(UnityEngine.Object obj) {
+#if UNITY_EDITOR
+            Baking.PrepareUndo(obj, "modified by ComponentKit");
+#endif // UNITY_EDITOR
         }
 
 #if UNITY_EDITOR

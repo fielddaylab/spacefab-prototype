@@ -34,7 +34,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - SupplyRoute
   - SupplyRegion
   - SupplyNode
   m_SortingLayers:
