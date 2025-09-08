@@ -16,10 +16,14 @@ namespace SpaceFab
         [SerializeField] private Button m_FloorPlanButton;
         [SerializeField] private SceneReference m_FloorPlanScene;
 
+        [SerializeField] private Button m_SupplyChainButton;
+        [SerializeField] private SceneReference m_SupplyChainScene;
+
         private void Awake()
         {
             m_ChipDesignButton.onClick.AddListener(OnStartClicked);
             m_FloorPlanButton.onClick.AddListener(OnFloorPlanClicked);
+            m_SupplyChainButton.onClick.AddListener(OnSupplyChainClicked);
         }
 
 
@@ -33,6 +37,10 @@ namespace SpaceFab
         private void OnFloorPlanClicked()
         {
             Game.Scenes.LoadMainScene(m_FloorPlanScene);
+        }
+
+        private void OnSupplyChainClicked() {
+            Game.Scenes.LoadMainScene(m_SupplyChainScene);
         }
 
         #endregion // Handlers

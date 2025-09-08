@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Position: {fileID: 2767804961464375912}
   m_Sprite: {fileID: 3993413467025754157}
-  m_DefaultHoverSprite: {fileID: 0}
+  m_DefaultHoverSprite: {fileID: 21300000, guid: 252e94f7b0093fb44b302521e438e606, type: 3}
   m_DefaultHeldScale: 0.75
 --- !u!222 &714638916175518783
 CanvasRenderer:
@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 3124008303836072681}
   - component: {fileID: 7538211166517392152}
   - component: {fileID: 8892762807763460669}
+  - component: {fileID: 8278494076434415283}
   m_Layer: 0
   m_Name: CursorCanvas
   m_TagString: Untagged
@@ -301,6 +302,20 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
+--- !u!114 &8278494076434415283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7598986032514851014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfefc0c42079f74cb2e74439ce50c1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UniqueID: 67b7aa75-3024-4720-a0d2-17e2a9ccbccf
+  m_WakeUpChildren: 1
 --- !u!1 &8533410306739544508
 GameObject:
   m_ObjectHideFlags: 0
