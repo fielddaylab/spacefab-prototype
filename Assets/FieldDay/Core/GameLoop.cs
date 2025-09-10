@@ -672,6 +672,7 @@ namespace FieldDay {
             }
 
             Game.Gui.ProcessUpdate();
+            Game.Gui.ProcessShortcuts();
 
             // flush event queue
             Game.Events.Flush();

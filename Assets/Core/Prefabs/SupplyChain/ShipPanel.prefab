@@ -2965,6 +2965,7 @@ GameObject:
   - component: {fileID: 1834584999838900379}
   - component: {fileID: 4102194715276930658}
   - component: {fileID: 7257774085506742027}
+  - component: {fileID: 5197663653968427367}
   m_Layer: 0
   m_Name: ShipPanel
   m_TagString: Untagged
@@ -3085,6 +3086,20 @@ MonoBehaviour:
   CursorType:
     m_HashValue: 0
   Tooltip: 
+--- !u!114 &5197663653968427367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8981010448634491926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da6909eb0cad464daf9bc4ddef5cd6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  KeyCode: 49
+  Modifiers: 0
 --- !u!1 &9096136050269031312
 GameObject:
   m_ObjectHideFlags: 0

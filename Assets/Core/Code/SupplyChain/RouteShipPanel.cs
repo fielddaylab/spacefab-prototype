@@ -45,7 +45,7 @@ namespace SpaceFab.SupplyChain {
         }
 
         private void OnShipClicked(PointerEventData evt) {
-            var widget = evt.pointerCurrentRaycast.gameObject.GetComponentInParent<RouteShipWidget>();
+            var widget = evt.pointerClick.GetComponentInParent<RouteShipWidget>();
             RouteShipUtility.SelectShipFromWidget(widget);
         }
     }

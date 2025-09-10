@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
@@ -23,7 +24,6 @@ namespace SpaceFab.SupplyChain {
     }
 
     static public partial class LiveRouteUtility {
-
         #region Nodes
 
         static public bool IsMostRecentNode(LiveRouteData liveRoute, PathNode node) {
@@ -54,6 +54,8 @@ namespace SpaceFab.SupplyChain {
             liveRoute.Nodes[liveRoute.NodeCount++] = node;
             SetNodeOwner(node, liveRoute);
             LiveRouteLineUtility.AddSolid(liveRoute.Line, node.transform.position);
+            LiveRouteLineUtility.UpdateTail(liveRoute.Line);
+            LiveRouteLineUtility.RegenerateColliders(liveRoute.Line);
             return true;
         }
 
@@ -66,6 +68,8 @@ namespace SpaceFab.SupplyChain {
             liveRoute.NodeCount--;
             SetNodeOwner(node, null);
             LiveRouteLineUtility.PopSolid(liveRoute.Line);
+            LiveRouteLineUtility.UpdateTail(liveRoute.Line);
+            LiveRouteLineUtility.RegenerateColliders(liveRoute.Line);
             return node;
         }
 
@@ -121,6 +125,21 @@ namespace SpaceFab.SupplyChain {
 
             Assert.True(portIndex >= 0, "Port not in route");
             ArrayUtils.FastRemoveAt(liveRoute.Ports, ref liveRoute.PortCount, portIndex);
+        }
+
+        static public int RemovePortsForNode(LiveRouteData liveRoute, PathNode node, ICollection<Port> removed) {
+            LiveRoutesState state = Find.State<LiveRoutesState>();
+            int count = 0;
+            for (int i = liveRoute.PortCount; i-- > 0;) {
+                Port port = liveRoute.Ports[i];
+                if (ReferenceEquals(port.ParentNode, node)) {
+                    state.UsedPorts.Remove(port);
+                    ArrayUtils.FastRemoveAt(liveRoute.Ports, ref liveRoute.PortCount, i);
+                    removed.Add(port);
+                    count++;
+                }
+            }
+            return count;
         }
 
         #endregion // Ports

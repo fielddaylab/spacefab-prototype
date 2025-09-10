@@ -13,6 +13,7 @@ namespace SpaceFab.SupplyChain {
     public sealed class RouteDrawerHoverSystem : SharedStateSystemBehaviour<RouteHoverState> {
         public override void ProcessWork(float deltaTime) {
             if (m_State.Locked) {
+                m_State.MousePosition = null;
                 return;
             }
 
@@ -22,6 +23,9 @@ namespace SpaceFab.SupplyChain {
                 if (node != null) {
                     hoverNode = node.ResolveComponent<PathNode>();
                 }
+                m_State.MousePosition = worldPos;
+            } else {
+                m_State.MousePosition = null;
             }
 
             if (m_State.Node != hoverNode) {

@@ -17,6 +17,7 @@ namespace SpaceFab.SupplyChain {
     public enum RouteDrawState {
         NotStarted,
         Started,
+        InProgress,
         Selected
     }
 }

@@ -76,7 +76,11 @@ namespace FieldDay.HID {
             Assert.NotNull(m_ExposedInputModule);
 
             m_ForceClickRecurseCounter++;
-            bool success = ExecuteEvents.Execute(root, m_ExposedInputModule.GetPointerEventData(), ExecuteEvents.pointerClickHandler);
+            PointerEventData evtData = m_ExposedInputModule.GetPointerEventData();
+            GameObject prevPointerClick = evtData.pointerClick;
+            evtData.pointerClick = root;
+            bool success = ExecuteEvents.Execute(root, evtData, ExecuteEvents.pointerClickHandler);
+            evtData.pointerClick = prevPointerClick;
             m_ForceClickRecurseCounter--;
             return success;
         }
@@ -414,6 +418,8 @@ namespace FieldDay.HID {
     }
 
     public enum ModifierKeyCode {
+        None = 0,
+
         LeftControl = KeyCode.LeftControl,
         LCtrl = KeyCode.LeftControl,
         RightControl = KeyCode.RightControl,

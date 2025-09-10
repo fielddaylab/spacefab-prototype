@@ -495,7 +495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6364293961599147933, guid: d160000221c707d4e946de23106fe95f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -577,7 +577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6364293961599147933, guid: d160000221c707d4e946de23106fe95f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -897,6 +897,10 @@ PrefabInstance:
       propertyPath: RouteColor.rgba
       value: 4284466005
       objectReference: {fileID: 0}
+    - target: {fileID: 5197663653968427367, guid: 7f3514b626c7f5a41a06a187ff538a33, type: 3}
+      propertyPath: KeyCode
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 8795117255722864527, guid: 7f3514b626c7f5a41a06a187ff538a33, type: 3}
       propertyPath: m_text
       value: Sky Scar
@@ -1113,7 +1117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6364293961599147933, guid: d160000221c707d4e946de23106fe95f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1358,6 +1362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Node: {fileID: 0}
+  RouteLine: {fileID: 0}
   Locked: 0
 --- !u!114 &471059391
 MonoBehaviour:
@@ -2166,7 +2171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6364293961599147933, guid: d160000221c707d4e946de23106fe95f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3123,6 +3128,10 @@ PrefabInstance:
       propertyPath: RouteColor.rgba
       value: 4283720662
       objectReference: {fileID: 0}
+    - target: {fileID: 5197663653968427367, guid: 7f3514b626c7f5a41a06a187ff538a33, type: 3}
+      propertyPath: KeyCode
+      value: 52
+      objectReference: {fileID: 0}
     - target: {fileID: 8795117255722864527, guid: 7f3514b626c7f5a41a06a187ff538a33, type: 3}
       propertyPath: m_text
       value: Harry
@@ -3272,7 +3281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 562e3be9dca51a94bb9a9f334aa131b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Flags: 16
+  Flags: 4
   Collider: {fileID: 1559728877}
   Highlight: {fileID: 1457875289}
   RouteNodes: []
@@ -4421,6 +4430,10 @@ PrefabInstance:
     - target: {fileID: 4221728565278921419, guid: 7f3514b626c7f5a41a06a187ff538a33, type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5197663653968427367, guid: 7f3514b626c7f5a41a06a187ff538a33, type: 3}
+      propertyPath: KeyCode
+      value: 51
       objectReference: {fileID: 0}
     - target: {fileID: 8795117255722864527, guid: 7f3514b626c7f5a41a06a187ff538a33, type: 3}
       propertyPath: m_text
