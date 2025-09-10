@@ -78,7 +78,7 @@ namespace SpaceFab.ChipFab
 
         private void CheckTriggerHoverDisplays()
         {
-            if (DragMgr.Instance.CurrDrag != null && !InUse)
+            if (DragMgr.Instance.CurrDrag != null)
             {
                 DragMgr.Instance.SetCurrDropZone(this);
                 HoverGroup.SetActive(true);
@@ -96,6 +96,18 @@ namespace SpaceFab.ChipFab
                 toAssign.transform.rotation = SlotPos.transform.rotation;
 
                 Microgame.Activate(DragMgr.WaferInstance);
+            }
+        }
+
+        public void CustomAssignToDropZone(Dispensable toAssign)
+        {
+            if (toAssign.Type == DispensableType.Dopant)
+            {
+                var furnace = Microgame.GetComponent<FurnaceMicrogame>();
+                if (furnace)
+                {
+                    furnace.AssignDopant(toAssign);
+                }
             }
         }
 

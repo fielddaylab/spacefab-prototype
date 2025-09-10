@@ -16,6 +16,8 @@ namespace SpaceFab.ChipFab
         public LayerMask draggableLayer;
         public LayerMask clickBoxLayer;
 
+        [HideInInspector] public bool DragWaferEnabled;
+
         public Transform CurrDrag { get; private set; }
 
         public DropZone CurrDropZone { get; private set; }
@@ -23,6 +25,7 @@ namespace SpaceFab.ChipFab
         private void Awake()
         {
             Instance = this;
+            DragWaferEnabled = true;
         }
 
         private void Start()
@@ -80,20 +83,26 @@ namespace SpaceFab.ChipFab
                 Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, draggableLayer);
                 if (hit != null)
                 {
-                    CurrDrag = hit.transform;
-                    var dispensable = CurrDrag.GetComponent<Dispensable>();
+                    var dispensable = hit.transform.GetComponent<Dispensable>();
                     if (dispensable && dispensable.Type == DispensableType.Wafer)
                     {
-                        dispensable.transform.rotation = default;
-                        Game.Events.Dispatch(GameEvents.WaferPickedUp);
+                        if (DragWaferEnabled)
+                        {
+                            CurrDrag = hit.transform;
+                            dispensable.transform.rotation = default;
+                            Game.Events.Dispatch(GameEvents.WaferPickedUp);
+                        }
+                    }
+                    else {
+                        CurrDrag = hit.transform;
                     }
                 }
             }
 
             if (Input.GetMouseButton(0) && CurrDrag != null)
             {
-                Vector3 targetPos = mouseWorldPos;
-                CurrDrag.position = targetPos;
+                 Vector3 targetPos = mouseWorldPos;
+                 CurrDrag.position = targetPos;
             }
 
             if (Input.GetMouseButtonUp(0))
@@ -112,12 +121,24 @@ namespace SpaceFab.ChipFab
                         var dispensable = CurrDrag.GetComponent<Dispensable>();
                         if (dispensable && dispensable.Type == DispensableType.Wafer)
                         {
-                            // handle wafer
-                            // set InUse
+                            if (DragWaferEnabled)
+                            {
+                                // handle wafer
+                                // set InUse
+                                if (CurrDropZone != null)
+                                {
+                                    // only allow one at a time
+                                    CurrDropZone.AssignToDropZone(CurrDrag);
+                                }
+                            }
+                        }
+                        else if (dispensable)
+                        {
+                            // handle custom
                             if (CurrDropZone != null)
                             {
                                 // only allow one at a time
-                                CurrDropZone.AssignToDropZone(CurrDrag);
+                                CurrDropZone.CustomAssignToDropZone(dispensable);
                             }
                         }
                     }

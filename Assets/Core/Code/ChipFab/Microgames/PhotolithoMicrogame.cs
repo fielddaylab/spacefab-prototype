@@ -6,14 +6,116 @@ namespace SpaceFab.ChipFab
 {
     public class PhotolithoMicrogame : StationMicrogame, IStationMicrogame
     {
+        public ClickBox MaskAButton;
+        public ClickBox MaskBButton;
+        public ClickBox MaskCButton;
+
+        public ClickBox RotateCCButton;
+        public ClickBox RotateCButton;
+
+        public ClickBox DevelopButton;
+
+        public Transform PreviewPos;
+        public GameObject PreviewPrefab;
+        private GameObject m_currPreview;
+        private SpriteRenderer m_currPreviewRenderer;
+
+        private MaskId m_currSelectedMask = MaskId.NONE;
+        private int m_currRotation = 0;
+
+
         public override void Activate(WaferState waferState)
         {
+            if (waferState.ResistLayer.State == ResistState.Full || waferState.ResistLayer.State == ResistState.Developed) { return; }
+
             base.Activate(waferState);
+
+            MaskAButton.OnMouseDown.AddListener(HandleMaskADown);
+            MaskBButton.OnMouseDown.AddListener(HandleMaskBDown);
+            MaskCButton.OnMouseDown.AddListener(HandleMaskCDown);
+
+            RotateCCButton.OnMouseDown.AddListener(HandleRotateCCDown);
+            RotateCButton.OnMouseDown.AddListener(HandleRotateCDown);
+
+            DevelopButton.OnMouseDown.AddListener(HandleDevelopDown);
+
+            m_currSelectedMask = MaskId.NONE;
+            m_currRotation = 0;
+
+            m_currPreview = Instantiate(PreviewPrefab, PreviewPos);
+            m_currPreviewRenderer = m_currPreview.GetComponent<SpriteRenderer>();
+            m_currPreviewRenderer.enabled = false;
         }
 
         public override void Deactivate()
         {
             base.Deactivate();
+
+            MaskAButton.OnMouseDown.RemoveListener(HandleMaskADown);
+            MaskBButton.OnMouseDown.RemoveListener(HandleMaskBDown);
+            MaskCButton.OnMouseDown.RemoveListener(HandleMaskCDown);
+
+            RotateCCButton.OnMouseDown.RemoveListener(HandleRotateCCDown);
+            RotateCButton.OnMouseDown.RemoveListener(HandleRotateCDown);
+
+            DevelopButton.OnMouseDown.RemoveListener(HandleDevelopDown);
         }
+
+        #region Handlers
+
+        private void HandleMaskADown()
+        {
+            m_currPreviewRenderer.enabled = true;
+            m_currSelectedMask = MaskId.A;
+            m_currPreviewRenderer.sprite = MaskAButton.GetComponentInParent<SpriteRenderer>().sprite;
+        }
+
+        private void HandleMaskBDown()
+        {
+            m_currPreviewRenderer.enabled = true;
+            m_currSelectedMask = MaskId.B;
+            m_currPreviewRenderer.sprite = MaskBButton.GetComponentInParent<SpriteRenderer>().sprite;
+        }
+
+        private void HandleMaskCDown()
+        {
+            m_currPreviewRenderer.enabled = true;
+            m_currSelectedMask = MaskId.C;
+            m_currPreviewRenderer.sprite = MaskCButton.GetComponentInParent<SpriteRenderer>().sprite;
+        }
+
+        private void HandleRotateCCDown()
+        {
+            m_currRotation -= 90;
+
+            if (m_currRotation == -360) { m_currRotation = 0; }
+
+            var angles = DragMgr.WaferInstance.transform.localEulerAngles;
+            angles.z = m_currRotation;
+            DragMgr.WaferInstance.transform.localEulerAngles =  angles;
+        }
+
+        private void HandleRotateCDown()
+        {
+            m_currRotation += 90;
+
+            if (m_currRotation == 360) { m_currRotation = 0; }
+
+            var angles = DragMgr.WaferInstance.transform.localEulerAngles;
+            angles.z = m_currRotation;
+            DragMgr.WaferInstance.transform.localEulerAngles = angles;
+        }
+
+        private void HandleDevelopDown()
+        {
+            DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, m_currRotation);
+            m_currPreview.transform.SetParent(DragMgr.WaferInstance.transform, true);
+            m_currPreview.transform.localScale = Vector3.one;
+            m_currPreview = null;
+            m_currPreviewRenderer = null;
+            Deactivate();
+        }
+
+        #endregion // Handlers
     }
 }

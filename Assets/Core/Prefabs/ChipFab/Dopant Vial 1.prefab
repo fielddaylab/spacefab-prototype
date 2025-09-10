@@ -60,9 +60,13 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3148925436801864088, guid: 92ff6645a2b21644b8ba8668d882d973, type: 3}
+      propertyPath: Type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4910371639360917310, guid: 92ff6645a2b21644b8ba8668d882d973, type: 3}
       propertyPath: m_Name
-      value: Dopant Vial Variant
+      value: Dopant Vial 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

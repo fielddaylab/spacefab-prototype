@@ -28,6 +28,8 @@ namespace SpaceFab.ChipFab
         public GameObject HeatingGroup;
         public Transform ThermoSlider;
 
+        public Transform DopantSlotPos;
+
         public ClickBox StartButton;
         public ClickBox ApplyHeatButton;
         public ClickBox FinishButton;
@@ -35,6 +37,11 @@ namespace SpaceFab.ChipFab
         private FurnaceMicrogameState m_state;
         private float m_heatTimer;
         private float m_currTemp;
+        private float m_precisionTimer;
+
+        private GameObject m_dopantObj;
+        private DopingType m_appliedDopant;
+        private bool m_usedDopant;
 
         #region IStationMicrogame
 
@@ -110,6 +117,7 @@ namespace SpaceFab.ChipFab
             }
 
             UpdateHeatingVisuals();
+            EvaluatePrecision();
         }
 
         private void UpdateHeatingVisuals()
@@ -119,11 +127,20 @@ namespace SpaceFab.ChipFab
             ThermoSlider.localScale = scale;
         }
 
+        private void EvaluatePrecision()
+        {
+            if (m_currTemp > TargetMaxTemp || m_currTemp < TargetMinTemp)
+            {
+                m_precisionTimer += Time.deltaTime;
+            }
+        }
+
         #region State Transitions
 
         private void TransitionToActivated()
         {
             m_state = FurnaceMicrogameState.Activated;
+            m_precisionTimer = 0;
             TransitionCommon();
         }
 
@@ -144,6 +161,8 @@ namespace SpaceFab.ChipFab
         private void TransitionToFinished()
         {
             m_state = FurnaceMicrogameState.Finished;
+            float precision = (HeatTime - m_precisionTimer) / HeatTime;
+            DragMgr.WaferInstance.SetOxideState(precision, m_usedDopant, m_appliedDopant);
             TransitionCommon();
         }
 
@@ -167,7 +186,14 @@ namespace SpaceFab.ChipFab
 
         private void HandleStartMouseDown()
         {
-            TransitionToHeating();
+            // check if valid combo
+            bool dopantMode = DragMgr.WaferInstance.OxideLayer.State == OxideState.Stripped && m_usedDopant;
+            bool emptyMode = DragMgr.WaferInstance.OxideLayer.State == OxideState.Empty;
+            if (dopantMode || emptyMode)
+            {
+                DragMgr.Instance.DragWaferEnabled = false;
+                TransitionToHeating();
+            }
         }
 
         private void HandleApplyHeat()
@@ -177,9 +203,37 @@ namespace SpaceFab.ChipFab
 
         private void HandleFinishClicked()
         {
+            DragMgr.Instance.DragWaferEnabled = true;
+            RemoveDopant();
             Deactivate();
         }
 
         #endregion // Handlers
+
+        public void AssignDopant(Dispensable dispensable)
+        {
+            if (m_usedDopant)
+            {
+                RemoveDopant();
+            }
+
+            dispensable.transform.position = DopantSlotPos.transform.position;
+            dispensable.transform.rotation = DopantSlotPos.transform.rotation;
+
+            var dopant = dispensable.GetComponent<Dopant>();
+
+            m_usedDopant = true;
+            m_appliedDopant = dopant.Type;
+            m_dopantObj = dispensable.gameObject;
+        }
+
+        private void RemoveDopant()
+        {
+            if (m_dopantObj)
+            {
+                Destroy(m_dopantObj);
+                m_usedDopant = false;
+            }
+        }
     }
 }

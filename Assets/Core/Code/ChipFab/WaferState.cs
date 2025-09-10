@@ -9,6 +9,7 @@ namespace SpaceFab.ChipFab
 
     public enum MaskId
     {
+        NONE,
         A,
         B,
         C
@@ -49,6 +50,7 @@ namespace SpaceFab.ChipFab
     {
         public OrientedMask Mask;
         public OxideState State;
+        public float Precision;
     }
 
     public enum MetallizationState
@@ -100,10 +102,39 @@ namespace SpaceFab.ChipFab
             SemiconductorLayer.DopingPatterns = new List<DopingPattern>();
 
             OxideLayer = new OxideLayer();
+            OxideLayer.State = OxideState.Empty;
 
             MetallizationLayer = new MetallizationLayer();
 
             ResistLayer = new ResistLayer();
+            ResistLayer.State = ResistState.Empty;
+        }
+
+        public void SetOxideState(float precision, bool usedDopant, DopingType dopingType)
+        {
+            OxideLayer.Precision = precision;
+
+            if (usedDopant)
+            {
+                // TODO: double check. Adds MaskID of Oxidation State to Doping Layer, using the DopingType of the Dopant used.
+                var pattern = new DopingPattern();
+                pattern.Mask.Id = OxideLayer.Mask.Id;
+                pattern.DopingType = dopingType;
+                SemiconductorLayer.DopingPatterns.Add(pattern);
+            }
+
+            OxideLayer.State = OxideState.Full;
+        }
+        
+        public void SetPhotoState(MaskId mask, int rotation)
+        {
+            ResistLayer.State = ResistState.Developed;
+
+            var oriented = new OrientedMask();
+            oriented.Id = mask;
+            oriented.Rotation = rotation;
+
+            ResistLayer.Mask = oriented;
         }
     }
 }
