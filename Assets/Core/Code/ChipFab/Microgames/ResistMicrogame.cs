@@ -130,6 +130,14 @@ namespace SpaceFab.ChipFab
 
         private void TransitionToActivated()
         {
+            // PREREQ: Oxide FUll or Metal FULL
+            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full)
+            {
+                Debug.Log("Invalid prereqs");
+                Deactivate();
+                return;
+            }
+
             m_state = ResistMicrogameState.Activated;
             m_nextKey = KeyCode.Space; // neutral key
             FluidVisual.localScale = Vector3.one * StartFluidScale;

@@ -39,6 +39,15 @@ namespace SpaceFab.ChipFab
 
             WaferDisplay.UpdateDisplay(DragMgr.WaferInstance.Data);
 
+            // PREREQS Resist DEVELOPED
+            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Developed)
+            {
+                Debug.Log("Invalid prereqs");
+                DragMgr.Instance.DragWaferEnabled = true;
+                Deactivate();
+                return;
+            }
+
             TransitionToActivated();
         }
 
@@ -121,7 +130,15 @@ namespace SpaceFab.ChipFab
         {
             var precision = EvaluatePrecision();
             DragMgr.Instance.DragWaferEnabled = true;
-            DragMgr.WaferInstance.SetOxideStateEtch(precision);
+            if (DragMgr.WaferInstance.Data.MetallizationLayer.State == MetallizationState.Full)
+            {
+                DragMgr.WaferInstance.SetMetallizationStateEtch(precision);
+
+            }
+            else if (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Full)
+            {
+                DragMgr.WaferInstance.SetOxideStateEtch(precision);
+            }
             Deactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }

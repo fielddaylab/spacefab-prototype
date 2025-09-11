@@ -188,12 +188,19 @@ namespace SpaceFab.ChipFab
         private void HandleStartMouseDown()
         {
             // check if valid combo
+            // PREREQ: Oxide STRIPPED & DOPANT or Oxide EMPTY
             bool dopantMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && m_usedDopant;
             bool emptyMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty;
             if (dopantMode || emptyMode)
             {
                 DragMgr.Instance.DragWaferEnabled = false;
                 TransitionToHeating();
+            }
+            else
+            {
+                Debug.Log("Invalid prereqs");
+                Deactivate();
+                return;
             }
         }
 

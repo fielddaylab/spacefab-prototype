@@ -46,6 +46,13 @@ namespace SpaceFab.ChipFab
             m_currPreview = Instantiate(PreviewPrefab, PreviewPos);
             m_currPreviewRenderer = m_currPreview.GetComponent<SpriteRenderer>();
             m_currPreviewRenderer.enabled = false;
+
+            // PREREQS: Resist FULL
+            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Full)
+            {
+                Debug.Log("Invalid Prereqs");
+                Deactivate();
+            }
         }
 
         public override void Deactivate()

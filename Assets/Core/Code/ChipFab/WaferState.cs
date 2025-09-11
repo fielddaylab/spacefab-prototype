@@ -86,7 +86,8 @@ namespace SpaceFab.ChipFab
     {
         Empty,
         Full,
-        Developed
+        Developed,
+        Stripped
     }
 
     [Serializable]
@@ -141,14 +142,20 @@ namespace SpaceFab.ChipFab
 
             if (usedDopant)
             {
-                // TODO: double check. Adds MaskID of Oxidation State to Doping Layer, using the DopingType of the Dopant used.
                 var pattern = new DopingPattern();
                 pattern.Mask.Id = Data.OxideLayer.Mask.Id;
+                pattern.Mask.Rotation = Data.OxideLayer.Mask.Rotation;
                 pattern.DopingType = dopingType;
                 Data.SemiconductorLayer.DopingPatterns.Add(pattern);
-            }
+                Data.OxideLayer.State = OxideState.Empty;
 
-            Data.OxideLayer.State = OxideState.Full;
+                Data.OxideLayer.Mask.Id = MaskId.NONE;
+                Data.OxideLayer.Mask.Rotation = 0;
+            }
+            else
+            {
+                Data.OxideLayer.State = OxideState.Full;
+            }
         }
         
         public void SetPhotoState(MaskId mask, int rotation)
@@ -168,17 +175,40 @@ namespace SpaceFab.ChipFab
             Data.ResistLayer.Precision = precision;
         }
 
+        public void SetResistStateWash()
+        {
+            Data.ResistLayer.State = ResistState.Empty;
+            Data.ResistLayer.Mask.Id = MaskId.NONE;
+            Data.ResistLayer.Mask.Rotation = 0;
+            // TODO: precision
+        }
+
         public void SetOxideStateEtch(float precision)
         {
             Data.OxideLayer.Mask.Id = Data.ResistLayer.Mask.Id;
+            Data.OxideLayer.Mask.Rotation = Data.ResistLayer.Mask.Rotation;
             Data.OxideLayer.State = OxideState.Stripped;
-            // Data.Oxide.Precision = precision;
+
+            Data.ResistLayer.State = ResistState.Stripped;
+            // Data.ResistLayer.Precision = precision;
         }
 
         public void SetMetallizationState(float precision)
         {
             Data.MetallizationLayer.State = MetallizationState.Full;
             Data.MetallizationLayer.Precision = precision;
+        }
+
+        public void SetMetallizationStateEtch(float precision)
+        {
+            Data.MetallizationLayer.State = MetallizationState.Stripped;
+            // Data.MetallizationLayer.Precision = precision;
+
+            Data.MetallizationLayer.Mask.Id = Data.ResistLayer.Mask.Id;
+            Data.MetallizationLayer.Mask.Rotation = Data.ResistLayer.Mask.Rotation;
+
+            Data.ResistLayer.State = ResistState.Stripped;
+            // Data.ResistLayer.Precision = precision;
         }
     }
 }

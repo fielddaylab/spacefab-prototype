@@ -94,6 +94,7 @@ namespace SpaceFab.ChipFab
             TransitionCommon();
 
             // disallow oxide state
+            // PREREQS Oxide EMPTY
             if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Empty)
             {
                 DragMgr.Instance.DragWaferEnabled = true;
