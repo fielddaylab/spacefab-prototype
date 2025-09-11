@@ -9,6 +9,7 @@ namespace SpaceFab.Research {
 	public sealed class ResearchDragState : SharedStateComponent {
 		public ResearchMaterialRig DragRenderer;
 		public CursorHint DragCursor;
+		public bool AllowSwap;
 		
 		[NonSerialized] public ResearchMaterial CurrentlyDragging;
 
@@ -39,13 +40,14 @@ namespace SpaceFab.Research {
             ResearchDragState dragState = Find.State<ResearchDragState>();
             if (dragState.CurrentlyDragging) {
 				ResearchMaterial swap = null;
-				if (slot.Item != null) {
+				if (dragState.AllowSwap && slot.Item != null) {
 					swap = slot.Item.Material;
 				}
-                FillInSlot(slot, dragState.CurrentlyDragging);
+				FillInSlot(slot, dragState.CurrentlyDragging);
 				if (swap) {
 					dragState.CurrentlyDragging = swap;
                     ResearchMaterialUtility.ApplyPropertiesToRig(dragState.DragRenderer, dragState.CurrentlyDragging);
+					ResearchMaterialUtility.UpdateSelectedMaterial(swap);
                 } else {
                     dragState.CurrentlyDragging = null;
                     dragState.DragRenderer.gameObject.SetActive(false);
@@ -70,7 +72,8 @@ namespace SpaceFab.Research {
 			dragState.DragRenderer.gameObject.SetActive(true);
 			ResearchMaterialUtility.ApplyPropertiesToRig(dragState.DragRenderer, dragState.CurrentlyDragging);
 			CursorHint.TryLock(dragState.DragCursor);
-			return true;
+            ResearchMaterialUtility.UpdateSelectedMaterial(dragState.CurrentlyDragging);
+            return true;
         }
     }
 }

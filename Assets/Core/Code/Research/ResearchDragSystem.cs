@@ -33,7 +33,11 @@ namespace SpaceFab.Research {
                         if (slot) {
                             ResearchSlotUtility.DepositCurrentDrag(slot);
                         } else if (gem) {
-                            ResearchSlotUtility.LiftItem(gem);
+                            if (gem.Material == m_State.CurrentlyDragging) {
+                                cancelQueued = true;
+                            } else {
+                                ResearchSlotUtility.LiftItem(gem);
+                            }
                         } else {
                             cancelQueued = true;
                         }
