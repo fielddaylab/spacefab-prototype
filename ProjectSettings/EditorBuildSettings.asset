@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Core/Scenes/SupplyChain.unity
     guid: ebc488a0a774d17489f4d58677fd5f24
+  - enabled: 1
+    path: Assets/Core/Scenes/Research.unity
+    guid: a2e772f47c25d8a42bd79d389c2ff838
   m_configObjects: {}
