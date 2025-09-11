@@ -93,6 +93,7 @@ namespace SpaceFab.ChipFab
     {
         public OrientedMask Mask;
         public ResistState State;
+        public float Precision;
     }
 
     [Serializable]
@@ -158,6 +159,12 @@ namespace SpaceFab.ChipFab
             oriented.Rotation = rotation;
 
             Data.ResistLayer.Mask = oriented;
+        }
+
+        public void SetResistState(float precision)
+        {
+            Data.ResistLayer.State = ResistState.Full;
+            Data.ResistLayer.Precision = precision;
         }
     }
 }
