@@ -32,12 +32,15 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - ResearchSlot
+  - ResearchGem
   - SupplyRoute
   - SupplyRegion
   - SupplyNode
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2560724423
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

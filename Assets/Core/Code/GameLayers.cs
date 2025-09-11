@@ -36,6 +36,15 @@ static public class LayerMasks {
     // Layer 11: FloorNodes
     public const int FloorNodes_Index = 11;
     public const int FloorNodes_Mask = 2048;
+    // Layer 27: ResearchSlot
+    public const int ResearchSlot_Index = 27;
+    public const int ResearchSlot_Mask = 134217728;
+    // Layer 28: ResearchGem
+    public const int ResearchGem_Index = 28;
+    public const int ResearchGem_Mask = 268435456;
+    // Layer 29: SupplyRoute
+    public const int SupplyRoute_Index = 29;
+    public const int SupplyRoute_Mask = 536870912;
     // Layer 30: SupplyRegion
     public const int SupplyRegion_Index = 30;
     public const int SupplyRegion_Mask = 1073741824;
@@ -45,6 +54,8 @@ static public class LayerMasks {
 }
 static public class SortingLayers {
     
+    // Layer Background
+    public const int Background = -1734242873;
     // Layer Default
     public const int Default = 0;
     // Layer Grid Base

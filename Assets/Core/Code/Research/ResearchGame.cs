@@ -1,0 +1,22 @@
+using BeauUtil;
+using BeauUtil.Debugger;
+using FieldDay;
+using FieldDay.Assets;
+using FieldDay.Scenes;
+using FieldDay.SharedState;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace SpaceFab.Research {
+    public sealed class ResearchGame : SceneController {
+        [AssetName(typeof(ResearchMaterial))] public StringHash32[] Materials;
+
+        protected override IEnumerator<WorkSlicer.Result?> OnScenePreload() {
+            foreach(var material in Materials) {
+                ResearchMaterialUtility.SpawnNewTrayItem(Find.NamedAsset<ResearchMaterial>(material));
+            }
+            ResearchMaterialUtility.ArrangeTrayItems();
+            return null;
+        }
+    }
+}

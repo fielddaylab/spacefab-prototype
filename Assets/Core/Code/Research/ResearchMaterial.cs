@@ -6,6 +6,8 @@ namespace SpaceFab.Research {
     [CreateAssetMenu(menuName = "Research/Research Material")]
     public sealed class ResearchMaterial : NamedAsset {
         public string DisplayName;
+        public string ChemicalSymbol;
+        public Material Material;
 
         [Header("Properties")]
         public ElectricalTag Electrical;

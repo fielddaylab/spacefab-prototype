@@ -1,7 +1,53 @@
+using BeauPools;
+using BeauUtil;
+using FieldDay;
 using FieldDay.Components;
+using System;
+using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace SpaceFab.Research {
     public sealed class ResearchSlot : BatchedComponent {
+        public Collider2D Region;
+        public Transform Root;
 
+        [NonSerialized] public ResearchMaterialItem Item;
+
+        public CastableEvent<ResearchSlot, ResearchMaterialItem> OnSlotUpdated = new CastableEvent<ResearchSlot, ResearchMaterialItem>();
+    }
+
+    static public partial class ResearchSlotUtility {
+        static public void FillInSlot(ResearchSlot slot, ResearchMaterial material) {
+            if (!material) {
+                if (slot.Item) {
+                    Pool.TryFree(slot.Item);
+                    slot.Item = null;
+                    slot.OnSlotUpdated.Invoke(slot, null);
+                }
+            } else {
+                if (!slot.Item) {
+                    slot.Item = Find.State<ResearchPools>().Items.Alloc(slot.Root);
+                    slot.Item.CurrentSlot = slot;
+                }
+
+                ResearchMaterialUtility.ApplyPropertiesToRig(slot.Item.Renderer, material);
+                slot.Item.Material = material;
+
+                slot.OnSlotUpdated.Invoke(slot, slot.Item);
+            }
+        }
+
+        static public bool TryRemoveFromSlot(ResearchSlot slot, out ResearchMaterial material) {
+            if (slot.Item) {
+                material = slot.Item.Material;
+                Pool.TryFree(slot.Item);
+                slot.Item = null;
+                slot.OnSlotUpdated.Invoke(slot, null);
+                return true;
+            } else {
+                material = null;
+                return false;
+            }
+        }
     }
 }
