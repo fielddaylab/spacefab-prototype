@@ -22,6 +22,20 @@ namespace SpaceFab.ChipFab
 
         private float m_reloadTimer;
 
+        private List<GameObject> m_allProjectiles = new List<GameObject>();
+
+        private void OnDisable()
+        {
+            while (m_allProjectiles.Count > 0)
+            {
+                if (m_allProjectiles[0])
+                {
+                    Destroy(m_allProjectiles[0]);
+                }
+                m_allProjectiles.RemoveAt(0);
+            }
+        }
+
         private void Update()
         {
             if (!this.gameObject.activeInHierarchy) { return; }
@@ -49,6 +63,8 @@ namespace SpaceFab.ChipFab
             var dir = (LaunchPoint.position - this.transform.position).normalized;
             projectile.transform.position = LaunchPoint.transform.position;
             projectile.SetDirAndSpeed(dir, ProjectileSpeed);
+
+            m_allProjectiles.Add(projectile.gameObject);
 
             m_reloadTimer = ReloadTime;
         }

@@ -79,6 +79,7 @@ namespace SpaceFab.ChipFab
     {
         public OrientedMask Mask;
         public MetallizationState State;
+        public float Precision;
     }
 
     public enum ResistState
@@ -165,6 +166,12 @@ namespace SpaceFab.ChipFab
         {
             Data.ResistLayer.State = ResistState.Full;
             Data.ResistLayer.Precision = precision;
+        }
+
+        public void SetMetallizationState(float precision)
+        {
+            Data.MetallizationLayer.State = MetallizationState.Full;
+            Data.MetallizationLayer.Precision = precision;
         }
     }
 }

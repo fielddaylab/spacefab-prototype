@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,8 @@ namespace SpaceFab.ChipFab
 {
     public enum ProjectileState
     {
-        Traveling
+        Traveling,
+        Arrived
     }
 
     public class Projectile : MonoBehaviour
@@ -34,14 +36,16 @@ namespace SpaceFab.ChipFab
                 case ProjectileState.Traveling:
                     Travel();
                     break;
+                case ProjectileState.Arrived:
+                    break;
                 default:
                     break;
             }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
-                {
-            Debug.Log("[Collision] Hit!");
+        {
+            m_state = ProjectileState.Arrived;
         }
 
         private void Travel()
@@ -49,7 +53,9 @@ namespace SpaceFab.ChipFab
             this.transform.position += m_moveDir * m_speed * Time.deltaTime;
 
             float dist = Mathf.Abs(Vector3.Distance(m_startPos, this.transform.position));
-            if (dist >= MaxTravelDist) { Destroy(this.gameObject); }
+            if (dist >= MaxTravelDist) {
+                Destroy(this.gameObject);
+            }
         }
     }
 }

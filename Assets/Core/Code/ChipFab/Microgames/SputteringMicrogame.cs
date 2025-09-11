@@ -24,6 +24,11 @@ namespace SpaceFab.ChipFab
 
         public SideWaferDisplay WaferDisplay;
 
+        public LayerMask SputterLayer;
+
+        public Transform LeftBoundPos;
+        public Transform RightBoundPos;
+
         private SputteringMicrogameState m_state;
 
         #region IStationMicrogame
@@ -107,9 +112,34 @@ namespace SpaceFab.ChipFab
 
         }
 
+        private float EvaluatePrecision()
+        {
+            // suite of raycasts
+            int numSections = 100;
+            int hitCount = 0;
+            float xStep = (RightBoundPos.position.x - LeftBoundPos.position.x) / numSections;
+
+            for (int i = 0; i < numSections; i++)
+            {
+                // raycast at step
+                float x = LeftBoundPos.position.x + xStep * i;
+                Vector2 pos = new Vector2(x, LeftBoundPos.position.y);
+                var collider = Physics2D.OverlapPoint(pos, SputterLayer);
+                if (collider)
+                {
+                    hitCount++;
+                }
+            }
+
+            float precision = hitCount / (float)numSections;
+            return precision;
+        }
+
         private void HandleFinishClicked()
         {
+            var precision = EvaluatePrecision();
             DragMgr.Instance.DragWaferEnabled = true;
+            DragMgr.WaferInstance.SetMetallizationState(precision);
             Deactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
