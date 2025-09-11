@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,12 @@ namespace SpaceFab.ChipFab
 
     public class SputteringMicrogame : StationMicrogame, IStationMicrogame
     {
+        private static KeyCode FIRE_KEY = KeyCode.Space;
+
+        public Blaster Blaster;
+
+        public ClickBox FinishButton;
+
         private SputteringMicrogameState m_state;
 
         #region IStationMicrogame
@@ -23,34 +30,52 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
+            FinishButton.transform.parent.gameObject.SetActive(false);
+            FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
+
+            DragMgr.Instance.DragWaferEnabled = false;
+
             TransitionToActivated();
         }
 
         public override void Deactivate()
         {
             base.Deactivate();
+
+            m_state = SputteringMicrogameState.Deactivated;
+
+            FinishButton.OnMouseDown.RemoveListener(HandleFinishClicked);
         }
 
         #endregion // IStationMicrogame
 
         private void Update()
         {
+            if (!Container.activeInHierarchy) { return; }
+
             switch (m_state)
             {
                 case SputteringMicrogameState.Activated:
-                    // TransitionToReady();
+                    TransitionToReady();
                     break;
                 case SputteringMicrogameState.Ready:
-                    // TransitionToSpinning();
+                    TransitionToSputtering();
                     break;
                 case SputteringMicrogameState.Sputtering:
-                    // ProcessMicrogame();
+                    ProcessMicrogame();
                     break;
                 case SputteringMicrogameState.Finished:
-                    // Deactivate();
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void ProcessMicrogame()
+        {
+            if (Input.GetKey(FIRE_KEY))
+            {
+                Blaster.Blast();
             }
         }
 
@@ -60,9 +85,29 @@ namespace SpaceFab.ChipFab
             TransitionCommon();
         }
 
+        private void TransitionToReady()
+        {
+            m_state = SputteringMicrogameState.Ready;
+            TransitionCommon();
+        }
+
+        private void TransitionToSputtering()
+        {
+            m_state = SputteringMicrogameState.Sputtering;
+            FinishButton.transform.parent.gameObject.SetActive(true);
+            TransitionCommon();
+        }
+
         private void TransitionCommon()
         {
 
+        }
+
+        private void HandleFinishClicked()
+        {
+            DragMgr.Instance.DragWaferEnabled = true;
+            Deactivate();
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
     }
 }
