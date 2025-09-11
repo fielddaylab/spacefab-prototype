@@ -12,6 +12,11 @@ namespace SpaceFab.ChipFab
         public SideWaferDisplay TargetSide;
         public AngledWaferDisplay TargetAngled;
 
+        public ClickBox SubmitButton;
+
+        public GameObject SuccessGroup;
+        public GameObject FailureGroup;
+
         public WaferData TargetData;
 
         private void Start()
@@ -20,6 +25,8 @@ namespace SpaceFab.ChipFab
 
             TargetSide.UpdateDisplay(TargetData);
             // TargetAngled.UpdateDisplay(TargetData);
+
+            SubmitButton.OnMouseDown.AddListener(HandleSubmitClicked);
         }
 
         #region Handlers
@@ -33,8 +40,24 @@ namespace SpaceFab.ChipFab
             {
                 Current.UpdateDisplay(default);
             }
+
+            SuccessGroup.SetActive(false);
+            FailureGroup.SetActive(false);
+        }
+
+        private void HandleSubmitClicked()
+        {
+            Evaluate();
         }
 
         #endregion // Handlers
+    
+        private void Evaluate()
+        {
+            bool success = true;
+
+            SuccessGroup.SetActive(success);
+            FailureGroup.SetActive(!success);
+        }
     }
 }

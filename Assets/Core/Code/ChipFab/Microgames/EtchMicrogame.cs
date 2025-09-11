@@ -78,6 +78,8 @@ namespace SpaceFab.ChipFab
 
         private void ProcessMicrogame()
         {
+            // TODO: finish implementation
+
             if (Input.GetKey(FIRE_KEY))
             {
                 Blaster.Blast();
@@ -108,9 +110,18 @@ namespace SpaceFab.ChipFab
 
         }
 
+        private float EvaluatePrecision()
+        {
+            // TODO: implement
+
+            return 1;
+        }
+
         private void HandleFinishClicked()
         {
+            var precision = EvaluatePrecision();
             DragMgr.Instance.DragWaferEnabled = true;
+            DragMgr.WaferInstance.SetOxideStateEtch(precision);
             Deactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }

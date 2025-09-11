@@ -92,6 +92,13 @@ namespace SpaceFab.ChipFab
         {
             m_state = SputteringMicrogameState.Activated;
             TransitionCommon();
+
+            // disallow oxide state
+            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Empty)
+            {
+                DragMgr.Instance.DragWaferEnabled = true;
+                Deactivate();
+            }
         }
 
         private void TransitionToReady()

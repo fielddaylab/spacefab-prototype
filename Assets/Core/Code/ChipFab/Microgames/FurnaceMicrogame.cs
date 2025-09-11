@@ -163,7 +163,7 @@ namespace SpaceFab.ChipFab
         {
             m_state = FurnaceMicrogameState.Finished;
             float precision = (HeatTime - m_precisionTimer) / HeatTime;
-            DragMgr.WaferInstance.SetOxideState(precision, m_usedDopant, m_appliedDopant);
+            DragMgr.WaferInstance.SetOxideStateFurnace(precision, m_usedDopant, m_appliedDopant);
             TransitionCommon();
         }
 

@@ -135,7 +135,7 @@ namespace SpaceFab.ChipFab
             Data.ResistLayer.State = ResistState.Empty;
         }
 
-        public void SetOxideState(float precision, bool usedDopant, DopingType dopingType)
+        public void SetOxideStateFurnace(float precision, bool usedDopant, DopingType dopingType)
         {
             Data.OxideLayer.Precision = precision;
 
@@ -166,6 +166,13 @@ namespace SpaceFab.ChipFab
         {
             Data.ResistLayer.State = ResistState.Full;
             Data.ResistLayer.Precision = precision;
+        }
+
+        public void SetOxideStateEtch(float precision)
+        {
+            Data.OxideLayer.Mask.Id = Data.ResistLayer.Mask.Id;
+            Data.OxideLayer.State = OxideState.Stripped;
+            // Data.Oxide.Precision = precision;
         }
 
         public void SetMetallizationState(float precision)
