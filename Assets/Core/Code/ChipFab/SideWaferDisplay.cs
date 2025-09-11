@@ -18,12 +18,15 @@ namespace SpaceFab.ChipFab
             {
                 case ResistState.Empty:
                     Resist.sprite = null;
+                    Resist.gameObject.SetActive(false);
                     break;
                 case ResistState.Full:
                     Resist.sprite = GameDB.Instance.ResistFull;
+                    Resist.gameObject.SetActive(true);
                     break;
                 case ResistState.Developed:
                     Resist.sprite = GameDB.Instance.ResistDeveloped;
+                    Resist.gameObject.SetActive(true);
                     break;
                 default:
                     break;
@@ -34,15 +37,19 @@ namespace SpaceFab.ChipFab
             {
                 case MetallizationState.Empty:
                     Metallization.sprite = null;
+                    Metallization.gameObject.SetActive(false);
                     break;
                 case MetallizationState.Full:
                     Metallization.sprite = GameDB.Instance.MetalFull;
+                    Metallization.gameObject.SetActive(true);
                     break;
                 case MetallizationState.Stripped:
                     Metallization.sprite = GameDB.Instance.MetalStripped;
+                    Metallization.gameObject.SetActive(true);
                     break;
                 case MetallizationState.OxideFilled:
                     Metallization.sprite = GameDB.Instance.MetalOxideFilled;
+                    Metallization.gameObject.SetActive(true);
                     break;
                 default:
                     break;
@@ -53,12 +60,15 @@ namespace SpaceFab.ChipFab
             {
                 case OxideState.Empty:
                     Oxide.sprite = null;
+                    Oxide.gameObject.SetActive(false);
                     break;
                 case OxideState.Full:
                     Oxide.sprite = GameDB.Instance.OxideFull;
+                    Oxide.gameObject.SetActive(true);
                     break;
                 case OxideState.Stripped:
                     Oxide.sprite = GameDB.Instance.OxidePatterned;
+                    Oxide.gameObject.SetActive(true);
                     break;
                 default:
                     break;

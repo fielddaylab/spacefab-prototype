@@ -19,11 +19,11 @@ TagManager:
   - FloorNodes
   - ChipFabDrag
   - ChipFabClickBox
-  - 
-  - 
-  - 
-  - 
-  - 
+  - ChipFabEtchProjectile
+  - ChipFabSputterProjectile
+  - ChipFabSemi
+  - ChipFabOxide-Metal
+  - ChipFabResist
   - 
   - 
   - 

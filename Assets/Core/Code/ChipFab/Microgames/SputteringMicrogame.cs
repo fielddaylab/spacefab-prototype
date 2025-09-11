@@ -22,6 +22,8 @@ namespace SpaceFab.ChipFab
 
         public ClickBox FinishButton;
 
+        public SideWaferDisplay WaferDisplay;
+
         private SputteringMicrogameState m_state;
 
         #region IStationMicrogame
@@ -34,6 +36,8 @@ namespace SpaceFab.ChipFab
             FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
 
             DragMgr.Instance.DragWaferEnabled = false;
+
+            WaferDisplay.UpdateDisplay(DragMgr.WaferInstance.Data);
 
             TransitionToActivated();
         }

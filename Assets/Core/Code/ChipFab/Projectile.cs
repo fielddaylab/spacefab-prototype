@@ -27,7 +27,7 @@ namespace SpaceFab.ChipFab
             m_startPos = this.transform.position;
         }
 
-        public void Update()
+        public void FixedUpdate()
         {
             switch (m_state)
             {
@@ -37,6 +37,11 @@ namespace SpaceFab.ChipFab
                 default:
                     break;
             }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+                {
+            Debug.Log("[Collision] Hit!");
         }
 
         private void Travel()
