@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 09fc3202fa39f3d4faa1dafd49af3577
+guid: 413805e5dcf8d3644b871ad92efcf63e
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638931961959777984
+  platformSettingsDirtyTick: 638931964683845677
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,7 +121,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ElecPropertySymbol
+  - name: Plus
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -130,9 +130,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 120
-      height: 119
-    spriteID: eb1bd3593230f6e4dabeb35713f47d2c
+      width: 87
+      height: 88
+    spriteID: d0295ce57a2c7a344bbb7aa51a41a5f2
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,21 +144,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -856068506
-    name: ElecPropertySymbol
+    guid: 212642874
+    name: Plus
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: ElecPropertySymbol
+    - name: Plus
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 6
-        y: 7
-        width: 120
-        height: 119
-      spriteId: eb1bd3593230f6e4dabeb35713f47d2c
+        x: 19
+        y: 21
+        width: 87
+        height: 88
+      spriteId: d0295ce57a2c7a344bbb7aa51a41a5f2
     linkedCells: []
     parentIndex: -1
   platformSettings:

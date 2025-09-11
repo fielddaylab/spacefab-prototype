@@ -1,4 +1,5 @@
 using System;
+using BeauUtil.Debugger;
 using FieldDay.Assets;
 using UnityEngine;
 
@@ -45,5 +46,29 @@ namespace SpaceFab.Research {
         Unknown = 0,
         N,
         P
+    }
+
+    static public partial class ResearchMaterialUtility {
+        static public float GetCurrent(ResearchMaterial material, float voltage, float temperature) {
+            // TODO: implement correctly
+            switch(material.Electrical) {
+                case ElectricalTag.Dopant: {
+                    return 0;
+                }
+                case ElectricalTag.Insulator: {
+                    return 0;
+                }
+                case ElectricalTag.Conductor: {
+                    return voltage * (1 - temperature);
+                }
+                case ElectricalTag.Semiconductor: {
+                    return voltage * temperature;
+                }
+                default: {
+                    Assert.Fail("unknown electrical mode");
+                    return 0;
+                }
+            }
+        }
     }
 }

@@ -402,6 +402,22 @@ namespace FieldDay.HID {
             }
         }
 
+        /// <summary>
+        /// Pauses all raycasts and devices.
+        /// </summary>
+        public void PauseAll() {
+            PauseRaycasts();
+            PauseDevices();
+        }
+
+        /// <summary>
+        /// Resumes all raycasts and devices.
+        /// </summary>
+        public void ResumeAll() {
+            ResumeDevices();
+            ResumeRaycasts();
+        }
+
         #endregion // Pausing
 
         #region Consume

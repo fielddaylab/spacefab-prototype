@@ -21,7 +21,14 @@ namespace SpaceFab.Research {
 				return;
 			}
 
+			ResearchInventory inv = Find.State<ResearchInventory>();
+
 			state.Current = material;
+			if (inv.KnownMaterials.Add(material.AssetId)) {
+				ResearchMaterialUtility.SpawnNewTrayItem(material);
+				ResearchMaterialUtility.ArrangeTrayItems();
+			}
+
 			state.OnUpdated.Invoke(material);
 		}
     }

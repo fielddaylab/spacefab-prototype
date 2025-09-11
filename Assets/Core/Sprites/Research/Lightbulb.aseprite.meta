@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 09fc3202fa39f3d4faa1dafd49af3577
+guid: 93683f8213600be419c4b34010eeab88
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638931961959777984
+  platformSettingsDirtyTick: 638931983633281066
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,7 +121,47 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ElecPropertySymbol
+  - name: Lightbulb_Off
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 201
+      width: 199
+      height: 232
+    spriteID: 751bac9d092bb2d4f954481af1d71f14
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 201}
+  - name: Lightbulb_On
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 205
+      y: 201
+      width: 199
+      height: 232
+    spriteID: bbd4877f7dd74004cb2f0d4ad3215fac
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 205, y: 201}
+  - name: Ligihtbulb_Shine
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -130,9 +170,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 120
-      height: 119
-    spriteID: eb1bd3593230f6e4dabeb35713f47d2c
+      width: 238
+      height: 195
+    spriteID: 1a65d0be275d4914fb6f8470091b81f9
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,21 +184,39 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -856068506
-    name: ElecPropertySymbol
+    guid: -270083213
+    name: Lightbulb
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: ElecPropertySymbol
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 6
-        y: 7
-        width: 120
-        height: 119
-      spriteId: eb1bd3593230f6e4dabeb35713f47d2c
+        x: 31
+        y: 13
+        width: 199
+        height: 232
+      spriteId: 751bac9d092bb2d4f954481af1d71f14
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 31
+        y: 13
+        width: 199
+        height: 232
+      spriteId: bbd4877f7dd74004cb2f0d4ad3215fac
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 14
+        y: 88
+        width: 238
+        height: 195
+      spriteId: 1a65d0be275d4914fb6f8470091b81f9
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -213,4 +271,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 128, y: 128}
+  canvasSize: {x: 256, y: 300}

@@ -12,8 +12,10 @@ namespace SpaceFab.Research {
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] Materials;
 
         protected override IEnumerator<WorkSlicer.Result?> OnScenePreload() {
+            ResearchInventory inventory = Find.State<ResearchInventory>();
             foreach(var material in Materials) {
                 ResearchMaterialUtility.SpawnNewTrayItem(Find.NamedAsset<ResearchMaterial>(material));
+                inventory.KnownMaterials.Add(material);
             }
             ResearchMaterialUtility.ArrangeTrayItems();
             return null;

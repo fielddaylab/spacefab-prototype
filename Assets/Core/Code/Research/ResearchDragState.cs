@@ -4,12 +4,14 @@ using FieldDay.HID;
 using FieldDay.SharedState;
 using SpaceFab.Research;
 using System;
+using UnityEngine.EventSystems;
 
 namespace SpaceFab.Research {
 	public sealed class ResearchDragState : SharedStateComponent {
 		public ResearchMaterialRig DragRenderer;
 		public CursorHint DragCursor;
 		public bool AllowSwap;
+		public Physics2DRaycaster Raycaster;
 		
 		[NonSerialized] public ResearchMaterial CurrentlyDragging;
 
@@ -25,6 +27,7 @@ namespace SpaceFab.Research {
 				dragState.CurrentlyDragging = null;
 				dragState.DragRenderer.gameObject.SetActive(false);
                 CursorHint.Unlock(dragState.DragCursor);
+				dragState.Raycaster.eventMask |= LayerMasks.UI_Mask;
                 return true;
 			}
 
@@ -52,6 +55,7 @@ namespace SpaceFab.Research {
                     dragState.CurrentlyDragging = null;
                     dragState.DragRenderer.gameObject.SetActive(false);
                     CursorHint.Unlock(dragState.DragCursor);
+                    dragState.Raycaster.eventMask |= LayerMasks.UI_Mask;
                 }
                 return true;
             }
@@ -72,6 +76,7 @@ namespace SpaceFab.Research {
 			dragState.DragRenderer.gameObject.SetActive(true);
 			ResearchMaterialUtility.ApplyPropertiesToRig(dragState.DragRenderer, dragState.CurrentlyDragging);
 			CursorHint.TryLock(dragState.DragCursor);
+            dragState.Raycaster.eventMask &= ~LayerMasks.UI_Mask;
             ResearchMaterialUtility.UpdateSelectedMaterial(dragState.CurrentlyDragging);
             return true;
         }

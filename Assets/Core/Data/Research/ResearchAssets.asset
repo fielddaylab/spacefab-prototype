@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4be90a9d33d3784caac2e5eb4b5636c, type: 3}
   m_Name: ResearchAssets
   m_EditorClassIdentifier: 
-  m_GlobalAssets: []
+  m_GlobalAssets:
+  - {fileID: 11400000, guid: 5862afb180b6a964dba14eb8fdc4d2eb, type: 2}
   m_NamedAssets:
   - {fileID: 11400000, guid: 4c7864a20f51bcb46b1ad4dc947df087, type: 2}
   - {fileID: 11400000, guid: 278143704fa23f749b1059ecbccf0a30, type: 2}

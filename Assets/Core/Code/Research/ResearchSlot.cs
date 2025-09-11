@@ -4,12 +4,12 @@ using FieldDay;
 using FieldDay.Components;
 using System;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace SpaceFab.Research {
     public sealed class ResearchSlot : BatchedComponent {
         public Collider2D Region;
         public Transform Root;
+        public GameObject EmptyContents;
 
         [NonSerialized] public ResearchMaterialItem Item;
 
@@ -23,11 +23,17 @@ namespace SpaceFab.Research {
                     Pool.TryFree(slot.Item);
                     slot.Item = null;
                     slot.OnSlotUpdated.Invoke(slot, null);
+                    if (slot.EmptyContents) {
+                        slot.EmptyContents.SetActive(true);
+                    }
                 }
             } else {
                 if (!slot.Item) {
                     slot.Item = Find.State<ResearchPools>().Items.Alloc(slot.Root);
                     slot.Item.CurrentSlot = slot;
+                    if (slot.EmptyContents) {
+                        slot.EmptyContents.SetActive(false);
+                    }
                 }
 
                 ResearchMaterialUtility.ApplyPropertiesToRig(slot.Item.Renderer, material);
