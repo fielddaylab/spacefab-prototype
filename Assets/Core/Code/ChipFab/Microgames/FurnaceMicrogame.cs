@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -187,8 +188,8 @@ namespace SpaceFab.ChipFab
         private void HandleStartMouseDown()
         {
             // check if valid combo
-            bool dopantMode = DragMgr.WaferInstance.OxideLayer.State == OxideState.Stripped && m_usedDopant;
-            bool emptyMode = DragMgr.WaferInstance.OxideLayer.State == OxideState.Empty;
+            bool dopantMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && m_usedDopant;
+            bool emptyMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty;
             if (dopantMode || emptyMode)
             {
                 DragMgr.Instance.DragWaferEnabled = false;
@@ -206,6 +207,7 @@ namespace SpaceFab.ChipFab
             DragMgr.Instance.DragWaferEnabled = true;
             RemoveDopant();
             Deactivate();
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
 
         #endregion // Handlers

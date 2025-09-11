@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace SpaceFab.ChipFab
 
         public override void Activate(WaferState waferState)
         {
-            if (waferState.ResistLayer.State == ResistState.Full || waferState.ResistLayer.State == ResistState.Developed) { return; }
+            if (waferState.Data.ResistLayer.State == ResistState.Full || waferState.Data.ResistLayer.State == ResistState.Developed) { return; }
 
             base.Activate(waferState);
 
@@ -114,6 +115,8 @@ namespace SpaceFab.ChipFab
             m_currPreview = null;
             m_currPreviewRenderer = null;
             Deactivate();
+
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
 
         #endregion // Handlers

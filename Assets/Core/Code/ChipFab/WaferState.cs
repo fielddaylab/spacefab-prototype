@@ -1,4 +1,5 @@
 using FieldDay;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,18 +22,29 @@ namespace SpaceFab.ChipFab
         P
     }
 
+    [Serializable]
     public struct OrientedMask
     {
         public MaskId Id;
         public int Rotation;
     }
 
+    [Serializable]
     public struct DopingPattern
     {
         public OrientedMask Mask;
         public DopingType DopingType;
     }
 
+    public enum SemiconductorState
+    {
+        Blank,
+        DopedN,
+        DopedP,
+        DopedNP
+    }
+
+    [Serializable]
     public struct SemiconductorLayer
     {
         public List<DopingPattern> DopingPatterns;
@@ -46,6 +58,7 @@ namespace SpaceFab.ChipFab
         Stripped
     }
 
+    [Serializable]
     public struct OxideLayer
     {
         public OrientedMask Mask;
@@ -61,6 +74,7 @@ namespace SpaceFab.ChipFab
         OxideFilled
     }
 
+    [Serializable]
     public struct MetallizationLayer
     {
         public OrientedMask Mask;
@@ -74,20 +88,27 @@ namespace SpaceFab.ChipFab
         Developed
     }
 
+    [Serializable]
     public struct ResistLayer
     {
         public OrientedMask Mask;
         public ResistState State;
     }
 
-    #endregion // Structs & Enums
-
-    public class WaferState : MonoBehaviour
+    [Serializable]
+    public struct WaferData
     {
         public ResistLayer ResistLayer;
         public MetallizationLayer MetallizationLayer;
         public OxideLayer OxideLayer;
         public SemiconductorLayer SemiconductorLayer;
+    }
+
+    #endregion // Structs & Enums
+
+    public class WaferState : MonoBehaviour
+    {
+        public WaferData Data;
 
         private void Awake()
         {
@@ -98,43 +119,45 @@ namespace SpaceFab.ChipFab
 
         private void Init()
         {
-            SemiconductorLayer = new SemiconductorLayer();
-            SemiconductorLayer.DopingPatterns = new List<DopingPattern>();
+            Data = new WaferData();
 
-            OxideLayer = new OxideLayer();
-            OxideLayer.State = OxideState.Empty;
+            Data.SemiconductorLayer = new SemiconductorLayer();
+            Data.SemiconductorLayer.DopingPatterns = new List<DopingPattern>();
 
-            MetallizationLayer = new MetallizationLayer();
+            Data.OxideLayer = new OxideLayer();
+            Data.OxideLayer.State = OxideState.Empty;
 
-            ResistLayer = new ResistLayer();
-            ResistLayer.State = ResistState.Empty;
+            Data.MetallizationLayer = new MetallizationLayer();
+
+            Data.ResistLayer = new ResistLayer();
+            Data.ResistLayer.State = ResistState.Empty;
         }
 
         public void SetOxideState(float precision, bool usedDopant, DopingType dopingType)
         {
-            OxideLayer.Precision = precision;
+            Data.OxideLayer.Precision = precision;
 
             if (usedDopant)
             {
                 // TODO: double check. Adds MaskID of Oxidation State to Doping Layer, using the DopingType of the Dopant used.
                 var pattern = new DopingPattern();
-                pattern.Mask.Id = OxideLayer.Mask.Id;
+                pattern.Mask.Id = Data.OxideLayer.Mask.Id;
                 pattern.DopingType = dopingType;
-                SemiconductorLayer.DopingPatterns.Add(pattern);
+                Data.SemiconductorLayer.DopingPatterns.Add(pattern);
             }
 
-            OxideLayer.State = OxideState.Full;
+            Data.OxideLayer.State = OxideState.Full;
         }
         
         public void SetPhotoState(MaskId mask, int rotation)
         {
-            ResistLayer.State = ResistState.Developed;
+            Data.ResistLayer.State = ResistState.Developed;
 
             var oriented = new OrientedMask();
             oriented.Id = mask;
             oriented.Rotation = rotation;
 
-            ResistLayer.Mask = oriented;
+            Data.ResistLayer.Mask = oriented;
         }
     }
 }

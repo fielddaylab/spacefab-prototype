@@ -6,7 +6,7 @@ namespace SpaceFab.ChipFab
 {
     public class AngledWaferDisplay : MonoBehaviour
     {
-        public void UpdateDisplay(WaferState state)
+        public void UpdateDisplay(WaferData data)
         {
 
         }
