@@ -15,7 +15,7 @@ namespace SpaceFab.Research {
     static public partial class ResearchMaterialUtility {
         static public void ApplyPropertiesToRig(ResearchMaterialRig rig, ResearchMaterial material) {
             rig.Renderer.sharedMaterial = material.Material;
-            rig.Label.SetText(material.DisplayName);
+            rig.Label.SetText(material.ChemicalSymbol);
         }
     }
 }

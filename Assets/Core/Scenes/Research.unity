@@ -761,6 +761,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: fb3ce66f8c6fcee4a85b576fd7b3dbe4, type: 2}
+    - target: {fileID: 1092320057855451943, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: EmptyContents
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6947052114439633309, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_Name
       value: Result
@@ -2128,7 +2132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 935202652}
-  Spacing: 2.5
+  Spacing: 2.2
   SelectionHighlight: {fileID: 1496441062}
 --- !u!1 &1188330759
 GameObject:
@@ -2444,8 +2448,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1
-  m_fontSizeBase: 1
+  m_fontSize: 0.8
+  m_fontSizeBase: 0.8
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4083,6 +4087,8 @@ MonoBehaviour:
   - m_HashValue: 3821421172
   - m_HashValue: 3383598718
   - m_HashValue: 1163381446
+  - m_HashValue: 3317014541
+  - m_HashValue: 541320182
 --- !u!114 &2020295782
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8fbb678e1b6954e80390e41280ac6e, type: 3}
   m_Name: Recipes
   m_EditorClassIdentifier: 
-  m_Entries: []
+  m_Entries:
+  - InputA:
+      m_HashValue: 1163381446
+    InputB:
+      m_HashValue: 3317014541
+    Output:
+      m_HashValue: 526239395
+  - InputA:
+      m_HashValue: 1163381446
+    InputB:
+      m_HashValue: 541320182
+    Output:
+      m_HashValue: 2247801736
