@@ -701,6 +701,7 @@ MonoBehaviour:
   PDopantColor: {r: 1, g: 0.3647059, b: 0.37647063, a: 1}
   ResistFull: {fileID: 21300000, guid: 826ee61b8a868f54dab6f157b4c59c5a, type: 3}
   ResistDeveloped: {fileID: 21300000, guid: 565ed240d54a2144a921409bb44253b3, type: 3}
+  ResistStripped: {fileID: 21300000, guid: 2974f8a1645e6214a9ba05cd99cfc77c, type: 3}
   OxideFull: {fileID: 21300000, guid: 0f3534cd88760f4419dd2f3a0313223c, type: 3}
   OxidePatterned: {fileID: 21300000, guid: 909f267b5c65e624dadd6c6042fea91e, type: 3}
   MetalFull: {fileID: 21300000, guid: 6b0935e52c981874e87802b511de4ef1, type: 3}

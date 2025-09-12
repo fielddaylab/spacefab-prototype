@@ -28,6 +28,10 @@ namespace SpaceFab.ChipFab
                     Resist.sprite = GameDB.Instance.ResistDeveloped;
                     Resist.gameObject.SetActive(true);
                     break;
+                case ResistState.Stripped:
+                    Resist.sprite = GameDB.Instance.ResistStripped;
+                    Resist.gameObject.SetActive(true);
+                    break;
                 default:
                     break;
             }

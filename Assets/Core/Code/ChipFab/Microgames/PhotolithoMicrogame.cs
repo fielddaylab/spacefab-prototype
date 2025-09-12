@@ -27,8 +27,6 @@ namespace SpaceFab.ChipFab
 
         public override void Activate(WaferState waferState)
         {
-            if (waferState.Data.ResistLayer.State == ResistState.Full || waferState.Data.ResistLayer.State == ResistState.Developed) { return; }
-
             base.Activate(waferState);
 
             MaskAButton.OnMouseDown.AddListener(HandleMaskADown);

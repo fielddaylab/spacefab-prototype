@@ -23,16 +23,6 @@ namespace SpaceFab.ChipFab
         public override void Activate(WaferState waferState)
         {
             base.Activate(waferState);
-
-            // PREREQS Resist DEVELOPED
-            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Developed)
-            {
-                Debug.Log("Invalid prereqs");
-                Deactivate();
-                return;
-            }
-
-            WashButton.OnMouseDown.AddListener(HandleWashClicked);
         }
 
         public override void Deactivate()
@@ -42,10 +32,29 @@ namespace SpaceFab.ChipFab
 
         #endregion // IStationMicrogame
 
+        private void OnEnable()
+        {
+            WashButton.OnMouseDown.AddListener(HandleWashClicked);
+        }
+
+        private void OnDisable()
+        {
+            WashButton.OnMouseDown.RemoveListener(HandleWashClicked);
+        }
+
         private void HandleWashClicked()
         {
+            // PREREQS Resist DEVELOPED
+            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Stripped)
+            {
+                Debug.Log("Invalid prereqs");
+                Deactivate();
+                return;
+            }
+
             DragMgr.WaferInstance.SetResistStateWash();
             Deactivate();
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
     }
 }

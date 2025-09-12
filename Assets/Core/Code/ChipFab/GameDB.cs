@@ -14,6 +14,7 @@ namespace SpaceFab.ChipFab
         [Header("Wafer Resist")]
         public Sprite ResistFull;
         public Sprite ResistDeveloped;
+        public Sprite ResistStripped;
 
         [Header("Wafer Oxide")]
         public Sprite OxideFull;
