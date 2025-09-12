@@ -37,6 +37,7 @@ namespace SpaceFab.Research {
             TemperatureIndex = 2;
             CoilRenderer.color = Colors[2];
             TemperatureLabel.SetText(Labels[2]);
+            Temperature = 0.5f;
             IncreaseButton.gameObject.SetActive(true);
             DecreaseButton.gameObject.SetActive(true);
 
