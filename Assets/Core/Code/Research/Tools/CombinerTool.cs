@@ -1,6 +1,7 @@
 using BeauRoutine;
 using BeauUtil;
 using FieldDay;
+using FieldDay.Audio;
 using FieldDay.Components;
 using System;
 using System.Collections;
@@ -31,7 +32,10 @@ namespace SpaceFab.Research {
         private IEnumerator ExplodeRoutine() {
             Game.Input.PauseAll();
             yield return 0.5f;
+            Sfx.Play("Research.Gem.Explode");
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[0], null);
+            yield return 0.15f;
+            Sfx.Play("Research.Gem.Explode");
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
             Game.Input.ResumeAll();
         }
@@ -42,6 +46,7 @@ namespace SpaceFab.Research {
                 if (recipeBook.TryGetResult(ResearchToolUtility.GetInputMaterial(m_Tool, 0).AssetId, ResearchToolUtility.GetInputMaterial(m_Tool, 1).AssetId, out StringHash32 outputMaterial)) {
                     ResearchSlotUtility.FillInSlot(m_Tool.OutputSlot, Find.NamedAsset<ResearchMaterial>(outputMaterial));
                     m_OutputWasFilled = true;
+                    Sfx.Play("Research.Gem.NewCombination");
                 } else {
                     m_ExplodeRoutine.Replace(this, ExplodeRoutine());
                     m_OutputWasFilled = false;

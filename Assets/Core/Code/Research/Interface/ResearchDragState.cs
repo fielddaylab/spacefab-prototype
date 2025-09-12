@@ -1,4 +1,5 @@
 using FieldDay;
+using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.HID;
 using FieldDay.SharedState;
@@ -28,6 +29,7 @@ namespace SpaceFab.Research {
 				dragState.DragRenderer.gameObject.SetActive(false);
                 CursorHint.Unlock(dragState.DragCursor);
 				dragState.Raycaster.eventMask |= LayerMasks.UI_Mask;
+                Sfx.Play("Research.Gem.DropCancel");
                 return true;
 			}
 
@@ -43,14 +45,20 @@ namespace SpaceFab.Research {
             ResearchDragState dragState = Find.State<ResearchDragState>();
             if (dragState.CurrentlyDragging) {
 				ResearchMaterial swap = null;
-				if (dragState.AllowSwap && slot.Item != null) {
+				if (dragState.AllowSwap && slot.AllowSwap && slot.Item != null) {
 					swap = slot.Item.Material;
 				}
 				FillInSlot(slot, dragState.CurrentlyDragging);
-				if (swap) {
+                Sfx.Play("Research.Gem.Drop");
+                if (swap) {
 					dragState.CurrentlyDragging = swap;
                     ResearchMaterialUtility.ApplyPropertiesToRig(dragState.DragRenderer, dragState.CurrentlyDragging);
 					ResearchMaterialUtility.UpdateSelectedMaterial(swap);
+                    Sfx.Play("Research.Gem.Lift", new SfxPlayArgs() {
+						Volume = 1,
+						Pitch = 1,
+						Delay = 0.05f
+					});
                 } else {
                     dragState.CurrentlyDragging = null;
                     dragState.DragRenderer.gameObject.SetActive(false);
@@ -78,6 +86,7 @@ namespace SpaceFab.Research {
 			CursorHint.TryLock(dragState.DragCursor);
             dragState.Raycaster.eventMask &= ~LayerMasks.UI_Mask;
             ResearchMaterialUtility.UpdateSelectedMaterial(dragState.CurrentlyDragging);
+            Sfx.Play("Research.Gem.Lift");
             return true;
         }
     }

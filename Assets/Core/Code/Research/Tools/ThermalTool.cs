@@ -1,5 +1,6 @@
 using BeauRoutine;
 using BeauUtil;
+using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.UI;
 using System;
@@ -48,6 +49,7 @@ namespace SpaceFab.Research {
             CoilRenderer.color = Colors[TemperatureIndex];
             TemperatureLabel.SetText(Labels[TemperatureIndex]);
 
+            Sfx.Play("Research.Tool.Button");
             GuiCommands.SetActive(DecreaseButton.gameObject, true);
             GuiCommands.SetActive(IncreaseButton.gameObject, TemperatureIndex < 4);
 
@@ -60,6 +62,7 @@ namespace SpaceFab.Research {
             CoilRenderer.color = Colors[TemperatureIndex];
             TemperatureLabel.SetText(Labels[TemperatureIndex]);
 
+            Sfx.Play("Research.Tool.Button");
             GuiCommands.SetActive(IncreaseButton.gameObject, true);
             GuiCommands.SetActive(DecreaseButton.gameObject, TemperatureIndex > 0);
 

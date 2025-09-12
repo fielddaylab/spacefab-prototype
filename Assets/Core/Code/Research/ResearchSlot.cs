@@ -10,6 +10,7 @@ namespace SpaceFab.Research {
         public Collider2D Region;
         public Transform Root;
         public GameObject EmptyContents;
+        public bool AllowSwap;
 
         [NonSerialized] public ResearchMaterialItem Item;
 

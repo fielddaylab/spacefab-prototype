@@ -2,6 +2,7 @@ using BeauUtil;
 using BeauUtil.Debugger;
 using BeauUtil.UI;
 using FieldDay;
+using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.HID;
 using FieldDay.Scenes;
@@ -22,6 +23,7 @@ namespace SpaceFab.Research {
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
             Cursor.onClick.Register(() => {
+                Sfx.Play("Research.Tool.Switch");
                 ResearchToolUtility.SetCurrentTool(Tool);
             });
             return null;

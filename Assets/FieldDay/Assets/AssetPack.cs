@@ -72,6 +72,15 @@ namespace FieldDay.Assets {
         /// </summary>
         static public void ReadFromEditorDirectory(AssetPack pack) {
             Baking.PrepareUndo(pack, "locating all assets in directory");
+            InternalReadFromEditorDirectory(pack);
+        }
+
+        static internal void EditorRepack(AssetPack pack) {
+            EditorUtility.SetDirty(pack);
+            InternalReadFromEditorDirectory(pack);
+        }
+
+        static private void InternalReadFromEditorDirectory(AssetPack pack) {
             string myDir = Baking.GetAssetDirectory(pack);
             pack.m_GlobalAssets = Baking.FindAssets<GlobalAsset>(myDir);
             pack.m_NamedAssets = Baking.FindAssets<NamedAsset>(myDir);

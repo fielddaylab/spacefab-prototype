@@ -1,5 +1,6 @@
 using BeauRoutine;
 using BeauUtil;
+using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.UI;
 using System;
@@ -46,11 +47,13 @@ namespace SpaceFab.Research {
 
         private void OnClickIncrease() {
             VoltageIndex++;
+            Sfx.Play("Research.Tool.Button");
             OnVoltageAdjusted();
         }
 
         private void OnClickDecrease() {
             VoltageIndex--;
+            Sfx.Play("Research.Tool.Button");
             OnVoltageAdjusted();
         }
 

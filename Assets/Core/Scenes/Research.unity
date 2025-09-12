@@ -1016,6 +1016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Packs:
   - {fileID: 11400000, guid: 8d3d615e111bdb04091ad037807a0f6a, type: 2}
+  - {fileID: 11400000, guid: a57fb9ae7664f5c41834dca2218ed645, type: 2}
 --- !u!1 &454629728
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,6 +1625,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1092320057855451943, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: AllowSwap
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5318650472370803103, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_Offset.x
       value: 0.05
@@ -1961,6 +1966,10 @@ PrefabInstance:
     - target: {fileID: 455049054091451661, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1092320057855451943, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: AllowSwap
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5318650472370803103, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_Offset.x
@@ -5450,7 +5459,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DragRenderer: {fileID: 3098179576703617969}
   DragCursor: {fileID: 3098179576703617970}
-  AllowSwap: 0
+  AllowSwap: 1
   Raycaster: {fileID: 1309304668}
 --- !u!4 &2020295779
 Transform:
