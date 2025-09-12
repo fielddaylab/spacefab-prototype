@@ -11,6 +11,11 @@ namespace SpaceFab.ChipFab
         public Color NDopantColor;
         public Color PDopantColor;
 
+        [Header("Masks")]
+        public Sprite MaskA;
+        public Sprite MaskB;
+        public Sprite MaskC;
+
         [Header("Wafer Resist")]
         public Sprite ResistFull;
         public Sprite ResistDeveloped;

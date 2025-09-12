@@ -112,6 +112,8 @@ namespace SpaceFab.ChipFab
     public class WaferState : MonoBehaviour
     {
         public WaferData Data;
+        public SpriteRenderer LatestMaskRenderer;
+        public int NumLayers = 0;
 
         private void Awake()
         {
@@ -146,7 +148,25 @@ namespace SpaceFab.ChipFab
                 pattern.Mask.Id = Data.OxideLayer.Mask.Id;
                 pattern.Mask.Rotation = Data.OxideLayer.Mask.Rotation;
                 pattern.DopingType = dopingType;
-                Data.SemiconductorLayer.DopingPatterns.Add(pattern);
+                if (Data.OxideLayer.Mask.Id != MaskId.NONE)
+                {
+                    Data.SemiconductorLayer.DopingPatterns.Add(pattern);
+                }
+
+                if (LatestMaskRenderer)
+                {
+                    if (dopingType == DopingType.N)
+                    {
+                        LatestMaskRenderer.color = GameDB.Instance.NDopantColor;
+                    }
+                    else if (dopingType == DopingType.P)
+                    {
+                        LatestMaskRenderer.color = GameDB.Instance.PDopantColor;
+                    }
+                }
+
+                LatestMaskRenderer = null;
+
                 Data.OxideLayer.State = OxideState.Empty;
 
                 Data.OxideLayer.Mask.Id = MaskId.NONE;
@@ -164,6 +184,8 @@ namespace SpaceFab.ChipFab
 
             var oriented = new OrientedMask();
             oriented.Id = mask;
+
+            if (rotation < 0) { rotation += 360; }
             oriented.Rotation = rotation;
 
             Data.ResistLayer.Mask = oriented;
@@ -203,6 +225,9 @@ namespace SpaceFab.ChipFab
         {
             Data.MetallizationLayer.State = MetallizationState.Stripped;
             // Data.MetallizationLayer.Precision = precision;
+
+            LatestMaskRenderer.color = Color.yellow;
+            LatestMaskRenderer = null;
 
             Data.MetallizationLayer.Mask.Id = Data.ResistLayer.Mask.Id;
             Data.MetallizationLayer.Mask.Rotation = Data.ResistLayer.Mask.Rotation;

@@ -73,28 +73,28 @@ namespace SpaceFab.ChipFab
         {
             m_currPreviewRenderer.enabled = true;
             m_currSelectedMask = MaskId.A;
-            m_currPreviewRenderer.sprite = MaskAButton.GetComponentInParent<SpriteRenderer>().sprite;
+            m_currPreviewRenderer.sprite = GameDB.Instance.MaskA;
         }
 
         private void HandleMaskBDown()
         {
             m_currPreviewRenderer.enabled = true;
             m_currSelectedMask = MaskId.B;
-            m_currPreviewRenderer.sprite = MaskBButton.GetComponentInParent<SpriteRenderer>().sprite;
+            m_currPreviewRenderer.sprite = GameDB.Instance.MaskB;
         }
 
         private void HandleMaskCDown()
         {
             m_currPreviewRenderer.enabled = true;
             m_currSelectedMask = MaskId.C;
-            m_currPreviewRenderer.sprite = MaskCButton.GetComponentInParent<SpriteRenderer>().sprite;
+            m_currPreviewRenderer.sprite = GameDB.Instance.MaskC;
         }
 
         private void HandleRotateCCDown()
         {
-            m_currRotation -= 90;
+            m_currRotation += 90;
 
-            if (m_currRotation == -360) { m_currRotation = 0; }
+            if (m_currRotation == 360) { m_currRotation = 0; }
 
             var angles = DragMgr.WaferInstance.transform.localEulerAngles;
             angles.z = m_currRotation;
@@ -103,9 +103,9 @@ namespace SpaceFab.ChipFab
 
         private void HandleRotateCDown()
         {
-            m_currRotation += 90;
+            m_currRotation -= 90;
 
-            if (m_currRotation == 360) { m_currRotation = 0; }
+            if (m_currRotation == -360) { m_currRotation = 0; }
 
             var angles = DragMgr.WaferInstance.transform.localEulerAngles;
             angles.z = m_currRotation;
@@ -114,9 +114,13 @@ namespace SpaceFab.ChipFab
 
         private void HandleDevelopDown()
         {
-            DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, m_currRotation);
+            // pattern rotates inverse of wafer
+            DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, -m_currRotation);
             m_currPreview.transform.SetParent(DragMgr.WaferInstance.transform, true);
+            DragMgr.WaferInstance.LatestMaskRenderer = m_currPreviewRenderer;
+            m_currPreviewRenderer.sortingOrder = m_currPreviewRenderer.sortingOrder + (++DragMgr.WaferInstance.NumLayers);
             m_currPreview.transform.localScale = Vector3.one;
+            m_currPreview.transform.localPosition = Vector3.zero;
             m_currPreview = null;
             m_currPreviewRenderer = null;
             Deactivate();

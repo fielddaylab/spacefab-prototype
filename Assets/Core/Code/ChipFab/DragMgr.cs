@@ -113,7 +113,10 @@ namespace SpaceFab.ChipFab
                     // if dispenser, destroy dragged object
                     if (hit.GetComponent<ClickBox>().BoxType == ClickBoxType.Dispenser)
                     {
-                        Destroy(CurrDrag.gameObject);
+                        if (CurrDrag)
+                        {
+                            Destroy(CurrDrag.gameObject);
+                        }
                     }
                     // else if drop zone
                     else if (hit.GetComponent<ClickBox>().BoxType == ClickBoxType.DropZone && CurrDrag != null)
