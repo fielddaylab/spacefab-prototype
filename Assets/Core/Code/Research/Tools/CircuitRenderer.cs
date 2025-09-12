@@ -12,6 +12,7 @@ namespace SpaceFab.Research {
         public Sprite BulbOffSprite;
         public Sprite BulbOnSprite;
         public SpriteRenderer BulbShine;
+        public float AnimSpeedMultiplier = 4;
 
         [NonSerialized] public int CircuitSpriteIndex;
         [NonSerialized] public float CircuitSpriteSpeed;

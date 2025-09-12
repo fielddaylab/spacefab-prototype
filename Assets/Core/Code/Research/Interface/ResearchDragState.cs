@@ -45,7 +45,7 @@ namespace SpaceFab.Research {
             ResearchDragState dragState = Find.State<ResearchDragState>();
             if (dragState.CurrentlyDragging) {
 				ResearchMaterial swap = null;
-				if (dragState.AllowSwap && slot.AllowSwap && slot.Item != null) {
+				if (dragState.AllowSwap && slot.AllowSwap && slot.Item != null && !slot.Item.ExplosionRoutine) {
 					swap = slot.Item.Material;
 				}
 				FillInSlot(slot, dragState.CurrentlyDragging);

@@ -5497,6 +5497,7 @@ MonoBehaviour:
     m_DefaultPoolRoot: {fileID: 465611781}
     m_DefaultSpawnRoot: {fileID: 0}
     m_ResetTransformOnAlloc: 0
+  PreExplodeItemMaterial: {fileID: 2100000, guid: d861b14ff59d5b842bbfa1b72fa5aa14, type: 2}
 --- !u!114 &2020295781
 MonoBehaviour:
   m_ObjectHideFlags: 0

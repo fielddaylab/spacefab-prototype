@@ -31,12 +31,11 @@ namespace SpaceFab.Research {
 
         private IEnumerator ExplodeRoutine() {
             Game.Input.PauseAll();
-            yield return 0.5f;
-            Sfx.Play("Research.Gem.Explode");
-            ResearchSlotUtility.FillInSlot(m_Tool.Slots[0], null);
+            yield return 0.4f;
+            ResearchMaterialUtility.ExplodeItem(m_Tool.Slots[0].Item);
             yield return 0.15f;
-            Sfx.Play("Research.Gem.Explode");
-            ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
+            ResearchMaterialUtility.ExplodeItem(m_Tool.Slots[1].Item);
+            yield return 0.3f;
             Game.Input.ResumeAll();
         }
 

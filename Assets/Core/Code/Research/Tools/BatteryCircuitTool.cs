@@ -76,7 +76,7 @@ namespace SpaceFab.Research {
                 var input = ResearchToolUtility.GetInputMaterial(m_Tool, 0);
                 float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
-                CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current * 4);
+                CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
             } else {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);

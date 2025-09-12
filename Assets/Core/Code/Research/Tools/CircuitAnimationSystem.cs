@@ -11,7 +11,7 @@ namespace SpaceFab.Research {
                     return;
                 }
 
-                obj.CircuitSpriteTimer += deltaTime * Math.Abs(obj.CircuitSpriteSpeed);
+                obj.CircuitSpriteTimer += deltaTime * Math.Abs(obj.CircuitSpriteSpeed) * obj.AnimSpeedMultiplier;
                 int framesAdvanced = (int) obj.CircuitSpriteTimer;
                 if (framesAdvanced > 0) {
                     obj.CircuitSpriteTimer -= framesAdvanced;

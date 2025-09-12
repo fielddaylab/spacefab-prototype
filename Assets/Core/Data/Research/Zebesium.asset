@@ -16,7 +16,7 @@ MonoBehaviour:
   ChemicalSymbol: Zbs
   Material: {fileID: 2100000, guid: 587447a5989075f4b8bfc2ee0bbcf3a7, type: 2}
   Electrical: 1
-  Thermal: 0
+  Thermal: 4
   SpecialTags: 
   DielectricStrength: 0
   DopantType: 0

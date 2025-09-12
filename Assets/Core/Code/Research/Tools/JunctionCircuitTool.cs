@@ -80,8 +80,7 @@ namespace SpaceFab.Research {
                 }
 
                 float current = 0;
-                if (inputA.Electrical == ElectricalTag.Insulator || inputB.Electrical == ElectricalTag.Insulator
-                    || inputA.Electrical == ElectricalTag.Dopant || inputB.Electrical == ElectricalTag.Dopant) {
+                if (ResearchMaterialUtility.BehavesAsInsulator(inputA) || ResearchMaterialUtility.BehavesAsInsulator(inputB)) {
                     current = 0;
                 } else if (inputA.DopantType == DopantType.P && inputB.DopantType == DopantType.N) {
                     current = 0; // p->n is not allowed
@@ -92,7 +91,7 @@ namespace SpaceFab.Research {
                 }
 
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
-                CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current * 4);
+                CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
             } else {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);

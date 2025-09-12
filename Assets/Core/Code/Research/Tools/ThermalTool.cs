@@ -1,9 +1,11 @@
 using BeauRoutine;
 using BeauUtil;
+using FieldDay;
 using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.UI;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -21,6 +23,8 @@ namespace SpaceFab.Research {
 
         [NonSerialized] private ResearchTool m_Tool;
         [NonSerialized] public int TemperatureIndex;
+
+        private Routine m_ExplodeRoutine;
 
         private void Awake() {
             this.CacheComponent(ref m_Tool);
@@ -70,12 +74,26 @@ namespace SpaceFab.Research {
             OnSlotFillUpdated();
         }
 
+        private IEnumerator ExplodeRoutine() {
+            Game.Input.PauseAll();
+            yield return 0.4f;
+            ResearchMaterialUtility.ExplodeItem(m_Tool.Slots[0].Item);
+            yield return 0.3f;
+            Game.Input.ResumeAll();
+        }
+
         private void OnSlotFillUpdated() {
             if (m_Tool.AllSlotsFilled) {
                 var input = ResearchToolUtility.GetInputMaterial(m_Tool, 0);
-                float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
-                CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
-                CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current * 4);
+                if (!ResearchMaterialUtility.IsStableAtTemperature(input, Temperature)) {
+                    m_ExplodeRoutine.Replace(this, ExplodeRoutine());
+                    CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
+                    CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
+                } else {
+                    float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
+                    CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
+                    CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
+                }
             } else {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
