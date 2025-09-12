@@ -130,6 +130,8 @@ namespace SpaceFab.ChipFab
 
         private void TransitionToActivated()
         {
+            InputsEnabled = true;
+
             // PREREQ: Oxide FUll or Metal FULL
             if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full)
             {
@@ -141,7 +143,7 @@ namespace SpaceFab.ChipFab
             m_state = ResistMicrogameState.Activated;
             m_nextKey = KeyCode.Space; // neutral key
             FluidVisual.localScale = Vector3.one * StartFluidScale;
-            InputsEnabled = true;
+            m_currSpeed = 0;
             TransitionCommon();
         }
 
