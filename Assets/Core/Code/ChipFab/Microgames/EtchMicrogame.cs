@@ -26,6 +26,19 @@ namespace SpaceFab.ChipFab
 
         private EtchMicrogameState m_state;
 
+        public GameObject BlastableResistPrefab;
+        public GameObject UnblastableResistPrefab;
+        public GameObject BlastableOxidePrefab;
+        public GameObject UnblastableOxidePrefab;
+
+        public Transform ParentFrame;
+
+        public Transform LUnblast, RUnblast, LBlast, RBlast;
+
+        private List<GameObject> m_generatedLayerBlocks = new List<GameObject>();
+
+        private int m_totalBlastables;
+
         #region IStationMicrogame
 
         public override void Activate(WaferState waferState)
@@ -47,6 +60,8 @@ namespace SpaceFab.ChipFab
                 Deactivate();
                 return;
             }
+
+            GenerateEtchableLayers(DragMgr.WaferInstance.Data);
 
             TransitionToActivated();
         }
@@ -121,9 +136,17 @@ namespace SpaceFab.ChipFab
 
         private float EvaluatePrecision()
         {
-            // TODO: implement
+            int hitCount = 0;
 
-            return 1;
+            foreach (var obj in m_generatedLayerBlocks)
+            {
+                if (obj == null)
+                {
+                    hitCount++;
+                }
+            }
+
+            return (float)hitCount / m_totalBlastables;
         }
 
         private void HandleFinishClicked()
@@ -141,6 +164,73 @@ namespace SpaceFab.ChipFab
             }
             Deactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+
+            while (m_generatedLayerBlocks.Count > 0)
+            {
+                if (m_generatedLayerBlocks[0] != null)
+                {
+                    Destroy(m_generatedLayerBlocks[0]);
+                }
+                m_generatedLayerBlocks.RemoveAt(0);
+            }
+            m_generatedLayerBlocks.Clear();
+        }
+
+        private void GenerateEtchableLayers(WaferData data)
+        {
+            // Resist Layer
+            switch (data.ResistLayer.State)
+            {
+                case ResistState.Developed:
+                    WaferDisplay.Resist.gameObject.SetActive(false);
+                    // generate left unblastable
+                    var newObj = Instantiate(UnblastableResistPrefab, ParentFrame);
+                    var objPos = newObj.transform.position;
+                    objPos.x = LUnblast.position.x;
+                    objPos.y = WaferDisplay.Resist.transform.position.y;
+                    newObj.transform.position = objPos;
+                    m_generatedLayerBlocks.Add(newObj);
+
+                    // generate right unblastable
+                    newObj = Instantiate(UnblastableResistPrefab, ParentFrame);
+                    objPos = newObj.transform.position;
+                    objPos.x = RUnblast.position.x;
+                    objPos.y = WaferDisplay.Resist.transform.position.y;
+                    newObj.transform.position = objPos;
+                    m_generatedLayerBlocks.Add(newObj);
+
+                    // generate blastable
+                    break;
+                default:
+                    break;
+            }
+
+            // Oxide Layer
+            switch (data.OxideLayer.State)
+            {
+                case OxideState.Full:
+                    WaferDisplay.Oxide.gameObject.SetActive(false);
+                    // generate left unblastable
+                    var newObj = Instantiate(UnblastableOxidePrefab, ParentFrame);
+                    var objPos = newObj.transform.position;
+                    objPos.x = LUnblast.position.x;
+                    objPos.y = WaferDisplay.Oxide.transform.position.y;
+                    newObj.transform.position = objPos;
+                    m_generatedLayerBlocks.Add(newObj);
+
+                    // generate right unblastable
+                    newObj = Instantiate(UnblastableOxidePrefab, ParentFrame);
+                    objPos = newObj.transform.position;
+                    objPos.x = RUnblast.position.x;
+                    objPos.y = WaferDisplay.Oxide.transform.position.y;
+                    newObj.transform.position = objPos;
+                    m_generatedLayerBlocks.Add(newObj);
+
+                    // generate blastable
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

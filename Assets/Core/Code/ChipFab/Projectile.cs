@@ -21,6 +21,8 @@ namespace SpaceFab.ChipFab
 
         public float MaxTravelDist;
 
+        public ProjectileCollisionHandlerBase CollisionHandler;
+
         public void SetDirAndSpeed(Vector3 dir, float speed)
         {
             m_moveDir = dir;
@@ -46,6 +48,10 @@ namespace SpaceFab.ChipFab
         private void OnCollisionEnter2D(Collision2D collision)
         {
             m_state = ProjectileState.Arrived;
+            if (CollisionHandler)
+            {
+                CollisionHandler.HandleCollision(collision);
+            }
         }
 
         private void Travel()
