@@ -61,6 +61,8 @@ namespace SpaceFab.ChipFab
                 return;
             }
 
+            m_totalBlastables = 0;
+
             GenerateEtchableLayers(DragMgr.WaferInstance.Data);
 
             TransitionToActivated();
@@ -200,6 +202,7 @@ namespace SpaceFab.ChipFab
                     m_generatedLayerBlocks.Add(newObj);
 
                     // generate blastable
+                    GenerateBlastables(BlastableResistPrefab, LBlast.position.x, RBlast.position.x, WaferDisplay.Resist.transform.position.y);
                     break;
                 default:
                     break;
@@ -227,10 +230,33 @@ namespace SpaceFab.ChipFab
                     m_generatedLayerBlocks.Add(newObj);
 
                     // generate blastable
+                    GenerateBlastables(BlastableOxidePrefab, LBlast.position.x, RBlast.position.x, WaferDisplay.Oxide.transform.position.y);
                     break;
                 default:
                     break;
             }
+        }
+
+        private void GenerateBlastables(GameObject prefab, float leftX, float rightX, float y)
+        {
+            float step = 0.0441607297114818f;
+            float currX = leftX;
+            int lastI = 0;
+            for (int i = 0; leftX + i * step < rightX; i++)
+            {
+                currX = leftX + i * step;
+
+                var newObj = Instantiate(prefab, ParentFrame);
+                var objPos = newObj.transform.position;
+                objPos.x = currX;
+                objPos.y = y;
+                newObj.transform.position = objPos;
+                m_generatedLayerBlocks.Add(newObj);
+
+                lastI = i + 1;
+            }
+
+            m_totalBlastables += lastI;
         }
     }
 }
