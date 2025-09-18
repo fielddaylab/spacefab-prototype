@@ -247,6 +247,8 @@ namespace SpaceFab.ChipFab
                 RemoveDopant();
             }
 
+            if (dispensable == null) { return; }
+
             dispensable.transform.position = DopantSlotPos.transform.position;
             dispensable.transform.rotation = DopantSlotPos.transform.rotation;
 
@@ -257,7 +259,7 @@ namespace SpaceFab.ChipFab
             m_dopantObj = dispensable.gameObject;
         }
 
-        private void RemoveDopant()
+        public void RemoveDopant()
         {
             if (m_dopantObj)
             {

@@ -92,6 +92,10 @@ namespace SpaceFab.ChipFab
                             Game.Events.Dispatch(GameEvents.WaferPickedUp);
                         }
                     }
+                    else if (dispensable && dispensable.Type == DispensableType.Dopant)
+                    {
+                        FurnaceMicrogame.Instance.RemoveDopant();
+                    }
                     else {
                         CurrDrag = hit.transform;
                     }

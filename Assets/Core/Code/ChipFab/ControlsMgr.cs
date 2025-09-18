@@ -18,6 +18,7 @@ namespace SpaceFab.ChipFab
 
         [Header("Nav Nodes")]
         public ControlNavNode StartingNode;
+        public bool NavNodesEnabled;
 
         [Header("Nav Keys")]
         public KeyCode NavLeftKey = KeyCode.LeftArrow;
@@ -32,6 +33,9 @@ namespace SpaceFab.ChipFab
 
         public DropZone CurrDropZone;
 
+        [Header("Conveyor")]
+        public ConveyorMgr ConveyorMgr;
+        public bool ConveyorEnabled;
 
         #region Unity Callbacks
 
@@ -43,7 +47,10 @@ namespace SpaceFab.ChipFab
         private void Start()
         {
             DragMgr.gameObject.SetActive(DragEnabled);
-            GoToNode(StartingNode);
+            if (NavNodesEnabled)
+            {
+                GoToNode(StartingNode);
+            }
         }
 
         private void Update()
@@ -56,6 +63,18 @@ namespace SpaceFab.ChipFab
         #region Input
 
         private void ProcessInputs()
+        {
+            if (NavNodesEnabled)
+            {
+                ProcessNavNodeInputs();
+            }
+            if (ConveyorEnabled)
+            {
+                ConveyorMgr.ProcessInputs();
+            }
+        }
+
+        private void ProcessNavNodeInputs()
         {
             if (Input.GetKeyDown(NavLeftKey))
             {

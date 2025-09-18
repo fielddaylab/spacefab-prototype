@@ -28,7 +28,7 @@ namespace SpaceFab.ChipFab
             var newObj = Instantiate(ToDispense);
             if (fromDrag)
             {
-                DragMgr.Instance.SetCurrDrag(newObj.transform);
+                // DragMgr.Instance.SetCurrDrag(newObj.transform);
             }
 
             var dispensable = newObj.GetComponent<Dispensable>();
@@ -48,14 +48,17 @@ namespace SpaceFab.ChipFab
                     {
                         newObj.transform.position = ControlsMgr.Instance.WaferDefaultPos.position;
                     }
+
+                    if (ControlsMgr.Instance.ConveyorEnabled)
+                    {
+                        ConveyorMgr.Instance.AssignWafer();
+                    }
                 }
                 else if (dispensable.Type == DispensableType.Dopant)
                 {
                     if (!fromDrag)
                     {
                         newObj.transform.position = ControlsMgr.Instance.DopantDefaultPos.position;
-                        // only place to put dopant is in the furnace
-                        FurnaceMicrogame.Instance.AssignDopant(dispensable);
                     }
 
                     // set dopant instance
@@ -64,7 +67,11 @@ namespace SpaceFab.ChipFab
                         Game.Events.Dispatch(GameEvents.NewDopantCreated);
                         Destroy(DragMgr.DopantInstance.gameObject);
                     }
+
                     DragMgr.DopantInstance = newObj;
+
+                    // only place to put dopant is in the furnace
+                    FurnaceMicrogame.Instance.AssignDopant(dispensable);
                 }
             }
         }
