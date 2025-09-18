@@ -4,7 +4,7 @@ using UnityEngine;
 namespace SpaceFab.SupplyChain {
     public sealed class RouteNode : BatchedComponent {
         public uint Cost;
-        public uint Reliability;
+        [Range(0, 3)] public uint Reliability;
         public uint ProductionTime;
     }
 }
