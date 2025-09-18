@@ -101,6 +101,8 @@ namespace SpaceFab.ChipFab
             pos.y = CarryPos.transform.position.y;
             DragMgr.WaferInstance.transform.position = pos;
 
+            DragMgr.WaferInstance.transform.rotation = default;
+
             ControlsMgr.Instance.CurrDropZone = m_currNode.GetComponent<DropZone>();
         }
 
