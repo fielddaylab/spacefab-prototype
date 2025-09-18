@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace SpaceFab.Research {
     [SysUpdate(GameLoopPhase.LateUpdate, 1000)]
-	public sealed class ResearchDragSystem : SharedStateSystemBehaviour<ResearchDragState> {
+	public sealed class ResearchDragSystem : SharedStateSystemBehaviour<ResearchDragState> { 
         public override void ProcessWork(float deltaTime) {
             bool cancelQueued = false;
 

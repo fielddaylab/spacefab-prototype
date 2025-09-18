@@ -4,9 +4,10 @@ using BeauUtil.Debugger;
 using BeauUtil.UI;
 using FieldDay.Assets;
 using UnityEngine;
+using FieldDay.HID;
 using UnityEngine.EventSystems;
 
-namespace FieldDay.HID {
+namespace FieldDay.UI {
     [DisallowMultipleComponent]
     public class CursorHint : PointerListener {
         #region Inspector
@@ -29,7 +30,7 @@ namespace FieldDay.HID {
             onPointerExit.AddListener(OnExit);
         }
 
-        protected virtual void OnDisable() {
+        protected override void OnDisable() {
             if (ReferenceEquals(this, s_Pointer)) {
                 s_Pointer = null;
             }
@@ -39,16 +40,18 @@ namespace FieldDay.HID {
             if (ReferenceEquals(this, s_Effective)) {
                 UpdateEffectiveCursor();
             }
+
+            base.OnDisable();
         }
 
-        private void OnEnter(PointerEventData evtData) {
+        private void OnEnter(EventData evtData) {
             if (!ReferenceEquals(this, s_Pointer)) {
                 s_Pointer = this;
                 UpdateEffectiveCursor();
             }
         }
 
-        private void OnExit(PointerEventData evtData) {
+        private void OnExit(EventData evtData) {
             if (ReferenceEquals(this, s_Pointer)) {
                 s_Pointer = null;
                 UpdateEffectiveCursor();

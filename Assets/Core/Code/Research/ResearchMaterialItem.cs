@@ -4,6 +4,7 @@ using FieldDay;
 using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.HID;
+using FieldDay.UI;
 using System;
 using System.Collections;
 using UnityEngine;

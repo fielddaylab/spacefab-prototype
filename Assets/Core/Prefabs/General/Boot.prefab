@@ -157,6 +157,7 @@ MonoBehaviour:
     MeshCapacity: 16
     MaterialCapacity: 16
     UnmanagedBudgetMB: 2
+    DoubleBufferedStringCapacityKB: 64
   m_GuiConfig:
     FaderPrefab: {fileID: 0}
   m_FileSystemConfig:
@@ -274,7 +275,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 1
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 32767

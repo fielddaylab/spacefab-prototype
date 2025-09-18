@@ -47,6 +47,9 @@ namespace SpaceFab.Research {
                 }
 
                 foreach (var button in Find.Components<ResearchToolButton>()) {
+                    if (button.Locked) {
+                        continue;
+                    }
                     bool isSelected = button.Tool == toolState.CurrentTool;
                     button.Region.enabled = !isSelected;
                     button.Image.color = isSelected ? button.SelectedColor : button.UnselectedColor;

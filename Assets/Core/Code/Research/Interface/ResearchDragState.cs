@@ -3,6 +3,7 @@ using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.HID;
 using FieldDay.SharedState;
+using FieldDay.UI;
 using SpaceFab.Research;
 using System;
 using UnityEngine.EventSystems;

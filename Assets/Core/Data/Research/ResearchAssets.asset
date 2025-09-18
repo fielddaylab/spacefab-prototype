@@ -15,9 +15,9 @@ MonoBehaviour:
   m_GlobalAssets:
   - {fileID: 11400000, guid: 5862afb180b6a964dba14eb8fdc4d2eb, type: 2}
   m_NamedAssets:
-  - {fileID: 11400000, guid: 4c7864a20f51bcb46b1ad4dc947df087, type: 2}
   - {fileID: 11400000, guid: 1e662b2942ec97d4594fb497c53b3a3d, type: 2}
   - {fileID: 11400000, guid: 278143704fa23f749b1059ecbccf0a30, type: 2}
+  - {fileID: 11400000, guid: 4c7864a20f51bcb46b1ad4dc947df087, type: 2}
   - {fileID: 11400000, guid: fb833b08a89dee2479716be0969175f9, type: 2}
   - {fileID: 11400000, guid: 83541b9db8e852345a16eb760966fd2e, type: 2}
   - {fileID: 11400000, guid: 627b648c012b3cf43b1f8a7630fe6d16, type: 2}

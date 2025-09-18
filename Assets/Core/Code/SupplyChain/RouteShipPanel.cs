@@ -44,8 +44,8 @@ namespace SpaceFab.SupplyChain {
             return null;
         }
 
-        private void OnShipClicked(PointerEventData evt) {
-            var widget = evt.pointerClick.GetComponentInParent<RouteShipWidget>();
+        private void OnShipClicked(PointerListener.EventData evt) {
+            var widget = evt.Source.GetComponentInParent<RouteShipWidget>();
             RouteShipUtility.SelectShipFromWidget(widget);
         }
     }

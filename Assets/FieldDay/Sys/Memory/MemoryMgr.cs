@@ -36,6 +36,9 @@ namespace FieldDay.Memory {
         private IPool<Material> m_MaterialPool;
         private Shader m_DefaultShader;
 
+        private StringArena m_CurrentFrameStringArena;
+        private StringArena m_BackupFrameStringArena;
+
         private Transform m_PersistentPoolRoot;
 
         private Unsafe.ArenaHandle m_BudgetCategoryAllocator;
@@ -98,6 +101,45 @@ namespace FieldDay.Memory {
 
         #endregion // GC
 
+        #region Strings
+
+        internal void SwapAllocationBuffers() {
+            Ref.Swap(ref m_CurrentFrameStringArena, ref m_BackupFrameStringArena);
+            m_CurrentFrameStringArena.Reset();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public StringSlice AllocString(string source) {
+            return m_CurrentFrameStringArena.Alloc(source);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public StringSlice AllocString(StringSlice source) {
+            return m_CurrentFrameStringArena.Alloc(source);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public StringSlice AllocString(StringBuilderSlice source) {
+            return m_CurrentFrameStringArena.Alloc(source);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public StringSlice AllocString(UnsafeString source) {
+            return m_CurrentFrameStringArena.Alloc(source);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public unsafe StringSlice AllocString(char* source, int sourceLength) {
+            return m_CurrentFrameStringArena.Alloc(source, sourceLength);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public StringSlice AllocString(UnsafeSpan<char> source) {
+            return m_CurrentFrameStringArena.Alloc(source);
+        }
+
+        #endregion // Strings
+
         #region Arenas
 
         /// <summary>
@@ -155,6 +197,9 @@ namespace FieldDay.Memory {
             m_GCCollectCounts = new int[genCount];
             m_GCCollectTimestamps = new long[genCount];
             m_LastKnownGenerationCount = genCount;
+
+            m_CurrentFrameStringArena = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB);
+            m_BackupFrameStringArena = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB);
 
             m_MeshPool = new DynamicPool<Mesh>(configuration.MeshCapacity, (p) => new Mesh(), false);
             m_MeshPool.Config.RegisterOnDestruct((p, m) => GameObject.DestroyImmediate(m));
@@ -270,12 +315,13 @@ namespace FieldDay.Memory {
 #endif // DEVELOPMENT
 
 #endregion // Debugging
-        }
+    }
 
     [Serializable]
     public struct MemoryPoolConfiguration {
         public int MeshCapacity;
         public int MaterialCapacity;
         public int UnmanagedBudgetMB;
+        public int DoubleBufferedStringCapacityKB;
     }
 }

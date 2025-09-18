@@ -15,6 +15,8 @@ MonoBehaviour:
   DisplayName: Silicon + Boron
   ChemicalSymbol: Si+B
   Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  Parent:
+    m_HashValue: 1163381446
   Electrical: 1
   Thermal: 0
   SpecialTags: 

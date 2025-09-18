@@ -10,6 +10,7 @@ namespace SpaceFab.Research {
 	[SharedStateInitOrder(-10)]
 	public sealed class ResearchSelectionState : SharedStateComponent {
 		[NonSerialized] public ResearchMaterial Current;
+		[NonSerialized] public bool Locked;
 
 		public CastableEvent<ResearchMaterial> OnUpdated = new CastableEvent<ResearchMaterial>();
     }
@@ -17,7 +18,7 @@ namespace SpaceFab.Research {
 	static public partial class ResearchMaterialUtility {
 		static public void UpdateSelectedMaterial(ResearchMaterial material) {
 			var state = Find.State<ResearchSelectionState>();
-			if (state.Current == material) {
+			if (state.Locked || state.Current == material) {
 				return;
 			}
 

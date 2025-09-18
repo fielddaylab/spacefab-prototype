@@ -6,6 +6,7 @@ using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.HID;
 using FieldDay.Scenes;
+using FieldDay.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,8 @@ namespace SpaceFab.Research {
         [Header("Colors")]
         public Color32 UnselectedColor;
         public Color32 SelectedColor;
+
+        [NonSerialized] public bool Locked;
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
             Cursor.onClick.Register(() => {

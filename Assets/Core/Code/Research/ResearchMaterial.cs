@@ -1,4 +1,5 @@
 using System;
+using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Assets;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace SpaceFab.Research {
         public string DisplayName;
         public string ChemicalSymbol;
         public Material Material;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32 Parent;
 
         [Header("Properties")]
         public ElectricalTag Electrical;
@@ -93,6 +95,80 @@ namespace SpaceFab.Research {
                 default:
                     return true;
             }
+        }
+
+        static public string GetTagLabel(ElectricalTag tag, DopantType dopantType) {
+            switch(tag) {
+                case ElectricalTag.Conductor: {
+                    return "Conductor";
+                }
+                case ElectricalTag.Semiconductor: {
+                    return "Semiconductor";
+                }
+                case ElectricalTag.Insulator: {
+                    return "Insulator";
+                }
+                case ElectricalTag.Dopant: {
+                    switch(dopantType) {
+                        case DopantType.Unknown: {
+                            return "Dopant";
+                        }
+                        case DopantType.N: {
+                            return "Dopant (N)";
+                        }
+                        case DopantType.P: {
+                            return "Dopant (P)";
+                        }
+                    }
+                    break;
+                }
+                case ElectricalTag.Unknown: {
+                    return "???";
+                }
+            }
+
+            Assert.Fail("no tag label");
+            return string.Empty;
+        }
+
+        static public string GetTagLabel(ThermalTag tag) {
+            switch (tag) {
+                case ThermalTag.LowTemp: {
+                    return "Low Temp";
+                }
+                case ThermalTag.HighTemp: {
+                    return "High Temp";
+                }
+                case ThermalTag.ExtremeTemp: {
+                    return "Extreme Temps";
+                }
+                case ThermalTag.Sensitive: {
+                    return "Sensitive";
+                }
+                case ThermalTag.Unknown: {
+                    return "???";
+                }
+            }
+
+            Assert.Fail("no tag label");
+            return string.Empty;
+        }
+
+        static public string GetTagLabel(SpecialTag tag) {
+            switch (tag) {
+                case SpecialTag.LightEmitting: {
+                    return "Light-Emitting";
+                }
+                case SpecialTag.HighMobility: {
+                    return "High Mobility";
+                }
+                case SpecialTag.Unknown: {
+                    return "???";
+                }
+            }
+
+            Assert.Fail("no tag label");
+            return string.Empty;
         }
     }
 }
