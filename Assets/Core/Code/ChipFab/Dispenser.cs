@@ -51,7 +51,20 @@ namespace SpaceFab.ChipFab
                 }
                 else if (dispensable.Type == DispensableType.Dopant)
                 {
-                    newObj.transform.position = ControlsMgr.Instance.DopantDefaultPos.position;
+                    if (!fromDrag)
+                    {
+                        newObj.transform.position = ControlsMgr.Instance.DopantDefaultPos.position;
+                        // only place to put dopant is in the furnace
+                        FurnaceMicrogame.Instance.AssignDopant(dispensable);
+                    }
+
+                    // set dopant instance
+                    if (DragMgr.DopantInstance)
+                    {
+                        Game.Events.Dispatch(GameEvents.NewDopantCreated);
+                        Destroy(DragMgr.DopantInstance.gameObject);
+                    }
+                    DragMgr.DopantInstance = newObj;
                 }
             }
         }

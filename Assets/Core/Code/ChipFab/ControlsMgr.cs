@@ -30,6 +30,8 @@ namespace SpaceFab.ChipFab
 
         private ControlNavNode m_currNode;
 
+        public DropZone CurrDropZone;
+
 
         #region Unity Callbacks
 
@@ -121,6 +123,15 @@ namespace SpaceFab.ChipFab
 
             // assign
             m_currNode = node;
+
+            if (node.GetComponent<DropZone>())
+            {
+                CurrDropZone = node.GetComponent<DropZone>();
+            }
+            else
+            {
+                CurrDropZone = null;
+            }
 
             // enter logic
             if (m_currNode != null)

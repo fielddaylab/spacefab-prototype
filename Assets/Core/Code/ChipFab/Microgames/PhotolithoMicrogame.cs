@@ -1,6 +1,7 @@
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.ChipFab
@@ -15,6 +16,8 @@ namespace SpaceFab.ChipFab
         public ClickBox RotateCButton;
 
         public ClickBox DevelopButton;
+
+        public TMP_Text RotText;
 
         public Transform PreviewPos;
         public GameObject PreviewPrefab;
@@ -44,6 +47,8 @@ namespace SpaceFab.ChipFab
             m_currPreview = Instantiate(PreviewPrefab, PreviewPos);
             m_currPreviewRenderer = m_currPreview.GetComponent<SpriteRenderer>();
             m_currPreviewRenderer.enabled = false;
+
+            RotText.SetText("0°");
 
             // PREREQS: Resist FULL
             if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Full)
@@ -99,6 +104,8 @@ namespace SpaceFab.ChipFab
             var angles = DragMgr.WaferInstance.transform.localEulerAngles;
             angles.z = m_currRotation;
             DragMgr.WaferInstance.transform.localEulerAngles =  angles;
+
+            RotText.SetText(m_currRotation + "°"); 
         }
 
         private void HandleRotateCDown()
@@ -110,6 +117,8 @@ namespace SpaceFab.ChipFab
             var angles = DragMgr.WaferInstance.transform.localEulerAngles;
             angles.z = m_currRotation;
             DragMgr.WaferInstance.transform.localEulerAngles = angles;
+            
+            RotText.SetText(m_currRotation + "°");
         }
 
         private void HandleDevelopDown()

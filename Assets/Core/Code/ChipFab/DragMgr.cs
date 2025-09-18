@@ -10,6 +10,7 @@ namespace SpaceFab.ChipFab
         public static DragMgr Instance;
 
         public static WaferState WaferInstance;
+        public static GameObject DopantInstance;
 
         private Camera MainCamera;
 
@@ -19,8 +20,6 @@ namespace SpaceFab.ChipFab
         [HideInInspector] public bool DragWaferEnabled;
 
         public Transform CurrDrag { get; private set; }
-
-        public DropZone CurrDropZone { get; private set; }
 
         private void Awake()
         {
@@ -48,23 +47,23 @@ namespace SpaceFab.ChipFab
         
         public void SetCurrDropZone(DropZone newZone)
         {
-            if (CurrDropZone)
+            if (ControlsMgr.Instance.CurrDropZone)
             {
                 // handle existing drop zone
             }
 
-            CurrDropZone = newZone;
+            ControlsMgr.Instance.CurrDropZone = newZone;
         }
 
         public void UnsetCurrDropZone(DropZone prevZone)
         {
-            if (CurrDropZone != prevZone)
+            if (ControlsMgr.Instance.CurrDropZone != prevZone)
             {
                 // handle mismatch drop zone
                 return;
             }
 
-            CurrDropZone = null;
+            ControlsMgr.Instance.CurrDropZone = null;
         }
 
         private void Update()
@@ -128,20 +127,20 @@ namespace SpaceFab.ChipFab
                             {
                                 // handle wafer
                                 // set InUse
-                                if (CurrDropZone != null)
+                                if (ControlsMgr.Instance.CurrDropZone != null)
                                 {
                                     // only allow one at a time
-                                    CurrDropZone.AssignToDropZone(CurrDrag);
+                                    ControlsMgr.Instance.CurrDropZone.AssignToDropZone(CurrDrag);
                                 }
                             }
                         }
                         else if (dispensable)
                         {
                             // handle custom
-                            if (CurrDropZone != null)
+                            if (ControlsMgr.Instance.CurrDropZone != null)
                             {
                                 // only allow one at a time
-                                CurrDropZone.CustomAssignToDropZone(dispensable);
+                                ControlsMgr.Instance.CurrDropZone.CustomAssignToDropZone(dispensable);
                             }
                         }
                     }

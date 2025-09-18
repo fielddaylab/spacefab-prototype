@@ -16,6 +16,8 @@ namespace SpaceFab.ChipFab
 
     public class FurnaceMicrogame : StationMicrogame, IStationMicrogame
     {
+        public static FurnaceMicrogame Instance;
+
         public float HeatTime;
         public float MaxTemp;
         public float MinTemp;
@@ -60,6 +62,8 @@ namespace SpaceFab.ChipFab
             //ApplyHeatButton.OnMouseDown.AddListener(HandleApplyHeat);
             FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
 
+            Game.Events.Register(GameEvents.NewDopantCreated, HandleNewDopantCreated);
+
             TransitionToActivated();
         }
 
@@ -77,6 +81,11 @@ namespace SpaceFab.ChipFab
         #endregion // IStationMicrogame
 
         #region Unity Callbacks
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Update()
         {
@@ -222,6 +231,11 @@ namespace SpaceFab.ChipFab
             RemoveDopant();
             Deactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+        }
+
+        private void HandleNewDopantCreated()
+        {
+            RemoveDopant();
         }
 
         #endregion // Handlers
