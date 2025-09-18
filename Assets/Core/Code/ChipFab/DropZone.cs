@@ -9,7 +9,7 @@ namespace SpaceFab.ChipFab
     {
         public ClickBox ClickBox;
         [HideInInspector] public bool InUse;
-        public GameObject HoverGroup;
+        public Hoverable Hoverable;
         [HideInInspector] public Transform UsingTransform;
         public Transform SlotPos;
 
@@ -26,7 +26,10 @@ namespace SpaceFab.ChipFab
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
             Game.Events.Register(GameEvents.WaferPickedUp, HandleWaferPickedUp);
 
-            HoverGroup.SetActive(false);
+            if (Hoverable)
+            {
+                Hoverable.EndHover();
+            }
         }
 
         private void HandleMouseEnter()
@@ -43,7 +46,10 @@ namespace SpaceFab.ChipFab
         private void HandleMouseExit()
         {
             DragMgr.Instance.UnsetCurrDropZone(this);
-            HoverGroup.SetActive(false);
+            if (Hoverable)
+            {
+                Hoverable.EndHover();
+            }
         }
 
         private void HandleNewWaferCreated()
@@ -81,7 +87,10 @@ namespace SpaceFab.ChipFab
             if (DragMgr.Instance.CurrDrag != null)
             {
                 DragMgr.Instance.SetCurrDropZone(this);
-                HoverGroup.SetActive(true);
+                if (Hoverable)
+                {
+                    Hoverable.BeginHover();
+                }
             }
         }
 

@@ -5,32 +5,65 @@ using UnityEngine;
 
 namespace SpaceFab.ChipFab
 {
-    public class Dispenser : MonoBehaviour
+    public class Dispenser : NavInteractable
     {
         public GameObject ToDispense;
         public ClickBox ClickBox;
 
-        private void Start()
+        private void Awake()
         {
             ClickBox.OnMouseDown.AddListener(HandleMouseDown);
         }
 
         private void HandleMouseDown()
         {
-            var newObj = Instantiate(ToDispense);
-            DragMgr.Instance.SetCurrDrag(newObj.transform);
-
-            var dispensable = newObj.GetComponent<Dispensable>();
-            if (dispensable && dispensable.Type == DispensableType.Wafer)
+            if (DragMgr.Instance.gameObject.activeInHierarchy)
             {
-                // set wafer instance
-                if (DragMgr.WaferInstance)
-                {
-                    Game.Events.Dispatch(GameEvents.NewWaferCreated);
-                    Destroy(DragMgr.WaferInstance.gameObject);
-                }
-                DragMgr.WaferInstance = newObj.GetComponent<WaferState>();
+                Dispense(true);
             }
         }
+
+        private void Dispense(bool fromDrag)
+        {
+            var newObj = Instantiate(ToDispense);
+            if (fromDrag)
+            {
+                DragMgr.Instance.SetCurrDrag(newObj.transform);
+            }
+
+            var dispensable = newObj.GetComponent<Dispensable>();
+            if (dispensable)
+            {
+                if (dispensable.Type == DispensableType.Wafer)
+                {
+                    // set wafer instance
+                    if (DragMgr.WaferInstance)
+                    {
+                        Game.Events.Dispatch(GameEvents.NewWaferCreated);
+                        Destroy(DragMgr.WaferInstance.gameObject);
+                    }
+                    DragMgr.WaferInstance = newObj.GetComponent<WaferState>();
+
+                    if (!fromDrag)
+                    {
+                        newObj.transform.position = ControlsMgr.Instance.WaferDefaultPos.position;
+                    }
+                }
+                else if (dispensable.Type == DispensableType.Dopant)
+                {
+                    newObj.transform.position = ControlsMgr.Instance.DopantDefaultPos.position;
+                }
+            }
+        }
+
+        #region INavInteractable
+
+        public override void Interact()
+        {
+            base.Interact();
+            Dispense(false);
+        }
+
+        #endregion // INavInteractable
     }
 }

@@ -32,7 +32,7 @@ namespace SpaceFab.ChipFab
         public Transform DopantSlotPos;
 
         public ClickBox StartButton;
-        public ClickBox ApplyHeatButton;
+        // public ClickBox ApplyHeatButton;
         public ClickBox FinishButton;
 
         private FurnaceMicrogameState m_state;
@@ -44,6 +44,8 @@ namespace SpaceFab.ChipFab
         private DopingType m_appliedDopant;
         private bool m_usedDopant;
 
+        private static KeyCode StokeKey = KeyCode.UpArrow;
+
         #region IStationMicrogame
 
         public override void Activate(WaferState waferState)
@@ -51,11 +53,11 @@ namespace SpaceFab.ChipFab
             base.Activate(waferState);
 
             StartButton.transform.parent.gameObject.SetActive(false);
-            ApplyHeatButton.transform.parent.gameObject.SetActive(false);
+            //ApplyHeatButton.transform.parent.gameObject.SetActive(false);
             FinishButton.transform.parent.gameObject.SetActive(false);
 
             StartButton.OnMouseDown.AddListener(HandleStartMouseDown);
-            ApplyHeatButton.OnMouseDown.AddListener(HandleApplyHeat);
+            //ApplyHeatButton.OnMouseDown.AddListener(HandleApplyHeat);
             FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
 
             TransitionToActivated();
@@ -66,7 +68,7 @@ namespace SpaceFab.ChipFab
             base.Deactivate();
 
             StartButton.OnMouseDown.RemoveListener(HandleStartMouseDown);
-            ApplyHeatButton.OnMouseDown.RemoveListener(HandleApplyHeat);
+            //ApplyHeatButton.OnMouseDown.RemoveListener(HandleApplyHeat);
             FinishButton.OnMouseDown.RemoveListener(HandleFinishClicked);
 
             TransitionToDeactivated();
@@ -115,6 +117,11 @@ namespace SpaceFab.ChipFab
             {
                 // reduce heat by steady amount
                 m_currTemp -= Time.deltaTime * HeatLossRate;
+            }
+
+            if (Input.GetKeyDown(StokeKey))
+            {
+                HandleApplyHeat();
             }
 
             UpdateHeatingVisuals();
@@ -176,7 +183,7 @@ namespace SpaceFab.ChipFab
         private void TransitionCommon()
         {
             StartButton.transform.parent.gameObject.SetActive(m_state == FurnaceMicrogameState.Ready);
-            ApplyHeatButton.transform.parent.gameObject.SetActive(m_state == FurnaceMicrogameState.Heating);
+            //ApplyHeatButton.transform.parent.gameObject.SetActive(m_state == FurnaceMicrogameState.Heating);
             HeatingGroup.SetActive(m_state == FurnaceMicrogameState.Heating);
             FinishButton.transform.parent.gameObject.SetActive(m_state == FurnaceMicrogameState.Finished);
         }
