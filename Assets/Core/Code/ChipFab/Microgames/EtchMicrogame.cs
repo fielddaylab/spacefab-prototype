@@ -77,6 +77,11 @@ namespace SpaceFab.ChipFab
             FinishButton.OnMouseDown.RemoveListener(HandleFinishClicked);
         }
 
+        public override bool TryCancel()
+        {
+            return m_state == EtchMicrogameState.Deactivated;
+        }
+
         #endregion // IStationMicrogame
 
 

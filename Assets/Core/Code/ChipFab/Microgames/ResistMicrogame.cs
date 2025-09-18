@@ -50,6 +50,11 @@ namespace SpaceFab.ChipFab
             base.Deactivate();
         }
 
+        public override bool TryCancel()
+        {
+            return m_state == ResistMicrogameState.Deactivated || m_state == ResistMicrogameState.Finished;
+        }
+
         #endregion // IStationMicrogame
 
         private void Update()

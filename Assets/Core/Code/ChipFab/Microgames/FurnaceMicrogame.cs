@@ -78,6 +78,11 @@ namespace SpaceFab.ChipFab
             TransitionToDeactivated();
         }
 
+        public override bool TryCancel()
+        {
+            return m_state == FurnaceMicrogameState.Deactivated;
+        }
+
         #endregion // IStationMicrogame
 
         #region Unity Callbacks

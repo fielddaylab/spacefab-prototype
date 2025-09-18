@@ -8,5 +8,7 @@ namespace SpaceFab.ChipFab {
         public void Activate(WaferState waferState);
 
         public void Deactivate();
+
+        public bool TryCancel();
     }
 }

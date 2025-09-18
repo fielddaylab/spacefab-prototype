@@ -31,5 +31,7 @@ namespace SpaceFab.ChipFab
                 Container.SetActive(false);
             }
         }
+
+        public abstract bool TryCancel();
     }
 }

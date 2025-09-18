@@ -56,6 +56,11 @@ namespace SpaceFab.ChipFab
             FinishButton.OnMouseDown.RemoveListener(HandleFinishClicked);
         }
 
+        public override bool TryCancel()
+        {
+            return m_state == SputteringMicrogameState.Deactivated;
+        }
+
         #endregion // IStationMicrogame
 
         private void Update()

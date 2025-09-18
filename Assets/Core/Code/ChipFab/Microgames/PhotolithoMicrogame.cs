@@ -44,6 +44,8 @@ namespace SpaceFab.ChipFab
             m_currSelectedMask = MaskId.NONE;
             m_currRotation = 0;
 
+            DevelopButton.transform.parent.gameObject.SetActive(false);
+
             m_currPreview = Instantiate(PreviewPrefab, PreviewPos);
             m_currPreviewRenderer = m_currPreview.GetComponent<SpriteRenderer>();
             m_currPreviewRenderer.enabled = false;
@@ -72,6 +74,12 @@ namespace SpaceFab.ChipFab
             DevelopButton.OnMouseDown.RemoveListener(HandleDevelopDown);
         }
 
+        public override bool TryCancel()
+        {
+            Deactivate();
+            return true;
+        }
+
         #region Handlers
 
         private void HandleMaskADown()
@@ -79,6 +87,7 @@ namespace SpaceFab.ChipFab
             m_currPreviewRenderer.enabled = true;
             m_currSelectedMask = MaskId.A;
             m_currPreviewRenderer.sprite = GameDB.Instance.MaskA;
+            DevelopButton.transform.parent.gameObject.SetActive(true);
         }
 
         private void HandleMaskBDown()
@@ -86,6 +95,7 @@ namespace SpaceFab.ChipFab
             m_currPreviewRenderer.enabled = true;
             m_currSelectedMask = MaskId.B;
             m_currPreviewRenderer.sprite = GameDB.Instance.MaskB;
+            DevelopButton.transform.parent.gameObject.SetActive(true);
         }
 
         private void HandleMaskCDown()
@@ -93,6 +103,7 @@ namespace SpaceFab.ChipFab
             m_currPreviewRenderer.enabled = true;
             m_currSelectedMask = MaskId.C;
             m_currPreviewRenderer.sprite = GameDB.Instance.MaskC;
+            DevelopButton.transform.parent.gameObject.SetActive(true);
         }
 
         private void HandleRotateCCDown()
@@ -123,6 +134,7 @@ namespace SpaceFab.ChipFab
 
         private void HandleDevelopDown()
         {
+            if (!m_currPreview) { return; }
             // pattern rotates inverse of wafer
             DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, -m_currRotation);
             m_currPreview.transform.SetParent(DragMgr.WaferInstance.transform, true);

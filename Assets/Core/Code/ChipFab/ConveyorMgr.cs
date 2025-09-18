@@ -58,18 +58,25 @@ namespace SpaceFab.ChipFab
             {
                 if (State == ConveyorState.Full)
                 {
-
+                    // try activate
+                    if (m_currNode.GetComponent<IStationMicrogame>() != null)
+                    {
+                        State = ConveyorState.Empty;
+                        ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
+                        m_currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
+                    }
                 }
             }
             else if (Input.GetKeyDown(NavDownKey))
             {
-                if (State == ConveyorState.Full)
-                { 
-
-                }
-                else
+                if (State == ConveyorState.Empty)
                 {
-
+                    // try cancel
+                    if (m_currNode.GetComponent<IStationMicrogame>().TryCancel())
+                    {
+                        State = ConveyorState.Full;
+                        SetAtIndex(m_currNodeIndex);
+                    }
                 }
             }
         }
@@ -93,6 +100,8 @@ namespace SpaceFab.ChipFab
             pos.x = m_currNode.transform.position.x;
             pos.y = CarryPos.transform.position.y;
             DragMgr.WaferInstance.transform.position = pos;
+
+            ControlsMgr.Instance.CurrDropZone = m_currNode.GetComponent<DropZone>();
         }
 
         public void AssignWafer()
