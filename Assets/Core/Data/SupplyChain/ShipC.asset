@@ -16,5 +16,5 @@ MonoBehaviour:
   Icon: {fileID: 21300000, guid: 7a79ba6c2c0b14744a446b1fe75f0d9d, type: 3}
   Speed: 2
   Capacity: 2
-  Defense: 2
+  Defense: 3
   Cost: 1

@@ -96,5 +96,36 @@ namespace SpaceFab.SupplyChain {
 
             drawer.DrawState = RouteDrawState.NotStarted;
         }
+
+        static public void AttemptFinishRoute() {
+            RouteShipSelectionState state = Find.State<RouteShipSelectionState>();
+            RouteDrawerState drawer = Find.State<RouteDrawerState>();
+
+            LiveRouteData route = state.SelectedRoute;
+            Assert.NotNull(route);
+
+            LiveRouteLineUtility.HideDottedLine(route.Line);
+
+            bool hasNonTempNode = false;
+            for (int i = 1; i < route.NodeCount; i++) {
+                if ((route.Nodes[i].Flags & PathNodeFlags.IsTemporary) == 0) {
+                    hasNonTempNode = true;
+                    break;
+                }
+            }
+
+            if (!hasNonTempNode) {
+                while (route.NodeCount > 1 && (route.Nodes[route.NodeCount - 1].Flags & PathNodeFlags.IsTemporary) != 0) {
+                    PathNode tempNode = LiveRouteUtility.PopNode(route);
+                    drawer.TempPathNodePool.Free(tempNode);
+                }
+            }
+
+            if (route.NodeCount == 1) {
+                LiveRouteUtility.PopNode(route);
+            }
+
+            drawer.DrawState = route.NodeCount > 0 ? RouteDrawState.Selected : RouteDrawState.NotStarted;
+        }
     }
 }

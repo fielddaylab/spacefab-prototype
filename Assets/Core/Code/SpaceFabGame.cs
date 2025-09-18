@@ -15,11 +15,15 @@ namespace SpaceFab
 {
     public sealed class SpaceFabGame : Game
     {
+        static public new EventDispatcher<EvtArgs> Events {
+            get; private set;
+        }
 
         [InvokePreBoot]
         static private void OnPreBoot()
         {
-            SetEventDispatcher(new EventDispatcher<EvtArgs>());
+            Events = new EventDispatcher<EvtArgs>();
+            SetEventDispatcher(Events);
             Rendering.EnableAspectClamping(4, 3);
         }
     }

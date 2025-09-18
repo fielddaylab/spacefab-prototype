@@ -41,7 +41,19 @@ namespace SpaceFab.SupplyChain {
             foreach(var ship in ShipWidgets) {
                 ship.CursorHint.onClick.Register(OnShipClicked);
             }
+            SpaceFabGame.Events.Register<StringHash32>(SupplyChainGame.Events.RouteStatsUpdated, OnRouteStatsUpdated);
             return null;
+        }
+
+        private void OnRouteStatsUpdated(StringHash32 shipId) {
+            LiveRouteData routeData = LiveRouteUtility.GetLiveRoute(shipId);
+
+            for(int i = 0; i < ShipCount; i++) {
+                RouteShipWidget widget = ShipWidgets[i];
+                if (widget.ShipId == shipId) {
+                    RouteShipUtility.PopulateWidgetRouteStats(widget, routeData.Stats);
+                }
+            }
         }
 
         private void OnShipClicked(PointerListener.EventData evt) {

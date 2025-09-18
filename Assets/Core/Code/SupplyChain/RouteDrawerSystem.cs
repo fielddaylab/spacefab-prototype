@@ -2,6 +2,7 @@ using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay;
+using FieldDay.Debugging;
 using FieldDay.HID;
 using FieldDay.Physics;
 using FieldDay.SharedState;
@@ -14,6 +15,8 @@ namespace SpaceFab.SupplyChain {
     [SysUpdate(GameLoopPhase.LateUpdate, 99)]
     public sealed class RouteDrawerSystem : SharedStateSystemBehaviour<RouteDrawerState, RouteHoverState, RouteShipSelectionState> {
         public override void ProcessWork(float deltaTime) {
+            LiveRouteData route = m_StateC.SelectedRoute;
+
             if (m_StateC.SelectedRoute == null) {
                 return;
             }
@@ -22,7 +25,7 @@ namespace SpaceFab.SupplyChain {
                 case RouteDrawState.NotStarted: {
                     if (m_StateB.Node && Game.Input.IsMousePressed(MouseButton.Left)) {
                         if ((m_StateB.Node.Flags & PathNodeFlags.IsDestination) != 0) {
-                            bool added = LiveRouteUtility.TryAddNode(m_StateC.SelectedRoute, m_StateB.Node);
+                            bool added = LiveRouteUtility.TryAddNode(route, m_StateB.Node);
                             Assert.True(added);
                             m_StateA.DrawState = RouteDrawState.Started;
                         }
@@ -32,9 +35,9 @@ namespace SpaceFab.SupplyChain {
                 case RouteDrawState.Started:
                 case RouteDrawState.InProgress: {
                     if (m_StateB.MousePosition.HasValue) {
-                        LiveRouteLineUtility.ShowDottedLine(m_StateC.SelectedRoute.Line, m_StateB.MousePosition.Value);
+                        LiveRouteLineUtility.ShowDottedLine(route.Line, m_StateB.MousePosition.Value);
                     } else {
-                        LiveRouteLineUtility.HideDottedLine(m_StateC.SelectedRoute.Line);
+                        LiveRouteLineUtility.HideDottedLine(route.Line);
                     }
 
                     if (Game.Input.IsMousePressed(MouseButton.Left)) {
@@ -42,11 +45,18 @@ namespace SpaceFab.SupplyChain {
                         if (!nodeToAdd && m_StateB.MousePosition.HasValue) {
                             nodeToAdd = m_StateA.TempPathNodePool.Alloc();
                             nodeToAdd.transform.localPosition = m_StateB.MousePosition.Value;
+                            nodeToAdd.transform.localEulerAngles = new Vector3(0, 0, RNG.Instance.NextFloat(-180, 180));
                             nodeToAdd.gameObject.SetActive(true);
                         }
 
                         if (nodeToAdd) {
-                            LiveRouteUtility.TryAddNode(m_StateC.SelectedRoute, nodeToAdd);
+                            if ((nodeToAdd.Flags & PathNodeFlags.IsDestination) != 0) {
+                                RouteShipUtility.AttemptFinishRoute();
+                            } else {
+                                if (!LiveRouteUtility.TryAddNode(route, nodeToAdd)) {
+                                    Pool.TryFree(nodeToAdd);
+                                }
+                            }
                         }
                     } else if (Game.Input.IsMousePressed(MouseButton.Right)) {
                         if (m_StateC.SelectedRoute.NodeCount > 0) {
@@ -62,6 +72,17 @@ namespace SpaceFab.SupplyChain {
                         }
                     }
                     break;
+                }
+            }
+
+            if (Game.IsDevBuild) {
+                SupplyRouteStats stats = route.Stats;
+                using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                    psb.Builder.Append("Route ").Append(route.ShipId.ToDebugString())
+                        .Append(": $").AppendNoAlloc(stats.Cost)
+                        .Append(", ").AppendNoAlloc(stats.Time).Append(" cycles")
+                        .Append(", ").AppendNoAlloc((int) (100f * stats.Reliability / SupplyUtility.MaxReliability)).Append("%");
+                    DebugDraw.AddViewportText(new Vector2(0.5f, 0), new Vector2(0, 16), psb.Builder, Color.yellow, 0, TextAnchor.LowerCenter, DebugTextStyle.BackgroundDark);
                 }
             }
         }

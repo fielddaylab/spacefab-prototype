@@ -1,3 +1,4 @@
+using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using BeauUtil.UI;
@@ -91,9 +92,35 @@ namespace SpaceFab.SupplyChain {
         }
 
         static public void PopulateWidgetStats(in RouteShipWidget.StatBar statBar, int statValue) {
-            for(int i = 0; i < statBar.Stats.Length; i++) {
+            for (int i = 0; i < statBar.Stats.Length; i++) {
                 statBar.Stats[i].Outline = i >= statValue;
             }
+        }
+
+        static public void PopulateWidgetRouteStats(RouteShipWidget widget, SupplyRouteStats stats) {
+            if (stats.Cost <= 0) {
+                widget.RouteGroup.gameObject.SetActive(false);
+                return;
+            }
+
+            using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                psb.Builder.Append("$").AppendNoAlloc(stats.Cost);
+                widget.RouteCost.SetText(psb.Builder);
+
+                psb.Builder.Clear();
+                psb.Builder.AppendNoAlloc(stats.Time).Append("C");
+
+                widget.RouteTime.SetText(psb.Builder);
+
+                float percentage = 100f * stats.Reliability / SupplyUtility.MaxReliability;
+
+                psb.Builder.Clear();
+                psb.Builder.AppendNoAlloc((int)percentage).Append("%");
+
+                widget.RouteReliability.SetText(psb.Builder);
+            }
+
+            widget.RouteGroup.gameObject.SetActive(true);
         }
     }
 }

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc55e0b7062e328418ae72f335769c2f, type: 3}
+  m_Name: SupplyChainSprites
+  m_EditorClassIdentifier: 
+  MaterialSprites:
+  - {fileID: -4007094952603525306, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: -8275036506126482525, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: 1962688198934686943, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: 140596862667004731, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: 6308789241794410092, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  MaterialSpriteOutlines:
+  - {fileID: 1889567846498479453, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: -4981239816509048427, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: 6694508499894108083, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: -7251339259454250575, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  - {fileID: -8761709578001338046, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  DefenseSprites:
+  - {fileID: 7933574025687213536, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}
+  - {fileID: -1810142065578039886, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}
+  - {fileID: 680312526135723946, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}
+  - {fileID: 6915960801302699653, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}

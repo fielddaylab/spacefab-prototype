@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4be90a9d33d3784caac2e5eb4b5636c, type: 3}
   m_Name: SupplyChainAssets
   m_EditorClassIdentifier: 
-  m_GlobalAssets: []
+  m_GlobalAssets:
+  - {fileID: 11400000, guid: 636dff3a5d7394c4088410e50b967f43, type: 2}
+  - {fileID: 11400000, guid: 52484c9a9c1ebec4e8948a81283bc358, type: 2}
   m_NamedAssets:
   - {fileID: 11400000, guid: 56f993dcf9ab87246a24950ddb712c54, type: 2}
   - {fileID: 11400000, guid: 63692c92893f18e44867ed70a7ca7062, type: 2}
