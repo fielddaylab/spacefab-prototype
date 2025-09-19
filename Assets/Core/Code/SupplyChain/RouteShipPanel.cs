@@ -37,6 +37,11 @@ namespace SpaceFab.SupplyChain {
             widget.Positioner.Offset0 = selected ? ShipWidgetSelectedOffset : default;
         }
 
+        protected override void OnDestroy() {
+            Game.Events.DeregisterAllForContext(this);
+            base.OnDestroy();
+        }
+
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
             foreach(var ship in ShipWidgets) {
                 ship.CursorHint.onClick.Register(OnShipClicked);

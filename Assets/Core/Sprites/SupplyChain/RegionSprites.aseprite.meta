@@ -77,7 +77,7 @@ ScriptedImporter:
     defaultPivotSpace: 1
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
-    mosaicPadding: 4
+    mosaicPadding: 2
     spritePadding: 0
     generateModelPrefab: 0
     generateAnimationClips: 0
@@ -90,14 +90,14 @@ ScriptedImporter:
     defaultPivotSpace: 1
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
-    mosaicPadding: 4
+    mosaicPadding: 2
     spritePadding: 0
     generateModelPrefab: 0
     generateAnimationClips: 0
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638937969165543153
+  platformSettingsDirtyTick: 638938845644752841
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -128,8 +128,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 4
+      x: 2
+      y: 468
       width: 233
       height: 230
     spriteID: 0a5456be097aa98468d66d9338b283cc
@@ -140,7 +140,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
+    uvTransform: {x: 2, y: 468}
   - name: RegionA
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -148,8 +148,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 245
-      y: 4
+      x: 241
+      y: 2
       width: 221
       height: 202
     spriteID: 68a346228ca95124a9210883a88f7932
@@ -160,7 +160,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 245, y: 4}
+    uvTransform: {x: 241, y: 2}
   - name: RegionB_Outline
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -168,8 +168,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 4
-      y: 242
+      x: 2
+      y: 702
       width: 233
       height: 230
     spriteID: 7b8a06a8a10c43741a2a1c22976bfd2e
@@ -180,7 +180,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 242}
+    uvTransform: {x: 2, y: 702}
   - name: RegionA_Outline
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -188,8 +188,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 245
-      y: 214
+      x: 241
+      y: 208
       width: 221
       height: 202
     spriteID: 6f77c4a527eecf24d9d7082865986b8c
@@ -200,7 +200,47 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 245, y: 214}
+    uvTransform: {x: 241, y: 208}
+  - name: RegionC
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 2
+      width: 235
+      height: 229
+    spriteID: b4b6f72e3ace6b245b2badc62e01b8d4
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 2}
+  - name: RegionC_Outline
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 235
+      width: 235
+      height: 229
+    spriteID: 06ac4e2c10325f74f8fdddf3caa8db9a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 235}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -246,6 +286,24 @@ ScriptedImporter:
         width: 221
         height: 202
       spriteId: 6f77c4a527eecf24d9d7082865986b8c
+    - name: Frame_4
+      frameIndex: 4
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 10
+        width: 235
+        height: 229
+      spriteId: b4b6f72e3ace6b245b2badc62e01b8d4
+    - name: Frame_5
+      frameIndex: 5
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 10
+        width: 235
+        height: 229
+      spriteId: 06ac4e2c10325f74f8fdddf3caa8db9a
     linkedCells: []
     parentIndex: -1
   platformSettings:

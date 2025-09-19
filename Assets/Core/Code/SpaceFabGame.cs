@@ -6,6 +6,7 @@ using BeauRoutine;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay;
+using FieldDay.Debugging;
 using FieldDay.UI.Animation;
 using UnityEngine;
 
@@ -25,6 +26,12 @@ namespace SpaceFab
             Events = new EventDispatcher<EvtArgs>();
             SetEventDispatcher(Events);
             Rendering.EnableAspectClamping(4, 3);
+        }
+
+        [SmokeTestProvider]
+        static private void SmokeTests() {
+            SmokeTestData sceneLoad = SmokeTestTemplates.CanLoadIntoScenes(5, "*", "");
+            SmokeTestMgr.RegisterTest(sceneLoad);
         }
     }
 }
