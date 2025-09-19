@@ -8,6 +8,8 @@ namespace SpaceFab.SupplyChain {
         public float[] Speeds = new float[4];
         public float[] Costs = new float[4];
 
+        public float[] ShipReliabilities = new float[4];
+
         [Header("Hazards")]        
         public float TimeDialationSpeedFactor = 0.65f;
         public float RiskyMultiplierPerUnit = 0.85f;

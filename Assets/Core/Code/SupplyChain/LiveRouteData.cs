@@ -13,6 +13,7 @@ namespace SpaceFab.SupplyChain {
     public sealed class LiveRouteData {
         public const int MaxNodes = 32;
         public const int MaxPorts = 16;
+        public const int MaxHazards = 16;
 
         public StringHash32 ShipId;
         public SupplyRouteStats Stats;
@@ -20,10 +21,12 @@ namespace SpaceFab.SupplyChain {
 
         public int NodeCount;
         public int PortCount;
+        public int HazardCount;
 
         public RouteLineRenderer Line;
         public readonly PathNode[] Nodes = new PathNode[MaxNodes];
         public readonly Port[] Ports = new Port[MaxPorts];
+        public readonly HazardRegion[] IntersectingHazards = new HazardRegion[MaxHazards];
     }
 
     static public partial class LiveRouteUtility {
@@ -116,6 +119,16 @@ namespace SpaceFab.SupplyChain {
             return true;
         }
 
+        static public int CountPortsOfType(LiveRouteData liveRoute, PortType type) {
+            int count = 0;
+            for(int i = 0; i < liveRoute.PortCount; i++) {
+                if (liveRoute.Ports[i].Type == type) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         static public void RemovePort(LiveRouteData liveRoute, Port port) {
             LiveRoutesState state = Find.State<LiveRoutesState>();
             Assert.True(!state.UsedPorts.Contains(port));
@@ -154,12 +167,36 @@ namespace SpaceFab.SupplyChain {
 
         #endregion // Ports
 
+        #region Hazards
+
+        static public void SetHazardOwner(HazardRegion hazard, LiveRouteData route) {
+            if (hazard.Highlight != null) {
+                if (route != null) {
+                    hazard.Highlight.PathHighlight.enabled = true;
+                    hazard.Highlight.PathHighlight.color = route.LineColor;
+                } else {
+                    hazard.Highlight.PathHighlight.enabled = false;
+                }
+            }
+        }
+
+        #endregion // Hazards
+
         static private readonly RaycastHit2D[] RaycastBufferA = new RaycastHit2D[8];
         static private readonly RaycastHit2D[] RaycastBufferB = new RaycastHit2D[8];
 
         static public unsafe void UpdateStats(LiveRouteData route) {
             RouteShip ship = Find.NamedAsset<RouteShip>(route.ShipId);
             SupplyChainMath mathSettings = Find.GlobalAsset<SupplyChainMath>();
+            bool isCurrentRoute = Find.State<RouteShipSelectionState>().SelectedRoute == route;
+
+            for (int i = route.HazardCount; i-- > 0;) {
+                if (isCurrentRoute) {
+                    SetHazardOwner(route.IntersectingHazards[i], null);
+                }
+                route.IntersectingHazards[i] = null;
+            }
+            route.HazardCount = 0;
 
             float distance = 0;
             float* hazardDistances = stackalloc float[3];
@@ -192,6 +229,19 @@ namespace SpaceFab.SupplyChain {
                         }
 
                         hazardDistances[(int)hazard.Type] += hazardInSeg;
+
+                        bool hazardInRoute = false;
+                        for(int hazardIndex = 0; hazardIndex < route.HazardCount; hazardIndex++) {
+                            if (route.IntersectingHazards[hazardIndex] == hazard) {
+                                hazardInRoute = true;
+                                break;
+                            }
+                        }
+
+                        if (!hazardInRoute) {
+                            Assert.True(route.HazardCount < LiveRouteData.MaxHazards);
+                            route.IntersectingHazards[route.HazardCount++] = hazard;
+                        }
                     }
                 }
             }
@@ -215,13 +265,12 @@ namespace SpaceFab.SupplyChain {
                 Port port = route.Ports[i];
                 RouteNode node = port.GetComponent<RouteNode>();
 
-                cost += (int) node.Cost;
-                cycles = Math.Max((int) node.ProductionTime, cycles);
-                reliability *= mathSettings.Reliabilities[node.Reliability];
-
                 if (port.Type == PortType.Supply) {
                     SupplyNode supplyNode = port.GetComponent<SupplyNode>();
                     materials[(int)supplyNode.Material - 1]++;
+                    cost += (int)node.Cost;
+                    cycles = Math.Max((int)node.ProductionTime, cycles);
+                    reliability *= mathSettings.Reliabilities[node.Reliability];
                 } else if (port.Type == PortType.Conversion) {
                     conversionNodes.Set(i);
                 }
@@ -232,10 +281,14 @@ namespace SpaceFab.SupplyChain {
                 converted = false;
                 foreach (var bit in conversionNodes) {
                     Port port = route.Ports[bit];
+                    RouteNode node = port.GetComponent<RouteNode>();
                     ConversionNode conversion = port.GetComponent<ConversionNode>();
                     if (materials[(int)conversion.Input - 1] > 0) {
                         materials[(int)conversion.Input - 1]++;
                         materials[(int)conversion.Output - 1]++;
+                        cost += (int)node.Cost;
+                        cycles = Math.Max((int)node.ProductionTime, cycles);
+                        reliability *= mathSettings.Reliabilities[node.Reliability];
                         converted = true;
                         conversionNodes.Unset(bit);
                     }
@@ -247,7 +300,22 @@ namespace SpaceFab.SupplyChain {
                 reliability *= (float)(Math.Exp(-mathSettings.RiskyMultiplierPerUnit * riskyDistance / mathSettings.RiskyMultiplierUnitDist));
             }
 
-            reliability *= mathSettings.Reliabilities[ship.Defense - 1];
+            if (hazardDistances[(int)HazardType.Tariff] > 0) {
+                for (int i = 0; i < route.HazardCount; i++) {
+                    HazardRegion hazard = route.IntersectingHazards[i];
+                    if (hazard.Type == HazardType.Tariff) {
+                        cost += hazard.TariffCost;
+                    }
+                }
+            }
+
+            reliability *= mathSettings.ShipReliabilities[ship.Defense - 1];
+
+            if (isCurrentRoute) {
+                for (int i = 0; i < route.HazardCount; i++) {
+                    SetHazardOwner(route.IntersectingHazards[i], route);
+                }
+            }
 
             SupplyRouteStats stats;
             stats.Time = (byte) cycles;

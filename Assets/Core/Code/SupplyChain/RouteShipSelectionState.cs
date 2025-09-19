@@ -58,6 +58,10 @@ namespace SpaceFab.SupplyChain {
             for (int i = 0; i < route.NodeCount; i++) {
                 LiveRouteUtility.SetNodeOwner(route.Nodes[i], route);
             }
+
+            for(int i = 0; i < route.HazardCount; i++) {
+                LiveRouteUtility.SetHazardOwner(route.IntersectingHazards[i], route);
+            }
         }
 
         static private void DeselectCurrentRoute() {
@@ -90,6 +94,10 @@ namespace SpaceFab.SupplyChain {
 
             for(int i = 0; i < route.NodeCount; i++) {
                 LiveRouteUtility.SetNodeOwner(route.Nodes[i], null);
+            }
+
+            for (int i = 0; i < route.HazardCount; i++) {
+                LiveRouteUtility.SetHazardOwner(route.IntersectingHazards[i], null);
             }
 
             LiveRouteLineUtility.UpdateColor(route.Line, ((Color) route.LineColor).WithAlpha(0.4f));

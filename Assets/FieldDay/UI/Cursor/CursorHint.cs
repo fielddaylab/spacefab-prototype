@@ -65,6 +65,14 @@ namespace FieldDay.UI {
         static private CursorHint s_Pointer;
         static private CursorHint s_Locked;
         static private CursorHint s_Effective;
+
+        /// <summary>
+        /// The current cursor hint under the pointer.
+        /// This ignores the locked cursor hint.
+        /// </summary>
+        static public CursorHint Pointer {
+            get { return s_Pointer; }
+        }
         
         /// <summary>
         /// The currently active cursor hint.
@@ -88,7 +96,7 @@ namespace FieldDay.UI {
                     OnHoverStart.Invoke(desiredEffective);
                 }
 
-                Log.Msg("[CursorHint] Updated effective focus from '{0}' to '{1}'", prev, desiredEffective);
+                Log.Debug("[CursorHint] Updated effective focus from '{0}' to '{1}'", prev, desiredEffective);
             }
         }
 

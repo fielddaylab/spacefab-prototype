@@ -27,6 +27,11 @@ MonoBehaviour:
   - 1.5
   - 2
   - 3
+  ShipReliabilities:
+  - 0.7
+  - 0.8
+  - 0.9
+  - 0.9999
   TimeDialationSpeedFactor: 0.55
   RiskyMultiplierPerUnit: 0.12
   RiskyMultiplierUnitDist: 5

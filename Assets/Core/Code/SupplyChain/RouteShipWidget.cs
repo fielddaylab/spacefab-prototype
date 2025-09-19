@@ -47,6 +47,7 @@ namespace SpaceFab.SupplyChain {
 
         [Header("Route")]
         public CanvasGroup RouteGroup;
+        public Graphic RouteColorIndicator;
         public TMP_Text RouteTime;
         public TMP_Text RouteCost;
         public TMP_Text RouteReliability;
@@ -86,6 +87,8 @@ namespace SpaceFab.SupplyChain {
                 PopulateWidgetStats(widget.CapacityStat, ship.Capacity);
                 PopulateWidgetStats(widget.DefenseStat, ship.Defense);
                 PopulateWidgetStats(widget.CostStat, ship.Cost);
+
+                widget.RouteColorIndicator.color = widget.RouteColor;
             } else {
                 widget.ShipId = default;
             }

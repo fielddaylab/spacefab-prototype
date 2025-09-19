@@ -17,7 +17,7 @@ namespace SpaceFab.SupplyChain {
         public override void ProcessWork(float deltaTime) {
             LiveRouteData route = m_StateC.SelectedRoute;
 
-            if (m_StateC.SelectedRoute == null) {
+            if (route == null) {
                 return;
             }
 
@@ -29,6 +29,16 @@ namespace SpaceFab.SupplyChain {
                             Assert.True(added);
                             m_StateA.DrawState = RouteDrawState.Started;
                         }
+                    }
+                    break;
+                }
+                case RouteDrawState.Selected: {
+                    if (m_StateB.Node && Game.Input.IsMousePressed(MouseButton.Left)) {
+                        if (LiveRouteUtility.IsNodeInPath(route, m_StateB.Node)) {
+                            m_StateA.DrawState = RouteDrawState.InProgress;
+                        }
+                    } else if (Game.Input.IsKeyPressed(KeyCode.E)) {
+                        m_StateA.DrawState = RouteDrawState.InProgress;
                     }
                     break;
                 }
@@ -58,18 +68,20 @@ namespace SpaceFab.SupplyChain {
                                 }
                             }
                         }
-                    } else if (Game.Input.IsMousePressed(MouseButton.Right)) {
-                        if (m_StateC.SelectedRoute.NodeCount > 0) {
-                            PathNode node = LiveRouteUtility.PopNode(m_StateC.SelectedRoute);
+                    } else if (Game.Input.IsMousePressed(MouseButton.Right) || Game.Input.IsKeyPressed(KeyCode.Backspace)) {
+                        if (route.NodeCount > 0) {
+                            PathNode node = LiveRouteUtility.PopNode(route);
                             Pool.TryFree(node);
 
-                            if (m_StateC.SelectedRoute.NodeCount == 1) {
+                            if (route.NodeCount == 1) {
                                 m_StateA.DrawState = RouteDrawState.Started;
-                            } else if (m_StateC.SelectedRoute.NodeCount == 0) {
+                            } else if (route.NodeCount == 0) {
                                 m_StateA.DrawState = RouteDrawState.NotStarted;
-                                LiveRouteLineUtility.HideDottedLine(m_StateC.SelectedRoute.Line);
+                                LiveRouteLineUtility.HideDottedLine(route.Line);
                             }
                         }
+                    } else if (Game.Input.IsKeyPressed(KeyCode.E)) {
+                        RouteShipUtility.AttemptFinishRoute();
                     }
                     break;
                 }
