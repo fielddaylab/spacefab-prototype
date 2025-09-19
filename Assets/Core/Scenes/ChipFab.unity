@@ -3296,7 +3296,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 3.27, y: 1.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &557439999
 MonoBehaviour:
@@ -10189,7 +10189,7 @@ Transform:
   m_GameObject: {fileID: 1395013541}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.34, y: 3.09, z: 0}
+  m_LocalPosition: {x: 3.9500003, y: 3.09, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11404,7 +11404,7 @@ Transform:
   m_GameObject: {fileID: 1581119042}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.76, y: 3.65, z: 0}
+  m_LocalPosition: {x: 1.37, y: 3.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -14273,7 +14273,7 @@ Transform:
   m_GameObject: {fileID: 1858428168}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.25, y: 2.64, z: -0.01}
+  m_LocalPosition: {x: 5.81, y: 3.99, z: -0.01}
   m_LocalScale: {x: 2.23, y: 0.92916673, z: 1.8583335}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -14585,7 +14585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DragMgr: {fileID: 1221443095}
-  DragEnabled: 1
+  DragEnabled: 0
   WaferDefaultPos: {fileID: 143433727}
   DopantDefaultPos: {fileID: 754302814}
   StartingNode: {fileID: 2076726547}

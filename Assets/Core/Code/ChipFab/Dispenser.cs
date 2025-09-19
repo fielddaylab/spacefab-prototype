@@ -17,10 +17,7 @@ namespace SpaceFab.ChipFab
 
         private void HandleMouseDown()
         {
-            if (DragMgr.Instance.gameObject.activeInHierarchy)
-            {
-                Dispense(true);
-            }
+            Dispense(true);
         }
 
         private void Dispense(bool fromDrag)
@@ -36,13 +33,15 @@ namespace SpaceFab.ChipFab
             {
                 if (dispensable.Type == DispensableType.Wafer)
                 {
+                    Game.Events.Dispatch(GameEvents.NewWaferCreated);
+
                     // set wafer instance
                     if (DragMgr.WaferInstance)
                     {
-                        Game.Events.Dispatch(GameEvents.NewWaferCreated);
                         Destroy(DragMgr.WaferInstance.gameObject);
                     }
                     DragMgr.WaferInstance = newObj.GetComponent<WaferState>();
+                    Game.Events.Dispatch(GameEvents.WaferStateUpdated);
 
                     if (!fromDrag)
                     {

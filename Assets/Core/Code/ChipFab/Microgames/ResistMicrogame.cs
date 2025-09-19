@@ -48,6 +48,8 @@ namespace SpaceFab.ChipFab
         public override void Deactivate()
         {
             base.Deactivate();
+
+            m_state = ResistMicrogameState.Deactivated;
         }
 
         public override bool TryCancel()
@@ -138,7 +140,7 @@ namespace SpaceFab.ChipFab
             InputsEnabled = true;
 
             // PREREQ: Oxide FUll or Metal FULL
-            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full)
+            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full)
             {
                 Debug.Log("Invalid prereqs");
                 Deactivate();

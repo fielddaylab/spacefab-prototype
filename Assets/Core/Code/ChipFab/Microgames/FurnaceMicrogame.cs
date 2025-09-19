@@ -80,7 +80,9 @@ namespace SpaceFab.ChipFab
 
         public override bool TryCancel()
         {
-            return m_state == FurnaceMicrogameState.Deactivated;
+            bool canCancel = m_state == FurnaceMicrogameState.Deactivated || m_state == FurnaceMicrogameState.Ready;
+            if (canCancel) { Deactivate(); }
+            return canCancel;
         }
 
         #endregion // IStationMicrogame
