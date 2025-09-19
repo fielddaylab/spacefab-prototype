@@ -1,6 +1,7 @@
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.ChipFab
@@ -16,6 +17,7 @@ namespace SpaceFab.ChipFab
 
         public GameObject SuccessGroup;
         public GameObject FailureGroup;
+        public TMP_Text PrecisionText;
 
         public WaferData TargetData;
 
@@ -43,6 +45,7 @@ namespace SpaceFab.ChipFab
 
             SuccessGroup.SetActive(false);
             FailureGroup.SetActive(false);
+            PrecisionText.gameObject.SetActive(false);
         }
 
         private void HandleSubmitClicked()
@@ -105,6 +108,8 @@ namespace SpaceFab.ChipFab
 
             SuccessGroup.SetActive(success);
             FailureGroup.SetActive(!success);
+            PrecisionText.gameObject.SetActive(true);
+            PrecisionText.SetText("Precision: " + (currState.Precision.Avg() * 100).ToString("#.##") + "%");
         }
     }
 }

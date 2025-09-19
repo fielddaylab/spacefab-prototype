@@ -64,14 +64,14 @@ namespace SpaceFab.ChipFab
         {
             base.Deactivate();
 
-            MaskAButton.OnMouseDown.RemoveListener(HandleMaskADown);
-            MaskBButton.OnMouseDown.RemoveListener(HandleMaskBDown);
-            MaskCButton.OnMouseDown.RemoveListener(HandleMaskCDown);
+            MaskAButton.OnMouseDown.RemoveAllListeners();
+            MaskBButton.OnMouseDown.RemoveAllListeners();
+            MaskCButton.OnMouseDown.RemoveAllListeners();
 
-            RotateCCButton.OnMouseDown.RemoveListener(HandleRotateCCDown);
-            RotateCButton.OnMouseDown.RemoveListener(HandleRotateCDown);
+            RotateCCButton.OnMouseDown.RemoveAllListeners();
+            RotateCButton.OnMouseDown.RemoveAllListeners();
 
-            DevelopButton.OnMouseDown.RemoveListener(HandleDevelopDown);
+            DevelopButton.OnMouseDown.RemoveAllListeners();
         }
 
         public override bool TryCancel()

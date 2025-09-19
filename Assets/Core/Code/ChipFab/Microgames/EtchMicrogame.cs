@@ -185,6 +185,19 @@ namespace SpaceFab.ChipFab
 
         private void GenerateEtchableLayers(WaferData data)
         {
+            if (m_generatedLayerBlocks.Count > 0)
+            {
+                while (m_generatedLayerBlocks.Count > 0)
+                {
+                    if (m_generatedLayerBlocks[0] != null)
+                    {
+                        Destroy(m_generatedLayerBlocks[0]);
+                    }
+                    m_generatedLayerBlocks.RemoveAt(0);
+                }
+                m_generatedLayerBlocks.Clear();
+            }
+
             // Resist Layer
             switch (data.ResistLayer.State)
             {

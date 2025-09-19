@@ -63,7 +63,6 @@ namespace SpaceFab.ChipFab
     {
         public OrientedMask Mask;
         public OxideState State;
-        public float Precision;
     }
 
     public enum MetallizationState
@@ -79,7 +78,6 @@ namespace SpaceFab.ChipFab
     {
         public OrientedMask Mask;
         public MetallizationState State;
-        public float Precision;
     }
 
     public enum ResistState
@@ -95,7 +93,22 @@ namespace SpaceFab.ChipFab
     {
         public OrientedMask Mask;
         public ResistState State;
-        public float Precision;
+    }
+
+    [Serializable]
+    public struct PrecisionData
+    {
+        public List<float> Values;
+
+        public float Avg()
+        {
+            float total = 0;
+            foreach (var v in Values) {
+                total += v;
+            }
+
+            return total / Values.Count;
+        }
     }
 
     [Serializable]
@@ -105,6 +118,7 @@ namespace SpaceFab.ChipFab
         public MetallizationLayer MetallizationLayer;
         public OxideLayer OxideLayer;
         public SemiconductorLayer SemiconductorLayer;
+        public PrecisionData Precision;
     }
 
     #endregion // Structs & Enums
@@ -136,11 +150,14 @@ namespace SpaceFab.ChipFab
 
             Data.ResistLayer = new ResistLayer();
             Data.ResistLayer.State = ResistState.Empty;
+
+            Data.Precision = new PrecisionData();
+            Data.Precision.Values = new List<float>();
         }
 
         public void SetOxideStateFurnace(float precision, bool usedDopant, DopingType dopingType)
         {
-            Data.OxideLayer.Precision = precision;
+            Data.Precision.Values.Add(precision);
 
             if (usedDopant)
             {
@@ -194,7 +211,7 @@ namespace SpaceFab.ChipFab
         public void SetResistState(float precision)
         {
             Data.ResistLayer.State = ResistState.Full;
-            Data.ResistLayer.Precision = precision;
+            Data.Precision.Values.Add(precision);
         }
 
         public void SetResistStateWash()
@@ -202,7 +219,6 @@ namespace SpaceFab.ChipFab
             Data.ResistLayer.State = ResistState.Empty;
             Data.ResistLayer.Mask.Id = MaskId.NONE;
             Data.ResistLayer.Mask.Rotation = 0;
-            // TODO: precision
         }
 
         public void SetOxideStateEtch(float precision)
@@ -212,13 +228,13 @@ namespace SpaceFab.ChipFab
             Data.OxideLayer.State = OxideState.Stripped;
 
             Data.ResistLayer.State = ResistState.Stripped;
-            // Data.ResistLayer.Precision = precision;
+            Data.Precision.Values.Add(precision);
         }
 
         public void SetMetallizationState(float precision)
         {
             Data.MetallizationLayer.State = MetallizationState.Full;
-            Data.MetallizationLayer.Precision = precision;
+            Data.Precision.Values.Add(precision);
         }
 
         public void SetMetallizationStateEtch(float precision)
@@ -233,7 +249,7 @@ namespace SpaceFab.ChipFab
             Data.MetallizationLayer.Mask.Rotation = Data.ResistLayer.Mask.Rotation;
 
             Data.ResistLayer.State = ResistState.Stripped;
-            // Data.ResistLayer.Precision = precision;
+            Data.Precision.Values.Add(precision);
         }
     }
 }
