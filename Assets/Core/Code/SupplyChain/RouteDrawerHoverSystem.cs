@@ -18,12 +18,19 @@ namespace SpaceFab.SupplyChain {
             }
 
             PathNode hoverNode = null;
+            Port hoverPort = null;
             if (!Game.Input.IsPointerOverCanvas() && MouseControls.TryGetWorldPosition2D(out Vector2 worldPos)) {
-                Collider2D node = Physics2D.OverlapCircle(worldPos, 0.005f, LayerMasks.SupplyNode_Mask);
-                if (node != null) {
-                    hoverNode = node.ResolveComponent<PathNode>();
-                }
                 m_State.MousePosition = worldPos;
+                Collider2D port = Physics2D.OverlapCircle(worldPos, 0.005f, LayerMasks.UI_Mask);
+                if (port != null) {
+                    var display = port.ResolveComponent<PortDetailsDisplay>();
+                    hoverPort = display ? display.Parent : null;
+                } else {
+                    Collider2D node = Physics2D.OverlapCircle(worldPos, 0.005f, LayerMasks.SupplyNode_Mask);
+                    if (node != null) {
+                        hoverNode = node.ResolveComponent<PathNode>();
+                    }
+                }
             } else {
                 m_State.MousePosition = null;
             }
@@ -31,13 +38,19 @@ namespace SpaceFab.SupplyChain {
             if (m_State.Node != hoverNode) {
                 if (m_State.Node && m_State.Node.Highlight) {
                     m_State.Node.Highlight.HoverHighlight.enabled = false;
+                    m_State.Node.Highlight.HasHover = false;
                 }
 
                 m_State.Node = hoverNode;
 
                 if (hoverNode && hoverNode.Highlight) {
                     hoverNode.Highlight.HoverHighlight.enabled = true;
+                    hoverNode.Highlight.HasHover = true;
                 }
+            }
+
+            if (m_State.Port != hoverPort) {
+                m_State.Port = hoverPort;
             }
         }
     }

@@ -65,22 +65,5 @@ namespace SpaceFab.SupplyChain {
             route.ShipId = shipId;
             return route;
         }
-    
-        static public void ClearLiveRoute(LiveRouteData route) {
-            LiveRoutesState state = Find.State<LiveRoutesState>();
-
-            for(int i = 0; i < route.NodeCount; i++) {
-                
-            }
-
-            for(int i = 0; i < route.PortCount; i++) {
-                state.UsedPorts.Remove(route.Ports[i]);
-                route.Ports[i] = null;
-            }
-
-            route.Line.gameObject.SetActive(false);
-
-            route.PortCount = route.NodeCount = 0;
-        }
     }
 }

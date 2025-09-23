@@ -16,6 +16,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 636dff3a5d7394c4088410e50b967f43, type: 2}
   - {fileID: 11400000, guid: 52484c9a9c1ebec4e8948a81283bc358, type: 2}
   m_NamedAssets:
+  - {fileID: 11400000, guid: 38b83f135f0c200418e6a5ffcd53cae7, type: 2}
   - {fileID: 11400000, guid: 56f993dcf9ab87246a24950ddb712c54, type: 2}
   - {fileID: 11400000, guid: 63692c92893f18e44867ed70a7ca7062, type: 2}
   - {fileID: 11400000, guid: b53c9c5b10146d24586d04e6c86dbf33, type: 2}

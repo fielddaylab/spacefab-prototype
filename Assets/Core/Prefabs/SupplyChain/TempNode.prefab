@@ -49,7 +49,7 @@ MonoBehaviour:
   Flags: 1
   Collider: {fileID: 6749265693400094622}
   Highlight: {fileID: 0}
-  RouteNodes: []
+  Ports: []
 --- !u!1 &6836246081808235540
 GameObject:
   m_ObjectHideFlags: 0

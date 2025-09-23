@@ -6,6 +6,7 @@ namespace SpaceFab.SupplyChain {
     public sealed class SupplyChainSprites : GlobalAsset {
         public Sprite[] MaterialSprites;
         public Sprite[] MaterialSpriteOutlines;
+        public Sprite[] MaterialSpriteIcons;
         public Sprite[] DefenseSprites;
 
         public Sprite MaterialSprite(FabMaterial mat) {
@@ -18,6 +19,13 @@ namespace SpaceFab.SupplyChain {
         public Sprite MaterialSpriteOutline(FabMaterial mat) {
             if (mat > 0) {
                 return MaterialSpriteOutlines[(int)mat - 1];
+            }
+            return null;
+        }
+
+        public Sprite MaterialSpriteTiny(FabMaterial mat) {
+            if (mat > 0) {
+                return MaterialSpriteIcons[(int) mat - 1];
             }
             return null;
         }

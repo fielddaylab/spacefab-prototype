@@ -10,10 +10,13 @@ namespace SpaceFab.SupplyChain {
         [Required] public Collider2D Collider;
         public PathNodeHighlight Highlight;
 
-        [HideInInspector] public RouteNode[] RouteNodes;
+        [HideInInspector] public Port[] Ports;
 
         private void Awake() {
-            RouteNodes = GetComponentsInChildren<RouteNode>(true);
+            Ports = GetComponentsInChildren<Port>(true);
+            for(int i = 0; i < Ports.Length; i++) {
+                Ports[i].ParentNode = this;
+            }
         }
     }
 

@@ -37,7 +37,7 @@ namespace FieldDay.Memory {
         private Shader m_DefaultShader;
 
         private StringArena m_CurrentFrameStringArena;
-        private StringArena m_BackupFrameStringArena;
+        private StringArena m_AlternateFrameStringArena;
 
         private Transform m_PersistentPoolRoot;
 
@@ -99,12 +99,28 @@ namespace FieldDay.Memory {
             }
         }
 
+        /// <summary>
+        /// How many ticks since the last garbage collection event.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public long TicksSinceLastGC() {
+            return Stopwatch.GetTimestamp() - m_MostRecentGCTimestamp;
+        }
+
+        /// <summary>
+        /// How many seconds since the last garbage collection event.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float SecondsSinceLastGC() {
+            return (float) ((Stopwatch.GetTimestamp() - m_MostRecentGCTimestamp) / (double) Stopwatch.Frequency);
+        }
+
         #endregion // GC
 
         #region Strings
 
         internal void SwapAllocationBuffers() {
-            Ref.Swap(ref m_CurrentFrameStringArena, ref m_BackupFrameStringArena);
+            Ref.Swap(ref m_CurrentFrameStringArena, ref m_AlternateFrameStringArena);
             m_CurrentFrameStringArena.Reset();
         }
 
@@ -199,7 +215,7 @@ namespace FieldDay.Memory {
             m_LastKnownGenerationCount = genCount;
 
             m_CurrentFrameStringArena = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB);
-            m_BackupFrameStringArena = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB);
+            m_AlternateFrameStringArena = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB);
 
             m_MeshPool = new DynamicPool<Mesh>(configuration.MeshCapacity, (p) => new Mesh(), false);
             m_MeshPool.Config.RegisterOnDestruct((p, m) => GameObject.DestroyImmediate(m));
@@ -232,6 +248,7 @@ namespace FieldDay.Memory {
                     Unsafe.FormatBytes(gcMem, psb);
                     psb.Builder.Append("\nTexture Memory: ");
                     Unsafe.FormatBytes((long)textureMem, psb);
+                    psb.Builder.Append("\nSeconds Since Last GC: ").AppendNoAlloc(SecondsSinceLastGC(), 2);
 
                     DebugDraw.AddLogText(psb, Color.yellow);
                 }

@@ -9,10 +9,11 @@ using UnityEngine;
 
 namespace SpaceFab.SupplyChain {
     public sealed class RouteHoverState : SharedStateComponent {
-        public PathNode Node;
-        public RouteLineRenderer RouteLine;
-        public bool Locked;
+        [NonSerialized] public PathNode Node;
+        [NonSerialized] public RouteLineRenderer RouteLine;
+        [NonSerialized] public Port Port;
+        [NonSerialized] public bool Locked;
 
-        public Vector3? MousePosition;
+        [NonSerialized] public Vector3? MousePosition;
     }
 }

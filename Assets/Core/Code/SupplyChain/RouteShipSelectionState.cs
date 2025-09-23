@@ -3,6 +3,7 @@ using BeauUtil.Debugger;
 using FieldDay;
 using FieldDay.Components;
 using FieldDay.SharedState;
+using FieldDay.UI;
 using System;
 using UnityEngine;
 
@@ -49,14 +50,21 @@ namespace SpaceFab.SupplyChain {
 
             if (route.NodeCount == 0) {
                 drawer.DrawState = RouteDrawState.NotStarted;
+                CursorHint.DefaultCursor = null;
             } else if (route.NodeCount == 1) {
                 drawer.DrawState = RouteDrawState.Started;
+                CursorHint.DefaultCursor = "DrawCursor";
             } else {
                 drawer.DrawState = RouteDrawState.Selected;
+                CursorHint.DefaultCursor = null;
             }
 
             for (int i = 0; i < route.NodeCount; i++) {
                 LiveRouteUtility.SetNodeOwner(route.Nodes[i], route);
+            }
+
+            for(int i = 0; i < route.PortCount; i++) {
+                
             }
 
             for(int i = 0; i < route.HazardCount; i++) {
@@ -103,6 +111,7 @@ namespace SpaceFab.SupplyChain {
             LiveRouteLineUtility.UpdateColor(route.Line, ((Color) route.LineColor).WithAlpha(0.4f));
 
             drawer.DrawState = RouteDrawState.NotStarted;
+            CursorHint.DefaultCursor = null;
         }
 
         static public void AttemptFinishRoute() {
@@ -134,6 +143,7 @@ namespace SpaceFab.SupplyChain {
             }
 
             drawer.DrawState = route.NodeCount > 0 ? RouteDrawState.Selected : RouteDrawState.NotStarted;
+            CursorHint.DefaultCursor = null;
         }
     }
 }

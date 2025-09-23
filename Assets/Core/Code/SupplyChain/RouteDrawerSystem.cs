@@ -7,6 +7,7 @@ using FieldDay.HID;
 using FieldDay.Physics;
 using FieldDay.SharedState;
 using FieldDay.Systems;
+using FieldDay.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,7 @@ namespace SpaceFab.SupplyChain {
                             bool added = LiveRouteUtility.TryAddNode(route, m_StateB.Node);
                             Assert.True(added);
                             m_StateA.DrawState = RouteDrawState.Started;
+                            CursorHint.DefaultCursor = "DrawCursor";
                         }
                     }
                     break;
@@ -36,9 +38,11 @@ namespace SpaceFab.SupplyChain {
                     if (m_StateB.Node && Game.Input.IsMousePressed(MouseButton.Left)) {
                         if (LiveRouteUtility.IsNodeInPath(route, m_StateB.Node)) {
                             m_StateA.DrawState = RouteDrawState.InProgress;
+                            CursorHint.DefaultCursor = "DrawCursor";
                         }
                     } else if (Game.Input.IsKeyPressed(KeyCode.E)) {
                         m_StateA.DrawState = RouteDrawState.InProgress;
+                        CursorHint.DefaultCursor = "DrawCursor";
                     }
                     break;
                 }
@@ -75,8 +79,10 @@ namespace SpaceFab.SupplyChain {
 
                             if (route.NodeCount == 1) {
                                 m_StateA.DrawState = RouteDrawState.Started;
+                                CursorHint.DefaultCursor = "DrawCursor";
                             } else if (route.NodeCount == 0) {
                                 m_StateA.DrawState = RouteDrawState.NotStarted;
+                                CursorHint.DefaultCursor = null;
                                 LiveRouteLineUtility.HideDottedLine(route.Line);
                             }
                         }

@@ -4,11 +4,10 @@ using FieldDay.Components;
 namespace SpaceFab.SupplyChain {
     public sealed class Port : BatchedComponent {
         public PortType Type;
-        [NonSerialized] public PathNode ParentNode;
+        public PortVisuals Visuals;
 
-        private void Awake() {
-            ParentNode = GetComponentInParent<PathNode>();
-        }
+        [NonSerialized] public PathNode ParentNode;
+        [NonSerialized] public LiveRouteData Owner;
     }
 
     public enum PortType : byte {

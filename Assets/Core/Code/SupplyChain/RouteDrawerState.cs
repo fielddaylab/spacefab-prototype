@@ -14,6 +14,7 @@ namespace SpaceFab.SupplyChain {
         [NonSerialized] public RouteDrawState DrawState;
     }
 
+
     public enum RouteDrawState {
         NotStarted,
         Started,

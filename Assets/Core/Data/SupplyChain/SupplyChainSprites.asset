@@ -24,6 +24,12 @@ MonoBehaviour:
   - {fileID: 6694508499894108083, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
   - {fileID: -7251339259454250575, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
   - {fileID: -8761709578001338046, guid: 0bdd6582936e90a4fa0bd621c0371b2e, type: 3}
+  MaterialSpriteIcons:
+  - {fileID: 780064077318569514, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
+  - {fileID: 2934485980501484309, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
+  - {fileID: -4367773378879019555, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
+  - {fileID: 4394838783352990769, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
+  - {fileID: 3069610640207118565, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
   DefenseSprites:
   - {fileID: 7933574025687213536, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}
   - {fileID: -1810142065578039886, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}

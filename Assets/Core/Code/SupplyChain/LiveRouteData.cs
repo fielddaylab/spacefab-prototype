@@ -77,6 +77,7 @@ namespace SpaceFab.SupplyChain {
             LiveRouteLineUtility.PopSolid(liveRoute.Line);
             LiveRouteLineUtility.UpdateTail(liveRoute.Line);
             LiveRouteLineUtility.RegenerateColliders(liveRoute.Line);
+            RemovePortsForNodeImpl(liveRoute, node, null);
             UpdateStats(liveRoute);
             return node;
         }
@@ -86,8 +87,10 @@ namespace SpaceFab.SupplyChain {
                 if (route != null) {
                     node.Highlight.PathHighlight.enabled = true;
                     node.Highlight.PathHighlight.color = route.LineColor;
+                    node.Highlight.HasPath = true;
                 } else {
                     node.Highlight.PathHighlight.enabled = false;
+                    node.Highlight.HasPath = false;
                 }
             }
         }
@@ -115,6 +118,7 @@ namespace SpaceFab.SupplyChain {
             state.UsedPorts.Add(port);
 
             liveRoute.Ports[liveRoute.PortCount++] = port;
+            SetPortOwner(port, liveRoute);
             UpdateStats(liveRoute);
             return true;
         }
@@ -131,7 +135,7 @@ namespace SpaceFab.SupplyChain {
 
         static public void RemovePort(LiveRouteData liveRoute, Port port) {
             LiveRoutesState state = Find.State<LiveRoutesState>();
-            Assert.True(!state.UsedPorts.Contains(port));
+            Assert.True(state.UsedPorts.Contains(port));
             state.UsedPorts.Remove(port);
 
             int portIndex = -1;
@@ -144,25 +148,51 @@ namespace SpaceFab.SupplyChain {
 
             Assert.True(portIndex >= 0, "Port not in route");
             ArrayUtils.FastRemoveAt(liveRoute.Ports, ref liveRoute.PortCount, portIndex);
+            SetPortOwner(port, null);
             UpdateStats(liveRoute);
         }
 
         static public int RemovePortsForNode(LiveRouteData liveRoute, PathNode node, ICollection<Port> removed) {
+            int count = RemovePortsForNodeImpl(liveRoute, node, removed);
+            if (count > 0) {
+                UpdateStats(liveRoute);
+            }
+            return count;
+        }
+
+        static private int RemovePortsForNodeImpl(LiveRouteData liveRoute, PathNode node, ICollection<Port> removed) {
             LiveRoutesState state = Find.State<LiveRoutesState>();
             int count = 0;
             for (int i = liveRoute.PortCount; i-- > 0;) {
                 Port port = liveRoute.Ports[i];
                 if (ReferenceEquals(port.ParentNode, node)) {
                     state.UsedPorts.Remove(port);
+                    SetPortOwner(port, null);
                     ArrayUtils.FastRemoveAt(liveRoute.Ports, ref liveRoute.PortCount, i);
-                    removed.Add(port);
+                    removed?.Add(port);
                     count++;
                 }
             }
-            if (count > 0) {
-                UpdateStats(liveRoute);
-            }
             return count;
+        }
+
+        static public void SetPortOwner(Port port, LiveRouteData route) {
+            port.Owner = route;
+            if (port.Visuals != null) {
+                if (route != null) {
+                    port.Visuals.Outline.enabled = true;
+                    port.Visuals.Outline.color = route.LineColor;
+                    if (port.Visuals.CurrentDetails) {
+                        port.Visuals.CurrentDetails.Outline.enabled = true;
+                        port.Visuals.CurrentDetails.Outline.color = route.LineColor;
+                    }
+                } else {
+                    port.Visuals.Outline.enabled = false;
+                    if (port.Visuals.CurrentDetails) {
+                        port.Visuals.CurrentDetails.Outline.enabled = false;
+                    }
+                }
+            }
         }
 
         #endregion // Ports
@@ -174,8 +204,10 @@ namespace SpaceFab.SupplyChain {
                 if (route != null) {
                     hazard.Highlight.PathHighlight.enabled = true;
                     hazard.Highlight.PathHighlight.color = route.LineColor;
+                    hazard.Highlight.HasPath = true;
                 } else {
                     hazard.Highlight.PathHighlight.enabled = false;
+                    hazard.Highlight.HasPath = false;
                 }
             }
         }
@@ -284,7 +316,7 @@ namespace SpaceFab.SupplyChain {
                     RouteNode node = port.GetComponent<RouteNode>();
                     ConversionNode conversion = port.GetComponent<ConversionNode>();
                     if (materials[(int)conversion.Input - 1] > 0) {
-                        materials[(int)conversion.Input - 1]++;
+                        materials[(int)conversion.Input - 1]--;
                         materials[(int)conversion.Output - 1]++;
                         cost += (int)node.Cost;
                         cycles = Math.Max((int)node.ProductionTime, cycles);

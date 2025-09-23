@@ -62,6 +62,7 @@ namespace FieldDay.UI {
 
         #region Current Tracking
 
+        static private StringHash32 s_DefaultOverride;
         static private CursorHint s_Pointer;
         static private CursorHint s_Locked;
         static private CursorHint s_Effective;
@@ -79,6 +80,14 @@ namespace FieldDay.UI {
         /// </summary>
         static public CursorHint Current {
             get { return s_Effective; }
+        }
+
+        /// <summary>
+        /// Default cursor type.
+        /// </summary>
+        static public StringHash32 DefaultCursor {
+            get { return s_DefaultOverride; }
+            set { s_DefaultOverride = value; }
         }
 
         static private void UpdateEffectiveCursor() {

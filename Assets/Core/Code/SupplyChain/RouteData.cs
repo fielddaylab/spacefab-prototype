@@ -22,5 +22,13 @@ namespace SpaceFab.SupplyChain {
         static public bool EvaluateRoute(in SupplyRouteStats routeData, ref PseudoRandom pseudoRand) {
             return pseudoRand.Bool(routeData.Reliability / (float) MaxReliability);
         }
+
+        static public unsafe void AccumulateMaterials(ref FabMaterialSet materials, in SupplyRouteStats stats) {
+            materials.Insulator += stats.Materials[(int) FabMaterial.Insulator - 1];
+            materials.Semiconductor += stats.Materials[(int) FabMaterial.Semiconductor - 1];
+            materials.DopantN += stats.Materials[(int) FabMaterial.DopantN - 1];
+            materials.DopantP += stats.Materials[(int) FabMaterial.DopantP - 1];
+            materials.Conductor += stats.Materials[(int) FabMaterial.Conductor - 1];
+        }
     }
 }

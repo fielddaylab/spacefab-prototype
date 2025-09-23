@@ -7,5 +7,8 @@ namespace SpaceFab.SupplyChain {
     public sealed class PathNodeHighlight : BatchedComponent {
         [Required] public SpriteRenderer PathHighlight;
         [Required] public SpriteRenderer HoverHighlight;
+
+        [NonSerialized] public bool HasPath;
+        [NonSerialized] public bool HasHover;
     }
 }

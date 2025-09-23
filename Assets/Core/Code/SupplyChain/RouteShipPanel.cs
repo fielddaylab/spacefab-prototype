@@ -38,7 +38,7 @@ namespace SpaceFab.SupplyChain {
         }
 
         protected override void OnDestroy() {
-            Game.Events.DeregisterAllForContext(this);
+            Game.Events?.DeregisterAllForContext(this);
             base.OnDestroy();
         }
 

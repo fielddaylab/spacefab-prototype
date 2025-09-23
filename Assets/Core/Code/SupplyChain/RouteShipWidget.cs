@@ -2,6 +2,7 @@ using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using BeauUtil.UI;
+using FieldDay;
 using FieldDay.Assets;
 using FieldDay.Components;
 using FieldDay.HID;
@@ -51,6 +52,7 @@ namespace SpaceFab.SupplyChain {
         public TMP_Text RouteTime;
         public TMP_Text RouteCost;
         public TMP_Text RouteReliability;
+        public Image[] RouteMaterials;
 
         #endregion // Inspector
 
@@ -103,6 +105,10 @@ namespace SpaceFab.SupplyChain {
         static public void PopulateWidgetRouteStats(RouteShipWidget widget, SupplyRouteStats stats) {
             if (stats.Cost <= 0) {
                 widget.RouteGroup.gameObject.SetActive(false);
+
+                for(int i = 0; i < widget.RouteMaterials.Length; i++) {
+                    widget.RouteMaterials[i].gameObject.SetActive(false);
+                }
                 return;
             }
 
@@ -123,7 +129,30 @@ namespace SpaceFab.SupplyChain {
                 widget.RouteReliability.SetText(psb.Builder);
             }
 
+            SupplyChainSprites supplySprites = Find.GlobalAsset<SupplyChainSprites>();
+
+            unsafe {
+                int materialCount = 0;
+                PopulateMaterialCategory(widget, FabMaterial.Insulator, stats.Materials[(int) FabMaterial.Insulator - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.Semiconductor, stats.Materials[(int) FabMaterial.Semiconductor - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.Conductor, stats.Materials[(int) FabMaterial.Conductor - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.DopantN, stats.Materials[(int) FabMaterial.DopantN - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.DopantP, stats.Materials[(int) FabMaterial.DopantP - 1], ref materialCount, supplySprites);
+
+                for(int i = materialCount; i < widget.RouteMaterials.Length; i++) {
+                    widget.RouteMaterials[i].gameObject.SetActive(false);
+                }
+            }
+
             widget.RouteGroup.gameObject.SetActive(true);
+        }
+
+        static private unsafe void PopulateMaterialCategory(RouteShipWidget widget, FabMaterial material, int count, ref int totalMaterials, SupplyChainSprites sprites) {
+            while (count-- > 0) {
+                int index = totalMaterials++;
+                widget.RouteMaterials[index].gameObject.SetActive(true);
+                widget.RouteMaterials[index].sprite = sprites.MaterialSpriteTiny(material);
+            }
         }
     }
 }
