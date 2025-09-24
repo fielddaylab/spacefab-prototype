@@ -17,6 +17,7 @@ using UnityEngine.UI;
 namespace SpaceFab.SupplyChain {
     public sealed class RouteRequestPanel : SharedPanel, IRegistrationCallbacks {
         public Image[] Resources;
+        public TMP_Text SellPrice;
 
         [NonSerialized] public FabMaterial[] ResourceMap = new FabMaterial[10];
         [NonSerialized] public int ResourceCount = 0;

@@ -15,12 +15,17 @@ namespace SpaceFab.SupplyChain {
 
         [AssetName(typeof(RouteShip))] public StringHash32[] Ships;
         public FabMaterialSet RequiredMaterials;
+        public int SellPrice = 10;
 
         protected override IEnumerator<WorkSlicer.Result?> OnScenePreload() {
             var routePanel = Find.Panel<RouteShipPanel>();
             routePanel.PopulateShips(Ships);
             var requestPanel = Find.Panel<RouteRequestPanel>();
             requestPanel.PopulateResources(RequiredMaterials);
+            requestPanel.SellPrice.SetText("Sell Price: $" + SellPrice.ToStringLookup());
+            var profitPanel = Find.Panel<RouteProfitPanel>();
+            profitPanel.DesiredMaterials = RequiredMaterials;
+            profitPanel.SellPrice = SellPrice;
             return null;
         }
     }

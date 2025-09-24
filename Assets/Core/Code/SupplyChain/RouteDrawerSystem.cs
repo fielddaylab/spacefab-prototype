@@ -92,17 +92,6 @@ namespace SpaceFab.SupplyChain {
                     break;
                 }
             }
-
-            if (Game.IsDevBuild) {
-                SupplyRouteStats stats = route.Stats;
-                using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
-                    psb.Builder.Append("Route ").Append(route.ShipId.ToDebugString())
-                        .Append(": $").AppendNoAlloc(stats.Cost)
-                        .Append(", ").AppendNoAlloc(stats.Time).Append(" cycles")
-                        .Append(", ").AppendNoAlloc((int) (100f * stats.Reliability / SupplyUtility.MaxReliability)).Append("%");
-                    DebugDraw.AddViewportText(new Vector2(0.5f, 0), new Vector2(0, 16), psb.Builder, Color.yellow, 0, TextAnchor.LowerCenter, DebugTextStyle.BackgroundDark);
-                }
-            }
         }
     }
 }
