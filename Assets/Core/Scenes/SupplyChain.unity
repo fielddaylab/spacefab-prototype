@@ -289,7 +289,7 @@ MonoBehaviour:
   m_text: Profit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
-  m_sharedMaterial: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e4f7c002082a5bf4895f874419850789, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1061,7 +1061,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -2241,7 +2241,7 @@ MonoBehaviour:
   m_text: ----
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
-  m_sharedMaterial: {fileID: 2821296471360535536, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 23cb01eb9efb4ec4399865f13305e917, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3546,7 +3546,7 @@ MonoBehaviour:
   m_text: Bill of Materials
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
-  m_sharedMaterial: {fileID: 2821296471360535536, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 23cb01eb9efb4ec4399865f13305e917, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4353,7 +4353,7 @@ MonoBehaviour:
   m_text: Sell Price
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
-  m_sharedMaterial: {fileID: 2821296471360535536, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 23cb01eb9efb4ec4399865f13305e917, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4570,7 +4570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8846507215224620638, guid: 26ba46b8a2648664c8be1e6903b5daf9, type: 3}
       propertyPath: m_ClearFlags
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8846507215224620638, guid: 26ba46b8a2648664c8be1e6903b5daf9, type: 3}
       propertyPath: m_BackGroundColor.b
@@ -6531,8 +6531,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '[E] To Toggle Drawing/Selecting Ports'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4d7666ee207a5ae4fa390331a56dc126, type: 2}
-  m_sharedMaterial: {fileID: 2884982905993258549, guid: 4d7666ee207a5ae4fa390331a56dc126, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e4f7c002082a5bf4895f874419850789, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6636,7 +6636,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
