@@ -1,4 +1,5 @@
 using FieldDay;
+using FieldDay.Rendering;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -24,6 +25,14 @@ namespace SpaceFab.ChipFab
         public ClickBox ReturnBtn;
 
         public WaferData TargetData;
+
+        private void Awake()
+        {
+            if (Camera.main.GetComponent<PrimaryWorldCamera>())
+            {
+                Destroy(Camera.main.gameObject);
+            }    
+        }
 
         private void Start()
         {

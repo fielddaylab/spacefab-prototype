@@ -69,7 +69,7 @@ namespace SpaceFab.ChipFab
             }
             else if (Input.GetKeyDown(NavDownKey))
             {
-                if (State == ConveyorState.Empty)
+                if (State == ConveyorState.Empty && DragMgr.WaferInstance != null)
                 {
                     // try cancel
                     if (m_currNode.GetComponent<IStationMicrogame>() != null) {
