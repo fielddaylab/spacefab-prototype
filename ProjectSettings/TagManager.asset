@@ -17,13 +17,13 @@ TagManager:
   - FloorplanDrag
   - FloorLinkNodes
   - FloorNodes
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - ChipFabDrag
+  - ChipFabClickBox
+  - ChipFabEtchProjectile
+  - ChipFabSputterProjectile
+  - ChipFabSemi
+  - ChipFabOxide-Metal
+  - ChipFabResist
   - 
   - 
   - 
@@ -55,4 +55,7 @@ TagManager:
     locked: 0
   - name: UI
     uniqueID: 1132335069
+    locked: 0
+  - name: ChipFab Microgame
+    uniqueID: 1897548539
     locked: 0
