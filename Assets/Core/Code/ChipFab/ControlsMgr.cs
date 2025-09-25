@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace SpaceFab.ChipFab
     public class ControlsMgr : MonoBehaviour
     {
         public static ControlsMgr Instance;
+
+        public bool InputsEnabled = true;
 
         [Header("Drag")]
         public DragMgr DragMgr;
@@ -51,6 +54,9 @@ namespace SpaceFab.ChipFab
             {
                 GoToNode(StartingNode);
             }
+
+            Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Register(GameEvents.TimerBegin, HandleTimerBegin);
         }
 
         private void Update()
@@ -64,13 +70,16 @@ namespace SpaceFab.ChipFab
 
         private void ProcessInputs()
         {
-            if (NavNodesEnabled)
+            if (InputsEnabled)
             {
-                ProcessNavNodeInputs();
-            }
-            if (ConveyorEnabled)
-            {
-                ConveyorMgr.ProcessInputs();
+                if (NavNodesEnabled)
+                {
+                    ProcessNavNodeInputs();
+                }
+                if (ConveyorEnabled)
+                {
+                    ConveyorMgr.ProcessInputs();
+                }
             }
         }
 
@@ -159,6 +168,22 @@ namespace SpaceFab.ChipFab
                 {
                     m_currNode.Hoverable.BeginHover();
                 }
+            }
+        }
+
+        private void HandleNewWaferCreated()
+        {
+            if (ModeMgr.Instance.Mode == GameMode.Timed)
+            {
+                InputsEnabled = false; // wait for time mgr to re-enable inputs
+            }
+        }
+
+        private void HandleTimerBegin()
+        {
+            if (ModeMgr.Instance.Mode == GameMode.Timed)
+            {
+                InputsEnabled = true;
             }
         }
     }

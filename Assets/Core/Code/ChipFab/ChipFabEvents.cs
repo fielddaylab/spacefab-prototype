@@ -13,6 +13,8 @@ namespace SpaceFab.ChipFab
         public static StringHash32 WaferStateUpdated = "wafer-state-updated";
 
         public static StringHash32 NewDopantCreated = "new-dopant-created";
+
+        public static StringHash32 TimerBegin = "timer-begin";
     }
 
     public static class GameConsts

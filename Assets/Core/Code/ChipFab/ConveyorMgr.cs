@@ -83,6 +83,11 @@ namespace SpaceFab.ChipFab
 
         private void TryShift(int amt)
         {
+            if (DragMgr.WaferInstance == null)
+            {
+                return;
+            }
+
             if (m_currNodeIndex + amt >= Nodes.Count || m_currNodeIndex + amt < 0)
             {
                 return;
