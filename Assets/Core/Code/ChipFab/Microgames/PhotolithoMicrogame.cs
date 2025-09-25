@@ -27,6 +27,9 @@ namespace SpaceFab.ChipFab
         private MaskId m_currSelectedMask = MaskId.NONE;
         private int m_currRotation = 0;
 
+        private float m_rotateCooldown = 0.1f;
+        private float m_cooldownTimer = 0;
+
 
         public override void Activate(WaferState waferState)
         {
@@ -82,6 +85,14 @@ namespace SpaceFab.ChipFab
 
         #region Handlers
 
+        private void Update()
+        {
+            if (m_cooldownTimer > 0)
+            {
+                m_cooldownTimer -= Time.deltaTime;
+            }
+        }
+
         private void HandleMaskADown()
         {
             m_currPreviewRenderer.enabled = true;
@@ -108,19 +119,27 @@ namespace SpaceFab.ChipFab
 
         private void HandleRotateCCDown()
         {
+            if (m_cooldownTimer > 0) { return; }
+
+            m_cooldownTimer = m_rotateCooldown;
+
             m_currRotation += 90;
 
             if (m_currRotation == 360) { m_currRotation = 0; }
 
             var angles = DragMgr.WaferInstance.transform.localEulerAngles;
             angles.z = m_currRotation;
-            DragMgr.WaferInstance.transform.localEulerAngles =  angles;
+            DragMgr.WaferInstance.transform.localEulerAngles = angles;
 
             RotText.SetText(m_currRotation + "°"); 
         }
 
         private void HandleRotateCDown()
         {
+            if (m_cooldownTimer > 0) { return; }
+
+            m_cooldownTimer = m_rotateCooldown;
+
             m_currRotation -= 90;
 
             if (m_currRotation == -360) { m_currRotation = 0; }

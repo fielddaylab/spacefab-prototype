@@ -72,10 +72,12 @@ namespace SpaceFab.ChipFab
                 if (State == ConveyorState.Empty)
                 {
                     // try cancel
-                    if (m_currNode.GetComponent<IStationMicrogame>().TryCancel())
-                    {
-                        State = ConveyorState.Full;
-                        SetAtIndex(m_currNodeIndex);
+                    if (m_currNode.GetComponent<IStationMicrogame>() != null) {
+                        if (m_currNode.GetComponent<IStationMicrogame>().TryCancel())
+                        {
+                            State = ConveyorState.Full;
+                            SetAtIndex(m_currNodeIndex);
+                        }
                     }
                 }
             }
