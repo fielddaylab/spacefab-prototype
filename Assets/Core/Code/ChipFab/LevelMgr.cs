@@ -110,6 +110,8 @@ namespace SpaceFab.ChipFab
             FailureGroup.SetActive(!success);
             PrecisionText.gameObject.SetActive(true);
             PrecisionText.SetText("Precision: " + (currState.Precision.Avg() * 100).ToString("#.##") + "%");
+
+            Game.Events.Dispatch(GameEvents.WaferSubmitted);
         }
     }
 }

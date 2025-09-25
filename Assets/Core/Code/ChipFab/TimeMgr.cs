@@ -25,6 +25,7 @@ namespace SpaceFab.ChipFab
         private void Start()
         {
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Register(GameEvents.WaferSubmitted, HandleWaferSubmitted);
             Reset();
         }
 
@@ -43,6 +44,12 @@ namespace SpaceFab.ChipFab
             RunningText.SetText("0.00 s");
             m_state = TimeState.Stopped;
             CountdownText.gameObject.SetActive(false);
+        }
+
+        public void Pause()
+        {
+            m_elapsedTime = 0;
+            m_state = TimeState.Stopped;
         }
 
         public void Begin()
@@ -82,6 +89,14 @@ namespace SpaceFab.ChipFab
             {
                 Reset();
                 Begin();
+            }
+        }
+
+        private void HandleWaferSubmitted()
+        {
+            if (ModeMgr.Instance.Mode == GameMode.Timed)
+            {
+                Pause();
             }
         }
     }

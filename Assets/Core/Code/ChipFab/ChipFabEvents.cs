@@ -15,6 +15,8 @@ namespace SpaceFab.ChipFab
         public static StringHash32 NewDopantCreated = "new-dopant-created";
 
         public static StringHash32 TimerBegin = "timer-begin";
+
+        public static StringHash32 WaferSubmitted = "wafer-submitted";
     }
 
     public static class GameConsts
