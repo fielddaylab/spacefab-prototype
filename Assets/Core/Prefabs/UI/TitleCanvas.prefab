@@ -769,7 +769,7 @@ MonoBehaviour:
   m_FloorPlanButton: {fileID: 2166757809088035805}
   m_FloorPlanScene: Floorplan
   m_ChipFabButton: {fileID: 8871687159710135083}
-  m_ChipFabScene: ChipFab
+  m_ChipFabScene: ChipFabLoader
 --- !u!1 &6595612790926603493
 GameObject:
   m_ObjectHideFlags: 0

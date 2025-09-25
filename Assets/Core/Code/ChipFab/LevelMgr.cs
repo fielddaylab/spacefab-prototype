@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace SpaceFab.ChipFab
 {
@@ -19,6 +21,8 @@ namespace SpaceFab.ChipFab
         public GameObject FailureGroup;
         public TMP_Text PrecisionText;
 
+        public ClickBox ReturnBtn;
+
         public WaferData TargetData;
 
         private void Start()
@@ -29,6 +33,7 @@ namespace SpaceFab.ChipFab
             // TargetAngled.UpdateDisplay(TargetData);
 
             SubmitButton.OnMouseDown.AddListener(HandleSubmitClicked);
+            ReturnBtn.OnMouseDown.AddListener(HandleReturnClicked);
         }
 
         #region Handlers
@@ -51,6 +56,11 @@ namespace SpaceFab.ChipFab
         private void HandleSubmitClicked()
         {
             Evaluate();
+        }
+
+        private void HandleReturnClicked()
+        {
+            SceneManager.LoadScene("ChipFabLoader");
         }
 
         #endregion // Handlers

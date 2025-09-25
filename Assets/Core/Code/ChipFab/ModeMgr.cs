@@ -14,11 +14,13 @@ namespace SpaceFab.ChipFab
     {
         public static ModeMgr Instance;
 
-        public GameMode Mode;
+        [HideInInspector] public GameMode Mode;
 
         private void Awake()
         {
             Instance = this;
+
+            Mode = ChipFabConfig.Instance.Mode;
         }
     }
 }

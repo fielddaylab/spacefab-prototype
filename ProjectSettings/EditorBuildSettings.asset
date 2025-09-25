@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Core/Scenes/ChipFab.unity
     guid: 7656a7a1cabdbf44ab69a59494799ac7
+  - enabled: 1
+    path: Assets/Core/Scenes/ChipFabLoader.unity
+    guid: 2f520dd4c296f5842bac8eefd3eebb58
   m_configObjects: {}

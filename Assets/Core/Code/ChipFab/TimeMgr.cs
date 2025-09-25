@@ -42,6 +42,9 @@ namespace SpaceFab.ChipFab
         {
             m_elapsedTime = 0;
             RunningText.SetText("0.00 s");
+
+            RunningText.gameObject.SetActive(ChipFabConfig.Instance.Mode == GameMode.Timed);
+
             m_state = TimeState.Stopped;
             CountdownText.gameObject.SetActive(false);
         }
