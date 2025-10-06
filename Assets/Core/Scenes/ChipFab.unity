@@ -2419,6 +2419,7 @@ GameObject:
   - component: {fileID: 365621763}
   - component: {fileID: 365621764}
   - component: {fileID: 365621765}
+  - component: {fileID: 365621766}
   m_Layer: 0
   m_Name: Sputtering Zone
   m_TagString: Untagged
@@ -2518,6 +2519,19 @@ MonoBehaviour:
   EnterNestNode: {fileID: 0}
   ExitNestNode: {fileID: 0}
   Interactable: {fileID: 0}
+--- !u!114 &365621766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365621760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3352d6ceb20f0d74d9a9e31d7fa89b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 3
 --- !u!1 &368814160
 GameObject:
   m_ObjectHideFlags: 0
@@ -4923,6 +4937,7 @@ GameObject:
   - component: {fileID: 720951595}
   - component: {fileID: 720951596}
   - component: {fileID: 720951597}
+  - component: {fileID: 720951598}
   m_Layer: 0
   m_Name: Furnace Zone
   m_TagString: Untagged
@@ -5028,6 +5043,19 @@ MonoBehaviour:
   EnterNestNode: {fileID: 0}
   ExitNestNode: {fileID: 0}
   Interactable: {fileID: 0}
+--- !u!114 &720951598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 720951592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3352d6ceb20f0d74d9a9e31d7fa89b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 0
 --- !u!1 &722154307
 GameObject:
   m_ObjectHideFlags: 0
@@ -5836,6 +5864,7 @@ GameObject:
   - component: {fileID: 848863828}
   - component: {fileID: 848863829}
   - component: {fileID: 848863830}
+  - component: {fileID: 848863831}
   m_Layer: 0
   m_Name: Etch Station
   m_TagString: Untagged
@@ -5939,6 +5968,19 @@ MonoBehaviour:
   EnterNestNode: {fileID: 0}
   ExitNestNode: {fileID: 0}
   Interactable: {fileID: 0}
+--- !u!114 &848863831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 848863825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3352d6ceb20f0d74d9a9e31d7fa89b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 4
 --- !u!1001 &868961358
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6072,6 +6114,7 @@ GameObject:
   - component: {fileID: 877745660}
   - component: {fileID: 877745661}
   - component: {fileID: 877745662}
+  - component: {fileID: 877745663}
   m_Layer: 0
   m_Name: Resist Station Zone
   m_TagString: Untagged
@@ -6170,6 +6213,19 @@ MonoBehaviour:
   EnterNestNode: {fileID: 0}
   ExitNestNode: {fileID: 0}
   Interactable: {fileID: 0}
+--- !u!114 &877745663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 877745657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3352d6ceb20f0d74d9a9e31d7fa89b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 2
 --- !u!1 &883714682
 GameObject:
   m_ObjectHideFlags: 0
@@ -6361,6 +6417,50 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &905948287
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 905948289}
+  - component: {fileID: 905948288}
+  m_Layer: 0
+  m_Name: StationMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &905948288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905948287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2e2d377c844ad4c93b87c9d65c8df5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &905948289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905948287}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &912978864
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12367,6 +12467,7 @@ GameObject:
   - component: {fileID: 1582168963}
   - component: {fileID: 1582168964}
   - component: {fileID: 1582168965}
+  - component: {fileID: 1582168966}
   m_Layer: 0
   m_Name: Wash Station
   m_TagString: Untagged
@@ -12457,6 +12558,19 @@ MonoBehaviour:
   UsingTransform: {fileID: 0}
   SlotPos: {fileID: 1805280129}
   Microgame: {fileID: 1582168962}
+--- !u!114 &1582168966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1582168960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3352d6ceb20f0d74d9a9e31d7fa89b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 5
 --- !u!1 &1604365772
 GameObject:
   m_ObjectHideFlags: 0
@@ -13032,6 +13146,7 @@ GameObject:
   - component: {fileID: 1666774709}
   - component: {fileID: 1666774710}
   - component: {fileID: 1666774711}
+  - component: {fileID: 1666774712}
   m_Layer: 0
   m_Name: Photolitho Zone
   m_TagString: Untagged
@@ -13133,6 +13248,19 @@ MonoBehaviour:
   EnterNestNode: {fileID: 0}
   ExitNestNode: {fileID: 0}
   Interactable: {fileID: 0}
+--- !u!114 &1666774712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666774706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3352d6ceb20f0d74d9a9e31d7fa89b85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 1
 --- !u!1 &1666802607
 GameObject:
   m_ObjectHideFlags: 0
@@ -17010,3 +17138,4 @@ SceneRoots:
   - {fileID: 1759292703}
   - {fileID: 1111269012}
   - {fileID: 1397809973}
+  - {fileID: 905948289}

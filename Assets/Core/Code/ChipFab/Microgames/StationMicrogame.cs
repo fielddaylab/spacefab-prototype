@@ -4,6 +4,16 @@ using UnityEngine;
 
 namespace SpaceFab.ChipFab
 {
+    public enum StationId
+    {
+        Furnace,
+        Photolithograph,
+        Resist,
+        Sputter,
+        Etch,
+        Wash
+    }
+
     public abstract class StationMicrogame : MonoBehaviour, IStationMicrogame
     {
         public GameObject Container;
