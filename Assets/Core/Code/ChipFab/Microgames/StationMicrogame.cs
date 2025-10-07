@@ -17,6 +17,7 @@ namespace SpaceFab.ChipFab
     public abstract class StationMicrogame : MonoBehaviour, IStationMicrogame
     {
         public GameObject Container;
+        public CamPositioner CamPos;
 
         protected void Start()
         {
@@ -28,6 +29,8 @@ namespace SpaceFab.ChipFab
 
         public virtual void Activate(WaferState waferState)
         {
+            CamMgr.Instance.LoadCamPos(CamPos.Pos);
+
             if (Container)
             {
                 Container.SetActive(true);

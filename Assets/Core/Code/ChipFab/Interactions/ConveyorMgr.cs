@@ -76,6 +76,7 @@ namespace SpaceFab.ChipFab
                         if (m_currNode.GetComponent<IStationMicrogame>().TryCancel())
                         {
                             State = ConveyorState.Full;
+                            CamMgr.Instance.UnloadCamPos(m_currNode.GetComponent<StationMicrogame>().CamPos.Pos);
                             SetAtIndex(m_currNodeIndex);
                         }
                     }

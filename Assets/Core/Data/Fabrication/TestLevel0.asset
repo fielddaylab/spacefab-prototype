@@ -13,5 +13,25 @@ MonoBehaviour:
   m_Name: TestLevel0
   m_EditorClassIdentifier: 
   m_levelId: test-0
-  m_availableStations: 00000000
+  m_availableStations: 000000000100000002000000030000000400000005000000
   m_automatedStationData: []
+  m_initialWafer:
+    ResistLayer:
+      Mask:
+        Id: 0
+        Rotation: 0
+      State: 0
+    MetallizationLayer:
+      Mask:
+        Id: 0
+        Rotation: 0
+      State: 0
+    OxideLayer:
+      Mask:
+        Id: 0
+        Rotation: 0
+      State: 0
+    SemiconductorLayer:
+      DopingPatterns: []
+    Precision:
+      Values: []
