@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,6 +43,11 @@ namespace SpaceFab.ChipFab
             if (Container)
             {
                 Container.SetActive(false);
+            }
+
+            if (AutomationMgr.Instance.CurrInstruction.Valid)
+            {
+                Game.Events.Dispatch(GameEvents.AutomationCompleted);
             }
         }
 

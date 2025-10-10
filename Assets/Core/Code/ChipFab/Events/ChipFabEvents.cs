@@ -17,6 +17,7 @@ namespace SpaceFab.ChipFab
         public static StringHash32 TimerBegin = "timer-begin";
 
         public static StringHash32 WaferSubmitted = "wafer-submitted";
+        public static StringHash32 AutomationCompleted = "automation-completed";
     }
 
     public static class GameConsts

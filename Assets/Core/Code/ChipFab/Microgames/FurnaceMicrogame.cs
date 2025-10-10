@@ -135,13 +135,35 @@ namespace SpaceFab.ChipFab
                 m_currTemp -= Time.deltaTime * HeatLossRate;
             }
 
-            if (Input.GetKeyDown(StokeKey))
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
             {
-                HandleApplyHeat();
+                ProcessAutomation();
+            }
+            else
+            {
+                ProcessManual();
             }
 
             UpdateHeatingVisuals();
             EvaluatePrecision();
+        }
+
+        private void ProcessAutomation()
+        {
+            var instruction = AutomationMgr.Instance.CurrInstruction;
+
+            if (m_currTemp <= instruction.Temperature)
+            {
+                HandleApplyHeat();
+            }
+        }
+
+        private void ProcessManual()
+        {
+            if (Input.GetKeyDown(StokeKey))
+            {
+                HandleApplyHeat();
+            }
         }
 
         private void UpdateHeatingVisuals()
