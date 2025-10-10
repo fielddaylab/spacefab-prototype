@@ -20,7 +20,7 @@ namespace SpaceFab.ChipFab
             Dispense(true);
         }
 
-        private void Dispense(bool fromDrag)
+        public void Dispense(bool fromDrag)
         {
             var newObj = Instantiate(ToDispense);
             if (fromDrag)

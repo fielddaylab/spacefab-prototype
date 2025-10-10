@@ -187,6 +187,21 @@ namespace SpaceFab.ChipFab
         {
             m_state = FurnaceMicrogameState.Activated;
             m_precisionTimer = 0;
+
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
+            {
+                if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
+                {
+                    // generate dopant
+                    DopantMgr.Instance.NDispenser.Dispense(false);
+                }
+                else if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
+                {
+                    // generate dopant
+                    DopantMgr.Instance.PDispenser.Dispense(false);
+                }
+            }
+
             TransitionCommon();
         }
 

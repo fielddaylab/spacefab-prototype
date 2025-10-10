@@ -48,13 +48,12 @@ namespace SpaceFab.ChipFab
 
         private void Start()
         {
-            foreach(var trigger in AllTriggers) { 
-                m_activeTriggers.Add(trigger);
-            }
-
             CurrInstruction.Valid = false;
 
             Game.Events.Register(GameEvents.AutomationCompleted, HandleAutomationCompleted);
+            Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+
+            ResetTriggers();
         }
 
         private void Update()
@@ -75,7 +74,11 @@ namespace SpaceFab.ChipFab
                     CurrInstruction.Valid = true;
                     m_activeTriggers.RemoveAt(i);
 
+                    Game.Events.Dispatch(GameEvents.AutomationStarted);
+
                     // move to target station
+                    var stationIndex = GetStationIndex(CurrInstruction.TargetStation);
+                    SetWaferAtIndex(stationIndex);
                     break;
                 }
             }
@@ -91,6 +94,50 @@ namespace SpaceFab.ChipFab
         private void HandleAutomationCompleted()
         {
             CurrInstruction.Valid = false;
+        }
+
+        private void HandleNewWaferCreated()
+        {
+            ResetTriggers();
+        }
+
+        private void ResetTriggers()
+        {
+            m_activeTriggers.Clear();
+
+            foreach (var trigger in AllTriggers)
+            {
+                m_activeTriggers.Add(trigger);
+            }
+        }
+
+        private int GetStationIndex(StationId id)
+        {
+            for (int i = 0; i < NavNodesMgr.Instance.Nodes.Count; i++)
+            {
+                var station = NavNodesMgr.Instance.Nodes[i].GetComponent<Station>();
+                if (station != null && station.Id == id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private void SetWaferAtIndex(int index)
+        {
+            var currNode = NavNodesMgr.Instance.Nodes[index];
+
+            var pos = DragMgr.WaferInstance.transform.position;
+            pos.x = currNode.transform.position.x;
+            pos.y = currNode.transform.position.y;
+            DragMgr.WaferInstance.transform.position = pos;
+
+            DragMgr.WaferInstance.transform.rotation = default;
+
+            ControlsMgr.Instance.CurrDropZone = currNode.GetComponent<DropZone>();
+            ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
+            currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
         }
     }
 }

@@ -13,7 +13,6 @@ namespace SpaceFab.ChipFab
     public class ConveyorMgr : MonoBehaviour
     {
         public static ConveyorMgr Instance;
-        public List<ControlNavNode> Nodes;
 
         [Header("Nav Keys")]
         public KeyCode NavLeftKey = KeyCode.LeftArrow;
@@ -31,7 +30,7 @@ namespace SpaceFab.ChipFab
         private void Awake()
         {
             m_currNodeIndex = 0;
-            m_currNode = Nodes[0];
+            m_currNode = NavNodesMgr.Instance.Nodes[0];
 
             State = ConveyorState.Empty;
 
@@ -91,7 +90,7 @@ namespace SpaceFab.ChipFab
                 return;
             }
 
-            if (m_currNodeIndex + amt >= Nodes.Count || m_currNodeIndex + amt < 0)
+            if (m_currNodeIndex + amt >= NavNodesMgr.Instance.Nodes.Count || m_currNodeIndex + amt < 0)
             {
                 return;
             }
@@ -102,7 +101,7 @@ namespace SpaceFab.ChipFab
         private void SetAtIndex(int index)
         {
             m_currNodeIndex = index;
-            m_currNode = Nodes[m_currNodeIndex];
+            m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];
 
             var pos = DragMgr.WaferInstance.transform.position;
             pos.x = m_currNode.transform.position.x;
