@@ -10,6 +10,7 @@ using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace FieldDay.Perf {
     static public class PerfUtility {
@@ -37,9 +38,21 @@ namespace FieldDay.Perf {
 #endif // UNITY_WEBGL && !UNITY_EDITOR
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public long GetTotalAllocatedMemory() {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            return WebPerf_GetMemoryUsage();
+#else
+            return Profiler.usedHeapSizeLong;
+#endif // UNITY_WEBGL && !UNITY_EDITOR
+        }
+
 #if UNITY_WEBGL
         [DllImport("__Internal")]
         static private extern bool WebPerf_IsCrossOriginIsolated();
+
+        [DllImport("__Internal")]
+        static private extern long WebPerf_GetMemoryUsage();
 #endif // UNITY_WEBGL
     }
 }

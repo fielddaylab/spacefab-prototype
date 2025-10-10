@@ -1,5 +1,7 @@
 using System;
 using System.Text;
+using BeauUtil;
+
 #if USING_OGDLOG
 using OGD;
 #endif // USING_OGDLOG
@@ -124,6 +126,11 @@ namespace FieldDay.Data {
                 return this;
             }
 
+            public JsonScope Field(string name, UnsafeString item) {
+                m_Json.Field(name, item);
+                return this;
+            }
+
             public JsonScope Field(string name, ulong item) {
                 m_Json.Field(name, item);
                 return this;
@@ -165,6 +172,11 @@ namespace FieldDay.Data {
             }
 
             public JsonScope Item(StringBuilder item) {
+                m_Json.Item(item);
+                return this;
+            }
+
+            public JsonScope Item(UnsafeString item) {
                 m_Json.Item(item);
                 return this;
             }

@@ -20,6 +20,7 @@ namespace FieldDay {
         T Field(string name, long item);
         T Field(string name, string item);
         T Field(string name, StringBuilder item);
+        T Field(string name, UnsafeString item);
         T Field(string name, ulong item);
         T Item(bool item);
         T Item(double item);
@@ -29,6 +30,7 @@ namespace FieldDay {
         T Item(long item);
         T Item(string item);
         T Item(StringBuilder item);
+        T Item(UnsafeString item);
         T Item(ulong item);
     }
 
@@ -209,6 +211,53 @@ namespace FieldDay {
             return this;
         }
 
+        public JsonBuilder Item(UnsafeString item) {
+            if (item.Length == 0) {
+                m_Builder.Append("null,");
+            } else {
+                m_Builder.Append('"');
+                for (int i = 0, len = item.Length; i < len; i++) {
+                    char c = item[i];
+                    switch (c) {
+                        case '\\': {
+                            m_Builder.Append("\\\\");
+                            break;
+                        }
+                        case '\"': {
+                            m_Builder.Append("\\\"");
+                            break;
+                        }
+                        case '\n': {
+                            m_Builder.Append("\\n");
+                            break;
+                        }
+                        case '\r': {
+                            m_Builder.Append("\\r");
+                            break;
+                        }
+                        case '\t': {
+                            m_Builder.Append("\\t");
+                            break;
+                        }
+                        case '\b': {
+                            m_Builder.Append("\\b");
+                            break;
+                        }
+                        case '\f': {
+                            m_Builder.Append("\\f");
+                            break;
+                        }
+                        default: {
+                            m_Builder.Append(c);
+                            break;
+                        }
+                    }
+                }
+                m_Builder.Append("\",");
+            }
+            return this;
+        }
+
         #endregion // Array
 
         #region Field
@@ -254,6 +303,11 @@ namespace FieldDay {
         }
 
         public JsonBuilder Field(string name, StringBuilder item) {
+            m_Builder.Append('"').Append(name).Append("\":");
+            return Item(item);
+        }
+
+        public JsonBuilder Field(string name, UnsafeString item) {
             m_Builder.Append('"').Append(name).Append("\":");
             return Item(item);
         }

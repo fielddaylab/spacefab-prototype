@@ -16,8 +16,10 @@ using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
+using FieldDay.Perf;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace FieldDay.Memory {
 
@@ -239,21 +241,38 @@ namespace FieldDay.Memory {
         }
 
         internal void Update() {
+#if DEVELOPMENT
             if (DebugFlags.IsFlagSet(DebuggingFlags.DisplayBasicStats)) {
                 long gcMem = GC.GetTotalMemory(false);
                 ulong textureMem = Texture.currentTextureMemory;
 
+                long monoHeapUsed = Profiler.GetMonoUsedSizeLong();
+                long monoHeapSize = Profiler.GetMonoHeapSizeLong();
+                long totalAllocatedMemory = PerfUtility.GetTotalAllocatedMemory();
+
                 using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
                     psb.Builder.Append("Managed Memory: ");
                     Unsafe.FormatBytes(gcMem, psb);
+                    psb.Builder.Append("\nMono Heap: ");
+                    Unsafe.FormatBytes(monoHeapUsed, psb);
+                    psb.Builder.Append(" / ");
+                    Unsafe.FormatBytes(monoHeapSize, psb);
                     psb.Builder.Append("\nTexture Memory: ");
                     Unsafe.FormatBytes((long)textureMem, psb);
                     psb.Builder.Append("\nSeconds Since Last GC: ").AppendNoAlloc(SecondsSinceLastGC(), 2);
+#if UNITY_WEBGL && !UNITY_EDITOR
+                    psb.Builder.Append("\nWASM Heap: ");
+#else
+                    psb.Builder.Append("\nSystem Memory Size: ");
+#endif // UNITY_WEBGL && !UNITY_EDITOR
+                    Unsafe.FormatBytes(totalAllocatedMemory, psb);
+                    psb.Builder.Append(" / ").AppendNoAlloc(SystemInfo.systemMemorySize).Append("MiB");
 
                     DebugDraw.AddLogText(psb, Color.yellow);
                 }
             }
-        }
+#endif // DEVELOPMENT
+                }
 
         internal void Shutdown() {
             m_MeshPool.Dispose();

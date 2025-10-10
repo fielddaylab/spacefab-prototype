@@ -51,7 +51,7 @@ PlayerSettings:
   unsupportedMSAAFallback: 0
   m_SpriteBatchVertexThreshold: 300
   m_MTRendering: 1
-  mipStripping: 0
+  mipStripping: 1
   numberOfMipsStripped: 0
   numberOfMipsStrippedPerMipmapLimitGroup: {}
   m_StackTraceTypes: 010000000100000001000000010000000100000001000000
@@ -422,6 +422,7 @@ PlayerSettings:
   openGLRequireES32: 0
   m_TemplateCustomTags:
     BRAINPOP: 
+    GOOGLE_PROJECT_ID: 
     PRODUCT_DESCRIPTION: 
     WEBGL_POWER_PREFERENCE: 
   mobileMTRendering:
@@ -698,8 +699,10 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration:
+    Standalone: 0
     WebGL: 0
   il2cppCodeGeneration:
+    Standalone: 1
     WebGL: 1
   managedStrippingLevel:
     EmbeddedLinux: 1

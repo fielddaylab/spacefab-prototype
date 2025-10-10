@@ -244,7 +244,7 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 429400384
+    guid: -1286326720
     name: RegionSprites
     layerFlags: 0
     layerType: 0

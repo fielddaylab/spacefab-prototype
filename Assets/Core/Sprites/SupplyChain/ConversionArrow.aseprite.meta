@@ -123,7 +123,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: ConversionArrow
     originalName: 
-    pivot: {x: 0.7288136, y: 0.11320755}
+    pivot: {x: 0.4915254, y: 0.4716981}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -144,7 +144,7 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 776814437
+    guid: 196690745
     name: ConversionArrow
     layerFlags: 0
     layerType: 0

@@ -144,7 +144,7 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 932250298
+    guid: -1425701342
     name: PlusButton
     layerFlags: 0
     layerType: 0
