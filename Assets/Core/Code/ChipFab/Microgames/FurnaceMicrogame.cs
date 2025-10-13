@@ -69,6 +69,14 @@ namespace SpaceFab.ChipFab
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
             base.Deactivate();
 
             StartButton.OnMouseDown.RemoveListener(HandleStartMouseDown);
@@ -102,11 +110,19 @@ namespace SpaceFab.ChipFab
                     TransitionToReady();
                     break;
                 case FurnaceMicrogameState.Ready:
+                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
+                        // auto start with automation
+                        HandleStartMouseDown();
+                    }
                     break;
                 case FurnaceMicrogameState.Heating:
                     ProcessMicrogame();
                     break;
                 case FurnaceMicrogameState.Finished:
+                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
+                        // auto end with automation
+                        HandleFinishClicked();
+                    }
                     break;
                 default:
                     break;

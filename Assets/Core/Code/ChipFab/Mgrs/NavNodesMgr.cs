@@ -10,7 +10,7 @@ namespace SpaceFab.ChipFab
 
         public List<ControlNavNode> Nodes;
 
-        private void Start()
+        private void Awake()
         {
             Instance = this;
         }

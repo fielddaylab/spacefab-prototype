@@ -123,7 +123,7 @@ namespace SpaceFab.ChipFab
         public static bool IsEqual(WaferData dataA, WaferData dataB)
         {
             // TODO: make more dynamic
-            bool isEqual = false;
+            bool isEqual = true;
             if (dataA.ResistLayer.State != dataB.ResistLayer.State)
             {
                 isEqual = false;

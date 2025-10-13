@@ -14,7 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_levelId: test-0
   m_availableStations: 000000000100000002000000030000000400000005000000
-  m_automatedStationData: []
+  m_automatedStationTriggers:
+  - TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 0
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
   m_initialWafer:
     ResistLayer:
       Mask:

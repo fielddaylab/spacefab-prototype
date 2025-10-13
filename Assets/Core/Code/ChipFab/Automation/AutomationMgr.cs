@@ -34,8 +34,8 @@ namespace SpaceFab.ChipFab
     {
         public static AutomationMgr Instance;
 
-        public List<AutomationTrigger> AllTriggers;
-        private List<AutomationTrigger> m_activeTriggers;
+        private List<AutomationTrigger> m_allTriggers = new List<AutomationTrigger>();
+        private List<AutomationTrigger> m_activeTriggers = new List<AutomationTrigger>();
 
         [HideInInspector] public AutomationInstruction CurrInstruction = default;
 
@@ -52,6 +52,8 @@ namespace SpaceFab.ChipFab
 
             Game.Events.Register(GameEvents.AutomationCompleted, HandleAutomationCompleted);
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+
+            m_allTriggers = ChipFabConfig.Instance.CurrLevel.AutomatedStationTriggers();
 
             ResetTriggers();
         }
@@ -105,7 +107,7 @@ namespace SpaceFab.ChipFab
         {
             m_activeTriggers.Clear();
 
-            foreach (var trigger in AllTriggers)
+            foreach (var trigger in m_allTriggers)
             {
                 m_activeTriggers.Add(trigger);
             }
@@ -127,6 +129,7 @@ namespace SpaceFab.ChipFab
         private void SetWaferAtIndex(int index)
         {
             var currNode = NavNodesMgr.Instance.Nodes[index];
+            ConveyorMgr.Instance.SetCurrNode(index);
 
             var pos = DragMgr.WaferInstance.transform.position;
             pos.x = currNode.transform.position.x;
@@ -136,8 +139,15 @@ namespace SpaceFab.ChipFab
             DragMgr.WaferInstance.transform.rotation = default;
 
             ControlsMgr.Instance.CurrDropZone = currNode.GetComponent<DropZone>();
-            ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
-            currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
+            if (ControlsMgr.Instance.ConveyorEnabled)
+            {
+                ConveyorMgr.Instance.TryActivateCurrStation();
+            } 
+            else
+            {
+                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
+                currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
+            }
         }
     }
 }

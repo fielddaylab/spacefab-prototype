@@ -29,12 +29,20 @@ namespace SpaceFab.ChipFab
 
         private void Awake()
         {
-            m_currNodeIndex = 0;
-            m_currNode = NavNodesMgr.Instance.Nodes[0];
-
             State = ConveyorState.Empty;
 
             Instance = this;
+        }
+
+        private void Start()
+        {
+            m_currNodeIndex = 0;
+            m_currNode = NavNodesMgr.Instance.Nodes[0];
+        }
+
+        public void SetCurrNode(int index)
+        {
+            m_currNode = NavNodesMgr.Instance.Nodes[index];
         }
 
         public void ProcessInputs()
@@ -58,12 +66,7 @@ namespace SpaceFab.ChipFab
                 if (State == ConveyorState.Full)
                 {
                     // try activate
-                    if (m_currNode.GetComponent<IStationMicrogame>() != null)
-                    {
-                        State = ConveyorState.Empty;
-                        ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
-                        m_currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
-                    }
+                    TryActivateCurrStation();
                 }
             }
             else if (Input.GetKeyDown(NavDownKey))
@@ -71,14 +74,7 @@ namespace SpaceFab.ChipFab
                 if (State == ConveyorState.Empty && DragMgr.WaferInstance != null)
                 {
                     // try cancel
-                    if (m_currNode.GetComponent<IStationMicrogame>() != null) {
-                        if (m_currNode.GetComponent<IStationMicrogame>().TryCancel())
-                        {
-                            State = ConveyorState.Full;
-                            CamMgr.Instance.UnloadCamPos(m_currNode.GetComponent<StationMicrogame>().CamPos.Pos);
-                            SetAtIndex(m_currNodeIndex);
-                        }
-                    }
+                    TryCancelCurrStation();
                 }
             }
         }
@@ -96,6 +92,34 @@ namespace SpaceFab.ChipFab
             }
 
             SetAtIndex(m_currNodeIndex + amt);
+        }
+
+        public void TryActivateCurrStation()
+        {
+            if (m_currNode.GetComponent<IStationMicrogame>() != null)
+            {
+                State = ConveyorState.Empty;
+                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
+                m_currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
+            }
+        }
+
+        public void TryCancelCurrStation()
+        {
+            if (m_currNode.GetComponent<IStationMicrogame>() != null)
+            {
+                if (m_currNode.GetComponent<IStationMicrogame>().TryCancel())
+                {
+                    TryReturnToConveyor();
+                }
+            }
+        }
+
+        public void TryReturnToConveyor()
+        {
+            State = ConveyorState.Full;
+            CamMgr.Instance.UnloadCamPos(m_currNode.GetComponent<StationMicrogame>().CamPos.Pos);
+            SetAtIndex(m_currNodeIndex);
         }
 
         private void SetAtIndex(int index)
