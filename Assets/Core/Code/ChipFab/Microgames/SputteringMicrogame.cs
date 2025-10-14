@@ -95,7 +95,7 @@ namespace SpaceFab.ChipFab
 
         private void ProcessMicrogame()
         {
-            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Etch)
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Sputter)
             {
                 if (!m_AutomationRoutine.Exists())
                 {

@@ -211,7 +211,7 @@ namespace SpaceFab.ChipFab
                     // generate dopant
                     DopantMgr.Instance.NDispenser.Dispense(false);
                 }
-                else if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
+                else if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.P)
                 {
                     // generate dopant
                     DopantMgr.Instance.PDispenser.Dispense(false);

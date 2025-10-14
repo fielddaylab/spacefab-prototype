@@ -136,7 +136,9 @@ namespace SpaceFab.ChipFab
 
             yield return 0.5f;
 
-            m_currRotation = instruction.Rotation;
+            m_currRotation = -instruction.Rotation;
+            if (m_currRotation < 0) { m_currRotation += 360; }
+            else if (m_currRotation > 359) { m_currRotation -= 360; }
             SetRotation();
 
             yield return 0.5f;

@@ -23,10 +23,27 @@ namespace SpaceFab.ChipFab
         public override void Activate(WaferState waferState)
         {
             base.Activate(waferState);
+
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Wash)
+            {
+                if (!m_AutomationRoutine.Exists())
+                {
+                    m_AutomationRoutine.Replace(AutomationRoutine());
+                }
+            }
         }
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Wash)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
+
             base.Deactivate();
         }
 
@@ -36,6 +53,15 @@ namespace SpaceFab.ChipFab
         }
 
         #endregion // IStationMicrogame
+
+        private IEnumerator AutomationRoutine()
+        {
+            yield return 0.5f;
+
+            HandleWashClicked();
+
+            yield return 0.5f;
+        }
 
         private void OnEnable()
         {

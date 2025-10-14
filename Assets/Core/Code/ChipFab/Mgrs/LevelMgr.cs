@@ -24,7 +24,7 @@ namespace SpaceFab.ChipFab
 
         public ClickBox ReturnBtn;
 
-        public WaferData TargetData;
+        [HideInInspector] public WaferData TargetData;
 
         private void Awake()
         {
@@ -38,6 +38,7 @@ namespace SpaceFab.ChipFab
         {
             Game.Events.Register(GameEvents.WaferStateUpdated, HandleWaferStateUpdated);
 
+            TargetData = ChipFabConfig.Instance.CurrLevel.TargetWafer();
             TargetSide.UpdateDisplay(TargetData);
             // TargetAngled.UpdateDisplay(TargetData);
 
