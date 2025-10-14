@@ -1317,7 +1317,7 @@ Transform:
   m_GameObject: {fileID: 235303918}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.766, z: -0.01}
+  m_LocalPosition: {x: 0, y: -0.621, z: -0.01}
   m_LocalScale: {x: 0.38329244, y: 0.16290726, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1714,7 +1714,7 @@ Transform:
   m_GameObject: {fileID: 296190486}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.017, y: -0.836, z: -0.01}
+  m_LocalPosition: {x: 0.017, y: -0.823, z: -0.01}
   m_LocalScale: {x: 0.64, y: 0.16290727, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2341,8 +2341,8 @@ Transform:
   m_GameObject: {fileID: 356667075}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.078, y: 0.622, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.156, y: 0.6, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1262135882}
@@ -5132,7 +5132,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0023832321, y: 0.085012436}
+  m_AnchoredPosition: {x: -0.0023832321, y: -0.132}
   m_SizeDelta: {x: 4.4482, y: 2.8158}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &722154309
@@ -6221,7 +6221,7 @@ MonoBehaviour:
   WaferVisual: {fileID: 1122557007}
   FluidVisual: {fileID: 356667076}
   StartFluidScale: 0.18
-  TargetFluidScale: 1.53
+  TargetFluidScale: 3
   Impulse: 0.1
   Friction: 0.35
 --- !u!114 &877745661
@@ -7149,7 +7149,7 @@ Transform:
   m_GameObject: {fileID: 972672243}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.766, z: -0.01}
+  m_LocalPosition: {x: 0, y: -0.638, z: -0.01}
   m_LocalScale: {x: 0.38329238, y: 0.16290727, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8024,7 +8024,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.18}
+  m_AnchoredPosition: {x: 0, y: -1.23}
   m_SizeDelta: {x: 7.5, y: 1.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1076884802
@@ -8609,8 +8609,8 @@ Transform:
   m_GameObject: {fileID: 1122557007}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.55, z: 0}
-  m_LocalScale: {x: 1.5356266, y: 1.5664163, z: 6.25}
+  m_LocalPosition: {x: 0, y: 0.4560004, z: 0}
+  m_LocalScale: {x: 3.0712538, y: 3.132833, z: 12.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1262135882}
@@ -9333,7 +9333,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.002383709, y: 0.085012436}
+  m_AnchoredPosition: {x: -0.002383709, y: -0.14}
   m_SizeDelta: {x: 4.4482, y: 2.8158}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1224265496
@@ -9812,11 +9812,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.23, z: 0}
-  m_LocalScale: {x: 0.16, y: 0.16, z: 0.16}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 1122557008}
   - {fileID: 356667076}
+  - {fileID: 1122557008}
   m_Father: {fileID: 1327876619}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1262135883
@@ -10664,7 +10664,7 @@ Transform:
   m_GameObject: {fileID: 1327876618}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.64, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16766,7 +16766,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0023832321, y: 0.085012436}
+  m_AnchoredPosition: {x: -0.0023832321, y: -0.124}
   m_SizeDelta: {x: 4.4482, y: 2.8158}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1998213784
@@ -17491,7 +17491,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac194e09cfa47b4f8467305480786e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AllTriggers: []
   CurrInstruction:
     Valid: 0
     TargetStation: 0

@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace SpaceFab.ChipFab
     {
         public GameObject Container;
         public CamPositioner CamPos;
+
+        protected Routine m_AutomationRoutine;
 
         protected void Start()
         {

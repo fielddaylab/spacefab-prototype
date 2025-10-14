@@ -42,6 +42,87 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
+  - TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 2
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 1
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 2
+      Rotation: 0
+  - TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 2
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 4
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 1
+      Rotation: 0
   m_initialWafer:
     ResistLayer:
       Mask:

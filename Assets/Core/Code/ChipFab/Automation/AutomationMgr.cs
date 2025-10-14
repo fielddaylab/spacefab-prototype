@@ -26,7 +26,7 @@ namespace SpaceFab.ChipFab
 
         [Header("Photolithograph")]
         public MaskId MaskToApply;
-        public float Rotation;
+        public int Rotation;
     }
 
 
@@ -60,7 +60,7 @@ namespace SpaceFab.ChipFab
 
         private void Update()
         {
-            if (ActivelyChecking)
+            if (ActivelyChecking && !CurrInstruction.Valid)
             {
                 CheckForAutomation();
             }
