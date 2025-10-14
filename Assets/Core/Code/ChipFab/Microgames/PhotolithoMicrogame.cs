@@ -69,6 +69,14 @@ namespace SpaceFab.ChipFab
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
             base.Deactivate();
 
             MaskAButton.OnMouseDown.RemoveAllListeners();

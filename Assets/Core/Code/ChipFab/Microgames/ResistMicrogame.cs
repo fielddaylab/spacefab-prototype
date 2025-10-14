@@ -47,6 +47,14 @@ namespace SpaceFab.ChipFab
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Resist)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
             base.Deactivate();
 
             m_state = ResistMicrogameState.Deactivated;

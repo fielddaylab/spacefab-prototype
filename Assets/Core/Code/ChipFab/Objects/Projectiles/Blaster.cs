@@ -40,6 +40,12 @@ namespace SpaceFab.ChipFab
         {
             if (!this.gameObject.activeInHierarchy) { return; }
 
+            if (AutomationMgr.Instance.CurrInstruction.Valid
+                && (AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Etch || AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Sputter))
+            {
+                return;
+            }
+
             if (m_reloadTimer > 0)
             {
                 m_reloadTimer -= Time.deltaTime;
@@ -55,9 +61,9 @@ namespace SpaceFab.ChipFab
             }
         }
 
-        public void Blast()
+        public void Blast(bool bypassTimer = false)
         {
-            if (m_reloadTimer > 0 ) { return; }
+            if (!bypassTimer && m_reloadTimer > 0) { return; }
 
             var projectile = Instantiate(Projectile).GetComponent<Projectile>();
             var dir = (LaunchPoint.position - this.transform.position).normalized;

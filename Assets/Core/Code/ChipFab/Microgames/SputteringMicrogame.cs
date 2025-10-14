@@ -49,6 +49,14 @@ namespace SpaceFab.ChipFab
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Sputter)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
             base.Deactivate();
 
             m_state = SputteringMicrogameState.Deactivated;
@@ -87,10 +95,46 @@ namespace SpaceFab.ChipFab
 
         private void ProcessMicrogame()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Etch)
+            {
+                if (!m_AutomationRoutine.Exists())
+                {
+                    m_AutomationRoutine.Replace(AutomationRoutine());
+                }
+            }
+            else
+            {
+                ProcessManual();
+            }
+        }
+
+        private void ProcessManual()
+        {
             if (Input.GetKey(FIRE_KEY))
             {
                 Blaster.Blast();
             }
+        }
+
+        private IEnumerator AutomationRoutine()
+        {
+            Blaster.transform.eulerAngles = new Vector3(0, 0, -40);
+
+            yield return 0.5f;
+
+            int steps = 50;
+            float amt = 80;
+            float stepAmt = amt / steps;
+            for (int i = 0; i < steps; i++)
+            {
+                Blaster.Blast(true);
+                Blaster.transform.Rotate(new Vector3(0, 0, 1) * stepAmt);
+                yield return 0.02f;
+            }
+
+            yield return 0.5f;
+
+            HandleFinishClicked();
         }
 
         private void TransitionToActivated()
