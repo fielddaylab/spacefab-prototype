@@ -18,16 +18,26 @@ namespace FieldDay.Animation.Sprites {
 
         [Header("Playback")]
         public SpriteAnimationPlaybackMode PlaybackMode = SpriteAnimationPlaybackMode.Loop;
-        public int LoopSectionStart;
+
+        [NonSerialized] public float CachedInvSampleRate;
+        [NonSerialized] public float CachedTotalDuration;
+
+#if UNITY_EDITOR
+        private void OnValidate() {
+            if (!Frame.IsActive(this)) {
+                return;
+            }
+
+            CachedInvSampleRate = 1f / SampleRate;
+            CachedTotalDuration = SpriteAnimationUtility.CalculateTotalDuration(this);
+        }
+#endif // UNITY_EDITOR
     }
 
     public enum SpriteAnimationPlaybackMode {
         Once,
         Loop,
         LoopRandom,
-        LoopSection,
-        PingPong,
-        PingPongOnce,
         StillFrames
     }
 

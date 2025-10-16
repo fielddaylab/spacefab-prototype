@@ -196,6 +196,9 @@ namespace FieldDay.Rendering {
             GameLoop.OnCanvasPreRender.Register(OnCanvasPreUpdate);
             GameLoop.OnApplicationPreRender.Register(OnApplicationPreRender);
             GameLoop.OnFrameAdvance.Register(OnApplicationPostRender);
+#if DEVELOPMENT
+            GameLoop.OnDebugUpdate.Register(OnDebugUpdate);
+#endif // DEVELOPMENT
 
             Game.Scenes.OnAnySceneUnloaded.Register(OnSceneLoadUnload);
             Game.Scenes.OnAnySceneEnabled.Register(OnSceneLoadUnload);
@@ -714,17 +717,50 @@ namespace FieldDay.Rendering {
 
         private enum DebuggingFlags {
             TraceExecution,
-            VisualizeEntireScreen
+            VisualizeEntireScreen,
+            DisplayGPUInfo
+        }
+
+        static private float s_ScreenshotScale = 4;
+
+        /// <summary>
+        /// Scale of all screenshots.
+        /// </summary>
+        static public float ScreenshotScale {
+            get { return s_ScreenshotScale; }
+            set { s_ScreenshotScale = Mathf.Clamp(s_ScreenshotScale, 1, 8); }
         }
 
 #if DEVELOPMENT
+
+        static private string s_CachedGraphicsDeviceName;
+        static private string s_CachedGraphicsDeviceVendor;
+        static private string s_CachedGraphicsDeviceVersion;
+
+        private void OnDebugUpdate() {
+            if (DebugFlags.IsFlagSet(DebuggingFlags.DisplayGPUInfo)) {
+                using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                    psb.Builder
+                        .Append("GPU Name: ").Append(s_CachedGraphicsDeviceName ?? (s_CachedGraphicsDeviceName = SystemInfo.graphicsDeviceName))
+                        .Append(" (").AppendNoAlloc(SystemInfo.graphicsDeviceID).Append(")")
+                        .Append("\nGPU Vendor: ").Append(s_CachedGraphicsDeviceVendor ?? (s_CachedGraphicsDeviceVendor = SystemInfo.graphicsDeviceVendor))
+                        .Append(" (").AppendNoAlloc(SystemInfo.graphicsDeviceVendorID).Append(")")
+                        .Append("\nGPU Version: ").Append(s_CachedGraphicsDeviceVersion ?? (s_CachedGraphicsDeviceVersion = SystemInfo.graphicsDeviceVersion))
+                        .Append("\nGPU Memory Size: ").AppendNoAlloc(SystemInfo.graphicsMemorySize).Append("MiB")
+                        .Append("\nShader Level: ").AppendNoAlloc(SystemInfo.graphicsShaderLevel);
+
+                    DebugDraw.AddLogText(psb, ColorBank.LightGray);
+                }
+            }
+        }
 
         [EngineMenuFactory]
         static private DMInfo CreateRenderDebugMenu() {
             DMInfo info = new DMInfo("Rendering", 16);
             DebugFlags.Menu.AddFlagToggle(info, "Trace Execution", DebuggingFlags.TraceExecution);
             DebugFlags.Menu.AddSingleFrameFlagButton(info, "Trace Execution (Frame)", DebuggingFlags.TraceExecution);
-            DebugFlags.Menu.AddFlagToggle(info, "Render Debug Info", DebuggingFlags.VisualizeEntireScreen);
+            DebugFlags.Menu.AddFlagToggle(info, "Render Screen Info", DebuggingFlags.VisualizeEntireScreen);
+            DebugFlags.Menu.AddFlagToggle(info, "Display GPU Info", DebuggingFlags.DisplayGPUInfo);
             info.AddDivider();
 
             DMInfo postProcessingMenu = new DMInfo("Post Processing", 4);
@@ -856,6 +892,12 @@ namespace FieldDay.Rendering {
             });
 
             info.AddSubmenu(shaderAudit);
+
+            DMInfo screenshots = new DMInfo("Screenshots");
+
+            screenshots.AddSlider("Resolution Scale", () => s_ScreenshotScale, (v) => s_ScreenshotScale = v, 1, 8, 0.5f, (f) => string.Format("{0:0.0}x", f));
+
+            info.AddSubmenu(screenshots);
 
             return info;
         }

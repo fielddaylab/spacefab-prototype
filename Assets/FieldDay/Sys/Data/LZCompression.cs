@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using BeauUtil;
 using BeauUtil.Debugger;
+using Unity.IL2CPP.CompilerServices;
 
 namespace FieldDay.Data {
 
@@ -80,6 +81,7 @@ namespace FieldDay.Data {
         /// <param name="srcSize">Total length of the data that can be matched.</param>
         /// <param name="seekWindow">The maximum amount of bytes backwards to search.</param>
         /// <param name="threshold">If a run length meets or exceeds this threshold, searching will stop.</param>
+        [Il2CppSetOption(Option.NullChecks, false)]
         static private Match FindBestMatch(byte* src, uint srcSize, uint seekWindow, uint threshold = DefaultRunLengthThreshold) {
             if (seekWindow < MinRunLength) {
                 return default;

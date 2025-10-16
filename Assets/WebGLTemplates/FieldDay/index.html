@@ -9,13 +9,18 @@
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
 
-#if BRAINPOP
-    <!-- brainpop -->
-    <script src="https://cdn.brainpop.com/games/assets/js/cameraProxyDOMCrossDomain.js"></script>
-    <script src="https://cdn.brainpop.com/games/assets/js/html2canvas.js"></script>
-#endif
-
     <script src="CompatibilityChecks.js"></script>
+	
+#if GOOGLE_PROJECT_ID
+	<!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{{ GOOGLE_PROJECT_ID }}}"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{{ GOOGLE_PROJECT_ID }}}');
+    </script>
+#endif
 
   </head>
   <body>
@@ -106,7 +111,7 @@
             progressBarFull.style.width = 100 * progress + "%";
           }).then((unityInstance) => {
             loadingBar.style.display = "none";
-        window.unityInstance = unityInstance;
+            window.unityInstance = unityInstance;
           }).catch((message) => {
             alert(message);
           });

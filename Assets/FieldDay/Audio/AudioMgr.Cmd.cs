@@ -5,6 +5,7 @@
 using BeauRoutine;
 using BeauUtil;
 using BeauUtil.Debugger;
+using FieldDay.Debugging;
 using FieldDay.Files;
 using System.IO;
 using UnityEngine;
@@ -12,7 +13,21 @@ using UnityEngine;
 namespace FieldDay.Audio {
     public sealed partial class AudioMgr {
         private void FlushCommandPipe() {
+#if DEVELOPMENT
+            bool shouldTrace = false;
+            if (DebugFlags.IsFlagSet(DebuggingFlags.TraceExecution)) {
+                shouldTrace = true;
+                if (m_CommandPipe.GetBuffer().Count > 0) {
+                    Log.Trace("[AudioMgr] Processing {0} commands...", m_CommandPipe.GetBuffer().Count);
+                }
+            }
+#endif // DEVELOPMENT
             while(m_CommandPipe.TryRead(out AudioCommand cmd)) {
+#if DEVELOPMENT
+                if (shouldTrace) {
+                    Log.Trace("[AudioMgr] Command '{0}'", cmd.Type.ToString());
+                }
+#endif // DEVELOPMENT
                 switch (cmd.Type) {
                     case AudioCommandType.StopAll: {
                         Cmd_StopAll();
@@ -91,6 +106,11 @@ namespace FieldDay.Audio {
 
                     case AudioCommandType.SetLoop: {
                         Cmd_SetLoop(cmd.SetLoop);
+                        break;
+                    }
+
+                    case AudioCommandType.SetUnloadFlag: {
+                        Cmd_SetUnloadFlag(cmd.SetUnloadFlag);
                         break;
                     }
 
@@ -259,10 +279,27 @@ namespace FieldDay.Audio {
             }
         }
 
-        private unsafe void Cmd_SetLoop(SetLoopCommandData loopData) {
+        private unsafe void Cmd_SetLoop(SetInstanceBoolCommandData loopData) {
             VoiceData voice = FindVoiceForId(loopData.Handle);
             if (voice != null) {
-                voice.Components.Source.loop = loopData.Loop;
+                voice.Components.Source.loop = loopData.Value;
+            }
+        }
+
+        private unsafe void Cmd_SetUnloadFlag(SetInstanceBoolCommandData flagData) {
+            VoiceData voice = FindVoiceForId(flagData.Handle);
+            if (voice != null) {
+                if (flagData.Value) {
+                    voice.Flags |= AudioPlaybackFlags.EagerUnload;
+                    if (voice.StreamingEntry != null) {
+                        voice.Flags |= AudioPlaybackFlags.EagerUnload;
+                    }
+                } else {
+                    voice.Flags &= ~AudioPlaybackFlags.EagerUnload;
+                    if (voice.StreamingEntry != null) {
+                        voice.Flags &= ~AudioPlaybackFlags.EagerUnload;
+                    }
+                }
             }
         }
 
@@ -327,7 +364,7 @@ namespace FieldDay.Audio {
                     }
                 }
 
-                evtProperties.Volume = evt.Volume.Generate();
+                evtProperties.Volume = evt.Volume.Generate() * evt.VolumeMultiplier;
                 evtProperties.Pitch = evt.Pitch.Generate();
                 evtProperties.Pan = evt.Pan.Generate();
 
@@ -344,6 +381,10 @@ namespace FieldDay.Audio {
                     if (evt.RandomizeStartTime) {
                         cmd.Flags |= AudioPlaybackFlags.RandomizePlaybackStart;
                     }
+                }
+
+                if (evt.UnloadAfterPlayback) {
+                    cmd.Flags |= AudioPlaybackFlags.EagerUnload;
                 }
 
                 if (cmd.Tag.IsEmpty) {
@@ -442,6 +483,9 @@ namespace FieldDay.Audio {
             if (streamedClip != null) {
                 streamedClip.RefCount++;
                 Assert.True(streamedClip.RefCount != 0, "Too many references to streamed clip");
+                if ((cmd.Flags & AudioPlaybackFlags.EagerUnload) != 0) {
+                    streamedClip.Flags |= StreamedClipFlags.EagerUnload;
+                }
             }
 
 #if UNITY_EDITOR

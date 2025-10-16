@@ -1,0 +1,25 @@
+{
+    "name": "FieldDay.Analytics",
+    "rootNamespace": "",
+    "references": [
+        "BeauRoutine",
+        "BeauUtil",
+        "FieldDay.Core",
+        "BeauUtil.Parse",
+        "BeauPools",
+        "BeauData",
+        "ScriptableBake",
+        "EasyAssetStreaming",
+        "Unity.TextMeshPro",
+		"OGD.Log"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
