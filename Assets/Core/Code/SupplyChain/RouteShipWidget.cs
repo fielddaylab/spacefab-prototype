@@ -33,13 +33,13 @@ namespace SpaceFab.SupplyChain {
 
         [Header("Stats")]
         public CanvasGroup StatsGroup;
-        public GuiMeter SpeedStat;
-        public GuiMeter CostStat;
+        public GuiCounter SpeedStat;
+        public GuiCounter CostStat;
 
         [Header("Route")]
         public CanvasGroup RouteGroup;
         public Graphic RouteColorIndicator;
-        public GuiMeter RouteTime;
+        public GuiCounter RouteTime;
         public TMP_Text RouteCost;
         public Image RouteReliability;
         public GameObject[] RouteMaterialSlots;

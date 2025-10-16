@@ -736,18 +736,23 @@ namespace FieldDay.Rendering {
         static private string s_CachedGraphicsDeviceName;
         static private string s_CachedGraphicsDeviceVendor;
         static private string s_CachedGraphicsDeviceVersion;
+        static private string s_CachedGraphicsDeviceType;
+        static private string s_CachedNPOTSupport;
 
         private void OnDebugUpdate() {
             if (DebugFlags.IsFlagSet(DebuggingFlags.DisplayGPUInfo)) {
                 using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
                     psb.Builder
-                        .Append("GPU Name: ").Append(s_CachedGraphicsDeviceName ?? (s_CachedGraphicsDeviceName = SystemInfo.graphicsDeviceName))
+                        .Append("GPU Type: ").Append(s_CachedGraphicsDeviceType ?? (s_CachedGraphicsDeviceType = SystemInfo.graphicsDeviceType.ToString()))
+                        .Append("\nGPU Name: ").Append(s_CachedGraphicsDeviceName ?? (s_CachedGraphicsDeviceName = SystemInfo.graphicsDeviceName))
                         .Append(" (").AppendNoAlloc(SystemInfo.graphicsDeviceID).Append(")")
                         .Append("\nGPU Vendor: ").Append(s_CachedGraphicsDeviceVendor ?? (s_CachedGraphicsDeviceVendor = SystemInfo.graphicsDeviceVendor))
                         .Append(" (").AppendNoAlloc(SystemInfo.graphicsDeviceVendorID).Append(")")
                         .Append("\nGPU Version: ").Append(s_CachedGraphicsDeviceVersion ?? (s_CachedGraphicsDeviceVersion = SystemInfo.graphicsDeviceVersion))
                         .Append("\nGPU Memory Size: ").AppendNoAlloc(SystemInfo.graphicsMemorySize).Append("MiB")
-                        .Append("\nShader Level: ").AppendNoAlloc(SystemInfo.graphicsShaderLevel);
+                        .Append("\nShader Level: ").AppendNoAlloc(SystemInfo.graphicsShaderLevel)
+                        .Append("\nMax Texture Size: ").AppendNoAlloc(SystemInfo.maxTextureSize)
+                        .Append("\nNPOT Support: ").Append(s_CachedNPOTSupport ?? (s_CachedNPOTSupport = SystemInfo.npotSupport.ToString()));
 
                     DebugDraw.AddLogText(psb, ColorBank.LightGray);
                 }

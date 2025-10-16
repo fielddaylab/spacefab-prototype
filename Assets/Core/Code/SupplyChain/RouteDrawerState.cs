@@ -10,6 +10,7 @@ namespace SpaceFab.SupplyChain {
         [Serializable] public sealed class RouteLinePool : SerializablePool<RouteLineRenderer> { }
 
         public PathNodePool TempPathNodePool;
+        public bool AllowTemporaryNodes;
 
         [NonSerialized] public RouteDrawState DrawState;
     }

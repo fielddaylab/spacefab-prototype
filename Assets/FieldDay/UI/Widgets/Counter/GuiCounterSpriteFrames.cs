@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace FieldDay.UI.Widgets {
-    public sealed class GuiMeterSpriteFrames : GuiMeter.Style {
+    public sealed class GuiCounterSpriteFrames : GuiCounter.Style {
         public SpriteRenderer Sprite;
         [FormerlySerializedAs("Target")] public Image GuiSprite;
         public Sprite[] Values;

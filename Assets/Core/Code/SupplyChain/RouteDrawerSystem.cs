@@ -56,7 +56,7 @@ namespace SpaceFab.SupplyChain {
 
                     if (Game.Input.IsMousePressed(MouseButton.Left)) {
                         PathNode nodeToAdd = m_StateB.Node;
-                        if (!nodeToAdd && m_StateB.MousePosition.HasValue) {
+                        if (!nodeToAdd && m_StateA.AllowTemporaryNodes && m_StateB.MousePosition.HasValue) {
                             nodeToAdd = m_StateA.TempPathNodePool.Alloc();
                             nodeToAdd.transform.localPosition = m_StateB.MousePosition.Value;
                             nodeToAdd.transform.localEulerAngles = new Vector3(0, 0, RNG.Instance.NextFloat(-180, 180));

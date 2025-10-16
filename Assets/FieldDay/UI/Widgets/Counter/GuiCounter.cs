@@ -3,18 +3,20 @@ using System;
 using UnityEngine;
 
 namespace FieldDay.UI.Widgets {
-    public sealed class GuiMeter : GuiWidget {
+    public sealed class GuiCounter : GuiWidget {
         public abstract class Style : GuiWidgetStyle<int> {
         }
 
-        [SerializeField] private int m_MaxValue;
         [SerializeField] private int m_StartingValue;
+        [SerializeField] private int m_MaxValue;
         [SerializeField, Required] private Style m_Style;
 
-        [NonSerialized] private int m_CurrentValue;
+        [NonSerialized] private int m_CurrentValue = -1;
 
         private void Awake() {
-            m_CurrentValue = m_StartingValue;
+            if (m_CurrentValue < 0) {
+                SetValue(m_StartingValue, true);
+            }
         }
 
         public int MaxValue {

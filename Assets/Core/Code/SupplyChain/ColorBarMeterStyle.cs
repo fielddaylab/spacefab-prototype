@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace SpaceFab.SupplyChain {
-    public sealed class ColorBarMeterStyle : GuiMeter.Style {
+    public sealed class ColorBarMeterStyle : GuiCounter.Style {
         public Graphic[] Targets;
         public Color32 OnColor;
         public Color32 OffColor;

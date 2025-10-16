@@ -22,7 +22,7 @@ namespace SpaceFab.SupplyChain {
 
         public GameObject FulfilledGroup;
         public TMP_Text ProfitLabel;
-        public GuiMeter TimeLabel;
+        public GuiCounter TimeLabel;
 
         [NonSerialized] public FabMaterialSet DesiredMaterials;
         [NonSerialized] public int SellPrice;
@@ -37,6 +37,10 @@ namespace SpaceFab.SupplyChain {
             double probability = 1;
             for(int i = 0; i < routesState.RouteCount; i++) {
                 var stats = routesState.Routes[i].Stats;
+                if (stats.Time <= 0) {
+                    continue;
+                }
+
                 cost += (int) stats.Cost;
                 time = Math.Max(time, stats.Time);
                 probability *= stats.Reliability / (double) SupplyUtility.MaxReliability;

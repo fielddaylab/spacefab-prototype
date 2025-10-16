@@ -2,7 +2,7 @@ using BeauUtil.Debugger;
 using UnityEngine;
 
 namespace FieldDay.UI.Widgets {
-    public sealed class GuiMeterSegmented : GuiMeter.Style {
+    public sealed class GuiCounterSegmented : GuiCounter.Style {
         public GameObject[] EnabledObjects;
         public GameObject[] DisabledObjects;
 

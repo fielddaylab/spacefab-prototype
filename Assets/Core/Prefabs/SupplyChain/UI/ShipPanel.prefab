@@ -1612,8 +1612,8 @@ MonoBehaviour:
   m_Class:
     m_Source: 
     m_HashValue: 0
-  m_MaxValue: 9
   m_StartingValue: 0
+  m_MaxValue: 9
   m_Style: {fileID: 7044387053410504137}
 --- !u!114 &7044387053410504137
 MonoBehaviour:

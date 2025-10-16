@@ -199,21 +199,21 @@ namespace FieldDay {
 
         #region Lerp
 
-        static public ColorPalette2 Lerp(ColorPalette2 a, ColorPalette2 b, float t) {
+        static public ColorPalette2 Lerp(in ColorPalette2 a, in ColorPalette2 b, float t) {
             return new ColorPalette2() {
                 Content = Color32.LerpUnclamped(a.Content, b.Content, t),
                 Background = Color32.LerpUnclamped(a.Background, b.Background, t)
             };
         }
 
-        static public ColorPalette2F Lerp(ColorPalette2F a, ColorPalette2F b, float t) {
+        static public ColorPalette2F Lerp(in ColorPalette2F a, in ColorPalette2F b, float t) {
             return new ColorPalette2() {
                 Content = Color.LerpUnclamped(a.Content, b.Content, t),
                 Background = Color.LerpUnclamped(a.Background, b.Background, t)
             };
         }
 
-        static public ColorPalette4 Lerp(ColorPalette4 a, ColorPalette4 b, float t) {
+        static public ColorPalette4 Lerp(in ColorPalette4 a, in ColorPalette4 b, float t) {
             return new ColorPalette4() {
                 Content = Color32.LerpUnclamped(a.Content, b.Content, t),
                 Background = Color32.LerpUnclamped(a.Background, b.Background, t),
@@ -222,7 +222,7 @@ namespace FieldDay {
             };
         }
 
-        static public ColorPalette4F Lerp(ColorPalette4F a, ColorPalette4F b, float t) {
+        static public ColorPalette4F Lerp(in ColorPalette4F a, in ColorPalette4F b, float t) {
             return new ColorPalette4F() {
                 Content = Color.LerpUnclamped(a.Content, b.Content, t),
                 Background = Color.LerpUnclamped(a.Background, b.Background, t),
@@ -235,58 +235,58 @@ namespace FieldDay {
 
         #region Apply
 
-        static public void Apply(ColorPalette2 palette, ColorPaletteTargetSet2 target) {
+        static public void Apply(in ColorPalette2 palette, in ColorPaletteTargetSet2 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
         }
 
-        static public void Apply(ColorPalette2 palette, ColorPaletteTarget2 target) {
+        static public void Apply(in ColorPalette2 palette, in ColorPaletteTarget2 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
         }
 
-        static public void Apply(ColorPalette2 palette, ColorChannelTarget content, ColorChannelTarget background) {
+        static public void Apply(in ColorPalette2 palette, in ColorChannelTarget content, in ColorChannelTarget background) {
             content.Apply(palette.Content);
             background.Apply(palette.Background);
         }
 
-        static public void Apply(ColorPalette2F palette, ColorPaletteTargetSet2 target) {
+        static public void Apply(in ColorPalette2F palette, in ColorPaletteTargetSet2 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
         }
 
-        static public void Apply(ColorPalette2F palette, ColorPaletteTarget2 target) {
+        static public void Apply(in ColorPalette2F palette, in ColorPaletteTarget2 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
         }
 
-        static public void Apply(ColorPalette2F palette, ColorChannelTarget content, ColorChannelTarget background) {
+        static public void Apply(in ColorPalette2F palette, in ColorChannelTarget content, in ColorChannelTarget background) {
             content.Apply(palette.Content);
             background.Apply(palette.Background);
         }
 
-        static public void Apply(ColorPalette4 palette, ColorPaletteTargetSet4 target) {
+        static public void Apply(in ColorPalette4 palette, in ColorPaletteTargetSet4 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
             target.Highlight.Apply(palette.Highlight);
             target.Shadow.Apply(palette.Shadow);
         }
 
-        static public void Apply(ColorPalette4 palette, ColorPaletteTarget4 target) {
+        static public void Apply(in ColorPalette4 palette, in ColorPaletteTarget4 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
             target.Highlight.Apply(palette.Highlight);
             target.Shadow.Apply(palette.Shadow);
         }
 
-        static public void Apply(ColorPalette4F palette, ColorPaletteTargetSet4 target) {
+        static public void Apply(in ColorPalette4F palette, in ColorPaletteTargetSet4 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
             target.Highlight.Apply(palette.Highlight);
             target.Shadow.Apply(palette.Shadow);
         }
 
-        static public void Apply(ColorPalette4F palette, ColorPaletteTarget4 target) {
+        static public void Apply(in ColorPalette4F palette, in ColorPaletteTarget4 target) {
             target.Content.Apply(palette.Content);
             target.Background.Apply(palette.Background);
             target.Highlight.Apply(palette.Highlight);
@@ -305,7 +305,7 @@ namespace FieldDay {
         public ColorGroup Group;
 
         [Il2CppSetOption(Option.NullChecks, false)]
-        public void Apply(Color color) {
+        public readonly void Apply(Color color) {
             if (Graphic) {
                 Graphic.color = color;
             } else if (Sprite) {
@@ -398,7 +398,7 @@ namespace FieldDay {
 
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         [Il2CppSetOption(Option.NullChecks, false)]
-        public void Apply(Color color) {
+        public readonly void Apply(Color color) {
             for (int i = 0, len = Graphics.Length; i < len; i++) {
                 Graphics[i].color = color;
             }
@@ -410,7 +410,7 @@ namespace FieldDay {
             }
         }
 
-        public bool IsEmpty {
+        public readonly bool IsEmpty {
             get {
                 return IsNullOrEmpty(Graphics) && IsNullOrEmpty(Sprites) && IsNullOrEmpty(Groups);
             }
@@ -429,7 +429,7 @@ namespace FieldDay {
         public ColorChannelTargetSet Content;
         public ColorChannelTargetSet Background;
 
-        public bool IsEmpty {
+        public readonly bool IsEmpty {
             get {
                 return Content.IsEmpty && Background.IsEmpty;
             }
@@ -443,7 +443,7 @@ namespace FieldDay {
         public ColorChannelTargetSet Highlight;
         public ColorChannelTargetSet Shadow;
 
-        public bool IsEmpty {
+        public readonly bool IsEmpty {
             get {
                 return Content.IsEmpty && Background.IsEmpty && Highlight.IsEmpty && Shadow.IsEmpty;
             }
