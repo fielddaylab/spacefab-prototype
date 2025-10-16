@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShipA
   m_EditorClassIdentifier: 
   DisplayName: The Scar
-  Icon: {fileID: 21300000, guid: 573c2d600a1939248b3ef50454276986, type: 3}
+  Icon: {fileID: -7408593085392513125, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
   Speed: 4
   Capacity: 1
   Defense: 1

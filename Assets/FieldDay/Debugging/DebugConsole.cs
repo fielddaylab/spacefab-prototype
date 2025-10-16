@@ -444,6 +444,8 @@ namespace FieldDay.Debugging {
                 }
             }
 
+            DebugDraw.AddRenderToggle(engineMenu, "Debug Drawing");
+
             DMInfo.SortByLabel(engineMenu);
 
             DMInfo.MergeSubmenu(s_RootMenu, engineMenu, false);

@@ -1557,13 +1557,6 @@ namespace FieldDay.Debugging {
         }
 
         #endregion // Static API
-
-        [EngineMenuFactory]
-        static private DMInfo CreateDrawingEngineMenu() {
-            DMInfo info = new DMInfo("Debug Drawing", 4);
-            AddRenderToggle(info, null);
-            return info;
-        }
     }
 
     /// <summary>

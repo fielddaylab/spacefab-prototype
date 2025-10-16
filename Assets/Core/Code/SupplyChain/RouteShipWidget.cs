@@ -9,6 +9,7 @@ using FieldDay.HID;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
 using FieldDay.UI;
+using FieldDay.UI.Widgets;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -17,15 +18,6 @@ using UnityEngine.UI;
 
 namespace SpaceFab.SupplyChain {
     public sealed class RouteShipWidget : MonoBehaviour, IScenePreload {
-        #region Types
-
-        [Serializable]
-        public struct StatBar {
-            public EllipseGraphic[] Stats;
-        }
-
-        #endregion // Types
-
         #region Inspector
 
         public LayoutOffset Positioner;
@@ -41,18 +33,19 @@ namespace SpaceFab.SupplyChain {
 
         [Header("Stats")]
         public CanvasGroup StatsGroup;
-        public StatBar SpeedStat;
-        public StatBar CapacityStat;
-        public StatBar DefenseStat;
-        public StatBar CostStat;
+        public GuiMeter SpeedStat;
+        public GuiMeter CostStat;
 
         [Header("Route")]
         public CanvasGroup RouteGroup;
         public Graphic RouteColorIndicator;
-        public TMP_Text RouteTime;
+        public GuiMeter RouteTime;
         public TMP_Text RouteCost;
-        public TMP_Text RouteReliability;
+        public Image RouteReliability;
+        public GameObject[] RouteMaterialSlots;
         public Image[] RouteMaterials;
+        public GameObject TimeAlertGroup;
+        public GameObject ReliabilityAlertGroup;
 
         #endregion // Inspector
 
@@ -85,20 +78,16 @@ namespace SpaceFab.SupplyChain {
                 widget.IconDisplay.sprite = ship.Icon;
                 widget.NameDisplay.SetText(ship.DisplayName);
 
-                PopulateWidgetStats(widget.SpeedStat, ship.Speed);
-                PopulateWidgetStats(widget.CapacityStat, ship.Capacity);
-                PopulateWidgetStats(widget.DefenseStat, ship.Defense);
-                PopulateWidgetStats(widget.CostStat, ship.Cost);
+                widget.SpeedStat.SetValue(ship.Speed, false);
+                widget.CostStat.SetValue(ship.Cost, false);
 
                 widget.RouteColorIndicator.color = widget.RouteColor;
+
+                for(int i = 0; i < widget.RouteMaterialSlots.Length; i++) {
+                    widget.RouteMaterialSlots[i].SetActive(ship.Capacity > i);
+                }
             } else {
                 widget.ShipId = default;
-            }
-        }
-
-        static public void PopulateWidgetStats(in RouteShipWidget.StatBar statBar, int statValue) {
-            for (int i = 0; i < statBar.Stats.Length; i++) {
-                statBar.Stats[i].Outline = i >= statValue;
             }
         }
 
@@ -112,24 +101,20 @@ namespace SpaceFab.SupplyChain {
                 return;
             }
 
-            using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
+            SupplyChainSprites supplySprites = Find.GlobalAsset<SupplyChainSprites>();
+            SupplyChainMath supplyMath = Find.GlobalAsset<SupplyChainMath>();
+
+            using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
                 psb.Builder.Append("$").AppendNoAlloc(stats.Cost);
                 widget.RouteCost.SetText(psb.Builder);
 
-                psb.Builder.Clear();
-                psb.Builder.AppendNoAlloc(stats.Time).Append("C");
+                widget.RouteTime.SetValue(stats.Time, false);
 
-                widget.RouteTime.SetText(psb.Builder);
+                float percentage = (float) stats.Reliability / SupplyUtility.MaxReliability;
 
-                float percentage = 100f * stats.Reliability / SupplyUtility.MaxReliability;
-
-                psb.Builder.Clear();
-                psb.Builder.AppendNoAlloc((int)percentage).Append("%");
-
-                widget.RouteReliability.SetText(psb.Builder);
+                int defenseIndex = supplyMath.GetReliabilityIndex(percentage);
+                widget.RouteReliability.sprite = supplySprites.DefenseSprite(defenseIndex);
             }
-
-            SupplyChainSprites supplySprites = Find.GlobalAsset<SupplyChainSprites>();
 
             unsafe {
                 int materialCount = 0;
@@ -145,6 +130,11 @@ namespace SpaceFab.SupplyChain {
             }
 
             widget.RouteGroup.gameObject.SetActive(true);
+        }
+
+        static public void PopulateWidgetBottleneckAlerts(RouteShipWidget widget, bool isTimeBottleneck, bool isReliabilityBottleneck) {
+            widget.TimeAlertGroup.SetActive(isTimeBottleneck);
+            widget.ReliabilityAlertGroup.SetActive(isReliabilityBottleneck);
         }
 
         static private unsafe void PopulateMaterialCategory(RouteShipWidget widget, FabMaterial material, int count, ref int totalMaterials, SupplyChainSprites sprites) {

@@ -11,10 +11,10 @@ using BeauUtil.Debugger;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Unity.IL2CPP.CompilerServices;
+using UnityEngine.EventSystems;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine.EventSystems;
 #endif // UNITY_EDITOR
 
 namespace FieldDay.Debugging {

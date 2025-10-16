@@ -15,7 +15,7 @@ namespace SpaceFab.SupplyChain {
 
     public enum HazardType {
         Risky,
-        TimeDialation,
+        TimeDilation,
         Tariff,
     }
 }

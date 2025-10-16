@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638937935664050473
+  platformSettingsDirtyTick: 638959595206378560
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -148,8 +148,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 107
-      y: 2
+      x: 2
+      y: 117
       width: 101
       height: 111
     spriteID: 4f3f480d046927d459e3e34d683814bd
@@ -160,7 +160,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 107, y: 2}
+    uvTransform: {x: 2, y: 117}
   - name: Defense2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -169,7 +169,7 @@ ScriptedImporter:
     rect:
       serializedVersion: 2
       x: 2
-      y: 117
+      y: 232
       width: 101
       height: 111
     spriteID: 047be6c4b55e3574faae3485a12e2324
@@ -180,8 +180,48 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 2, y: 117}
+    uvTransform: {x: 2, y: 232}
   - name: Defense3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 347
+      width: 101
+      height: 111
+    spriteID: 84d015c0e13bb8847b4fdbfe1be3e5e2
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 347}
+  - name: Defense4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 107
+      y: 2
+      width: 101
+      height: 111
+    spriteID: cf655aa8b6d2ad34f94ee41f770fd2b2
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 107, y: 2}
+  - name: DefenseAlert
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -192,7 +232,7 @@ ScriptedImporter:
       y: 117
       width: 101
       height: 111
-    spriteID: 84d015c0e13bb8847b4fdbfe1be3e5e2
+    spriteID: c3a545ca055886a4899cb3e6f7694c60
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -246,6 +286,24 @@ ScriptedImporter:
         width: 101
         height: 111
       spriteId: 84d015c0e13bb8847b4fdbfe1be3e5e2
+    - name: Frame_4
+      frameIndex: 4
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 10
+        width: 101
+        height: 111
+      spriteId: cf655aa8b6d2ad34f94ee41f770fd2b2
+    - name: Frame_5
+      frameIndex: 5
+      additiveSortOrder: 0
+      cellRect:
+        x: 12
+        y: 10
+        width: 101
+        height: 111
+      spriteId: c3a545ca055886a4899cb3e6f7694c60
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -267,7 +325,7 @@ ScriptedImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
     crunchedCompression: 0
@@ -286,6 +344,18 @@ ScriptedImporter:
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
   - name: WebGL
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Android
     overridden: 0
     ignorePlatformSupport: 0
     maxTextureSize: 2048

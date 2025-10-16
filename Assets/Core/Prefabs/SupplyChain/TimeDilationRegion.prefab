@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 7067860165860044556}
   - component: {fileID: 2284195866055498355}
   m_Layer: 30
-  m_Name: TimeDialationRegion
+  m_Name: TimeDilationRegion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

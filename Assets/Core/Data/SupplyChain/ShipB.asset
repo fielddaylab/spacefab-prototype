@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShipB
   m_EditorClassIdentifier: 
   DisplayName: IT904
-  Icon: {fileID: 21300000, guid: 290cf007a443d2c4c9835144ed5fe988, type: 3}
+  Icon: {fileID: -8407637396049678052, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
   Speed: 1
   Capacity: 3
   Defense: 2

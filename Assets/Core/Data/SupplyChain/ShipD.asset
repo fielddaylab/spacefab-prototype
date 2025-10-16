@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShipD
   m_EditorClassIdentifier: 
   DisplayName: Helper
-  Icon: {fileID: -1797078844852884309, guid: 333b8899ba13a184ca35b8ed2e617e4a, type: 3}
+  Icon: {fileID: 125457502999409166, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
   Speed: 1
   Capacity: 4
   Defense: 4

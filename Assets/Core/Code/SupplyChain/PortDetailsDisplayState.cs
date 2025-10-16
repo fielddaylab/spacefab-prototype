@@ -41,8 +41,6 @@ namespace SpaceFab.SupplyChain {
                         PopulatePortDetails(details, port, sprites);
                         port.Visuals.CurrentDetails = details;
                     }
-
-                    port.Visuals.CurrentDetails.Cursor.enabled = mode == PortDetailsMode.Interactive;
                 }
             }
         }

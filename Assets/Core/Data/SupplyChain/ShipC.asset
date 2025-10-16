@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShipC
   m_EditorClassIdentifier: 
   DisplayName: Harry
-  Icon: {fileID: 21300000, guid: 7a79ba6c2c0b14744a446b1fe75f0d9d, type: 3}
+  Icon: {fileID: 512354004875479031, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
   Speed: 2
   Capacity: 2
   Defense: 3

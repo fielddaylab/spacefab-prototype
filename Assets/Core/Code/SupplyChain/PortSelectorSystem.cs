@@ -34,7 +34,6 @@ namespace SpaceFab.SupplyChain {
                 } else {
                     LiveRouteUtility.TryAddPort(route, port);
                 }
-
             }
         }
     }

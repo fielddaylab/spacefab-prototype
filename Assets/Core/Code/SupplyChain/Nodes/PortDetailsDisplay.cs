@@ -17,10 +17,6 @@ namespace SpaceFab.SupplyChain {
         public TMP_Text Time;
         public SpriteRenderer Defense;
 
-        [Header("Interaction")]
-        public Collider2D Clickable;
-        public CursorHint Cursor;
-
         [NonSerialized] public Port Parent;
 
         void IPoolAllocHandler.OnAlloc() {

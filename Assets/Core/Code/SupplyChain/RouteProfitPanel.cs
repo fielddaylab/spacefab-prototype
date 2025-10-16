@@ -8,6 +8,7 @@ using FieldDay.Components;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
 using FieldDay.UI;
+using FieldDay.UI.Widgets;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -17,7 +18,11 @@ using UnityEngine.UI;
 
 namespace SpaceFab.SupplyChain {
     public sealed class RouteProfitPanel : SharedPanel, IRegistrationCallbacks {
-        public TMP_Text Label;
+        public GameObject NotFulfilledGroup;
+
+        public GameObject FulfilledGroup;
+        public TMP_Text ProfitLabel;
+        public GuiMeter TimeLabel;
 
         [NonSerialized] public FabMaterialSet DesiredMaterials;
         [NonSerialized] public int SellPrice;
@@ -44,15 +49,19 @@ namespace SpaceFab.SupplyChain {
                 && materials.Semiconductor >= DesiredMaterials.Semiconductor
                 && materials.DopantN >= DesiredMaterials.DopantN
                 && materials.DopantP >= DesiredMaterials.DopantP) {
+                NotFulfilledGroup.SetActive(false);
+                FulfilledGroup.SetActive(true);
                 using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
                     if (profit < 0) {
                         psb.Builder.Append('-');
                     }
-                    psb.Builder.Append('$').AppendNoAlloc(Math.Abs(profit)).Append(" in ").AppendNoAlloc(time).Append("C (").AppendNoAlloc((int) (100 * probability)).Append("%)");
-                    Label.SetText(psb);
+                    psb.Builder.Append('$').AppendNoAlloc(Math.Abs(profit));
+                    ProfitLabel.SetText(psb);
+                    TimeLabel.SetValue(time, false);
                 }
             } else {
-                Label.SetText("---");
+                FulfilledGroup.SetActive(false);
+                NotFulfilledGroup.SetActive(true);
             }
         }
 

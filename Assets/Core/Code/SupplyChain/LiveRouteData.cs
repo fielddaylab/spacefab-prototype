@@ -18,6 +18,7 @@ namespace SpaceFab.SupplyChain {
         public StringHash32 ShipId;
         public SupplyRouteStats Stats;
         public Color32 LineColor;
+        public int CarryingCapacity;
 
         public int NodeCount;
         public int PortCount;
@@ -121,6 +122,11 @@ namespace SpaceFab.SupplyChain {
             SetPortOwner(port, liveRoute);
             UpdateStats(liveRoute);
             return true;
+        }
+
+        static public bool CanAddPort(LiveRouteData liveRoute, Port port) {
+            return liveRoute.PortCount < LiveRouteData.MaxPorts
+                && (port.Type != PortType.Supply || CountPortsOfType(liveRoute, PortType.Supply) < liveRoute.CarryingCapacity);
         }
 
         static public int CountPortsOfType(LiveRouteData liveRoute, PortType type) {
@@ -281,7 +287,7 @@ namespace SpaceFab.SupplyChain {
             float speed = mathSettings.Speeds[ship.Speed - 1];
             float dialationFactor = mathSettings.TimeDialationSpeedFactor;
 
-            float timeDialatedDistance = hazardDistances[(int)HazardType.TimeDialation];
+            float timeDialatedDistance = hazardDistances[(int)HazardType.TimeDilation];
             float totalTime = (distance - timeDialatedDistance) / speed
                 + (timeDialatedDistance) / (speed * dialationFactor);
 
@@ -341,8 +347,6 @@ namespace SpaceFab.SupplyChain {
                 }
             }
 
-            reliability *= mathSettings.ShipReliabilities[ship.Defense - 1];
-
             if (isCurrentRoute) {
                 for (int i = 0; i < route.HazardCount; i++) {
                     SetHazardOwner(route.IntersectingHazards[i], route);
@@ -366,7 +370,7 @@ namespace SpaceFab.SupplyChain {
                     .Append("\n   Distance: ").AppendNoAlloc(distance, 2)
                     .Append("\n   Distance (Risky Hazard): ").AppendNoAlloc(hazardDistances[(int)HazardType.Risky], 2)
                     .Append("\n   Distance (Tariff): ").AppendNoAlloc(hazardDistances[(int)HazardType.Tariff], 2)
-                    .Append("\n   Distance (Time Dialation): ").AppendNoAlloc(hazardDistances[(int)HazardType.TimeDialation], 2)
+                    .Append("\n   Distance (Time Dialation): ").AppendNoAlloc(hazardDistances[(int)HazardType.TimeDilation], 2)
                     .Append("\n   Cost: $").AppendNoAlloc(stats.Cost)
                     .Append("\n   Time: ").AppendNoAlloc(stats.Time).Append(" cycles")
                     .Append("\n   Reliability: ").AppendNoAlloc((int) (reliability * 100)).Append("%");

@@ -35,7 +35,7 @@ namespace FieldDay.Animation.Sprites {
     }
 
     public enum SpriteAnimationPlaybackMode {
-        Once,
+        OneShot,
         Loop,
         LoopRandom,
         StillFrames

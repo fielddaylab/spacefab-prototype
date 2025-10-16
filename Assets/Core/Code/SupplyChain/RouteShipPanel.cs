@@ -51,13 +51,30 @@ namespace SpaceFab.SupplyChain {
         }
 
         private void OnRouteStatsUpdated(StringHash32 shipId) {
-            LiveRouteData routeData = LiveRouteUtility.GetLiveRoute(shipId);
+            LiveRoutesState routesState = Find.State<LiveRoutesState>();
 
-            for(int i = 0; i < ShipCount; i++) {
+            int highestTime = 0;
+            int lowestReliability = SupplyUtility.MaxReliability + 1;
+            int routeCount = 0;
+
+            for (int i = 0; i < routesState.RouteCount; i++) {
+                LiveRouteData liveRoute = routesState.Routes[i];
+                if (liveRoute.Stats.Time <= 0) {
+                    continue;
+                }
+
+                highestTime = Math.Max(liveRoute.Stats.Time, highestTime);
+                lowestReliability = Math.Min(liveRoute.Stats.Reliability, lowestReliability);
+                routeCount++;
+            }
+
+            for (int i = 0; i < ShipCount; i++) {
                 RouteShipWidget widget = ShipWidgets[i];
+                LiveRouteData routeData = LiveRouteUtility.GetLiveRoute(widget.ShipId);
                 if (widget.ShipId == shipId) {
                     RouteShipUtility.PopulateWidgetRouteStats(widget, routeData.Stats);
                 }
+                RouteShipUtility.PopulateWidgetBottleneckAlerts(widget, routeCount > 1 && routeData.Stats.Time == highestTime, routeCount > 1 && routeData.Stats.Reliability == lowestReliability);
             }
         }
 
