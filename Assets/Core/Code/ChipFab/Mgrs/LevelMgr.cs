@@ -47,6 +47,12 @@ namespace SpaceFab.ChipFab
             ReturnBtn.OnMouseDown.AddListener(HandleReturnClicked);
         }
 
+        private void OnDestroy()
+        {
+            Game.Events?.Deregister(GameEvents.WaferStateUpdated, HandleWaferStateUpdated);
+            Game.Events?.Deregister(GameEvents.WaferStateUndone, HandleWaferStateUpdated);
+        }
+
         #region Handlers
 
         private void HandleWaferStateUpdated()

@@ -29,6 +29,13 @@ namespace SpaceFab.ChipFab
             Reset();
         }
 
+        private void OnDestroy()
+        {
+            Game.Events?.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events?.Deregister(GameEvents.WaferSubmitted, HandleWaferSubmitted);
+            m_startRoutine.Stop();
+        }
+
         private void Update()
         {
             if (m_state == TimeState.Running)
