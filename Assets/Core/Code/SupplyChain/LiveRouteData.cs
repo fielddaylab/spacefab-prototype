@@ -58,11 +58,22 @@ namespace SpaceFab.SupplyChain {
                 }
             }
 
+            if (node.Port && node.Port.Type != PortType.Purchase) {
+                if (!CanAddPort(liveRoute, node.Port)) {
+                    return false;
+                }
+            }
+
             liveRoute.Nodes[liveRoute.NodeCount++] = node;
             SetNodeOwner(node, liveRoute);
             LiveRouteLineUtility.AddSolid(liveRoute.Line, node.transform.position);
             LiveRouteLineUtility.UpdateTail(liveRoute.Line);
             LiveRouteLineUtility.RegenerateColliders(liveRoute.Line);
+
+            if (node.Port && node.Port.Type != PortType.Purchase) {
+                TryAddPort(liveRoute, node.Port);
+            }
+
             UpdateStats(liveRoute);
             return true;
         }
@@ -126,6 +137,7 @@ namespace SpaceFab.SupplyChain {
 
         static public bool CanAddPort(LiveRouteData liveRoute, Port port) {
             return liveRoute.PortCount < LiveRouteData.MaxPorts
+                && (port.Owner == null)
                 && (port.Type != PortType.Supply || CountPortsOfType(liveRoute, PortType.Supply) < liveRoute.CarryingCapacity);
         }
 

@@ -160,8 +160,6 @@ MonoBehaviour:
   Cost: {fileID: 7308501841509382945}
   Time: {fileID: 5441593600700748414}
   Defense: {fileID: 988426334889684001}
-  Clickable: {fileID: 0}
-  Cursor: {fileID: 0}
 --- !u!210 &6592807385809695116
 SortingGroup:
   m_ObjectHideFlags: 0

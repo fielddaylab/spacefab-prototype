@@ -28,13 +28,12 @@ namespace SpaceFab.SupplyChain {
             }
 
             displayer.CurrentMode = mode;
-            if (mode == PortDetailsMode.Off) {
-                foreach(var port in displayer.Node.Ports) {
+            var port = displayer.Node.Port;
+            if (port) {
+                if (mode == PortDetailsMode.Off) {
                     Pool.TryFree(port.Visuals.CurrentDetails);
                     port.Visuals.CurrentDetails = null;
-                }
-            } else {
-                foreach(var port in displayer.Node.Ports) {
+                } else {
                     if (!port.Visuals.CurrentDetails) {
                         PortDetailsDisplay details = AllocateDisplayForPort(pools, port);
                         MoveDisplayToBestLocation(details, port.transform);

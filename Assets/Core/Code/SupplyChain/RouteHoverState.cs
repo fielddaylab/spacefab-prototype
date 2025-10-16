@@ -11,7 +11,6 @@ namespace SpaceFab.SupplyChain {
     public sealed class RouteHoverState : SharedStateComponent {
         [NonSerialized] public PathNode Node;
         [NonSerialized] public RouteLineRenderer RouteLine;
-        [NonSerialized] public Port Port;
         [NonSerialized] public bool Locked;
 
         [NonSerialized] public Vector3? MousePosition;
