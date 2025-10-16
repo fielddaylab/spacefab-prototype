@@ -35,6 +35,7 @@ public class WaferVersionMgr : MonoBehaviour
                 WaferHistory.RemoveAt(WaferHistory.Count - 1);
             }
             DragMgr.WaferInstance.Data = WaferHistory[WaferHistory.Count - 1];
+            // DragMgr.WaferInstance.LatestMaskRenderer.enabled = false;
             Game.Events.Dispatch(GameEvents.WaferStateUndone);
         }
     }

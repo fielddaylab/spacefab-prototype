@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6528b2aa790eb2441b6fd12999031423, type: 3}
   m_Name: NoAutomationTest
   m_EditorClassIdentifier: 
-  m_levelId: test-0
+  m_levelId: no-auto-test
   m_availableStations: 000000000100000002000000030000000400000005000000
   m_automatedStationTriggers: []
   m_initialWafer:

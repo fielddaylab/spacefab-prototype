@@ -10,6 +10,7 @@ namespace SpaceFab.ChipFab
     [Serializable]
     public struct AutomationTrigger
     {
+        public bool Disable;
         public WaferData TriggerState;
         public AutomationInstruction Instruction;
     }
@@ -109,6 +110,7 @@ namespace SpaceFab.ChipFab
 
             foreach (var trigger in m_allTriggers)
             {
+                if (trigger.Disable) { continue; }
                 m_activeTriggers.Add(trigger);
             }
         }

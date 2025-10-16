@@ -128,6 +128,14 @@ namespace SpaceFab.ChipFab
             {
                 isEqual = false;
             }
+            if (dataA.ResistLayer.Mask.Id != dataB.ResistLayer.Mask.Id)
+            {
+                isEqual = false;
+            }
+            if (dataA.ResistLayer.Mask.Rotation != dataB.ResistLayer.Mask.Rotation)
+            {
+                isEqual = false;
+            }
 
             if ((dataA.MetallizationLayer.State != dataB.MetallizationLayer.State)
                 || (dataA.MetallizationLayer.Mask.Id != dataB.MetallizationLayer.Mask.Id)

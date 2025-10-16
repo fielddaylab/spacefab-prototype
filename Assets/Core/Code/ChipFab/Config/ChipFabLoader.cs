@@ -12,12 +12,14 @@ namespace SpaceFab.ChipFab
         public Button TimedModeBtn;
 
         public Button NoAutoBtn;
+        public Button HybridAutoBtn;
         public Button AutoBtn;
 
         public Button StartBtn;
         [SerializeField] private string m_ChipFabScene;
 
         [SerializeField] private LevelSetupData NoAutoData;
+        [SerializeField] private LevelSetupData HybridAutoData;
         [SerializeField] private LevelSetupData AutoData;
 
         private void Awake()
@@ -26,6 +28,7 @@ namespace SpaceFab.ChipFab
             TimedModeBtn.onClick.AddListener(HandleTimeClicked);
 
             NoAutoBtn.onClick.AddListener(HandleNoAutoClicked);
+            HybridAutoBtn.onClick.AddListener(HandleHybridAutoClicked);
             AutoBtn.onClick.AddListener(HandleAutoClicked);
 
             StartBtn.onClick.AddListener(HandleStartClicked);
@@ -49,6 +52,11 @@ namespace SpaceFab.ChipFab
         private void HandleNoAutoClicked()
         {
             ChipFabConfig.Instance.CurrLevel = NoAutoData;
+        }
+
+        private void HandleHybridAutoClicked()
+        {
+            ChipFabConfig.Instance.CurrLevel = HybridAutoData;
         }
 
         private void HandleAutoClicked()
