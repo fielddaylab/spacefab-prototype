@@ -33,14 +33,13 @@ namespace SpaceFab.ChipFab
             {
                 if (dispensable.Type == DispensableType.Wafer)
                 {
-                    Game.Events.Dispatch(GameEvents.NewWaferCreated);
-
                     // set wafer instance
                     if (DragMgr.WaferInstance)
                     {
                         Destroy(DragMgr.WaferInstance.gameObject);
                     }
                     DragMgr.WaferInstance = newObj.GetComponent<WaferState>();
+                    Game.Events.Dispatch(GameEvents.NewWaferCreated);
                     Game.Events.Dispatch(GameEvents.WaferStateUpdated);
 
                     if (!fromDrag)

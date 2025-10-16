@@ -11,6 +11,7 @@ namespace SpaceFab.ChipFab
         public static StringHash32 WaferPickedUp = "wafer-picked-up";
 
         public static StringHash32 WaferStateUpdated = "wafer-state-updated";
+        public static StringHash32 WaferStateUndone = "wafer-state-undone";
 
         public static StringHash32 NewDopantCreated = "new-dopant-created";
 

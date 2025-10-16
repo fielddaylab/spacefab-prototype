@@ -37,6 +37,7 @@ namespace SpaceFab.ChipFab
         private void Start()
         {
             Game.Events.Register(GameEvents.WaferStateUpdated, HandleWaferStateUpdated);
+            Game.Events.Register(GameEvents.WaferStateUndone, HandleWaferStateUpdated);
 
             TargetData = ChipFabConfig.Instance.CurrLevel.TargetWafer();
             TargetSide.UpdateDisplay(TargetData);

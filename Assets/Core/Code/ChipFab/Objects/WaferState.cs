@@ -186,7 +186,7 @@ namespace SpaceFab.ChipFab
         {
             Init();
 
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            // Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
 
         private void Init()

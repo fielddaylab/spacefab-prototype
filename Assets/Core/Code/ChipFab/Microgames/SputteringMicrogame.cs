@@ -37,6 +37,9 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
+            FinishButton.OnMouseDown.RemoveAllListeners();
+
+
             FinishButton.transform.parent.gameObject.SetActive(false);
             FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
 

@@ -54,6 +54,9 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
+            StartButton.OnMouseDown.RemoveAllListeners();
+            FinishButton.OnMouseDown.RemoveAllListeners();
+
             StartButton.transform.parent.gameObject.SetActive(false);
             //ApplyHeatButton.transform.parent.gameObject.SetActive(false);
             FinishButton.transform.parent.gameObject.SetActive(false);

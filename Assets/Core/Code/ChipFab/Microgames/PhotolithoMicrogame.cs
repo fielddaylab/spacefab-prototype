@@ -37,6 +37,14 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
+            MaskAButton.OnMouseDown.RemoveAllListeners();
+            MaskBButton.OnMouseDown.RemoveAllListeners();
+            MaskCButton.OnMouseDown.RemoveAllListeners();
+            RotateCCButton.OnMouseDown.RemoveAllListeners();
+            RotateCButton.OnMouseDown.RemoveAllListeners();
+            DevelopButton.OnMouseDown.RemoveAllListeners();
+
+
             MaskAButton.OnMouseDown.AddListener(HandleMaskADown);
             MaskBButton.OnMouseDown.AddListener(HandleMaskBDown);
             MaskCButton.OnMouseDown.AddListener(HandleMaskCDown);
