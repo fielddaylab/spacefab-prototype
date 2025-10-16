@@ -15,10 +15,4 @@ namespace SpaceFab.ChipDesign
 
         public static StringHash32 OnConfigChanged = "on-config-changed";
     }
-
-    public static class GameConsts
-    {
-        public static float UNSTABLE_CODE = -29584;
-        public static float DEFFERED_CODE = float.MinValue;
-    }
 }
