@@ -161,6 +161,10 @@ namespace SpaceFab.ChipDesign
             {
                 case ToolType.DrawLinks:
                     break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
+                    break;
                 default:
                     break;
             }
@@ -187,6 +191,10 @@ namespace SpaceFab.ChipDesign
                     break;
                 case ToolType.DrawBNodes:
                     break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
+                    break;
                 default:
                     break;
             }
@@ -200,6 +208,10 @@ namespace SpaceFab.ChipDesign
                 case ToolType.Erase:
                     break;
                 case ToolType.DrawLinks:
+                    break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
                     break;
                 default:
                     break;
@@ -229,6 +241,10 @@ namespace SpaceFab.ChipDesign
                     break;
                 case ToolType.DrawBNodes:
                     break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
+                    break;
                 default:
                     break;
             }
@@ -244,6 +260,10 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.DrawLinks:
+                    break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
                     break;
                 default:
                     break;
@@ -271,6 +291,10 @@ namespace SpaceFab.ChipDesign
                     break;
                 case ToolType.DrawBNodes:
                     break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
+                    break;
                 default:
                     break;
             }
@@ -284,6 +308,10 @@ namespace SpaceFab.ChipDesign
                 case ToolType.Erase:
                     break;
                 case ToolType.DrawLinks:
+                    break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
                     break;
                 default:
                     break;
@@ -312,6 +340,10 @@ namespace SpaceFab.ChipDesign
                 case ToolType.DrawANodes:
                     break;
                 case ToolType.DrawBNodes:
+                    break;
+                case ToolType.DrawVia:
+                    break;
+                case ToolType.DrawGate:
                     break;
                 default:
                     break;

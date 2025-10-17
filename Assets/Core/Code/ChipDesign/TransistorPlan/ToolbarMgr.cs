@@ -21,7 +21,9 @@ namespace SpaceFab.ChipDesign
         DrawVPlusNodes,
         DrawVMinusNodes,
         DrawANodes,
-        DrawBNodes
+        DrawBNodes,
+        DrawVia,
+        DrawGate
     }
 
     public enum GridInteractionLayer
@@ -41,6 +43,8 @@ namespace SpaceFab.ChipDesign
 
         [Header("Common")]
         [SerializeField] private Button EraseButton;
+        [SerializeField] private Button DrawViaButton;
+        [SerializeField] private Button DrawGateButton;
         [SerializeField] private TMP_Text ActiveToolText;
 
         [Header("Nodes")]
@@ -77,6 +81,8 @@ namespace SpaceFab.ChipDesign
             DrawBNodesButton.onClick.AddListener(HandleDrawBNodesClicked);
             EraseButton.onClick.AddListener(HandleEraseClicked);
             DrawLinksButton.onClick.AddListener(HandleDrawLinksClicked);
+            DrawViaButton.onClick.AddListener(HandleDrawViaClicked);
+            DrawGateButton.onClick.AddListener(HandleDrawGateClicked);
         }
 
         private void OnDestroy()
@@ -96,6 +102,8 @@ namespace SpaceFab.ChipDesign
             DrawBNodesButton.onClick.RemoveListener(HandleDrawBNodesClicked);
             EraseButton.onClick.RemoveListener(HandleEraseClicked);
             DrawLinksButton.onClick.RemoveListener(HandleDrawLinksClicked);
+            DrawViaButton.onClick.RemoveListener(HandleDrawViaClicked);
+            DrawGateButton.onClick.RemoveListener(HandleDrawGateClicked);
         }
 
         private void Start()
@@ -232,6 +240,22 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawLinks);
+            }
+        }
+
+        private void HandleDrawViaClicked()
+        {
+            if (InteractMgr.Instance != null)
+            {
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawVia);
+            }
+        }
+
+        private void HandleDrawGateClicked()
+        {
+            if (InteractMgr.Instance != null)
+            {
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawGate);
             }
         }
 
