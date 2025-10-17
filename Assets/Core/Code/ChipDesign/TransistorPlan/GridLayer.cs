@@ -21,7 +21,7 @@ namespace SpaceFab.ChipDesign
     /// <summary>
     /// Underlying data representation of a grid layer
     /// </summary>
-    public class GridLayer : MonoBehaviour
+    public class GridLayer
     {
         public Dimensions Dimensions;
         private GridCell[,] m_Cells; // accessed in row, col order

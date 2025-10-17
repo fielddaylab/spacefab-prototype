@@ -1,6 +1,5 @@
 using FieldDay;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -70,11 +69,11 @@ namespace SpaceFab.ChipDesign
             {
                 if (ActiveLayer == GridInteractionLayer.Metal)
                 {
-                    ClickEmptyMLayerCell();
+                    ClickEmptyMLayerCell(gridPos);
                 }
                 else
                 {
-                    ClickEmptyTLayerCell();
+                    ClickEmptyTLayerCell(gridPos);
                 }
             }
             // if grid cell is full:
@@ -82,11 +81,11 @@ namespace SpaceFab.ChipDesign
             {
                 if (ActiveLayer == GridInteractionLayer.Metal)
                 {
-                    ClickOccupiedMLayerCell();
+                    ClickOccupiedMLayerCell(gridPos);
                 }
                 else
                 {
-                    ClickOccupiedTLayerCell();
+                    ClickOccupiedTLayerCell(gridPos);
                 }
             }
             Debug.Log("[InteractMgr] Click Coords: (x: " + gridPos.x + " , y: " + gridPos.y + ")");
@@ -121,11 +120,11 @@ namespace SpaceFab.ChipDesign
             {
                 if (ActiveLayer == GridInteractionLayer.Metal)
                 {
-                    DragEmptyMLayerCell();
+                    DragEmptyMLayerCell(gridPos);
                 }
                 else
                 {
-                    DragEmptyTLayerCell();
+                    DragEmptyTLayerCell(gridPos);
                 }
             }
             // if grid cell is full:
@@ -133,11 +132,11 @@ namespace SpaceFab.ChipDesign
             {
                 if (ActiveLayer == GridInteractionLayer.Metal)
                 {
-                    DragOccupiedMLayerCell();
+                    DragOccupiedMLayerCell(gridPos);
                 }
                 else
                 {
-                    DragOccupiedTLayerCell();
+                    DragOccupiedTLayerCell(gridPos);
                 }
             }
 
@@ -154,124 +153,182 @@ namespace SpaceFab.ChipDesign
 
         #region Clicks
 
-        private void ClickEmptyMLayerCell()
+        private void ClickEmptyMLayerCell(Vector2Int gridPos)
         {
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
+
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.DrawLinks:
+                    cell.CellType = CellType.Metal;
                     break;
                 case ToolType.DrawVia:
+                    DrawVia(ref cell, gridPos);
                     break;
                 case ToolType.DrawGate:
+                    DrawGate(ref cell, gridPos);
                     break;
                 default:
                     break;
             }
+
+            layer.SetCell(gridPos, cell);
         }
 
-        private void ClickEmptyTLayerCell()
+        private void ClickEmptyTLayerCell(Vector2Int gridPos)
         {
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
+
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.DrawNNodes:
+                    cell.CellType = CellType.NTransistor;
                     break;
                 case ToolType.DrawPNodes:
+                    cell.CellType = CellType.PTransistor;
                     break;
                 case ToolType.DrawInNodes:
+                    cell.CellType = CellType.Input;
+                    cell.SubtypeLabel = "IN";
                     break;
                 case ToolType.DrawOutNodes:
+                    cell.CellType = CellType.Output;
+                    cell.SubtypeLabel = "OUT";
                     break;
                 case ToolType.DrawVPlusNodes:
+                    cell.CellType = CellType.Input;
+                    cell.SubtypeLabel = "V+";
                     break;
                 case ToolType.DrawVMinusNodes:
+                    cell.CellType = CellType.Input;
+                    cell.SubtypeLabel = "V-";
                     break;
                 case ToolType.DrawANodes:
+                    cell.CellType = CellType.Input;
+                    cell.SubtypeLabel = "A";
                     break;
                 case ToolType.DrawBNodes:
+                    cell.CellType = CellType.Input;
+                    cell.SubtypeLabel = "B";
                     break;
                 case ToolType.DrawVia:
+                    DrawVia(ref cell, gridPos);
                     break;
                 case ToolType.DrawGate:
+                    DrawGate(ref cell, gridPos);
                     break;
                 default:
                     break;
             }
+
+            layer.SetCell(gridPos, cell);
         }
 
-        private void ClickOccupiedMLayerCell()
+        private void ClickOccupiedMLayerCell(Vector2Int gridPos)
         {
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
+
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.Erase:
+                    EraseCell(cell, gridPos);
                     break;
                 case ToolType.DrawLinks:
+                    // TODO: 
                     break;
                 case ToolType.DrawVia:
+                    // TODO: 
                     break;
                 case ToolType.DrawGate:
+                    // TODO: 
                     break;
                 default:
                     break;
             }
+
+            layer.SetCell(gridPos, cell);
         }
 
-        private void ClickOccupiedTLayerCell()
+        private void ClickOccupiedTLayerCell(Vector2Int gridPos)
         {
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
+
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.Erase:
+                    EraseCell(cell, gridPos);
                     break;
                 case ToolType.DrawNNodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawPNodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawInNodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawOutNodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawVPlusNodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawVMinusNodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawANodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawBNodes:
+                    // TODO: 
                     break;
                 case ToolType.DrawVia:
+                    // TODO: 
                     break;
                 case ToolType.DrawGate:
+                    // TODO: 
                     break;
                 default:
                     break;
             }
+
+            layer.SetCell(gridPos, cell);
         }
 
         #endregion // Clicks
 
         #region Dragging
 
-        private void DragEmptyMLayerCell()
+        private void DragEmptyMLayerCell(Vector2Int gridPos)
         {
+            // TODO: 
+
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.DrawLinks:
                     break;
-                case ToolType.DrawVia:
+                /*case ToolType.DrawVia:
                     break;
                 case ToolType.DrawGate:
-                    break;
+                    break;*/
                 default:
                     break;
             }
         }
 
-        private void DragEmptyTLayerCell()
+        private void DragEmptyTLayerCell(Vector2Int gridPos)
         {
+            // TODO: 
+
             // check tool
             switch (ActiveTool)
             {
@@ -291,17 +348,19 @@ namespace SpaceFab.ChipDesign
                     break;
                 case ToolType.DrawBNodes:
                     break;
-                case ToolType.DrawVia:
+                /*case ToolType.DrawVia:
                     break;
                 case ToolType.DrawGate:
-                    break;
+                    break;*/
                 default:
                     break;
             }
         }
 
-        private void DragOccupiedMLayerCell()
+        private void DragOccupiedMLayerCell(Vector2Int gridPos)
         {
+            // TODO: 
+
             // check tool
             switch (ActiveTool)
             {
@@ -309,17 +368,19 @@ namespace SpaceFab.ChipDesign
                     break;
                 case ToolType.DrawLinks:
                     break;
-                case ToolType.DrawVia:
+                /*case ToolType.DrawVia:
                     break;
                 case ToolType.DrawGate:
-                    break;
+                    break;*/
                 default:
                     break;
             }
         }
 
-        private void DragOccupiedTLayerCell()
+        private void DragOccupiedTLayerCell(Vector2Int gridPos)
         {
+            // TODO: 
+
             // check tool
             switch (ActiveTool)
             {
@@ -341,10 +402,10 @@ namespace SpaceFab.ChipDesign
                     break;
                 case ToolType.DrawBNodes:
                     break;
-                case ToolType.DrawVia:
+                /*case ToolType.DrawVia:
                     break;
                 case ToolType.DrawGate:
-                    break;
+                    break;*/
                 default:
                     break;
             }
@@ -361,6 +422,106 @@ namespace SpaceFab.ChipDesign
         }
 
         #endregion // Releases
+
+        #region Helpers
+
+        private void DrawVia(ref GridCell cell, Vector2Int gridPos)
+        {
+            if (cell.CellType == CellType.Input || cell.CellType == CellType.Output) { return; }
+
+            GridInteractionLayer linkedLayerType = ActiveLayer == GridInteractionLayer.Metal ? GridInteractionLayer.Transistor : GridInteractionLayer.Metal;
+            var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
+            var linkedCell = linkedLayer.GetCell(gridPos);
+
+            cell.TransferType = TransferType.Via;
+            linkedCell.TransferType = TransferType.Via;
+
+            int cellEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.DESCEND : (int)EdgeDir.ASCEND;
+            int linkedEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.ASCEND : (int)EdgeDir.DESCEND;
+            cell.Edges[cellEdgeIndex] = EdgeState.Connected;
+            linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+        }
+
+        private void DrawGate(ref GridCell cell, Vector2Int gridPos)
+        {
+            if (cell.CellType == CellType.Input || cell.CellType == CellType.Output) { return; }
+
+            GridInteractionLayer linkedLayerType = ActiveLayer == GridInteractionLayer.Metal ? GridInteractionLayer.Transistor : GridInteractionLayer.Metal;
+            var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
+            var linkedCell = linkedLayer.GetCell(gridPos);
+
+            cell.TransferType = TransferType.Gate;
+            linkedCell.TransferType = TransferType.Gate;
+
+            int cellEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.DESCEND : (int)EdgeDir.ASCEND;
+            int linkedEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.ASCEND : (int)EdgeDir.DESCEND;
+            cell.Edges[cellEdgeIndex] = EdgeState.Connected;
+            linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+        }
+
+        private void EraseCell(GridCell cell, Vector2Int gridPos)
+        {
+            // erase cell
+            cell.Erase(out List<EdgeDir> danglingEdges);
+
+            // erase dangling edges
+            foreach (var dangling in danglingEdges)
+            {
+                // get adj cell
+                var adjCell = GetAdjCell(gridPos, dangling);
+
+                // erase opposite edge
+                adjCell.EraseEdge(GetOppositeDir(dangling));
+            }
+        }
+
+        private GridCell GetAdjCell(Vector2Int gridPos, EdgeDir dir)
+        {
+            int layerOffset = 0;
+            Vector2Int gridOffset = Vector2Int.zero;
+
+            switch (dir)
+            {
+                case EdgeDir.NORTH:
+                    gridOffset.y = 1;
+                    break;
+                case EdgeDir.EAST:
+                    gridOffset.x = 1;
+                    break;
+                case EdgeDir.ASCEND:
+                    layerOffset = -1;
+                    break;
+                case EdgeDir.SOUTH:
+                    gridOffset.y = -1;
+                    break;
+                case EdgeDir.WEST:
+                    gridOffset.x = -1;
+                    break;
+                case EdgeDir.DESCEND:
+                    layerOffset = 1;
+                    break;
+                default:
+                    break;
+            }
+
+            var adjGridPos = gridPos + gridOffset;
+            var adjLayerIndex = (int)ActiveLayer + layerOffset;
+
+            var adjLayer = GridStack.Instance.GridLayers[adjLayerIndex];
+
+            GridCell adjCell = adjLayer.GetCell(adjGridPos);
+
+            return adjCell;
+        }
+
+        private EdgeDir GetOppositeDir(EdgeDir original)
+        {
+            EdgeDir opposite = (EdgeDir)(((int)original + Enum.GetValues(typeof(EdgeDir)).Length / 2) % Enum.GetValues(typeof(EdgeDir)).Length);
+
+            return opposite;
+        }
+
+        #endregion // Helpers
 
         #region Tools
 

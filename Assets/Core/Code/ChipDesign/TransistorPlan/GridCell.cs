@@ -12,13 +12,13 @@ namespace SpaceFab.ChipDesign
         Connected
     }
 
-    public enum EdgeDirs
+    public enum EdgeDir
     {
         NORTH,
         EAST,
+        ASCEND,
         SOUTH,
         WEST,
-        ASCEND,
         DESCEND
     }
 
@@ -41,9 +41,10 @@ namespace SpaceFab.ChipDesign
 
     #endregion // Enums & Structs
 
-    public class GridCell : MonoBehaviour
+    public class GridCell
     {
         public CellType CellType;
+        public string SubtypeLabel;
         public EdgeState[] Edges = new EdgeState[6]; // one for each edge dir
         public TransferType TransferType; // informs how data is transferred between layers when either ASCEND or DESCEND edges are connected
 
@@ -58,5 +59,34 @@ namespace SpaceFab.ChipDesign
         }
 
         #endregion // Loading
+
+        /// <summary>
+        /// Returns a list of danglingEdges
+        /// </summary>
+        /// <returns></returns>
+        public void Erase(out List<EdgeDir> danglingEdges)
+        {
+            danglingEdges = new List<EdgeDir>();
+
+            CellType = CellType.NONE;
+            SubtypeLabel = default;
+
+            for (int i = 0; i < Edges.Length; i++)
+            {
+                // TODO: remove reciprocal edges
+                if (Edges[i] == EdgeState.Connected)
+                {
+                    danglingEdges.Add((EdgeDir)i);
+                }
+
+                Edges[i] = EdgeState.Disconnected;
+            }
+            TransferType = TransferType.NONE;
+        }
+
+        public void EraseEdge(EdgeDir dir)
+        {
+            Edges[(int)dir] = EdgeState.Disconnected;
+        }
     }
 }
