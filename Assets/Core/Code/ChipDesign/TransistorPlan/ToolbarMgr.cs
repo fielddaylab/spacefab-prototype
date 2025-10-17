@@ -14,7 +14,7 @@ namespace SpaceFab.ChipDesign
         None,
         DrawNNodes,
         DrawPNodes,
-        DrawLinks,
+        DrawLinks, // DrawMetal
         Erase,
         DrawInNodes,
         DrawOutNodes,

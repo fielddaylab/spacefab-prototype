@@ -21,25 +21,25 @@ namespace SpaceFab.ChipDesign
     [CreateAssetMenu(menuName = "Chip Design/New Level Data")]
     public class LevelData : ScriptableObject
     {
-        [SerializeField] private List<Placeable> m_allowedPlacables;
+        [SerializeField] private List<Placeable> m_allowedPlaceables;
         [SerializeField] private GridStackConfig m_gridConfig;
 
-        public List<Placeable> GetPlaceables() { return m_allowedPlacables; }
+        public List<Placeable> GetPlaceables() { return m_allowedPlaceables; }
         public GridStackConfig GetGridConfig() { return m_gridConfig; }
     }
 
     public class LevelDataCopy
     {
-        [SerializeField] private List<Placeable> m_allowedPlacables;
+        [SerializeField] private List<Placeable> m_allowedPlaceables;
         [SerializeField] private GridStackConfig m_gridConfig;
 
-        public List<Placeable> GetPlaceables() { return m_allowedPlacables; }
+        public List<Placeable> GetPlaceables() { return m_allowedPlaceables; }
         public GridStackConfig GetGridConfig() { return m_gridConfig; }
 
 
         public void LoadData(LevelData data)
         {
-            m_allowedPlacables = data.GetPlaceables();
+            m_allowedPlaceables = data.GetPlaceables();
             m_gridConfig = data.GetGridConfig();
         }
     }

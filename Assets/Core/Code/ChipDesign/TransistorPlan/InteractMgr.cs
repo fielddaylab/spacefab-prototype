@@ -240,13 +240,19 @@ namespace SpaceFab.ChipDesign
                     EraseCell(cell, gridPos);
                     break;
                 case ToolType.DrawLinks:
-                    // TODO: 
+                    // Do nothing. Click only matters if node is empty.
                     break;
                 case ToolType.DrawVia:
-                    // TODO: 
+                    // place a via if metal
+                    if (cell.CellType == CellType.Metal) {
+                        DrawVia(ref cell, gridPos);
+                    }
                     break;
                 case ToolType.DrawGate:
-                    // TODO: 
+                    // place a gate if metal
+                    if (cell.CellType == CellType.Metal) {
+                        DrawGate(ref cell, gridPos);
+                    }
                     break;
                 default:
                     break;
@@ -267,34 +273,36 @@ namespace SpaceFab.ChipDesign
                     EraseCell(cell, gridPos);
                     break;
                 case ToolType.DrawNNodes:
-                    // TODO: 
+                    // only relevant if the occupied cell is a transistor
+                    if (cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) {
+                        cell.CellType = CellType.NTransistor;
+                    }
                     break;
                 case ToolType.DrawPNodes:
-                    // TODO: 
+                    // only relevant if the occupied cell is a transistor
+                    if (cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) {
+                        cell.CellType = CellType.PTransistor;
+                    }
                     break;
+                // only allow inputs/outputs to be placed on empty spaces
                 case ToolType.DrawInNodes:
-                    // TODO: 
-                    break;
                 case ToolType.DrawOutNodes:
-                    // TODO: 
-                    break;
                 case ToolType.DrawVPlusNodes:
-                    // TODO: 
-                    break;
                 case ToolType.DrawVMinusNodes:
-                    // TODO: 
-                    break;
                 case ToolType.DrawANodes:
-                    // TODO: 
-                    break;
                 case ToolType.DrawBNodes:
-                    // TODO: 
                     break;
                 case ToolType.DrawVia:
-                    // TODO: 
+                    // place a via if transistor
+                    if (cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) {
+                        DrawVia(ref cell, gridPos);
+                    }
                     break;
                 case ToolType.DrawGate:
-                    // TODO: 
+                    // place a gate if transistor
+                    if (cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) {
+                        DrawGate(ref cell, gridPos);
+                    }
                     break;
                 default:
                     break;
