@@ -31,6 +31,7 @@ namespace SpaceFab.ChipDesign
 
     public enum CellType
     {
+        NONE,
         Input,
         Metal,
         NTransistor,
@@ -45,5 +46,17 @@ namespace SpaceFab.ChipDesign
         public CellType CellType;
         public EdgeState[] Edges = new EdgeState[6]; // one for each edge dir
         public TransferType TransferType; // informs how data is transferred between layers when either ASCEND or DESCEND edges are connected
+
+        #region Loading
+
+        public void LoadCellConfig(GridCellConfig config)
+        {
+            CellType = config.CellType;
+            Edges = config.Edges;
+            if (config.Edges.Length != 6) { Debug.LogError("[CellConfig] config does not have 6 edges!"); }
+            TransferType = config.TransferType;
+        }
+
+        #endregion // Loading
     }
 }

@@ -11,15 +11,23 @@ namespace SpaceFab.ChipDesign
 
         private void Start()
         {
-            // Size Grid
-            GridRenderer.size = new Vector2(GridData.LayerDims.X, GridData.LayerDims.Y);
+            UpdateGrid();
+            UpdateCamera();
+        }
 
+        private void UpdateGrid()
+        {
+            GridRenderer.size = new Vector2(GridData.LayerDims.X, GridData.LayerDims.Y);
+        }
+
+        private void UpdateCamera()
+        {
             // Move Camera to Grid
             Camera.main.transform.position = new Vector3(
                 GridData.LayerDims.X / 2f,
                 GridData.LayerDims.Y / 2f,
                 Camera.main.transform.position.z
-                ); ;
+                );
         }
     }
 }
