@@ -78,4 +78,29 @@ namespace SpaceFab.ChipDesign
 
         #endregion // Queries
     }
+
+    public static class GridUtility
+    {
+        public static EdgeDir DirFromToCell(Vector2Int fromPos, Vector2Int toPos)
+        {
+            var dif = toPos - fromPos;
+
+            if (dif.x == 1)
+            {
+                return EdgeDir.EAST;
+            }
+            else if (dif.x == -1)
+            {
+                return EdgeDir.WEST;
+            }
+            else if (dif.y == 1)
+            {
+                return EdgeDir.NORTH;
+            }
+            else // (dif.y == 0)
+            {
+                return EdgeDir.SOUTH;
+            }
+        }
+    }
 }

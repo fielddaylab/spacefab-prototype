@@ -19,6 +19,7 @@ namespace SpaceFab.ChipDesign
         #region Members
 
         private Vector2Int m_LastKnownDragCoord;
+        private Vector2Int m_LastTerminatedDragCoord;
 
         #endregion Members
 
@@ -104,6 +105,19 @@ namespace SpaceFab.ChipDesign
                 return;
             }
 
+            if (m_LastTerminatedDragCoord != -Vector2Int.one)
+            {
+                // no change from last terminated drag position (player needs to release mouse before new drag can begin)
+                return;
+            }
+
+            var dif = gridPos - m_LastKnownDragCoord;
+            if (dif.x != 0 && dif.y != 0)
+            {
+                // only orthogonal movement allowed; collapse to one dimension (x)
+                dif.y = 0;
+            }
+
             // if out of bounds:
             if (!GridStack.Instance.InBounds(gridPos.x, gridPos.y)) {
                 // terminate drag
@@ -141,12 +155,15 @@ namespace SpaceFab.ChipDesign
             }
 
             // continue dragging
-            m_LastKnownDragCoord = gridPos;
+            if (gridPos != m_LastTerminatedDragCoord)
+            {
+                m_LastKnownDragCoord = gridPos;
+            }
         }
 
         private void HandleLeftMouseUp()
         {
-            TerminateDrag();
+            TerminateDrag(true);
         }
 
         #endregion // Coordinate Inputs
@@ -276,12 +293,14 @@ namespace SpaceFab.ChipDesign
                     // only relevant if the occupied cell is a transistor
                     if (cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) {
                         cell.CellType = CellType.NTransistor;
+                        // note: preserves edge connections
                     }
                     break;
                 case ToolType.DrawPNodes:
                     // only relevant if the occupied cell is a transistor
                     if (cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) {
                         cell.CellType = CellType.PTransistor;
+                        // note: preserves edge connections
                     }
                     break;
                 // only allow inputs/outputs to be placed on empty spaces
@@ -317,17 +336,12 @@ namespace SpaceFab.ChipDesign
 
         private void DragEmptyMLayerCell(Vector2Int gridPos)
         {
-            // TODO: 
-
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.DrawLinks:
+                    DragDrawNodeOfType(CellType.Metal, gridPos);
                     break;
-                /*case ToolType.DrawVia:
-                    break;
-                case ToolType.DrawGate:
-                    break;*/
                 default:
                     break;
             }
@@ -335,31 +349,15 @@ namespace SpaceFab.ChipDesign
 
         private void DragEmptyTLayerCell(Vector2Int gridPos)
         {
-            // TODO: 
-
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.DrawNNodes:
+                    DragDrawNodeOfType(CellType.NTransistor, gridPos);
                     break;
                 case ToolType.DrawPNodes:
+                    DragDrawNodeOfType(CellType.PTransistor, gridPos);
                     break;
-                case ToolType.DrawInNodes:
-                    break;
-                case ToolType.DrawOutNodes:
-                    break;
-                case ToolType.DrawVPlusNodes:
-                    break;
-                case ToolType.DrawVMinusNodes:
-                    break;
-                case ToolType.DrawANodes:
-                    break;
-                case ToolType.DrawBNodes:
-                    break;
-                /*case ToolType.DrawVia:
-                    break;
-                case ToolType.DrawGate:
-                    break;*/
                 default:
                     break;
             }
@@ -367,19 +365,18 @@ namespace SpaceFab.ChipDesign
 
         private void DragOccupiedMLayerCell(Vector2Int gridPos)
         {
-            // TODO: 
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
 
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.Erase:
+                    EraseCell(cell, gridPos);
                     break;
                 case ToolType.DrawLinks:
+                    DragDrawNodeOfType(CellType.Metal, gridPos);
                     break;
-                /*case ToolType.DrawVia:
-                    break;
-                case ToolType.DrawGate:
-                    break;*/
                 default:
                     break;
             }
@@ -387,33 +384,39 @@ namespace SpaceFab.ChipDesign
 
         private void DragOccupiedTLayerCell(Vector2Int gridPos)
         {
-            // TODO: 
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
 
             // check tool
             switch (ActiveTool)
             {
                 case ToolType.Erase:
+                    EraseCell(cell, gridPos);
                     break;
                 case ToolType.DrawNNodes:
+                    // do not allow dragging onto inputs/outputs
+                    if (cell.CellType == CellType.Input || cell.CellType == CellType.Output) 
+                    {
+                        TerminateDrag();
+                        return;
+                    }
+                    else
+                    {
+                        DragDrawNodeOfType(CellType.NTransistor, gridPos);
+                    }
                     break;
                 case ToolType.DrawPNodes:
+                    // do not allow dragging onto inputs/outputs
+                    if (cell.CellType == CellType.Input || cell.CellType == CellType.Output)
+                    {
+                        TerminateDrag();
+                        return;
+                    }
+                    else
+                    {
+                        DragDrawNodeOfType(CellType.PTransistor, gridPos);
+                    }
                     break;
-                case ToolType.DrawInNodes:
-                    break;
-                case ToolType.DrawOutNodes:
-                    break;
-                case ToolType.DrawVPlusNodes:
-                    break;
-                case ToolType.DrawVMinusNodes:
-                    break;
-                case ToolType.DrawANodes:
-                    break;
-                case ToolType.DrawBNodes:
-                    break;
-                /*case ToolType.DrawVia:
-                    break;
-                case ToolType.DrawGate:
-                    break;*/
                 default:
                     break;
             }
@@ -423,10 +426,17 @@ namespace SpaceFab.ChipDesign
 
         #region Releases
 
-        private void TerminateDrag()
+        /// <summary>
+        /// Terminates drag tracking.
+        /// </summary>
+        /// <param name="fullRelease">True if player released mouse button, false if released due to logic rules</param>
+        private void TerminateDrag(bool fullRelease = false)
         {
             // stop tracking dragging
-            m_LastKnownDragCoord = Vector2Int.one * -1;
+            if (!fullRelease) { m_LastTerminatedDragCoord = m_LastKnownDragCoord; }
+            else { m_LastTerminatedDragCoord = -Vector2Int.one; }
+
+            m_LastKnownDragCoord = -Vector2Int.one;
         }
 
         #endregion // Releases
@@ -481,6 +491,26 @@ namespace SpaceFab.ChipDesign
                 // erase opposite edge
                 adjCell.EraseEdge(GetOppositeDir(dangling));
             }
+        }
+
+        private void DragDrawNodeOfType(CellType type, Vector2Int gridPos)
+        {
+            // create edge between last known pos and curr pos
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var fromCell = layer.GetCell(m_LastKnownDragCoord);
+            var toCell = layer.GetCell(gridPos);
+            var fromDir = GridUtility.DirFromToCell(m_LastKnownDragCoord, gridPos);
+            var reverseDir = GetOppositeDir(fromDir);
+
+            fromCell.Edges[(int)fromDir] = EdgeState.Connected;
+            toCell.Edges[(int)reverseDir] = EdgeState.Connected;
+
+            // set properties
+            toCell.CellType = type;
+
+            // save changes
+            layer.SetCell(m_LastKnownDragCoord, fromCell);
+            layer.SetCell(gridPos, toCell);
         }
 
         private GridCell GetAdjCell(Vector2Int gridPos, EdgeDir dir)
