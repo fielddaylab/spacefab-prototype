@@ -11,8 +11,9 @@ namespace SpaceFab.ChipDesign {
         public Sprite Metal;
 
         [Header("Transistors")]
-        public Sprite NTransistor;
-        public Sprite PTransistor;
+        public Sprite Transistor;
+        public Color NColor;
+        public Color PColor;
 
         private void Awake()
         {

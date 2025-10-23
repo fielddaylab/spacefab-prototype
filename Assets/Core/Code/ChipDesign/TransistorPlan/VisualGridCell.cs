@@ -17,13 +17,16 @@ namespace SpaceFab.ChipDesign
                     m_renderer.sprite = SpriteDB.Instance.Metal;
                     break;
                 case CellType.NTransistor:
-                    m_renderer.sprite = SpriteDB.Instance.NTransistor;
+                    m_renderer.sprite = SpriteDB.Instance.Transistor;
+                    m_renderer.color = SpriteDB.Instance.NColor;
                     break;
                 case CellType.PTransistor:
-                    m_renderer.sprite = SpriteDB.Instance.PTransistor;
+                    m_renderer.sprite = SpriteDB.Instance.Transistor;
+                    m_renderer.color = SpriteDB.Instance.PColor;
                     break;
                 default:
                     m_renderer.sprite = null;
+                    m_renderer.color = Color.white;
                     break;
             }
         }

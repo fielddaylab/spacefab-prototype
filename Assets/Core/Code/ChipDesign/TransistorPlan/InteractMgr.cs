@@ -491,6 +491,8 @@ namespace SpaceFab.ChipDesign
                 // erase opposite edge
                 adjCell.EraseEdge(GetOppositeDir(dangling));
             }
+
+            Game.Events.Dispatch(GameEvents.OnLayoutChanged);
         }
 
         private void DragDrawNodeOfType(CellType type, Vector2Int gridPos)
