@@ -6,6 +6,9 @@ namespace SpaceFab.ChipDesign
 {
     public class VisualGridCell : MonoBehaviour
     {
+        private const int METAL_SORT_ORDER = 100;
+        private const int TRANSISTOR_SORT_ORDER = 0;
+
         [SerializeField] private SpriteRenderer m_pathRenderer;
 
         public void RefreshVisual(GridCell cellData, int layerIndex)
@@ -35,6 +38,8 @@ namespace SpaceFab.ChipDesign
                     m_pathRenderer.color = Color.white;
                     break;
             }
+
+            m_pathRenderer.sortingOrder = layerIndex == 0 ? METAL_SORT_ORDER : TRANSISTOR_SORT_ORDER;
 
             if (lookedUpEdge)
             {

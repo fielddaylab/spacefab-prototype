@@ -25,6 +25,7 @@ namespace SpaceFab.ChipDesign
                 {
                     var cell = GameObject.Instantiate(cellVisualsPrefab, container).GetComponent<VisualGridCell>();
                     cell.transform.position = new Vector3(col + cellOffset, row + cellOffset, 0);
+                    cell.gameObject.name = "Cell Visual (" + col + ", " + row + ")";
                     SetCell(col, row, cell);
                 }
             }
