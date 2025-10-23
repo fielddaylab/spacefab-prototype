@@ -1,3 +1,4 @@
+using FieldDay;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,13 +25,15 @@ namespace SpaceFab.ChipDesign
     public class GridLayer
     {
         public Dimensions Dimensions;
+        public int LayerIndex;
         private GridCell[,] m_Cells; // accessed in row, col order
 
         #region Constructor
 
-        public GridLayer(int xDim, int yDim)
+        public GridLayer(int xDim, int yDim, int layerIndex)
         {
             Dimensions = new Dimensions(xDim, yDim);
+            LayerIndex = layerIndex;
             m_Cells = new GridCell[yDim, xDim];
             for (int row = 0; row < yDim; row++)
             {
@@ -61,12 +64,16 @@ namespace SpaceFab.ChipDesign
         public void SetCell(int x, int y, GridCell cell)
         {
             m_Cells[y, x] = cell;
+
+            Game.Events.Dispatch(GameEvents.OnLayoutChanged);
         }
 
         // Set cell at x, y in row, col order
         public void SetCell(Vector2Int coord, GridCell cell)
         {
             m_Cells[coord.y, coord.x] = cell;
+
+            Game.Events.Dispatch(GameEvents.OnLayoutChanged);
         }
 
         #endregion // Gets & Sets

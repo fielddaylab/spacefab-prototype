@@ -14,5 +14,6 @@ namespace SpaceFab.ChipDesign
         public static StringHash32 OnFloorLinksChanged = "on-floor-links-changed";
 
         public static StringHash32 OnConfigChanged = "on-config-changed";
+        public static StringHash32 NewGridStackCreated = "new-grid-stack-created";
     }
 }

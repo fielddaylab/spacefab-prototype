@@ -1,3 +1,4 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,11 +33,12 @@ namespace SpaceFab.ChipDesign
             { 
                 GridLayers = new GridLayer[]
                 {
-                    new GridLayer(LayerDims.X, LayerDims.Y),  // metal layer (highest)
-                    new GridLayer(LayerDims.X, LayerDims.Y)   // transistor layer (lowest)
+                    new GridLayer(LayerDims.X, LayerDims.Y, 0),  // metal layer (highest)
+                    new GridLayer(LayerDims.X, LayerDims.Y, 1)   // transistor layer (lowest)
                 };
             }
 
+            Game.Events.Dispatch(GameEvents.NewGridStackCreated);
         }
 
         #endregion // Unity Callbacks
@@ -48,8 +50,8 @@ namespace SpaceFab.ChipDesign
             LayerDims = config.LayerDims;
             GridLayers = new GridLayer[]
             {
-                new GridLayer(LayerDims.X, LayerDims.Y),  // metal layer (highest)
-                new GridLayer(LayerDims.X, LayerDims.Y)   // transistor layer (lowest)
+                new GridLayer(LayerDims.X, LayerDims.Y, 0),  // metal layer (highest)
+                new GridLayer(LayerDims.X, LayerDims.Y, 1)   // transistor layer (lowest)
             };
             for (int i = 0; i < config.Cells.Length; i++)
             {
