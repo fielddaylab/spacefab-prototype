@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7514ec292913eb243abbcd71cb77f588, type: 3}
+  m_Name: Transistor Path Library
+  m_EditorClassIdentifier: 
+  m_RadiusReference: 1
+  m_ErrorSprite: {fileID: 0}
+  m_RotationEntries:
+  - PathIndices: 0400040004000400
+    PathRotations: 0000010002000300
+  - PathIndices: 0300
+    PathRotations: 0000
+  - PathIndices: 0300
+    PathRotations: 0300
+  - PathIndices: 0200
+    PathRotations: 0300
+  - PathIndices: 0300
+    PathRotations: 0200
+  - PathIndices: 01000100
+    PathRotations: 01000300
+  - PathIndices: 0200
+    PathRotations: 0200
+  - PathIndices: 0000
+    PathRotations: 0300
+  - PathIndices: 0300
+    PathRotations: 0100
+  - PathIndices: 0200
+    PathRotations: 0000
+  - PathIndices: 01000100
+    PathRotations: 00000200
+  - PathIndices: 0000
+    PathRotations: 0000
+  - PathIndices: 0200
+    PathRotations: 0100
+  - PathIndices: 0000
+    PathRotations: 0100
+  - PathIndices: 0000
+    PathRotations: 0200
+  - PathIndices: 0500050005000500
+    PathRotations: 0000010002000300
+  m_Paths:
+  - Sprite: {fileID: 21300000, guid: 9eaba0b278e0a3b45a869a5d4ac76caa, type: 3}
+    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Scale: 1
+    FlipX: 0
+  - Sprite: {fileID: 21300000, guid: e96a3285c499e2f448de1eed256b692e, type: 3}
+    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Scale: 1
+    FlipX: 0
+  - Sprite: {fileID: 21300000, guid: 327eb2398053bac468c3c8268e9990d4, type: 3}
+    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Scale: 1
+    FlipX: 0
+  - Sprite: {fileID: 21300000, guid: 467d3ee17338b6849af17140b256bf11, type: 3}
+    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Scale: 1
+    FlipX: 0
+  - Sprite: {fileID: 21300000, guid: 755639d961c20dc419c113f21fe63f86, type: 3}
+    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Scale: 1
+    FlipX: 0
+  - Sprite: {fileID: 21300000, guid: f4b0668623ca55344bf1013517298369, type: 3}
+    Rotation: {x: -0, y: -0, z: -0, w: 1}
+    Scale: 1
+    FlipX: 0

@@ -89,4 +89,28 @@ namespace SpaceFab.ChipDesign
             Edges[(int)dir] = EdgeState.Disconnected;
         }
     }
+
+    public static class EdgeUtility
+    {
+        /// <summary>
+        /// Condenses 6 edge states to the 4 cardinal directions
+        /// </summary>
+        /// <param name="toCondense"></param>
+        /// <returns></returns>
+        public static EdgeState[] CondenseEdges(EdgeState[] toCondense)
+        {
+            if (toCondense.Length != 6) { 
+                Debug.LogError("[EdgeUtility] unable to convert edges of length other than 6!");
+                return null;
+            }
+
+            EdgeState[] condensed = new EdgeState[4];
+            condensed[0] = toCondense[0]; // North
+            condensed[1] = toCondense[1]; // East
+            condensed[2] = toCondense[3]; // South
+            condensed[3] = toCondense[4]; // West
+
+            return condensed;
+        }
+    }
 }
