@@ -1,12 +1,27 @@
+using BeauRoutine;
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceFab.ChipFab
 {
+    public enum StationId
+    {
+        Furnace,
+        Photolithograph,
+        Resist,
+        Sputter,
+        Etch,
+        Wash
+    }
+
     public abstract class StationMicrogame : MonoBehaviour, IStationMicrogame
     {
         public GameObject Container;
+        public CamPositioner CamPos;
+
+        protected Routine m_AutomationRoutine;
 
         protected void Start()
         {
@@ -18,6 +33,8 @@ namespace SpaceFab.ChipFab
 
         public virtual void Activate(WaferState waferState)
         {
+            CamMgr.Instance.LoadCamPos(CamPos.Pos);
+
             if (Container)
             {
                 Container.SetActive(true);
@@ -29,6 +46,11 @@ namespace SpaceFab.ChipFab
             if (Container)
             {
                 Container.SetActive(false);
+            }
+
+            if (AutomationMgr.Instance.CurrInstruction.Valid)
+            {
+                Game.Events.Dispatch(GameEvents.AutomationCompleted);
             }
         }
 

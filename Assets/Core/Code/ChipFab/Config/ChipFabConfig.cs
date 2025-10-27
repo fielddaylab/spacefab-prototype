@@ -9,6 +9,7 @@ namespace SpaceFab.ChipFab
         public static ChipFabConfig Instance;
 
         public GameMode Mode;
+        public LevelSetupData CurrLevel;
 
         private void Awake()
         {

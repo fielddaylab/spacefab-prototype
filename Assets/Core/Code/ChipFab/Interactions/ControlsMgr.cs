@@ -57,6 +57,8 @@ namespace SpaceFab.ChipFab
 
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
             Game.Events.Register(GameEvents.TimerBegin, HandleTimerBegin);
+            Game.Events.Register(GameEvents.AutomationStarted, HandleAutomationStarted);
+            Game.Events.Register(GameEvents.AutomationCompleted, HandleAutomationCompleted);
         }
 
         private void Update()
@@ -185,6 +187,16 @@ namespace SpaceFab.ChipFab
             {
                 InputsEnabled = true;
             }
+        }
+
+        private void HandleAutomationStarted()
+        {
+            InputsEnabled = false;
+        }
+
+        private void HandleAutomationCompleted()
+        {
+            InputsEnabled = true;
         }
     }
 }

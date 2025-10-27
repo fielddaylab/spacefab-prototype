@@ -47,6 +47,14 @@ namespace SpaceFab.ChipFab
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Resist)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
             base.Deactivate();
 
             m_state = ResistMicrogameState.Deactivated;
@@ -58,6 +66,11 @@ namespace SpaceFab.ChipFab
         }
 
         #endregion // IStationMicrogame
+
+        private void Awake()
+        {
+            m_state = ResistMicrogameState.Deactivated;
+        }
 
         private void Update()
         {
@@ -86,36 +99,48 @@ namespace SpaceFab.ChipFab
             m_currSpeed -= Friction * Time.deltaTime;
             if (m_currSpeed < 0) { m_currSpeed = 0; }
 
-            // apply impulse
-            if (InputsEnabled)
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Resist)
             {
-                if (m_nextKey == KeyCode.Space)
+                // add initial impulse
+                if (InputsEnabled)
                 {
-                    if (Input.GetKeyDown(Key1))
-                    {
-                        m_currSpeed += Impulse;
-                        m_nextKey = Key2;
-                    }
-                    else if (Input.GetKeyDown(Key2))
-                    {
-                        m_currSpeed += Impulse;
-                        m_nextKey = Key1;
-                    }
+                    m_currSpeed = 1.5f;
+                    InputsEnabled = false;
                 }
-                else if (m_nextKey == Key1)
+            }
+            else
+            {
+                // apply impulse
+                if (InputsEnabled)
                 {
-                    if (Input.GetKeyDown(Key1))
+                    if (m_nextKey == KeyCode.Space)
                     {
-                        m_currSpeed += Impulse;
-                        m_nextKey = Key2;
+                        if (Input.GetKeyDown(Key1))
+                        {
+                            m_currSpeed += Impulse;
+                            m_nextKey = Key2;
+                        }
+                        else if (Input.GetKeyDown(Key2))
+                        {
+                            m_currSpeed += Impulse;
+                            m_nextKey = Key1;
+                        }
                     }
-                }
-                else if (m_nextKey == Key2)
-                {
-                    if (Input.GetKeyDown(Key2))
+                    else if (m_nextKey == Key1)
                     {
-                        m_currSpeed += Impulse;
-                        m_nextKey = Key1;
+                        if (Input.GetKeyDown(Key1))
+                        {
+                            m_currSpeed += Impulse;
+                            m_nextKey = Key2;
+                        }
+                    }
+                    else if (m_nextKey == Key2)
+                    {
+                        if (Input.GetKeyDown(Key2))
+                        {
+                            m_currSpeed += Impulse;
+                            m_nextKey = Key1;
+                        }
                     }
                 }
             }

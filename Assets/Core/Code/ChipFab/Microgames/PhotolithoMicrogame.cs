@@ -30,10 +30,20 @@ namespace SpaceFab.ChipFab
         private float m_rotateCooldown = 0.1f;
         private float m_cooldownTimer = 0;
 
+        private bool m_autoRoutineStarted = false;
+
 
         public override void Activate(WaferState waferState)
         {
             base.Activate(waferState);
+
+            MaskAButton.OnMouseDown.RemoveAllListeners();
+            MaskBButton.OnMouseDown.RemoveAllListeners();
+            MaskCButton.OnMouseDown.RemoveAllListeners();
+            RotateCCButton.OnMouseDown.RemoveAllListeners();
+            RotateCButton.OnMouseDown.RemoveAllListeners();
+            DevelopButton.OnMouseDown.RemoveAllListeners();
+
 
             MaskAButton.OnMouseDown.AddListener(HandleMaskADown);
             MaskBButton.OnMouseDown.AddListener(HandleMaskBDown);
@@ -53,6 +63,8 @@ namespace SpaceFab.ChipFab
             m_currPreviewRenderer = m_currPreview.GetComponent<SpriteRenderer>();
             m_currPreviewRenderer.enabled = false;
 
+            m_autoRoutineStarted = false;
+
             RotText.SetText("0°");
 
             // PREREQS: Resist FULL
@@ -65,6 +77,14 @@ namespace SpaceFab.ChipFab
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
             base.Deactivate();
 
             MaskAButton.OnMouseDown.RemoveAllListeners();
@@ -91,6 +111,47 @@ namespace SpaceFab.ChipFab
             {
                 m_cooldownTimer -= Time.deltaTime;
             }
+
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
+            {
+                if (!m_autoRoutineStarted)
+                {
+                    m_AutomationRoutine.Replace(AutomationRoutine());
+                    m_autoRoutineStarted = true;
+                }
+            }
+        }
+
+        private IEnumerator AutomationRoutine()
+        {
+            yield return 0.5f;
+
+            var instruction = AutomationMgr.Instance.CurrInstruction;
+            switch (instruction.MaskToApply)
+            {
+                case MaskId.A:
+                    HandleMaskADown();
+                    break;
+                case MaskId.B:
+                    HandleMaskBDown();
+                    break;
+                case MaskId.C:
+                    HandleMaskCDown();
+                    break;
+                default:
+                    break;
+            }
+
+            yield return 0.5f;
+
+            m_currRotation = -instruction.Rotation;
+            if (m_currRotation < 0) { m_currRotation += 360; }
+            else if (m_currRotation > 359) { m_currRotation -= 360; }
+            SetRotation();
+
+            yield return 0.5f;
+
+            HandleDevelopDown();
         }
 
         private void HandleMaskADown()
@@ -127,11 +188,7 @@ namespace SpaceFab.ChipFab
 
             if (m_currRotation == 360) { m_currRotation = 0; }
 
-            var angles = DragMgr.WaferInstance.transform.localEulerAngles;
-            angles.z = m_currRotation;
-            DragMgr.WaferInstance.transform.localEulerAngles = angles;
-
-            RotText.SetText(m_currRotation + "°"); 
+            SetRotation();
         }
 
         private void HandleRotateCDown()
@@ -144,10 +201,15 @@ namespace SpaceFab.ChipFab
 
             if (m_currRotation == -360) { m_currRotation = 0; }
 
+            SetRotation();
+        }
+
+        private void SetRotation()
+        {
             var angles = DragMgr.WaferInstance.transform.localEulerAngles;
             angles.z = m_currRotation;
             DragMgr.WaferInstance.transform.localEulerAngles = angles;
-            
+
             RotText.SetText(m_currRotation + "°");
         }
 

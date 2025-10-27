@@ -24,7 +24,7 @@ namespace SpaceFab.ChipFab
 
         public ClickBox ReturnBtn;
 
-        public WaferData TargetData;
+        [HideInInspector] public WaferData TargetData;
 
         private void Awake()
         {
@@ -37,12 +37,20 @@ namespace SpaceFab.ChipFab
         private void Start()
         {
             Game.Events.Register(GameEvents.WaferStateUpdated, HandleWaferStateUpdated);
+            Game.Events.Register(GameEvents.WaferStateUndone, HandleWaferStateUpdated);
 
+            TargetData = ChipFabConfig.Instance.CurrLevel.TargetWafer();
             TargetSide.UpdateDisplay(TargetData);
             // TargetAngled.UpdateDisplay(TargetData);
 
             SubmitButton.OnMouseDown.AddListener(HandleSubmitClicked);
             ReturnBtn.OnMouseDown.AddListener(HandleReturnClicked);
+        }
+
+        private void OnDestroy()
+        {
+            Game.Events?.Deregister(GameEvents.WaferStateUpdated, HandleWaferStateUpdated);
+            Game.Events?.Deregister(GameEvents.WaferStateUndone, HandleWaferStateUpdated);
         }
 
         #region Handlers
@@ -76,54 +84,8 @@ namespace SpaceFab.ChipFab
     
         private void Evaluate()
         {
-            bool success = true;
             var currState = DragMgr.WaferInstance.Data;
-
-            // TODO: make more dynamic
-            if (TargetData.ResistLayer.State != currState.ResistLayer.State)
-            {
-                success = false;
-            }
-
-            if ((TargetData.MetallizationLayer.State != currState.MetallizationLayer.State)
-                || (TargetData.MetallizationLayer.Mask.Id != currState.MetallizationLayer.Mask.Id)
-                || (TargetData.MetallizationLayer.Mask.Rotation != currState.MetallizationLayer.Mask.Rotation)
-                )
-            {
-                success = false;
-            }
-
-            if (TargetData.OxideLayer.State != currState.OxideLayer.State)
-            {
-                success = false;
-            }
-
-            bool hasPatterns = true;
-
-            foreach (var pattern in TargetData.SemiconductorLayer.DopingPatterns)
-            {
-                bool anyFound = false;
-                foreach (var currPattern in currState.SemiconductorLayer.DopingPatterns)
-                {
-                    if ((currPattern.Mask.Id == pattern.Mask.Id)
-                        && (currPattern.Mask.Rotation == pattern.Mask.Rotation)
-                        && (currPattern.DopingType == pattern.DopingType)
-                        )
-                    {
-                        anyFound = true;
-                    }
-                }
-
-                if (!anyFound) {
-                    hasPatterns = false;
-                    break;
-                }
-            }
-
-            if (!hasPatterns)
-            {
-                success = false;
-            }
+            bool success = WaferData.IsEqual(currState, TargetData);
 
             SuccessGroup.SetActive(success);
             FailureGroup.SetActive(!success);

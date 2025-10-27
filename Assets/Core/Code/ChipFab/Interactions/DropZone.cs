@@ -17,11 +17,14 @@ namespace SpaceFab.ChipFab
 
         private void Start()
         {
-            ClickBox.OnHoverEnter.AddListener(HandleMouseEnter);
-            ClickBox.OnHoverContinue.AddListener(HandleHoverContinue);
-            ClickBox.OnHoverExit.AddListener(HandleMouseExit);
+            if (ControlsMgr.Instance.DragEnabled)
+            {
+                ClickBox.OnHoverEnter.AddListener(HandleMouseEnter);
+                ClickBox.OnHoverContinue.AddListener(HandleHoverContinue);
+                ClickBox.OnHoverExit.AddListener(HandleMouseExit);
 
-            ClickBox.OnMouseDown.AddListener(HandleMouseDown);
+                ClickBox.OnMouseDown.AddListener(HandleMouseDown);
+            }
 
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
             Game.Events.Register(GameEvents.WaferPickedUp, HandleWaferPickedUp);

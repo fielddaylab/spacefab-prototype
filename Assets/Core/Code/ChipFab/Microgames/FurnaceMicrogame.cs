@@ -54,6 +54,9 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
+            StartButton.OnMouseDown.RemoveAllListeners();
+            FinishButton.OnMouseDown.RemoveAllListeners();
+
             StartButton.transform.parent.gameObject.SetActive(false);
             //ApplyHeatButton.transform.parent.gameObject.SetActive(false);
             FinishButton.transform.parent.gameObject.SetActive(false);
@@ -69,6 +72,14 @@ namespace SpaceFab.ChipFab
 
         public override void Deactivate()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
+            {
+                if (ControlsMgr.Instance.ConveyorEnabled)
+                {
+                    ConveyorMgr.Instance.TryReturnToConveyor();
+                }
+            }
+
             base.Deactivate();
 
             StartButton.OnMouseDown.RemoveListener(HandleStartMouseDown);
@@ -102,11 +113,19 @@ namespace SpaceFab.ChipFab
                     TransitionToReady();
                     break;
                 case FurnaceMicrogameState.Ready:
+                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
+                        // auto start with automation
+                        HandleStartMouseDown();
+                    }
                     break;
                 case FurnaceMicrogameState.Heating:
                     ProcessMicrogame();
                     break;
                 case FurnaceMicrogameState.Finished:
+                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
+                        // auto end with automation
+                        HandleFinishClicked();
+                    }
                     break;
                 default:
                     break;
@@ -135,13 +154,35 @@ namespace SpaceFab.ChipFab
                 m_currTemp -= Time.deltaTime * HeatLossRate;
             }
 
-            if (Input.GetKeyDown(StokeKey))
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
             {
-                HandleApplyHeat();
+                ProcessAutomation();
+            }
+            else
+            {
+                ProcessManual();
             }
 
             UpdateHeatingVisuals();
             EvaluatePrecision();
+        }
+
+        private void ProcessAutomation()
+        {
+            var instruction = AutomationMgr.Instance.CurrInstruction;
+
+            if (m_currTemp <= instruction.Temperature)
+            {
+                HandleApplyHeat();
+            }
+        }
+
+        private void ProcessManual()
+        {
+            if (Input.GetKeyDown(StokeKey))
+            {
+                HandleApplyHeat();
+            }
         }
 
         private void UpdateHeatingVisuals()
@@ -165,6 +206,21 @@ namespace SpaceFab.ChipFab
         {
             m_state = FurnaceMicrogameState.Activated;
             m_precisionTimer = 0;
+
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
+            {
+                if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
+                {
+                    // generate dopant
+                    DopantMgr.Instance.NDispenser.Dispense(false);
+                }
+                else if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.P)
+                {
+                    // generate dopant
+                    DopantMgr.Instance.PDispenser.Dispense(false);
+                }
+            }
+
             TransitionCommon();
         }
 

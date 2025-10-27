@@ -119,6 +119,67 @@ namespace SpaceFab.ChipFab
         public OxideLayer OxideLayer;
         public SemiconductorLayer SemiconductorLayer;
         public PrecisionData Precision;
+
+        public static bool IsEqual(WaferData dataA, WaferData dataB)
+        {
+            // TODO: make more dynamic
+            bool isEqual = true;
+            if (dataA.ResistLayer.State != dataB.ResistLayer.State)
+            {
+                isEqual = false;
+            }
+            if (dataA.ResistLayer.Mask.Id != dataB.ResistLayer.Mask.Id)
+            {
+                isEqual = false;
+            }
+            if (dataA.ResistLayer.Mask.Rotation != dataB.ResistLayer.Mask.Rotation)
+            {
+                isEqual = false;
+            }
+
+            if ((dataA.MetallizationLayer.State != dataB.MetallizationLayer.State)
+                || (dataA.MetallizationLayer.Mask.Id != dataB.MetallizationLayer.Mask.Id)
+                || (dataA.MetallizationLayer.Mask.Rotation != dataB.MetallizationLayer.Mask.Rotation)
+                )
+            {
+                isEqual = false;
+            }
+
+            if (dataA.OxideLayer.State != dataB.OxideLayer.State)
+            {
+                isEqual = false;
+            }
+
+            bool hasPatterns = true;
+
+            foreach (var pattern in dataA.SemiconductorLayer.DopingPatterns)
+            {
+                bool anyFound = false;
+                foreach (var currPattern in dataB.SemiconductorLayer.DopingPatterns)
+                {
+                    if ((currPattern.Mask.Id == pattern.Mask.Id)
+                        && (currPattern.Mask.Rotation == pattern.Mask.Rotation)
+                        && (currPattern.DopingType == pattern.DopingType)
+                        )
+                    {
+                        anyFound = true;
+                    }
+                }
+
+                if (!anyFound)
+                {
+                    hasPatterns = false;
+                    break;
+                }
+            }
+
+            if (!hasPatterns)
+            {
+                isEqual = false;
+            }
+
+            return isEqual;
+        }
     }
 
     #endregion // Structs & Enums
@@ -133,7 +194,7 @@ namespace SpaceFab.ChipFab
         {
             Init();
 
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            // Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
 
         private void Init()
