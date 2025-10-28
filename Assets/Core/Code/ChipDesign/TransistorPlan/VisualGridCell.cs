@@ -15,11 +15,20 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private SpriteRenderer m_subRenderer;
         [SerializeField] private TMP_Text m_textRenderer;
         [SerializeField] private SpriteRenderer m_transferRenderer;
+        [SerializeField] private SpriteRenderer[] m_dirRenderers;
 
-        public void RefreshVisual(GridCell cellData, int layerIndex)
+
+        public void RefreshVisual(GridCell cellData, int layerIndex, int col, int row)
         {
             PathLibrary.AssembledPathData pathData = default;
             bool lookedUpEdge = false;
+
+            // Reset
+            m_pathRenderer.sprite = null;
+            m_subRenderer.sprite = null;
+            foreach (var r in m_dirRenderers) { r.sprite = null; }
+            m_textRenderer.SetText("");
+            m_pathRenderer.color = Color.white;
 
             // Render according to cell data
             switch (cellData.CellType)
@@ -29,14 +38,10 @@ namespace SpaceFab.ChipDesign
                     lookedUpEdge = true;
                     break;
                 case CellType.NTransistor:
-                    SpriteDB.Instance.TransistorLibrary.Lookup(EdgeUtility.CondenseEdges(cellData.Edges), out pathData);
-                    lookedUpEdge = true;
-                    m_pathRenderer.color = SpriteDB.Instance.NColor;
+                    RenderNTransistor(ref cellData, ref pathData, ref lookedUpEdge, layerIndex, col, row);
                     break;
                 case CellType.PTransistor:
-                    SpriteDB.Instance.TransistorLibrary.Lookup(EdgeUtility.CondenseEdges(cellData.Edges), out pathData);
-                    lookedUpEdge = true;
-                    m_pathRenderer.color = SpriteDB.Instance.PColor;
+                    RenderPTransistor(ref cellData, ref pathData, ref lookedUpEdge, layerIndex, col, row);
                     break;
                 case CellType.Input:
                     m_pathRenderer.sprite = SpriteDB.Instance.IOOuter;
@@ -49,12 +54,11 @@ namespace SpaceFab.ChipDesign
                     m_textRenderer.SetText(cellData.SubtypeLabel);
                     break;
                 default:
-                    m_pathRenderer.sprite = null;
-                    m_subRenderer.sprite = null;
-                    m_textRenderer.SetText("");
-                    m_pathRenderer.color = Color.white;
                     break;
             }
+
+            // Reset
+            m_transferRenderer.sprite = null;
 
             switch (cellData.TransferType)
             {
@@ -65,13 +69,13 @@ namespace SpaceFab.ChipDesign
                     m_transferRenderer.sprite = SpriteDB.Instance.Gate;
                     break;
                 default:
-                    m_transferRenderer.sprite = null;
                     break;
             }
 
             m_pathRenderer.sortingOrder = layerIndex == 0 ? METAL_SORT_ORDER : TRANSISTOR_SORT_ORDER;
             m_subRenderer.sortingOrder = m_pathRenderer.sortingOrder - 10;
             m_textRenderer.GetComponent<Renderer>().sortingOrder = m_pathRenderer.sortingOrder + 10;
+            foreach (var r in m_dirRenderers) { r.sortingOrder = m_pathRenderer.sortingOrder + 5; }
             m_transferRenderer.sortingOrder = TRANSFER_SORT_ORDER;
 
             if (lookedUpEdge)
@@ -80,6 +84,82 @@ namespace SpaceFab.ChipDesign
                 var angles = m_pathRenderer.transform.rotation.eulerAngles;
                 angles.z = 90 * pathData.Turns;
                 m_pathRenderer.transform.rotation = Quaternion.Euler(angles);
+            }
+        }
+
+        private void RenderNTransistor(ref GridCell cellData, ref PathLibrary.AssembledPathData pathData, ref bool lookedUpEdge, int layerIndex, int col, int row)
+        {
+            var condensedEdges = EdgeUtility.CondenseEdges(cellData.Edges);
+            SpriteDB.Instance.TransistorLibrary.Lookup(condensedEdges, out pathData);
+            lookedUpEdge = true;
+            m_pathRenderer.color = SpriteDB.Instance.NColor;
+
+            // set dir renderers
+            for (int i = 0; i < 4; i++)
+            {
+                if (condensedEdges[i] == EdgeState.Connected)
+                {
+                    // lookup adjacent
+                    int adjCol = col;
+                    int adjRow = row;
+
+                    // N
+                    if (i == 0) { adjRow++; }
+                    // E
+                    else if (i == 1) { adjCol++; }
+                    // S
+                    else if (i == 2) { adjRow--; }
+                    // W
+                    else if (i == 3) { adjCol--; }
+
+                    if (GridStack.Instance.InBounds(adjCol, adjRow))
+                    {
+                        var adjCell = GridStack.Instance.GridLayers[layerIndex].GetCell(adjCol, adjRow);
+                        // if P, set N to P half of renderer
+                        if (adjCell.CellType == CellType.PTransistor)
+                        {
+                            m_dirRenderers[i].sprite = SpriteDB.Instance.NSide;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RenderPTransistor(ref GridCell cellData, ref PathLibrary.AssembledPathData pathData, ref bool lookedUpEdge, int layerIndex, int col, int row)
+        {
+            var condensedEdges = EdgeUtility.CondenseEdges(cellData.Edges);
+            SpriteDB.Instance.TransistorLibrary.Lookup(condensedEdges, out pathData);
+            lookedUpEdge = true;
+            m_pathRenderer.color = SpriteDB.Instance.PColor;
+
+            // set dir renderers
+            for (int i = 0; i < 4; i++)
+            {
+                if (condensedEdges[i] == EdgeState.Connected)
+                {
+                    // lookup adjacent
+                    int adjCol = col;
+                    int adjRow = row;
+
+                    // N
+                    if (i == 0) { adjRow++; }
+                    // E
+                    else if (i == 1) { adjCol++; }
+                    // S
+                    else if (i == 2) { adjRow--; }
+                    // W
+                    else if (i == 3) { adjCol--; }
+
+                    if (GridStack.Instance.InBounds(adjCol, adjRow))
+                    {
+                        var adjCell = GridStack.Instance.GridLayers[layerIndex].GetCell(adjCol, adjRow);
+                        // if P, set N to P half of renderer
+                        if (adjCell.CellType == CellType.NTransistor)
+                        {
+                            m_dirRenderers[i].sprite = SpriteDB.Instance.PSide;
+                        }
+                    }
+                }
             }
         }
     }

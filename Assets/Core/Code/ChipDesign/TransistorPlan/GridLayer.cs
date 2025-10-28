@@ -48,13 +48,23 @@ namespace SpaceFab.ChipDesign
 
         #region Gets & Sets
 
-        // Access x, y in row, col order
+        /// <summary>
+        /// Access x, y in row, col order
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public GridCell GetCell(int x, int y)
         {
             return m_Cells[y, x];
         }
 
-        // Access x, y in row, col order
+        /// <summary>
+        /// Access x, y in row, col order
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public GridCell GetCell(Vector2Int coord)
         {
             return m_Cells[coord.y, coord.x];

@@ -759,6 +759,8 @@ MonoBehaviour:
   TransistorLibrary: {fileID: 11400000, guid: 95f943eb1ba539147b6e691e854975ef, type: 2}
   NColor: {r: 0.3803922, g: 0.7176471, b: 0.8117648, a: 1}
   PColor: {r: 0.8313726, g: 0.45882356, b: 0.4666667, a: 1}
+  NSide: {fileID: 21300000, guid: 295945768a71e314d86071fab8472481, type: 3}
+  PSide: {fileID: 21300000, guid: 1a6adfc6ac2bd394aa03916b29a0d84a, type: 3}
   Via: {fileID: 21300000, guid: b8f3b3ad74400d340a1ac2817b8421de, type: 3}
   ViaHigh: {fileID: 21300000, guid: 9bde03c1bebb85c4dad27598ca1e4245, type: 3}
   ViaLow: {fileID: 21300000, guid: 90c1592dce8c93348996a9459d500048, type: 3}

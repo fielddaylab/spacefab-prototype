@@ -16,6 +16,8 @@ namespace SpaceFab.ChipDesign {
         public PathLibrary TransistorLibrary;
         public Color NColor;
         public Color PColor;
+        public Sprite NSide;
+        public Sprite PSide;
 
         [Header("Vias")]
         public Sprite Via;

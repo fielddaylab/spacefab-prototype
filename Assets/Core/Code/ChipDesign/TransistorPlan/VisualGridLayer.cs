@@ -82,7 +82,7 @@ namespace SpaceFab.ChipDesign
                 for (int col = 0; col < Dimensions.X; col++)
                 {
                     var cell = GridStack.Instance.GridLayers[LayerIndex].GetCell(col, row);
-                    m_Cells[row, col].RefreshVisual(cell, LayerIndex);
+                    m_Cells[row, col].RefreshVisual(cell, LayerIndex, col, row);
                 }
             }
         }
