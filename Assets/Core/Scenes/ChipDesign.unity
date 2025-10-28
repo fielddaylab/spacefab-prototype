@@ -195,7 +195,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f35084c9bb709ec4dbba5569a5d1c19c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 93d7d0834f4816f4dac5df7a00b2923a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -759,6 +759,17 @@ MonoBehaviour:
   TransistorLibrary: {fileID: 11400000, guid: 95f943eb1ba539147b6e691e854975ef, type: 2}
   NColor: {r: 0.3803922, g: 0.7176471, b: 0.8117648, a: 1}
   PColor: {r: 0.8313726, g: 0.45882356, b: 0.4666667, a: 1}
+  Via: {fileID: 21300000, guid: b8f3b3ad74400d340a1ac2817b8421de, type: 3}
+  ViaHigh: {fileID: 21300000, guid: 9bde03c1bebb85c4dad27598ca1e4245, type: 3}
+  ViaLow: {fileID: 21300000, guid: 90c1592dce8c93348996a9459d500048, type: 3}
+  ViaNeutral: {fileID: 21300000, guid: 010f9310c85bfbc489c6cbe2cdabd2d2, type: 3}
+  ViaUnstable: {fileID: 21300000, guid: aca0caa03b6d9034fb9e305337fbc1c4, type: 3}
+  Gate: {fileID: 21300000, guid: a899a3b2498a47a4b97dd0764fd6e503, type: 3}
+  GateHigh: {fileID: 21300000, guid: 78efde9288f7f3a4aaf83cc0749ad714, type: 3}
+  GateLow: {fileID: 21300000, guid: 725213504f6c2e34c90c40ae6fbd6ea3, type: 3}
+  GateUnstable: {fileID: 21300000, guid: 838e634c7fee32e4281defaef0545a9d, type: 3}
+  IOInner: {fileID: 21300000, guid: cd4429e1d7ba3ae44887d23cff93dc79, type: 3}
+  IOOuter: {fileID: 21300000, guid: 6756769c71e88ce428302abebcef0b2a, type: 3}
 --- !u!4 &1806810589
 Transform:
   m_ObjectHideFlags: 0

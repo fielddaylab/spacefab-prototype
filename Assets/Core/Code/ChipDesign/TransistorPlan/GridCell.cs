@@ -70,10 +70,10 @@ namespace SpaceFab.ChipDesign
 
             CellType = CellType.NONE;
             SubtypeLabel = default;
+            TransferType = TransferType.NONE;
 
             for (int i = 0; i < Edges.Length; i++)
             {
-                // TODO: remove reciprocal edges
                 if (Edges[i] == EdgeState.Connected)
                 {
                     danglingEdges.Add((EdgeDir)i);
@@ -87,6 +87,11 @@ namespace SpaceFab.ChipDesign
         public void EraseEdge(EdgeDir dir)
         {
             Edges[(int)dir] = EdgeState.Disconnected;
+
+            if (dir == EdgeDir.ASCEND || dir == EdgeDir.DESCEND)
+            {
+                TransferType = TransferType.NONE;
+            }
         }
     }
 

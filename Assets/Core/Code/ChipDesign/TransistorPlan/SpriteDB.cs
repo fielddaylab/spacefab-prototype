@@ -17,6 +17,24 @@ namespace SpaceFab.ChipDesign {
         public Color NColor;
         public Color PColor;
 
+        [Header("Vias")]
+        public Sprite Via;
+        public Sprite ViaHigh;
+        public Sprite ViaLow;
+        public Sprite ViaNeutral;
+        public Sprite ViaUnstable;
+
+        [Header("Gates")]
+        public Sprite Gate;
+        public Sprite GateHigh;
+        public Sprite GateLow;
+        public Sprite GateUnstable;
+
+        [Header("IO")]
+        public Sprite IOInner;
+        public Sprite IOOuter;
+
+
         private void Awake()
         {
             Instance = this;

@@ -118,6 +118,14 @@ namespace SpaceFab.ChipDesign
                 dif.y = 0;
             }
 
+            // if dragging too quickly
+            if (Math.Abs(dif.x) > 1 || Math.Abs(dif.y) > 1)
+            {
+                // terminate drag
+                TerminateDrag();
+                return;
+            }
+
             // if out of bounds:
             if (!GridStack.Instance.InBounds(gridPos.x, gridPos.y)) {
                 // terminate drag
@@ -178,6 +186,9 @@ namespace SpaceFab.ChipDesign
             // check tool
             switch (ActiveTool)
             {
+                case ToolType.Erase:
+                    EraseCell(cell, gridPos);
+                    break;
                 case ToolType.DrawLinks:
                     cell.CellType = CellType.Metal;
                     break;
@@ -202,6 +213,9 @@ namespace SpaceFab.ChipDesign
             // check tool
             switch (ActiveTool)
             {
+                case ToolType.Erase:
+                    EraseCell(cell, gridPos);
+                    break;
                 case ToolType.DrawNNodes:
                     cell.CellType = CellType.NTransistor;
                     break;
@@ -336,9 +350,15 @@ namespace SpaceFab.ChipDesign
 
         private void DragEmptyMLayerCell(Vector2Int gridPos)
         {
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
+
             // check tool
             switch (ActiveTool)
             {
+                case ToolType.Erase:
+                    EraseCell(cell, gridPos);
+                    break;
                 case ToolType.DrawLinks:
                     DragDrawNodeOfType(CellType.Metal, gridPos);
                     break;
@@ -349,9 +369,15 @@ namespace SpaceFab.ChipDesign
 
         private void DragEmptyTLayerCell(Vector2Int gridPos)
         {
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
+
             // check tool
             switch (ActiveTool)
             {
+                case ToolType.Erase:
+                    EraseCell(cell, gridPos);
+                    break;
                 case ToolType.DrawNNodes:
                     DragDrawNodeOfType(CellType.NTransistor, gridPos);
                     break;
@@ -503,6 +529,16 @@ namespace SpaceFab.ChipDesign
             var toCell = layer.GetCell(gridPos);
             var fromDir = GridUtility.DirFromToCell(m_LastKnownDragCoord, gridPos);
             var reverseDir = GetOppositeDir(fromDir);
+
+            // disallow drag from inputs/outputs on transistor layer
+            if (type == CellType.NTransistor || type == CellType.PTransistor)
+            {
+                if (fromCell.CellType == CellType.Input || fromCell.CellType == CellType.Input)
+                {
+                    TerminateDrag();
+                    return;
+                }
+            }
 
             fromCell.Edges[(int)fromDir] = EdgeState.Connected;
             toCell.Edges[(int)reverseDir] = EdgeState.Connected;
