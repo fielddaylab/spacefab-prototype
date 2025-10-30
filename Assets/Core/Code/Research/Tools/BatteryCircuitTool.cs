@@ -23,9 +23,9 @@ namespace SpaceFab.Research {
         private void Awake() {
             this.CacheComponent(ref m_Tool);
 
-            VoltageIndex = 3;
-            VoltageIcon.sprite = VoltageIcons[3];
-            InputVoltage = 0.5f;
+            VoltageIndex = 4;
+            VoltageIcon.sprite = VoltageIcons[4];
+            InputVoltage = 0.333f;
             IncreaseButton.gameObject.SetActive(true);
             DecreaseButton.gameObject.SetActive(true);
             BatteryFlip.localEulerAngles = new Vector3(0, 0, 0);
@@ -39,7 +39,7 @@ namespace SpaceFab.Research {
         private void OnDisable() {
             VoltageIndex = 3;
             VoltageIcon.sprite = VoltageIcons[3];
-            InputVoltage = 0.5f;
+            InputVoltage = 0.333f;
             IncreaseButton.gameObject.SetActive(true);
             DecreaseButton.gameObject.SetActive(true);
             BatteryFlip.localEulerAngles = new Vector3(0, 0, 0);

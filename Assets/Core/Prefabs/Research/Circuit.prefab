@@ -312,7 +312,7 @@ MonoBehaviour:
   BulbOffSprite: {fileID: -928199606015216653, guid: 93683f8213600be419c4b34010eeab88, type: 3}
   BulbOnSprite: {fileID: 2574863000967551387, guid: 93683f8213600be419c4b34010eeab88, type: 3}
   BulbShine: {fileID: 4901237424396147551}
-  AnimSpeedMultiplier: 7
+  AnimSpeedMultiplier: 11
 --- !u!1 &7154826025414503831
 GameObject:
   m_ObjectHideFlags: 0

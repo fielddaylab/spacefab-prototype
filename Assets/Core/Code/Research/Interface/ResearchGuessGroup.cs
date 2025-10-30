@@ -127,9 +127,9 @@ namespace SpaceFab.Research {
                 case ThermalTag.LowTemp: {
                     return "LowTemp";
                 }
-                case ThermalTag.ExtremeTemp: {
-                    return "ExtremeTemp";
-                }
+                //case ThermalTag.ExtremeTemp: {
+                //    return "ExtremeTemp";
+                //}
                 case ThermalTag.Sensitive: {
                     return "Sensitive";
                 }
@@ -146,7 +146,7 @@ namespace SpaceFab.Research {
             } else if (id == "LowTemp") {
                 guessState.Thermal = ThermalTag.LowTemp;
             } else if (id == "ExtremeTemp") {
-                guessState.Thermal = ThermalTag.ExtremeTemp;
+                //guessState.Thermal = ThermalTag.ExtremeTemp;
             } else if (id == "Sensitive") {
                 guessState.Thermal = ThermalTag.Sensitive;
             } else {

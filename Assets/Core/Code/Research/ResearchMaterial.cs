@@ -15,7 +15,7 @@ namespace SpaceFab.Research {
         [Header("Properties")]
         public ElectricalTag Electrical;
         public ThermalTag Thermal;
-        public SpecialTag[] SpecialTags;
+        public SpecialTag SpecialTags;
 
         [Header("Fields")]
         public float DielectricStrength;
@@ -30,18 +30,20 @@ namespace SpaceFab.Research {
         Dopant
     }
 
+    [Flags]
     public enum ThermalTag : uint {
         Unknown = 0,
-        HighTemp,
-        LowTemp,
-        ExtremeTemp,
-        Sensitive
+        HighTemp = 0x01,
+        LowTemp = 0x02,
+        Sensitive = 0x04
     }
 
+    [Flags]
     public enum SpecialTag : uint {
         Unknown = 0,
-        HighMobility,
-        LightEmitting
+        HighMobility = 0x01,
+        LightEmitting = 0x02,
+        HighVoltage = 0x04
     }
 
     public enum DopantType : uint {
@@ -85,16 +87,21 @@ namespace SpaceFab.Research {
         }
 
         static public bool IsStableAtTemperature(ResearchMaterial material, float temperature) {
-            switch(material.Thermal) {
-                case ThermalTag.LowTemp:
-                    return temperature <= 0.75f;
-                case ThermalTag.HighTemp:
-                    return temperature >= 0.25f;
-                case ThermalTag.Sensitive:
-                    return temperature >= 0.25f && temperature <= 0.75f;
-                default:
-                    return true;
+            if ((material.Thermal & ThermalTag.HighTemp) == 0 && temperature >= 0.75f) {
+                return false;
             }
+            if ((material.Thermal & ThermalTag.LowTemp) == 0 && temperature <= 0.25f) {
+                return false;
+            }
+            return true;
+        }
+
+        static public bool IsStableAtVoltage(ResearchMaterial material, float voltage) {
+            if (Math.Abs(voltage) >= 0.75f && (material.SpecialTags & SpecialTag.HighVoltage) == 0) {
+                return false;
+            }
+
+            return true;
         }
 
         static public string GetTagLabel(ElectricalTag tag, DopantType dopantType) {
@@ -139,9 +146,6 @@ namespace SpaceFab.Research {
                 case ThermalTag.HighTemp: {
                     return "High Temp";
                 }
-                case ThermalTag.ExtremeTemp: {
-                    return "Extreme Temps";
-                }
                 case ThermalTag.Sensitive: {
                     return "Sensitive";
                 }
@@ -161,6 +165,9 @@ namespace SpaceFab.Research {
                 }
                 case SpecialTag.HighMobility: {
                     return "High Mobility";
+                }
+                case SpecialTag.HighVoltage: {
+                    return "High Voltage";
                 }
                 case SpecialTag.Unknown: {
                     return "???";

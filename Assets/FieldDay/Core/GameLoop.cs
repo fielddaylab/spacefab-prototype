@@ -96,7 +96,9 @@ namespace FieldDay {
         private FileSystem.Config m_FileSystemConfig = new FileSystem.Config();
 
         [SerializeField]
-        private RenderMgr.Config m_RenderConfig = new RenderMgr.Config();
+        private RenderMgr.Config m_RenderConfig = new RenderMgr.Config() {
+            DebugClearColor = ColorBank.Magenta
+        };
 
         [SerializeField]
         private AssetPack[] m_GlobalAssetPacks = Array.Empty<AssetPack>();

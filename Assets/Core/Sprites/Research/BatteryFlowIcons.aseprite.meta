@@ -128,8 +128,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 2
-      y: 98
+      x: 163
+      y: 2
       width: 43
       height: 75
     spriteID: 3ebedd16459bd1f40956554339c3e47f
@@ -140,7 +140,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 2, y: 98}
+    uvTransform: {x: 163, y: 2}
   - name: Battery_Positive
     originalName: 
     pivot: {x: 0.52500004, y: 0.32500002}
@@ -148,7 +148,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 49
+      x: 210
       y: 2
       width: 40
       height: 40
@@ -160,7 +160,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 49, y: 2}
+    uvTransform: {x: 210, y: 2}
   - name: Battery_Neutral
     originalName: 
     pivot: {x: 0.5277778, y: 0.6666667}
@@ -168,8 +168,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 2
-      y: 225
+      x: 116
+      y: 98
       width: 36
       height: 12
     spriteID: 0ba0acdab34b96642a662bd86ef0a335
@@ -180,7 +180,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 2, y: 225}
+    uvTransform: {x: 116, y: 98}
   - name: Battery_Negative
     originalName: 
     pivot: {x: 0.52380955, y: 0.54545456}
@@ -188,8 +188,8 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 2
-      y: 177
+      x: 163
+      y: 81
       width: 42
       height: 44
     spriteID: f08f4efaaaf47bd4bbd177dd4fdcfff8
@@ -200,7 +200,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 2, y: 177}
+    uvTransform: {x: 163, y: 81}
   - name: Battery_NegativePlus
     originalName: 
     pivot: {x: 0.53488374, y: 0.45652175}
@@ -208,7 +208,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 2
+      x: 116
       y: 2
       width: 43
       height: 92
@@ -220,7 +220,47 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
+    uvTransform: {x: 116, y: 2}
+  - name: Battery_NegativePlus3
+    originalName: 
+    pivot: {x: 0.5090909, y: 0.50442475}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 2
+      width: 55
+      height: 113
+    spriteID: c43c9c8e587276d42b6b464f731ef40f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
     uvTransform: {x: 2, y: 2}
+  - name: Battery_PositivePlus3
+    originalName: 
+    pivot: {x: 0.54901963, y: 0.49107146}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 61
+      y: 2
+      width: 51
+      height: 112
+    spriteID: a9ff7c432dd74f04f95861cc49ccd573
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 61, y: 2}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -275,6 +315,24 @@ ScriptedImporter:
         width: 43
         height: 92
       spriteId: 302f40bff41e3574f93b066aaa43d422
+    - name: Frame_5
+      frameIndex: 5
+      additiveSortOrder: 0
+      cellRect:
+        x: 4
+        y: 7
+        width: 55
+        height: 113
+      spriteId: c43c9c8e587276d42b6b464f731ef40f
+    - name: Frame_6
+      frameIndex: 6
+      additiveSortOrder: 0
+      cellRect:
+        x: 4
+        y: 9
+        width: 51
+        height: 112
+      spriteId: a9ff7c432dd74f04f95861cc49ccd573
     linkedCells: []
     parentIndex: -1
   platformSettings:

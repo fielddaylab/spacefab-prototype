@@ -39,6 +39,8 @@ namespace FieldDay.Rendering {
             public float FOV;
             public float Ortho;
             public int CullingMask;
+            public CameraClearFlags ClearFlags;
+            public Color32 BackgroundColor;
 
 #if USING_URP
             public AntialiasingMode AA;
@@ -49,6 +51,8 @@ namespace FieldDay.Rendering {
                 camera.cullingMask = CullingMask;
                 camera.orthographicSize = Ortho;
                 camera.fieldOfView = FOV;
+                camera.clearFlags = ClearFlags;
+                camera.backgroundColor = BackgroundColor;
 
 #if USING_URP
                 var data = camera.GetUniversalAdditionalCameraData();
@@ -68,6 +72,9 @@ namespace FieldDay.Rendering {
                 Ortho = camera.orthographicSize;
                 FOV = camera.fieldOfView;
 
+                ClearFlags = camera.clearFlags;
+                BackgroundColor = camera.backgroundColor;
+
 #if USING_URP
                 var data = camera.GetUniversalAdditionalCameraData();
                 if (data) {
@@ -81,11 +88,18 @@ namespace FieldDay.Rendering {
         }
 
         private struct DebugCameraAdjustments {
+            public enum ClearMode {
+                Default,
+                DepthClearOnly,
+                ColorClear,
+            }
+
             public bool DisablePostProcessing;
             public int DisableLayers;
             public int ForceLayers;
             public float? AdjustFOV;
             public float? AdjustOrthoSize;
+            public ClearMode Clear;
 
 #if USING_URP
             public AntialiasingMode? AA;
@@ -101,7 +115,7 @@ namespace FieldDay.Rendering {
                 }
 #endif // USING_URP
                 return DisablePostProcessing || DisableLayers != 0 || ForceLayers != 0
-                    || AdjustFOV.HasValue || AdjustOrthoSize.HasValue;
+                    || AdjustFOV.HasValue || AdjustOrthoSize.HasValue || Clear != ClearMode.Default;
             }
 
             public void Apply(Camera camera) {
@@ -111,6 +125,18 @@ namespace FieldDay.Rendering {
                 }
                 if (AdjustOrthoSize.HasValue) {
                     camera.orthographicSize = AdjustOrthoSize.Value;
+                }
+
+                switch(Clear) {
+                    case ClearMode.DepthClearOnly: {
+                        camera.clearFlags = CameraClearFlags.Depth;
+                        break;
+                    }
+                    case ClearMode.ColorClear: {
+                        camera.backgroundColor = s_DebugCameraClearColor;
+                        camera.clearFlags = CameraClearFlags.SolidColor;
+                        break;
+                    }
                 }
 
 #if USING_URP
@@ -134,6 +160,7 @@ namespace FieldDay.Rendering {
         [Serializable]
         public struct Config {
             public Camera FallbackCamera;
+            public Color DebugClearColor;
         }
 
         public struct CameraChangeData {
@@ -175,6 +202,8 @@ namespace FieldDay.Rendering {
 
         private CameraRestoreData m_DebugPrimaryCameraRestore;
         private DebugCameraAdjustments m_DebugPrimaryCameraAdjustments;
+        
+        static private Color32 s_DebugCameraClearColor;
 
         private void CacheDebugCameraAdjustments() {
             m_DebugPrimaryCameraAdjustments.CachedActive = m_DebugPrimaryCameraAdjustments.CheckIsActive();
@@ -212,6 +241,11 @@ namespace FieldDay.Rendering {
             if (m_FallbackCamera) {
                 m_FallbackCamera.gameObject.SetActive(m_UsingFallback);
             }
+
+            if (config.DebugClearColor == Color.clear) {
+                config.DebugClearColor = ColorBank.Magenta;
+            }
+            s_DebugCameraClearColor = config.DebugClearColor;
 
             LightProbes.needsRetetrahedralization += OnLightProbesDirty;
             LightProbes.tetrahedralizationCompleted += OnLightProbesFinishedCompute;
@@ -768,18 +802,25 @@ namespace FieldDay.Rendering {
             DebugFlags.Menu.AddFlagToggle(info, "Display GPU Info", DebuggingFlags.DisplayGPUInfo);
             info.AddDivider();
 
-            DMInfo postProcessingMenu = new DMInfo("Post Processing", 4);
-            postProcessingMenu.AddToggle("Suppress Post-Processing", () => Game.Rendering.m_DebugPrimaryCameraAdjustments.DisablePostProcessing, (b) => {
-                Game.Rendering.m_DebugPrimaryCameraAdjustments.DisablePostProcessing = b;
-                Game.Rendering.CacheDebugCameraAdjustments();
-            });
+            info.AddSelector("Clear Mode",
+                () => (int)Game.Rendering.m_DebugPrimaryCameraAdjustments.Clear,
+                (i) => {
+                    Game.Rendering.m_DebugPrimaryCameraAdjustments.Clear = (DebugCameraAdjustments.ClearMode)i;
+                    Game.Rendering.CacheDebugCameraAdjustments();
+                }, new string[] { "---", "Depth Only", "Debug Color" });
 
-            info.AddSubmenu(postProcessingMenu);
+            info.AddSelector("Post Processing", () => Game.Rendering.m_DebugPrimaryCameraAdjustments.DisablePostProcessing ? 1 : 0,
+                (i) => {
+                    Game.Rendering.m_DebugPrimaryCameraAdjustments.DisablePostProcessing = i == 1;
+                    Game.Rendering.CacheDebugCameraAdjustments();
+                }, new string[] { "---", "Suppress" });
+
+            info.AddDivider();
 
             DMInfo renderLayerMenu = new DMInfo("Rendering Layers");
             renderLayerMenu.MinimumWidth = 250;
 
-            string[] layerSelectorLabels = new string[] { "(Scene Default)", "Disabled", "Always" };
+            string[] layerSelectorLabels = new string[] { "---", "Disabled", "Always" };
 
             for (int i = 0; i < 32; i++) {
                 string layerName = LayerMask.LayerToName(i);
@@ -825,7 +866,7 @@ namespace FieldDay.Rendering {
             }, 0, 3, 1, (f) => {
                 int m = (int) f;
                 if (m == 0) {
-                    return "(Scene Default)";
+                    return "---";
                 } else {
                     return ((AntialiasingMode) (m - 1)).ToString();
                 }
@@ -846,7 +887,7 @@ namespace FieldDay.Rendering {
             }, 0, 3, 1, (f) => {
                 int m = (int) f;
                 if (m == 0) {
-                    return "(Scene Default)";
+                    return "---";
                 } else {
                     return ((AntialiasingQuality) (m - 1)).ToString();
                 }
