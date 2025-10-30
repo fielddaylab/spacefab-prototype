@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices.WindowsRuntime;
 using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
@@ -110,6 +111,7 @@ namespace FieldDay.Perf {
             30,
             40,
             60,
+            90,
             120
         };
 
@@ -119,6 +121,7 @@ namespace FieldDay.Perf {
             "30",
             "40",
             "60",
+            "90",
             "120"
         };
 
@@ -128,25 +131,10 @@ namespace FieldDay.Perf {
             "CanvasPre", "RenderPre", "PreCull", "PreRender", "PostRender", "FrameAdv"
         };
 
-        static private int GetFramerateIndex() {
-            return Array.IndexOf(s_Framerates, Application.targetFrameRate);
-        }
-
         [EngineMenuFactory]
         static private DMInfo CreateDebugInfo() {
             DMInfo info = new DMInfo("Performance");
-            info.AddSlider("Target Framerate", () => {
-                return GetFramerateIndex();
-            }, (f) => {
-                GameLoop.SetTargetFramerate(s_Framerates[(int) f]);
-            }, 0, s_Framerates.Length - 1, 1, (f) => {
-                int idx = (int) f;
-                if (idx < 0) {
-                    return Application.targetFrameRate.ToStringLookup();
-                } else {
-                    return s_FramerateStrings[idx];
-                }
-            });
+            info.AddSelector("Target Framerate", () => Application.targetFrameRate, (i) => GameLoop.SetTargetFramerate(i), s_Framerates, s_FramerateStrings);
 
             info.AddDivider();
 

@@ -118,6 +118,10 @@ namespace FieldDay.Debugging {
             if (Input.GetKey(KeyCode.Return)) {
                 buttons |= DebugInputButtons.Select;
             }
+
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+                buttons |= DebugInputButtons.Modifier;
+            }
         }
 
 #if USING_XR && !UNITY_WEBGL
@@ -137,6 +141,7 @@ namespace FieldDay.Debugging {
                 }
                 if (lHand.GetFeature(CommonUsages.triggerButton)) {
                     modifiers |= InputModifierKeys.L2;
+                    buttons |= DebugInputButtons.Modifier;
                 }
                 if (lHand.GetFeature(CommonUsages.menuButton)) {
                     modifiers |= InputModifierKeys.Platform;
@@ -174,6 +179,7 @@ namespace FieldDay.Debugging {
                 }
                 if (rHand.GetFeature(CommonUsages.triggerButton)) {
                     modifiers |= InputModifierKeys.R2;
+                    buttons |= DebugInputButtons.Modifier;
                 }
                 if (rHand.GetFeature(CommonUsages.menuButton)) {
                     modifiers |= InputModifierKeys.Platform;
@@ -483,6 +489,8 @@ namespace FieldDay.Debugging {
         DPadRight = 0x008,
 
         Select = 0x010,
-        Cancel = 0x020
+        Cancel = 0x020,
+
+        Modifier = 0x040
     }
 }

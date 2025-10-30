@@ -1213,6 +1213,10 @@ PrefabInstance:
       propertyPath: m_SliderPrefab
       value: 
       objectReference: {fileID: 8919007298008427008, guid: 1918a2da5ebc6ea4bab92782a6224ddb, type: 3}
+    - target: {fileID: 4697618310385283251, guid: 5650266d42f118f49955154be9b773a9, type: 3}
+      propertyPath: m_SelectorPrefab
+      value: 
+      objectReference: {fileID: 8706219475401997198, guid: 8e0d2d3f0937bc64281734239243989d, type: 3}
     - target: {fileID: 7497580269783364986, guid: 5650266d42f118f49955154be9b773a9, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1414,6 +1418,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 402902107207320016, guid: 7980326f9b25cdd4ea19b25fdceed3cf, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1496552514671397562, guid: 7980326f9b25cdd4ea19b25fdceed3cf, type: 3}
       propertyPath: m_Maskable
       value: 0
@@ -1603,8 +1611,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6005453282994836412, guid: 7980326f9b25cdd4ea19b25fdceed3cf, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005453282994836412, guid: 7980326f9b25cdd4ea19b25fdceed3cf, type: 3}
+      propertyPath: m_Outline
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005453282994836412, guid: 7980326f9b25cdd4ea19b25fdceed3cf, type: 3}
       propertyPath: m_Maskable
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005453282994836412, guid: 7980326f9b25cdd4ea19b25fdceed3cf, type: 3}
+      propertyPath: m_Thickness
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 6107715119483750239, guid: 7980326f9b25cdd4ea19b25fdceed3cf, type: 3}
       propertyPath: m_BufferSize

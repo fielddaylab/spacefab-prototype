@@ -534,14 +534,14 @@ namespace FieldDay.Systems {
         [EngineMenuFactory]
         static private DMInfo CreateSystemsDebugMenu() {
             DMInfo info = new DMInfo("ECS Systems", 24);
+            info.SetMinWidth(300);
             
             DebugFlags.Menu.AddFlagToggle(info, "Display Stats", DebuggingFlags.DisplayStats);
             info.AddDivider();
             
             DMPredicate groupPredicate = () => DebugFlags.IsFlagSet(DebuggingFlags.DisplayOrder);
             DebugFlags.Menu.AddFlagToggle(info, "Display Order", DebuggingFlags.DisplayOrder);
-            info.AddSlider("Bucket Selection", () => s_DebugBucketIndex, (f) => s_DebugBucketIndex = (int)f, 0, BucketList.Length - 1, 1,
-                (f) => BucketNames[(int)f], groupPredicate, 1);
+            info.AddSelector("Bucket Selection", () => s_DebugBucketIndex, (f) => s_DebugBucketIndex = f, BucketNames, groupPredicate);
             return info;
         }
 

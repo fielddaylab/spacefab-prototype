@@ -379,9 +379,9 @@ namespace FieldDay.Debugging {
             if (DebugInput.IsPressed(DebugInputButtons.Cancel)) {
                 return DMMenuUI.NavigationCommand.Back;
             } else if (DebugInput.IsPressed(DebugInputButtons.DPadLeft)) {
-                return DMMenuUI.NavigationCommand.PrevPage;
+                return DebugInput.IsDown(DebugInputButtons.Modifier) ? DMMenuUI.NavigationCommand.DecreaseSlider : DMMenuUI.NavigationCommand.PrevPage;
             } else if (DebugInput.IsPressed(DebugInputButtons.DPadRight)) {
-                return DMMenuUI.NavigationCommand.NextPage;
+                return DebugInput.IsDown(DebugInputButtons.Modifier) ? DMMenuUI.NavigationCommand.IncreaseSlider : DMMenuUI.NavigationCommand.NextPage;
             } else if (DebugInput.IsPressed(DebugInputButtons.DPadUp)) {
                 return DMMenuUI.NavigationCommand.MoveArrowUp;
             } else if (DebugInput.IsPressed(DebugInputButtons.DPadDown)) {

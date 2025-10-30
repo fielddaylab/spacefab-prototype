@@ -779,6 +779,8 @@ namespace FieldDay.Rendering {
             DMInfo renderLayerMenu = new DMInfo("Rendering Layers");
             renderLayerMenu.MinimumWidth = 250;
 
+            string[] layerSelectorLabels = new string[] { "(Scene Default)", "Disabled", "Always" };
+
             for (int i = 0; i < 32; i++) {
                 string layerName = LayerMask.LayerToName(i);
 
@@ -787,7 +789,7 @@ namespace FieldDay.Rendering {
                 }
 
                 int idx = i;
-                renderLayerMenu.AddSlider(layerName, () => {
+                renderLayerMenu.AddSelector(layerName, () => {
                     if (Bits.Contains(Game.Rendering.m_DebugPrimaryCameraAdjustments.ForceLayers, idx)) {
                         return 2;
                     } else if (Bits.Contains(Game.Rendering.m_DebugPrimaryCameraAdjustments.DisableLayers, idx)) {
@@ -799,19 +801,7 @@ namespace FieldDay.Rendering {
                     Bits.Set(ref Game.Rendering.m_DebugPrimaryCameraAdjustments.ForceLayers, idx, f == 2);
                     Bits.Set(ref Game.Rendering.m_DebugPrimaryCameraAdjustments.DisableLayers, idx, f == 1);
                     Game.Rendering.CacheDebugCameraAdjustments();
-                }, 0, 2, 1, (f) => {
-                    if (f == 0) {
-                        return "(Scene Default)";
-                    } else if (f == 1) {
-                        return "Disabled";
-                    } else {
-                        return "Always";
-                    }
-                });
-
-                if ((idx % 4) == 0) {
-                    renderLayerMenu.AddDivider();
-                }
+                }, layerSelectorLabels);
             }
 
             info.AddSubmenu(renderLayerMenu);
