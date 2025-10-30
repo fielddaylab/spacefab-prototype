@@ -115,7 +115,7 @@ namespace SpaceFab.ChipDesign
             if (dif.x != 0 && dif.y != 0)
             {
                 // only orthogonal movement allowed; collapse to one dimension (x)
-                dif.y = 0;
+                gridPos.y = m_LastKnownDragCoord.y;
             }
 
             // if dragging too quickly
