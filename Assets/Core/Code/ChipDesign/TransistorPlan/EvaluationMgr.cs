@@ -1,7 +1,11 @@
+using BeauUtil;
 using FieldDay;
+using FieldDay.Audio;
+using FieldDay.Mathematics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,8 +20,44 @@ namespace SpaceFab.ChipDesign
         Unstable
     }
 
+    public enum EvalResult
+    {
+        Failure,
+        Success,
+        CycleDetected,
+        MissingNode
+    }
+
     public class EvaluationMgr : MonoBehaviour
     {
+        #region Structs
+
+        private struct GraphNode
+        {
+            public string Name;
+            public List<GraphEdge> Edges;
+
+            public void SetName(int layerIndex, int col, int row)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("L");
+                sb.Append(layerIndex.ToStringLookup());
+                sb.Append("C");
+                sb.Append(col.ToStringLookup());
+                sb.Append("R");
+                sb.Append(row.ToStringLookup());
+
+                Name = sb.ToString();
+            }
+        }
+
+        private struct GraphEdge
+        {
+            public GraphNode Other;
+        }
+
+        #endregion // Structs
+
         #region Inspector
 
         public Button EvaluateButton;
@@ -44,22 +84,85 @@ namespace SpaceFab.ChipDesign
 
         #region Helpers
 
-        private void Evaluate()
+        private unsafe void Evaluate()
         {
-            // TODO: Create Topological Map
+            // TODO: Gather nodes and edges
+            var graph = new List<GraphNode>();
+            int numNodes = 0;
+            int numEdges = 0;
+            ConstructGraph(out graph, out numNodes, out numEdges);
 
-            
+            #region CONVERT TOPOLOGICAL 
 
-            // TODO: Check for cycles
-            bool hasCycles = true;
-            
-            if (hasCycles)
+            // Convert to topological map
+            DependencySolver.Node<StringHash32>* nodes = stackalloc DependencySolver.Node<StringHash32>[numNodes];
+            DependencySolver.Edge<StringHash32>* edges = stackalloc DependencySolver.Edge<StringHash32>[numEdges];
+
+            for (int i = 0; i < numNodes; i++)
             {
-                EvaluationInvalid();
+                nodes[i].Id = graph[i].Name;
+
+                if (graph[i].Edges.Count != 0)
+                {
+                    for (int e = 0; e < graph[i].Edges.Count; e++)
+                    {
+                        edges[i + e].Endpoint = graph[i].Edges[e].Other.Name;
+                    }
+                    nodes[i].Edges = new OffsetLengthU16((ushort)i, (ushort)graph[i].Edges.Count);
+                }
+                else
+                {
+                    nodes[i].Edges = default;
+                }
             }
-            else
+
+            #endregion // CONVERT TOPOLOGICAL 
+
+            EvalResult evalResult = EvalResult.Failure;
+
+            #region SOLVE TOPOLOGICAL
+
+            if (numNodes > 0)
             {
-                // TODO: Run Input Suite
+                DependencySolver.OutputNode<StringHash32>* outputNodes = stackalloc DependencySolver.OutputNode<StringHash32>[numNodes];
+                DependencySolver.Result result = DependencySolver.Solve<StringHash32>(new UnsafeSpan<DependencySolver.Node<StringHash32>>(nodes, numNodes), new UnsafeSpan<DependencySolver.Edge<StringHash32>>(edges, numEdges), new UnsafeSpan<DependencySolver.OutputNode<StringHash32>>(outputNodes, numNodes));
+
+                // Convert result into EvalResult
+                switch (result)
+                {
+                    case DependencySolver.Result.Success:
+                        evalResult = EvalResult.Success;
+                        break;
+                    case DependencySolver.Result.CycleDetected:
+                        evalResult = EvalResult.CycleDetected;
+                        break;
+                    case DependencySolver.Result.MissingNode:
+                        evalResult = EvalResult.MissingNode;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            #endregion // SOLVE TOPOLOGICAL
+
+            // Handle result
+            switch (evalResult)
+            {
+                case EvalResult.Failure:
+                    EvaluationFailure();
+                    break;
+                case EvalResult.CycleDetected:
+                    EvaluationInvalid();
+                    break;
+                case EvalResult.MissingNode:
+                    EvaluationInvalid();
+                    break;
+                case EvalResult.Success:
+                    EvaluationFailure();
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -85,6 +188,20 @@ namespace SpaceFab.ChipDesign
             ResultPanel.SetActive(true);
 
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);
+        }
+
+        private void ConstructGraph(out List<GraphNode> nodes, out int numNodes, out int numEdges)
+        {
+            nodes = new List<GraphNode>();
+
+
+            numNodes = nodes.Count;
+            numEdges = 0;
+            foreach (var node in nodes)
+            {
+                if (node.Edges == null) { continue; }
+                numEdges += node.Edges.Count;
+            }
         }
 
         #endregion // Helpers
