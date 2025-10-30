@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0deb29611ef62184490152ddb436aa4a
+guid: ed713e04e48d52444ae40cad0e3483f8
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -35,7 +35,7 @@ ScriptedImporter:
     spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 500
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -74,7 +74,7 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 1
+    defaultPivotSpace: 0
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 2
@@ -87,7 +87,7 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 1
+    defaultPivotSpace: 0
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 2
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638974309043876674
+  platformSettingsDirtyTick: 638974386449141541
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,18 +121,58 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Battery_PositivePlus
+  - name: BoltParticle_0
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
+    pivot: {x: 0.6923077, y: 0.49056605}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 163
+      x: 27
+      y: 65
+      width: 13
+      height: 53
+    spriteID: 73105ca040b2ad549aa22205f3568128
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 27, y: 65}
+  - name: BoltParticle_1
+    originalName: 
+    pivot: {x: 0.47368422, y: 0.5272727}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 64
+      width: 19
+      height: 55
+    spriteID: 05d1579a5b2d74e4c82a1de194e62144
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 64}
+  - name: BoltParticle_2
+    originalName: 
+    pivot: {x: 0.5294118, y: 0.4915254}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 27
       y: 2
-      width: 43
-      height: 75
-    spriteID: 3ebedd16459bd1f40956554339c3e47f
+      width: 17
+      height: 59
+    spriteID: eb59f4b1405ebf245b5f44a6fbf5944a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -140,99 +180,19 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 163, y: 2}
-  - name: Battery_Positive
+    uvTransform: {x: 27, y: 2}
+  - name: BoltParticle_3
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 210
-      y: 2
-      width: 40
-      height: 40
-    spriteID: 65fd02c824097384ba0c07604d45e569
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 210, y: 2}
-  - name: Battery_Neutral
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 116
-      y: 98
-      width: 36
-      height: 12
-    spriteID: 0ba0acdab34b96642a662bd86ef0a335
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 116, y: 98}
-  - name: Battery_Negative
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 163
-      y: 81
-      width: 42
-      height: 44
-    spriteID: f08f4efaaaf47bd4bbd177dd4fdcfff8
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 163, y: 81}
-  - name: Battery_NegativePlus
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 116
-      y: 2
-      width: 43
-      height: 92
-    spriteID: 302f40bff41e3574f93b066aaa43d422
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 116, y: 2}
-  - name: Battery_NegativePlus3
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
+    pivot: {x: 0.47619048, y: 0.51724136}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 55
-      height: 113
-    spriteID: c43c9c8e587276d42b6b464f731ef40f
+      width: 21
+      height: 58
+    spriteID: 48b7a6d9e01efbb41b651007d916a9d4
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -241,31 +201,11 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 2, y: 2}
-  - name: Battery_PositivePlus3
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 61
-      y: 2
-      width: 51
-      height: 112
-    spriteID: a9ff7c432dd74f04f95861cc49ccd573
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 61, y: 2}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1031336657
-    name: BatteryFlowIcons
+    guid: 399771624
+    name: BoltSprite
     layerFlags: 0
     layerType: 0
     blendMode: 0
@@ -274,65 +214,38 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
-        y: 28
-        width: 43
-        height: 75
-      spriteId: 3ebedd16459bd1f40956554339c3e47f
+        x: 7
+        y: 6
+        width: 13
+        height: 53
+      spriteId: 73105ca040b2ad549aa22205f3568128
     - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
-        x: 11
-        y: 51
-        width: 40
-        height: 40
-      spriteId: 65fd02c824097384ba0c07604d45e569
+        x: 7
+        y: 3
+        width: 19
+        height: 55
+      spriteId: 05d1579a5b2d74e4c82a1de194e62144
     - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
-        x: 13
-        y: 56
-        width: 36
-        height: 12
-      spriteId: 0ba0acdab34b96642a662bd86ef0a335
+        x: 7
+        y: 3
+        width: 17
+        height: 59
+      spriteId: eb59f4b1405ebf245b5f44a6fbf5944a
     - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
-        x: 10
-        y: 40
-        width: 42
-        height: 44
-      spriteId: f08f4efaaaf47bd4bbd177dd4fdcfff8
-    - name: Frame_4
-      frameIndex: 4
-      additiveSortOrder: 0
-      cellRect:
-        x: 9
-        y: 22
-        width: 43
-        height: 92
-      spriteId: 302f40bff41e3574f93b066aaa43d422
-    - name: Frame_5
-      frameIndex: 5
-      additiveSortOrder: 0
-      cellRect:
-        x: 4
-        y: 7
-        width: 55
-        height: 113
-      spriteId: c43c9c8e587276d42b6b464f731ef40f
-    - name: Frame_6
-      frameIndex: 6
-      additiveSortOrder: 0
-      cellRect:
-        x: 4
-        y: 9
-        width: 51
-        height: 112
-      spriteId: a9ff7c432dd74f04f95861cc49ccd573
+        x: 6
+        y: 2
+        width: 21
+        height: 58
+      spriteId: 48b7a6d9e01efbb41b651007d916a9d4
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -387,4 +300,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 64, y: 128}
+  canvasSize: {x: 32, y: 64}

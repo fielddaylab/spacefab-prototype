@@ -34,6 +34,11 @@ namespace SpaceFab.Research {
             return item ? item.Material : null;
         }
 
+        static public ResearchMaterialItem GetInputMaterialItem(ResearchTool tool, int slotIndex) {
+            Assert.True(slotIndex >= 0 && slotIndex < tool.Slots.Length);
+            return tool.Slots[slotIndex].Item;
+        }
+
         static public void UpdateSlotFillState(ResearchTool tool) {
             bool areSlotsFilled = true;
             foreach(var slot in tool.Slots) {

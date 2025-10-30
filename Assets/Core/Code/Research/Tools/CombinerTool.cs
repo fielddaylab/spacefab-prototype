@@ -12,7 +12,6 @@ namespace SpaceFab.Research {
         [NonSerialized] private ResearchTool m_Tool;
 
         private bool m_OutputWasFilled;
-        private Routine m_ExplodeRoutine;
 
         private void Awake() {
             this.CacheComponent(ref m_Tool);
@@ -29,16 +28,6 @@ namespace SpaceFab.Research {
             }
         }
 
-        private IEnumerator ExplodeRoutine() {
-            Game.Input.PauseAll();
-            yield return 0.4f;
-            ResearchMaterialUtility.ExplodeItem(m_Tool.Slots[0].Item);
-            yield return 0.15f;
-            ResearchMaterialUtility.ExplodeItem(m_Tool.Slots[1].Item);
-            yield return 0.3f;
-            Game.Input.ResumeAll();
-        }
-
         private void OnSlotFillUpdated() {
             if (m_Tool.AllSlotsFilled) {
                 var recipeBook = Find.GlobalAsset<ResearchMaterialRecipeBook>();
@@ -47,7 +36,9 @@ namespace SpaceFab.Research {
                     m_OutputWasFilled = true;
                     Sfx.Play("Research.Gem.NewCombination");
                 } else {
-                    m_ExplodeRoutine.Replace(this, ExplodeRoutine());
+                    ResearchMaterialUtility.BeginExplosions();
+                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), ExplosionStyle.InvalidCombo, 0.5f);
+                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 1), ExplosionStyle.InvalidCombo, 0.9f);
                     m_OutputWasFilled = false;
                     ResearchSlotUtility.FillInSlot(m_Tool.OutputSlot, null);
                 }

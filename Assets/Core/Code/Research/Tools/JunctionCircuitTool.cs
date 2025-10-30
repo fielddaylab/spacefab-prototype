@@ -1,81 +1,26 @@
-using BeauRoutine;
 using BeauUtil;
-using FieldDay.Audio;
-using FieldDay.Components;
-using FieldDay.UI;
 using System;
 using UnityEngine;
 
 namespace SpaceFab.Research {
     public sealed class JunctionCircuitTool : MonoBehaviour {
-        [Range(-1, 1)] public float InputVoltage;
+        public VoltageControl Voltage;
         [Range(0, 1)] public float Temperature;
 
-        public ResearchSpriteButton IncreaseButton;
-        public ResearchSpriteButton DecreaseButton;
-        public SpriteRenderer VoltageIcon;
-        public Transform BatteryFlip;
-        public Sprite[] VoltageIcons;
-
         [NonSerialized] private ResearchTool m_Tool;
-        [NonSerialized] public int VoltageIndex;
 
         private void Awake() {
             this.CacheComponent(ref m_Tool);
 
-            VoltageIndex = 4;
-            VoltageIcon.sprite = VoltageIcons[4];
-            InputVoltage = 0.5f;
-            IncreaseButton.gameObject.SetActive(true);
-            DecreaseButton.gameObject.SetActive(true);
-            BatteryFlip.localEulerAngles = new Vector3(0, 0, 0);
-
             m_Tool.OnInputSlotsUpdated.Register(OnSlotFillUpdated);
-
-            IncreaseButton.Cursor.onClick.Register(OnClickIncrease);
-            DecreaseButton.Cursor.onClick.Register(OnClickDecrease);
-        }
-
-        private void OnDisable() {
-            VoltageIndex = 4;
-            VoltageIcon.sprite = VoltageIcons[4];
-            InputVoltage = 0.5f;
-            IncreaseButton.gameObject.SetActive(true);
-            DecreaseButton.gameObject.SetActive(true);
-            BatteryFlip.localEulerAngles = new Vector3(0, 0, 0);
-        }
-
-        private void OnClickIncrease() {
-            VoltageIndex++;
-            Sfx.Play("Research.Tool.Button");
-            OnVoltageAdjusted();
-        }
-
-        private void OnClickDecrease() {
-            VoltageIndex--;
-            Sfx.Play("Research.Tool.Button");
-            OnVoltageAdjusted();
-        }
-
-        private void OnVoltageAdjusted() {
-            VoltageIcon.sprite = VoltageIcons[VoltageIndex];
-            if (VoltageIndex < 3) {
-                BatteryFlip.localEulerAngles = new Vector3(0, 0, 180);
-            } else if (VoltageIndex > 3) {
-                BatteryFlip.localEulerAngles = new Vector3(0, 0, 0);
-            }
-            InputVoltage = (VoltageIndex - 3) / 3f;
-            OnSlotFillUpdated();
-
-            GuiCommands.SetActive(IncreaseButton.gameObject, VoltageIndex < 6);
-            GuiCommands.SetActive(DecreaseButton.gameObject, VoltageIndex > 0);
+            Voltage.OnVoltageModified.Register(OnSlotFillUpdated);
         }
 
         private void OnSlotFillUpdated() {
-            if (m_Tool.AllSlotsFilled && InputVoltage != 0) {
+            if (m_Tool.AllSlotsFilled && Voltage.InputVoltage != 0) {
                 var inputA = ResearchToolUtility.GetInputMaterial(m_Tool, 0);
                 var inputB = ResearchToolUtility.GetInputMaterial(m_Tool, 1);
-                if (InputVoltage < 0) {
+                if (Voltage.InputVoltage < 0) {
                     Ref.Swap(ref inputA, ref inputB);
                 }
 
@@ -85,9 +30,9 @@ namespace SpaceFab.Research {
                 } else if (inputA.DopantType == DopantType.P && inputB.DopantType == DopantType.N) {
                     current = 0; // p->n is not allowed
                 } else {
-                    float currentA = ResearchMaterialUtility.GetCurrent(inputA, InputVoltage, Temperature);
-                    float currentB = ResearchMaterialUtility.GetCurrent(inputB, InputVoltage, Temperature);
-                    current = Math.Min(Math.Abs(currentA), Math.Abs(currentB)) * Math.Sign(InputVoltage);
+                    float currentA = ResearchMaterialUtility.GetCurrent(inputA, Voltage.InputVoltage, Temperature);
+                    float currentB = ResearchMaterialUtility.GetCurrent(inputB, Voltage.InputVoltage, Temperature);
+                    current = Math.Min(Math.Abs(currentA), Math.Abs(currentB)) * Math.Sign(Voltage.InputVoltage);
                 }
 
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, current);

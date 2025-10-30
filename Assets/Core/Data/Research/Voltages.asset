@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc898690d4f08ca4ab8aaa685700185c, type: 3}
+  m_Name: Voltages
+  m_EditorClassIdentifier: 
+  VoltageIcons:
+  - {fileID: -6882305358531917930, guid: 0deb29611ef62184490152ddb436aa4a, type: 3}
+  - {fileID: 3361595568402019967, guid: 0deb29611ef62184490152ddb436aa4a, type: 3}
+  - {fileID: 2996278305519527441, guid: 0deb29611ef62184490152ddb436aa4a, type: 3}
+  - {fileID: 1003486464161234087, guid: 0deb29611ef62184490152ddb436aa4a, type: 3}
+  - {fileID: -7679401068503533341, guid: 0deb29611ef62184490152ddb436aa4a, type: 3}
+  - {fileID: 1928143694034937006, guid: 0deb29611ef62184490152ddb436aa4a, type: 3}
+  - {fileID: -1935955147183802757, guid: 0deb29611ef62184490152ddb436aa4a, type: 3}
+  Voltages:
+  - -1
+  - -0.5
+  - -0.25
+  - 0
+  - 0.25
+  - 0.5
+  - 1
+  CenterIndex: 3
+  DefaultIndex: 4

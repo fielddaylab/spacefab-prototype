@@ -9,6 +9,7 @@ using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
+using Unity.Profiling;
 using UnityEngine;
 
 namespace FieldDay.Perf {
@@ -23,6 +24,7 @@ namespace FieldDay.Perf {
 
         internal PerformanceMgr() {
             m_TimingBuffer = new RingBuffer<PhaseTimingData>(BufferSize, RingBufferMode.Overwrite);
+            PerfMetric.Initialize();
 
             GameLoop.OnDebugUpdate.Register(OnDebugUpdate);
 
@@ -35,6 +37,7 @@ namespace FieldDay.Perf {
 
         internal void Shutdown() {
             m_TimingBuffer.Clear();
+            PerfMetric.Shutdown();
         }
 
         private unsafe void OnDebugUpdate() {
@@ -135,6 +138,24 @@ namespace FieldDay.Perf {
         static private DMInfo CreateDebugInfo() {
             DMInfo info = new DMInfo("Performance");
             info.AddSelector("Target Framerate", () => Application.targetFrameRate, (i) => GameLoop.SetTargetFramerate(i), s_Framerates, s_FramerateStrings);
+
+            info.AddDivider();
+
+            DMInfo metrics = new DMInfo("Metrics");
+
+            metrics.AddButton("Dump Available Metrics", () => {
+                using (Log.DisableMsgStackTrace()) {
+                    int count = 0;
+                    Log.Msg("[PerformanceMgr] Enumerating metrics...");
+                    foreach (var metric in PerfMetric.EnumerateAvailableMetrics()) {
+                        Log.Msg("{0} | {1} ({2}, {3}) [{4}]", metric.Category.Name, metric.Name, metric.DataType.ToString(), metric.UnitType.ToString(), metric.Flags.ToString());
+                        count++;
+                    }
+                    Log.Msg("[PerformanceMgr] Found {0} metrics", count);
+                }
+            });
+
+            info.AddSubmenu(metrics);
 
             info.AddDivider();
 
