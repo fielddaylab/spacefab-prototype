@@ -15,15 +15,15 @@ namespace SpaceFab.ChipDesign {
 
             GridLayers = new VisualGridLayer[]
             {
-                new VisualGridLayer(LayerDims.X, LayerDims.Y, 0, cellVisualsPrefab, container),  // metal layer (highest)
-                new VisualGridLayer(LayerDims.X, LayerDims.Y, 1, cellVisualsPrefab, container)   // transistor layer (lowest)
+                new VisualGridLayer(LayerDims.X, LayerDims.Y, GridStack.METAL_LAYER, cellVisualsPrefab, container),  // metal layer (highest)
+                new VisualGridLayer(LayerDims.X, LayerDims.Y, GridStack.TRANSISTOR_LAYER, cellVisualsPrefab, container)   // transistor layer (lowest)
             };
         }
 
         public void Destroy()
         {
-            GridLayers[0].Destroy();
-            GridLayers[1].Destroy();
+            GridLayers[GridStack.METAL_LAYER].Destroy();
+            GridLayers[GridStack.TRANSISTOR_LAYER].Destroy();
         }
     }
 }

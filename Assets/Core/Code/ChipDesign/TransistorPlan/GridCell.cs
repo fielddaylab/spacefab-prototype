@@ -26,7 +26,8 @@ namespace SpaceFab.ChipDesign
     {
         NONE,
         Via,
-        Gate
+        Gate,
+        Implicit // Input/Output to Metal
     }
 
     public enum CellType

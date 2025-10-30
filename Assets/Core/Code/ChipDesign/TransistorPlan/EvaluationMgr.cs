@@ -36,9 +36,12 @@ namespace SpaceFab.ChipDesign
         {
             public string Name;
             public List<GraphEdge> Edges;
+            public GraphCoord Coord;
 
-            public void SetName(int layerIndex, int col, int row)
+            public void Init(int layerIndex, int col, int row)
             {
+                Edges = new List<GraphEdge>();
+
                 StringBuilder sb = new StringBuilder();
                 sb.Append("L");
                 sb.Append(layerIndex.ToStringLookup());
@@ -48,12 +51,76 @@ namespace SpaceFab.ChipDesign
                 sb.Append(row.ToStringLookup());
 
                 Name = sb.ToString();
+
+                Coord = new GraphCoord();
+                Coord.Layer = layerIndex;
+                Coord.Col = col;
+                Coord.Row = row;
             }
         }
 
         private struct GraphEdge
         {
-            public GraphNode Other;
+            public GraphNode Other { get; private set; }
+
+            public void Init(GraphNode other)
+            {
+                Other = other;
+            }
+        }
+
+        public struct GraphCoord
+        {
+            public int Layer;
+            public int Col;
+            public int Row;
+
+            public GraphCoord(int layer, int col, int row)
+            {
+                Layer = layer;
+                Col = col;
+                Row = row;
+            }
+        }
+
+
+        private struct CrucialGraphNode
+        {
+            public string Name;
+            public List<CrucialGraphEdge> Edges; // Edges to other CrucialNodes
+            public GraphCoord Coord;
+
+            public void Init(int layerIndex, int col, int row)
+            {
+                Edges = new List<CrucialGraphEdge>();
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("L");
+                sb.Append(layerIndex.ToStringLookup());
+                sb.Append("C");
+                sb.Append(col.ToStringLookup());
+                sb.Append("R");
+                sb.Append(row.ToStringLookup());
+
+                Name = sb.ToString();
+
+                Coord = new GraphCoord();
+                Coord.Layer = layerIndex;
+                Coord.Col = col;
+                Coord.Row = row;
+            }
+        }
+
+        private struct CrucialGraphEdge
+        {
+            public GraphNode Other { get; private set; }
+            public List<GraphNode> Path { get; private set; }
+
+            public void Init(GraphNode other, List<GraphNode> path)
+            {
+                Other = other;
+                Path = path;
+            }
         }
 
         #endregion // Structs
@@ -87,28 +154,29 @@ namespace SpaceFab.ChipDesign
         private unsafe void Evaluate()
         {
             // TODO: Gather nodes and edges
-            var graph = new List<GraphNode>();
-            int numNodes = 0;
-            int numEdges = 0;
-            ConstructGraph(out graph, out numNodes, out numEdges);
+            var crucialGraph = new List<CrucialGraphNode>();
+            var completeGraph = new List<GraphNode>();
+            int numCrucialNodes = 0;
+            int numCrucialEdges = 0;
+            ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges);
 
             #region CONVERT TOPOLOGICAL 
 
             // Convert to topological map
-            DependencySolver.Node<StringHash32>* nodes = stackalloc DependencySolver.Node<StringHash32>[numNodes];
-            DependencySolver.Edge<StringHash32>* edges = stackalloc DependencySolver.Edge<StringHash32>[numEdges];
+            DependencySolver.Node<StringHash32>* nodes = stackalloc DependencySolver.Node<StringHash32>[numCrucialNodes];
+            DependencySolver.Edge<StringHash32>* edges = stackalloc DependencySolver.Edge<StringHash32>[numCrucialNodes];
 
-            for (int i = 0; i < numNodes; i++)
+            for (int i = 0; i < numCrucialNodes; i++)
             {
-                nodes[i].Id = graph[i].Name;
+                nodes[i].Id = crucialGraph[i].Name;
 
-                if (graph[i].Edges.Count != 0)
+                if (crucialGraph[i].Edges.Count != 0)
                 {
-                    for (int e = 0; e < graph[i].Edges.Count; e++)
+                    for (int e = 0; e < crucialGraph[i].Edges.Count; e++)
                     {
-                        edges[i + e].Endpoint = graph[i].Edges[e].Other.Name;
+                        edges[i + e].Endpoint = crucialGraph[i].Edges[e].Other.Name;
                     }
-                    nodes[i].Edges = new OffsetLengthU16((ushort)i, (ushort)graph[i].Edges.Count);
+                    nodes[i].Edges = new OffsetLengthU16((ushort)i, (ushort)crucialGraph[i].Edges.Count);
                 }
                 else
                 {
@@ -122,10 +190,10 @@ namespace SpaceFab.ChipDesign
 
             #region SOLVE TOPOLOGICAL
 
-            if (numNodes > 0)
+            if (numCrucialNodes > 0)
             {
-                DependencySolver.OutputNode<StringHash32>* outputNodes = stackalloc DependencySolver.OutputNode<StringHash32>[numNodes];
-                DependencySolver.Result result = DependencySolver.Solve<StringHash32>(new UnsafeSpan<DependencySolver.Node<StringHash32>>(nodes, numNodes), new UnsafeSpan<DependencySolver.Edge<StringHash32>>(edges, numEdges), new UnsafeSpan<DependencySolver.OutputNode<StringHash32>>(outputNodes, numNodes));
+                DependencySolver.OutputNode<StringHash32>* outputNodes = stackalloc DependencySolver.OutputNode<StringHash32>[numCrucialNodes];
+                DependencySolver.Result result = DependencySolver.Solve<StringHash32>(new UnsafeSpan<DependencySolver.Node<StringHash32>>(nodes, numCrucialNodes), new UnsafeSpan<DependencySolver.Edge<StringHash32>>(edges, numCrucialEdges), new UnsafeSpan<DependencySolver.OutputNode<StringHash32>>(outputNodes, numCrucialNodes));
 
                 // Convert result into EvalResult
                 switch (result)
@@ -190,17 +258,93 @@ namespace SpaceFab.ChipDesign
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);
         }
 
-        private void ConstructGraph(out List<GraphNode> nodes, out int numNodes, out int numEdges)
+        private void ConstructGraph(out List<CrucialGraphNode> crucialNodes, out List<GraphNode> allNodes, out int numCrucialNodes, out int numCrucialEdges)
         {
-            nodes = new List<GraphNode>();
+            // SETUP
 
+            crucialNodes = new List<CrucialGraphNode>();
+            allNodes = new List<GraphNode>();
 
-            numNodes = nodes.Count;
-            numEdges = 0;
-            foreach (var node in nodes)
+            Dictionary<GraphCoord, GraphNode> CoordNodeMap = new Dictionary<GraphCoord, GraphNode>();
+
+            // CORE -- CREATE NODES
+
+            var dims = GridStack.Instance.LayerDims;
+            for (int layer = 0; layer < GridStack.Instance.GridLayers.Length; layer++)
             {
-                if (node.Edges == null) { continue; }
-                numEdges += node.Edges.Count;
+                for (int row = 0; row < dims.Y; row++)
+                {
+                    for (int col = 0; col < dims.X; col++)
+                    {
+                        var cell = GridStack.Instance.GridLayers[layer].GetCell(col, row);
+                        if (cell.CellType == CellType.NONE) { continue; }
+
+                        // Inputs, Outputs, and Transistors under Gates are crucial nodes -- gather them on the transistor layer
+                        if (layer == GridStack.TRANSISTOR_LAYER)
+                        {
+                            if ((cell.CellType == CellType.Input || cell.CellType == CellType.Output)
+                                || ((cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) && cell.TransferType == TransferType.Gate))
+                            {
+                                var crucialNode = new CrucialGraphNode();
+                                crucialNode.Init(layer, col, row);
+
+                                crucialNodes.Add(crucialNode);
+                            }
+                        }
+
+                        var newNode = new GraphNode();
+                        newNode.Init(layer, col, row);
+                        var coordKey = newNode.Coord;
+
+                        CoordNodeMap.Add(coordKey, newNode);
+                    }
+                }
+            }
+
+            // CORE -- CREATE EDGES
+
+            for (int layer = 0; layer < GridStack.Instance.GridLayers.Length; layer++)
+            {
+                for (int row = 0; row < dims.Y; row++)
+                {
+                    for (int col = 0; col < dims.X; col++)
+                    {
+                        var cell = GridStack.Instance.GridLayers[layer].GetCell(col, row);
+                        if (cell.CellType == CellType.NONE) { continue; }
+
+                        var lookupCoord = new GraphCoord(layer, col, row);
+                        var dictNode = CoordNodeMap[lookupCoord];
+
+                        for (int dir = 0; dir < 6; dir++)
+                        {
+                            if (cell.Edges[dir] == EdgeState.Connected)
+                            {
+                                GridUtility.GetOffsetOfDir((EdgeDir)dir, out Vector2Int gridOffset, out int layerOffset);
+                                var adjLookupCoord = new GraphCoord(layer + layerOffset, col + gridOffset.x, row + gridOffset.y);
+                                GraphNode adjNode = CoordNodeMap[adjLookupCoord];
+
+                                var newEdge = new GraphEdge();
+                                newEdge.Init(adjNode);
+                                dictNode.Edges.Add(newEdge);
+                            }
+                        }
+
+                        CoordNodeMap[lookupCoord] = dictNode;
+                    }
+                }
+            }
+
+            // TODO: CORE -- ASSEMBLE CRUCIAL NODES / EDGES
+
+
+            // SUMMARY AND RETURN
+
+            numCrucialNodes = crucialNodes.Count;
+            numCrucialEdges = 0;
+            foreach (var cNode in crucialNodes)
+            {
+                if (cNode.Edges == null) { continue; }
+                numCrucialEdges += cNode.Edges.Count;
             }
         }
 

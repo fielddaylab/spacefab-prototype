@@ -11,6 +11,8 @@ namespace SpaceFab.ChipDesign
     /// </summary>
     public class GridStack : MonoBehaviour
     {
+        public const int METAL_LAYER = 0;
+        public const int TRANSISTOR_LAYER = 1;
         public static GridStack Instance;
 
         public Dimensions LayerDims; // x and y dims of each layer
@@ -33,8 +35,8 @@ namespace SpaceFab.ChipDesign
             { 
                 GridLayers = new GridLayer[]
                 {
-                    new GridLayer(LayerDims.X, LayerDims.Y, 0),  // metal layer (highest)
-                    new GridLayer(LayerDims.X, LayerDims.Y, 1)   // transistor layer (lowest)
+                    new GridLayer(LayerDims.X, LayerDims.Y, METAL_LAYER),  // metal layer (highest)
+                    new GridLayer(LayerDims.X, LayerDims.Y, TRANSISTOR_LAYER)   // transistor layer (lowest)
                 };
             }
 
@@ -50,8 +52,8 @@ namespace SpaceFab.ChipDesign
             LayerDims = config.LayerDims;
             GridLayers = new GridLayer[]
             {
-                new GridLayer(LayerDims.X, LayerDims.Y, 0),  // metal layer (highest)
-                new GridLayer(LayerDims.X, LayerDims.Y, 1)   // transistor layer (lowest)
+                new GridLayer(LayerDims.X, LayerDims.Y, METAL_LAYER),  // metal layer (highest)
+                new GridLayer(LayerDims.X, LayerDims.Y, TRANSISTOR_LAYER)   // transistor layer (lowest)
             };
             for (int i = 0; i < config.Cells.Length; i++)
             {
@@ -102,6 +104,36 @@ namespace SpaceFab.ChipDesign
             else // (dif.y == 0)
             {
                 return EdgeDir.SOUTH;
+            }
+        }
+
+        public static void GetOffsetOfDir(EdgeDir dir, out Vector2Int gridOffset, out int layerOffset)
+        {
+            layerOffset = 0;
+            gridOffset = Vector2Int.zero;
+
+            switch (dir)
+            {
+                case EdgeDir.NORTH:
+                    gridOffset.y = 1;
+                    break;
+                case EdgeDir.EAST:
+                    gridOffset.x = 1;
+                    break;
+                case EdgeDir.ASCEND:
+                    layerOffset = -1;
+                    break;
+                case EdgeDir.SOUTH:
+                    gridOffset.y = -1;
+                    break;
+                case EdgeDir.WEST:
+                    gridOffset.x = -1;
+                    break;
+                case EdgeDir.DESCEND:
+                    layerOffset = 1;
+                    break;
+                default:
+                    break;
             }
         }
     }

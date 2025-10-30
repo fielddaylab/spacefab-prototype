@@ -202,7 +202,7 @@ namespace SpaceFab.ChipDesign
                     EraseCell(cell, gridPos);
                     break;
                 case ToolType.DrawLinks:
-                    cell.CellType = CellType.Metal;
+                    DrawMetal(ref cell, gridPos);
                     break;
                 case ToolType.DrawVia:
                     DrawVia(ref cell, gridPos);
@@ -235,28 +235,22 @@ namespace SpaceFab.ChipDesign
                     cell.CellType = CellType.PTransistor;
                     break;
                 case ToolType.DrawInNodes:
-                    cell.CellType = CellType.Input;
-                    cell.SubtypeLabel = "IN";
+                    DrawIONode(true, "IN", ref cell, gridPos);
                     break;
                 case ToolType.DrawOutNodes:
-                    cell.CellType = CellType.Output;
-                    cell.SubtypeLabel = "OUT";
+                    DrawIONode(false, "OUT", ref cell, gridPos);
                     break;
                 case ToolType.DrawVPlusNodes:
-                    cell.CellType = CellType.Input;
-                    cell.SubtypeLabel = "V+";
+                    DrawIONode(true, "V+", ref cell, gridPos);
                     break;
                 case ToolType.DrawVMinusNodes:
-                    cell.CellType = CellType.Input;
-                    cell.SubtypeLabel = "V-";
+                    DrawIONode(true, "V-", ref cell, gridPos);
                     break;
                 case ToolType.DrawANodes:
-                    cell.CellType = CellType.Input;
-                    cell.SubtypeLabel = "A";
+                    DrawIONode(true, "A", ref cell, gridPos);
                     break;
                 case ToolType.DrawBNodes:
-                    cell.CellType = CellType.Input;
-                    cell.SubtypeLabel = "B";
+                    DrawIONode(true, "B", ref cell, gridPos);
                     break;
                 case ToolType.DrawVia:
                     DrawVia(ref cell, gridPos);
@@ -481,6 +475,54 @@ namespace SpaceFab.ChipDesign
 
         #region Helpers
 
+        private void DrawMetal(ref GridCell cell, Vector2Int gridPos)
+        {
+            cell.CellType = CellType.Metal;
+
+            // if an input or output is below, connect edge
+            GridInteractionLayer linkedLayerType = GridInteractionLayer.Transistor;
+            var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
+            var linkedCell = linkedLayer.GetCell(gridPos);
+
+            if (linkedCell.CellType == CellType.Input || linkedCell.CellType == CellType.Output)
+            {
+                cell.TransferType = TransferType.Implicit;
+                linkedCell.TransferType = TransferType.Implicit;
+
+                int cellEdgeIndex = (int)EdgeDir.DESCEND;
+                int linkedEdgeIndex = (int)EdgeDir.ASCEND;
+                cell.Edges[cellEdgeIndex] = EdgeState.Connected;
+                linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+            }
+        }
+
+        private void ConnectToMetalLayer(ref GridCell cell, Vector2Int gridPos)
+        {
+            // in there's metal above, connect edge
+            GridInteractionLayer linkedLayerType = GridInteractionLayer.Metal;
+            var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
+            var linkedCell = linkedLayer.GetCell(gridPos);
+
+            if (linkedCell.CellType == CellType.Metal)
+            {
+                cell.TransferType = TransferType.Implicit;
+                linkedCell.TransferType = TransferType.Implicit;
+
+                int cellEdgeIndex = (int)EdgeDir.ASCEND;
+                int linkedEdgeIndex = (int)EdgeDir.DESCEND;
+                cell.Edges[cellEdgeIndex] = EdgeState.Connected;
+                linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+            }
+        }
+
+        private void DrawIONode(bool isInput, string subtype, ref GridCell cell, Vector2Int gridPos)
+        {
+            if (cell.TransferType == TransferType.Gate || cell.TransferType == TransferType.Via) { return; }
+            cell.CellType = isInput ? CellType.Input : CellType.Output;
+            cell.SubtypeLabel = subtype;
+            ConnectToMetalLayer(ref cell, gridPos);
+        }
+
         private void DrawVia(ref GridCell cell, Vector2Int gridPos)
         {
             if (cell.CellType == CellType.Input || cell.CellType == CellType.Output) { return; }
@@ -558,6 +600,15 @@ namespace SpaceFab.ChipDesign
             // set properties
             toCell.CellType = type;
 
+            if (type == CellType.Metal)
+            {
+                DrawMetal(ref toCell, gridPos);
+            }
+            else if (type == CellType.Input || type == CellType.Output)
+            {
+                ConnectToMetalLayer(ref toCell, gridPos);
+            }
+
             // save changes
             layer.SetCell(m_LastKnownDragCoord, fromCell);
             layer.SetCell(gridPos, toCell);
@@ -568,29 +619,7 @@ namespace SpaceFab.ChipDesign
             int layerOffset = 0;
             Vector2Int gridOffset = Vector2Int.zero;
 
-            switch (dir)
-            {
-                case EdgeDir.NORTH:
-                    gridOffset.y = 1;
-                    break;
-                case EdgeDir.EAST:
-                    gridOffset.x = 1;
-                    break;
-                case EdgeDir.ASCEND:
-                    layerOffset = -1;
-                    break;
-                case EdgeDir.SOUTH:
-                    gridOffset.y = -1;
-                    break;
-                case EdgeDir.WEST:
-                    gridOffset.x = -1;
-                    break;
-                case EdgeDir.DESCEND:
-                    layerOffset = 1;
-                    break;
-                default:
-                    break;
-            }
+            GridUtility.GetOffsetOfDir(dir, out gridOffset, out layerOffset);
 
             var adjGridPos = gridPos + gridOffset;
             var adjLayerIndex = (int)ActiveLayer + layerOffset;
