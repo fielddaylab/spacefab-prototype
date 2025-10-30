@@ -36,6 +36,9 @@ namespace SpaceFab.ChipDesign {
         public Sprite IOInner;
         public Sprite IOOuter;
 
+        [Header("Flow")]
+        public Sprite FlowIndicator;
+
 
         private void Awake()
         {

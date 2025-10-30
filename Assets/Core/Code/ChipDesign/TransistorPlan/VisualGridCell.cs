@@ -7,6 +7,7 @@ namespace SpaceFab.ChipDesign
 {
     public class VisualGridCell : MonoBehaviour
     {
+        private const int FLOW_SORT_ORDER = 500;
         private const int TRANSFER_SORT_ORDER = 200;
         private const int METAL_SORT_ORDER = 100;
         private const int TRANSISTOR_SORT_ORDER = 0;
@@ -17,6 +18,32 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private SpriteRenderer m_transferRenderer;
         [SerializeField] private SpriteRenderer[] m_dirRenderers;
 
+        [SerializeField] private SpriteRenderer m_flowIndicator;
+
+        public void SetFlow(FlowState flow)
+        {
+            m_flowIndicator.sortingOrder = FLOW_SORT_ORDER;
+
+            switch (flow)
+            {
+                case (FlowState.Hi):
+                    m_flowIndicator.sprite = SpriteDB.Instance.FlowIndicator;
+                    m_flowIndicator.color = Color.yellow;
+                    break;
+                case (FlowState.Lo):
+                    m_flowIndicator.sprite = SpriteDB.Instance.FlowIndicator;
+                    m_flowIndicator.color = Color.blue;
+                    break;
+                case (FlowState.Unstable):
+                    m_flowIndicator.sprite = SpriteDB.Instance.FlowIndicator;
+                    m_flowIndicator.color = Color.red;
+                    break;
+                default:
+                    m_flowIndicator.sprite = null;
+                    m_flowIndicator.color = Color.white;
+                    break;
+            }
+        }
 
         public void RefreshVisual(GridCell cellData, int layerIndex, int col, int row)
         {

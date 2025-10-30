@@ -2,6 +2,7 @@ using FieldDay;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SpaceFab.ChipDesign
 {
@@ -21,6 +22,8 @@ namespace SpaceFab.ChipDesign
         private Vector2Int m_LastKnownDragCoord;
         private Vector2Int m_LastTerminatedDragCoord;
 
+        [HideInInspector] public bool InteractInputsEnabled = true;
+
         #endregion Members
 
         #region Unity Callbacks
@@ -28,6 +31,12 @@ namespace SpaceFab.ChipDesign
         private void Awake()
         {
             Instance = this;
+        }
+
+        private void Start()
+        {
+            Game.Events.Register(GameEvents.OnResultsDisplayed, HandleResultsDisplayed);
+            Game.Events.Register(GameEvents.OnResultsHidden, HandleResultsHidden);
         }
 
         private void Update()
@@ -41,6 +50,9 @@ namespace SpaceFab.ChipDesign
 
         private void ProcessInputs()
         {
+            if (EventSystem.current.IsPointerOverGameObject()) { return; }
+            if (!InteractInputsEnabled) { return; }
+
             if (Input.GetMouseButtonDown(0)) {
                 HandleLeftMouseDown();
             }
@@ -618,5 +630,19 @@ namespace SpaceFab.ChipDesign
         }
 
         #endregion // Layers
+
+        #region Handlers
+
+        private void HandleResultsDisplayed()
+        {
+            InteractInputsEnabled = false;
+        }
+
+        private void HandleResultsHidden()
+        {
+            InteractInputsEnabled = true;
+        }
+
+        #endregion // Handlers
     }
 }

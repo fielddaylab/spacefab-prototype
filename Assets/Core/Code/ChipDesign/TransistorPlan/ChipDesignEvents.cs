@@ -12,8 +12,11 @@ namespace SpaceFab.ChipDesign
         public static StringHash32 EvaluationStarted = "evaluation-started";
         public static StringHash32 OnLayoutChanged = "on-layout-changed";
         public static StringHash32 OnFloorLinksChanged = "on-floor-links-changed";
+        public static StringHash32 OnResultsDisplayed = "on-results-displayed";
+        public static StringHash32 OnResultsHidden = "on-results-hidden";
 
         public static StringHash32 OnConfigChanged = "on-config-changed";
         public static StringHash32 NewGridStackCreated = "new-grid-stack-created";
+
     }
 }
