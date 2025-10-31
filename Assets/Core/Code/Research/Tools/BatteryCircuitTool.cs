@@ -29,9 +29,11 @@ namespace SpaceFab.Research {
                 if (!ResearchMaterialUtility.IsStableAtVoltage(input, Voltage.InputVoltage)) {
                     ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), ExplosionStyle.VoltageBreakdown, 1);
                 }
+                ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.HighMobility) != 0 ? current : 0);
             } else {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
+                ResearchToolUtility.SetHighMobilityStrength(null, 0);
             }
         }
     }

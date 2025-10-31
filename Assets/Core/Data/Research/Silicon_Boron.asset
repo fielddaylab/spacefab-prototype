@@ -19,6 +19,6 @@ MonoBehaviour:
     m_HashValue: 1163381446
   Electrical: 1
   Thermal: 0
-  SpecialTags: 
+  SpecialTags: 2
   DielectricStrength: 0
   DopantType: 1

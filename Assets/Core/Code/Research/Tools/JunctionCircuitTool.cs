@@ -1,5 +1,6 @@
 using BeauUtil;
 using System;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 namespace SpaceFab.Research {
@@ -35,11 +36,25 @@ namespace SpaceFab.Research {
                     current = Math.Min(Math.Abs(currentA), Math.Abs(currentB)) * Math.Sign(Voltage.InputVoltage);
                 }
 
+                bool lightEmitting = (inputA.SpecialTags & inputB.SpecialTags & SpecialTag.LightEmitting) != 0;
+                bool highMobility = (inputA.SpecialTags & inputB.SpecialTags & SpecialTag.HighMobility) != 0;
+
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
+                ResearchToolUtility.SetLightEmissionStrength(m_Tool.SlotsEffectPosition, lightEmitting ? current : 0);
+                ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, highMobility ? current : 0);
+
+                if (!ResearchMaterialUtility.IsStableAtVoltage(inputA, Voltage.InputVoltage)) {
+                    ResearchMaterialUtility.ExplodeItem(m_Tool.Slots[0].Item, ExplosionStyle.VoltageBreakdown);
+                }
+                if (!ResearchMaterialUtility.IsStableAtVoltage(inputB, Voltage.InputVoltage)) {
+                    ResearchMaterialUtility.ExplodeItem(m_Tool.Slots[1].Item, ExplosionStyle.VoltageBreakdown);
+                }
             } else {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
+                ResearchToolUtility.SetLightEmissionStrength(null, 0);
+                ResearchToolUtility.SetHighMobilityStrength(null, 0);
             }
         }
     }

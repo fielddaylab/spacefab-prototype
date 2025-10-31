@@ -15,8 +15,10 @@ MonoBehaviour:
   DisplayName: Phosphorus
   ChemicalSymbol: P
   Material: {fileID: 2100000, guid: e7ce83bbfbaa8e04488a8871c7acc025, type: 2}
+  Parent:
+    m_HashValue: 0
   Electrical: 4
   Thermal: 0
-  SpecialTags: 
+  SpecialTags: 0
   DielectricStrength: 0
   DopantType: 2

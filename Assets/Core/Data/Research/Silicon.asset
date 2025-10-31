@@ -15,8 +15,10 @@ MonoBehaviour:
   DisplayName: Silicon
   ChemicalSymbol: Si
   Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  Parent:
+    m_HashValue: 0
   Electrical: 3
   Thermal: 0
-  SpecialTags: 
+  SpecialTags: 2
   DielectricStrength: 0
   DopantType: 0

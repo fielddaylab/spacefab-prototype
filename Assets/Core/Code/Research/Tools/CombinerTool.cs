@@ -34,6 +34,7 @@ namespace SpaceFab.Research {
                 if (recipeBook.TryGetResult(ResearchToolUtility.GetInputMaterial(m_Tool, 0).AssetId, ResearchToolUtility.GetInputMaterial(m_Tool, 1).AssetId, out StringHash32 outputMaterial)) {
                     ResearchSlotUtility.FillInSlot(m_Tool.OutputSlot, Find.NamedAsset<ResearchMaterial>(outputMaterial));
                     m_OutputWasFilled = true;
+                    VfxUtility.PlayFromPool(Find.State<ResearchPools>().ShineEffectPool, m_Tool.OutputSlot.transform);
                     Sfx.Play("Research.Gem.NewCombination");
                 } else {
                     ResearchMaterialUtility.BeginExplosions();

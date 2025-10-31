@@ -12,9 +12,14 @@ using UnityEngine;
 namespace SpaceFab.Research {
 	public sealed class ResearchPools : SharedStateComponent, IScenePreload {
 		[Serializable] public sealed class ItemPool : SerializablePool<ResearchMaterialItem> { }
+        [Serializable] public sealed class VfxPool : SerializablePool<VfxInstance> { }
 
-		public ItemPool Items;
+        public ItemPool Items;
 		public Material PreExplodeItemMaterial;
+
+        public VfxPool ExplosionEffectPool;
+        public VfxPool ShineEffectPool;
+        public VfxPool BoltZapEffectPool;
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
             Items.Prewarm();

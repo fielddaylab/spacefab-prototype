@@ -78,15 +78,17 @@ namespace SpaceFab.Research {
                 if (!ResearchMaterialUtility.IsStableAtTemperature(input, Temperature)) {
                     CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                     CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
-                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), ExplosionStyle.TemperatureBreakdown, 0.4f);
+                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), Temperature > 0.5f ? ExplosionStyle.TemperatureBreakdownHot : ExplosionStyle.TemperatureBreakdownCold, 0.4f);
                 } else {
                     float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
                     CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
                     CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
+                    ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.HighMobility) != 0 ? current : 0);
                 }
             } else {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
+                ResearchToolUtility.SetHighMobilityStrength(null, 0);
             }
         }
     }

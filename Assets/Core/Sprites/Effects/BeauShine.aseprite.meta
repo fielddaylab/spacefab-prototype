@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ed713e04e48d52444ae40cad0e3483f8
+guid: 8dbf51048c807b0488bd2894197ae40d
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -32,10 +32,10 @@ ScriptedImporter:
     sRGBTexture: 1
     spriteMode: 2
     spriteExtrude: 1
-    spriteMeshType: 1
+    spriteMeshType: 0
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 500
+    spritePixelsToUnits: 100
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638974386449141541
+  platformSettingsDirtyTick: 638975026669318352
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,18 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: BoltParticle_0
+  - name: BeauShine_0
     originalName: 
-    pivot: {x: 0.6923077, y: 0.49056605}
+    pivot: {x: 0.5, y: 0.49122807}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 27
-      y: 65
-      width: 13
-      height: 53
-    spriteID: 73105ca040b2ad549aa22205f3568128
+      x: 66
+      y: 2
+      width: 56
+      height: 57
+    spriteID: 0306c10191dba64489f864d827e85e07
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -140,19 +140,19 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 27, y: 65}
-  - name: BoltParticle_1
+    uvTransform: {x: 66, y: 2}
+  - name: BeauShine_1
     originalName: 
-    pivot: {x: 0.47368422, y: 0.5272727}
+    pivot: {x: 0.5263158, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
       y: 64
-      width: 19
-      height: 55
-    spriteID: 05d1579a5b2d74e4c82a1de194e62144
+      width: 57
+      height: 60
+    spriteID: 2a3ab7e0938b61b4db1c3d96b4494c79
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -161,38 +161,18 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 2, y: 64}
-  - name: BoltParticle_2
+  - name: BeauShine_2
     originalName: 
-    pivot: {x: 0.5294118, y: 0.4915254}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 27
-      y: 2
-      width: 17
-      height: 59
-    spriteID: eb59f4b1405ebf245b5f44a6fbf5944a
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 27, y: 2}
-  - name: BoltParticle_3
-    originalName: 
-    pivot: {x: 0.47619048, y: 0.51724136}
+    pivot: {x: 0.5166667, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 21
+      width: 60
       height: 58
-    spriteID: 48b7a6d9e01efbb41b651007d916a9d4
+    spriteID: c84726e6964d0ff4b85248027accaf5c
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -201,11 +181,31 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 2, y: 2}
+  - name: BeauShine_3
+    originalName: 
+    pivot: {x: 0.50877196, y: 0.5084746}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 63
+      y: 64
+      width: 57
+      height: 59
+    spriteID: 0cd08fc513145b948bb19c75d5473f1f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 63, y: 64}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 399771624
-    name: BoltSprite
+    guid: 683227032
+    name: BeauShine
     layerFlags: 0
     layerType: 0
     blendMode: 0
@@ -214,38 +214,38 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 7
-        y: 6
-        width: 13
-        height: 53
-      spriteId: 73105ca040b2ad549aa22205f3568128
+        x: 4
+        y: 4
+        width: 56
+        height: 57
+      spriteId: 0306c10191dba64489f864d827e85e07
     - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
-        x: 7
-        y: 3
-        width: 19
-        height: 55
-      spriteId: 05d1579a5b2d74e4c82a1de194e62144
+        x: 2
+        y: 2
+        width: 57
+        height: 60
+      spriteId: 2a3ab7e0938b61b4db1c3d96b4494c79
     - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
-        x: 7
+        x: 1
         y: 3
-        width: 17
-        height: 59
-      spriteId: eb59f4b1405ebf245b5f44a6fbf5944a
+        width: 60
+        height: 58
+      spriteId: c84726e6964d0ff4b85248027accaf5c
     - name: Frame_3
       frameIndex: 3
       additiveSortOrder: 0
       cellRect:
-        x: 6
+        x: 3
         y: 2
-        width: 21
-        height: 58
-      spriteId: 48b7a6d9e01efbb41b651007d916a9d4
+        width: 57
+        height: 59
+      spriteId: 0cd08fc513145b948bb19c75d5473f1f
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -300,4 +300,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 32, y: 64}
+  canvasSize: {x: 64, y: 64}

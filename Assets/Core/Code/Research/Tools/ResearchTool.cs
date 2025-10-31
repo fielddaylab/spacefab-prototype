@@ -6,6 +6,7 @@ using FieldDay.Components;
 using FieldDay.Scenes;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace SpaceFab.Research {
     public sealed class ResearchTool : BatchedComponent, IScenePreload {
@@ -13,6 +14,7 @@ namespace SpaceFab.Research {
         public ResearchSlot[] Slots;
         public ResearchSlot OutputSlot;
         public CircuitRenderer Circuit;
+        public Transform SlotsEffectPosition;
 
         [NonSerialized] public bool AllSlotsFilled;
 

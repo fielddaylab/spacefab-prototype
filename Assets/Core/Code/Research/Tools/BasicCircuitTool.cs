@@ -3,6 +3,7 @@ using BeauUtil;
 using FieldDay.Components;
 using System;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace SpaceFab.Research {
     public sealed class BasicCircuitTool : MonoBehaviour {
@@ -23,9 +24,11 @@ namespace SpaceFab.Research {
                 float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
+                ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.HighMobility) != 0 ? current : 0);
             } else {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
+                ResearchToolUtility.SetHighMobilityStrength(null, 0);
             }
         }
     }

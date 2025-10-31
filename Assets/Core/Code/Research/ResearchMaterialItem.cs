@@ -33,14 +33,25 @@ namespace SpaceFab.Research {
             if (item.Clickable) {
                 item.Clickable.enabled = false;
             }
-            item.ExplosionRoutine.Replace(item, ExplosionRoutine(item, style)).DelayBy(delay);
+            item.ExplosionRoutine.Replace(item, ExplosionRoutine(item, style, delay));
             BeginExplosions();
         }
 
-        static private IEnumerator ExplosionRoutine(ResearchMaterialItem item, ExplosionStyle style) {
+        static private IEnumerator ExplosionRoutine(ResearchMaterialItem item, ExplosionStyle style, float delay) {
+            ResearchPools pools = Find.State<ResearchPools>();
+
+            if (style == ExplosionStyle.VoltageBreakdown) {
+                VfxUtility.PlayFromPool(pools.BoltZapEffectPool, item.transform);
+            }
+            if (delay > 0) {
+                yield return delay;
+            }
+
             item.Renderer.Renderer.sharedMaterial = Find.State<ResearchPools>().PreExplodeItemMaterial;
-            yield return item.transform.MoveTo(item.transform.localPosition.x + 0.1f, 0.3f, Axis.X, Space.Self).Wave(Wave.Function.Sin, 6);
+            yield return item.transform.MoveTo(item.transform.localPosition.x + 0.1f, 0.27f, Axis.X, Space.Self).Wave(Wave.Function.Sin, 6);
+            VfxUtility.PlayFromPool(pools.ExplosionEffectPool, item.transform);
             Sfx.Play("Research.Gem.Explode");
+            yield return 0.05f;
             ResearchSlotUtility.FillInSlot(item.CurrentSlot, null);
         }
 
@@ -66,6 +77,7 @@ namespace SpaceFab.Research {
         Default,
         InvalidCombo,
         VoltageBreakdown,
-        TemperatureBreakdown,
+        TemperatureBreakdownHot,
+        TemperatureBreakdownCold,
     }
 }

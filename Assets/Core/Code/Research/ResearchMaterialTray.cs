@@ -38,7 +38,7 @@ namespace SpaceFab.Research {
             return tray.Items.Find((a, b) => a.Material == b, material);
         }
 
-        static public void SpawnNewTrayItem(ResearchMaterial material) {
+        static public ResearchMaterialItem SpawnNewTrayItem(ResearchMaterial material) {
             ResearchMaterialTray tray = Find.State<ResearchMaterialTray>();
             ResearchPools pools = Find.State<ResearchPools>();
             
@@ -48,6 +48,8 @@ namespace SpaceFab.Research {
             item.CurrentSlot = null;
 
             tray.Items.PushBack(item);
+
+            return item;
         }
 
         static public void ArrangeTrayItems() {

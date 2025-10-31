@@ -55,6 +55,7 @@ namespace SpaceFab.Research {
     static public partial class ResearchMaterialUtility {
         static public float GetCurrent(ResearchMaterial material, float voltage, float temperature) {
             // TODO: implement correctly
+            float multiplier = (material.SpecialTags & SpecialTag.HighMobility) != 0 ? 1.5f : 1;
             switch(material.Electrical) {
                 case ElectricalTag.Dopant: {
                     return 0;
@@ -63,10 +64,10 @@ namespace SpaceFab.Research {
                     return 0;
                 }
                 case ElectricalTag.Conductor: {
-                    return voltage * (0.2f + 0.8f * (1 - temperature));
+                    return multiplier * voltage * (0.2f + 0.8f * (1 - temperature));
                 }
                 case ElectricalTag.Semiconductor: {
-                    return voltage * (0.2f + 0.8f * temperature);
+                    return multiplier * voltage * (0.2f + 0.8f * temperature);
                 }
                 default: {
                     Assert.Fail("unknown electrical mode");

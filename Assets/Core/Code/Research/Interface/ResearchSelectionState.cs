@@ -26,9 +26,10 @@ namespace SpaceFab.Research {
 
 			state.Current = material;
 			if (inv.KnownMaterials.Add(material.AssetId)) {
-				ResearchMaterialUtility.SpawnNewTrayItem(material);
+				ResearchMaterialItem spawned = ResearchMaterialUtility.SpawnNewTrayItem(material);
 				ResearchMaterialUtility.ArrangeTrayItems();
-			}
+                VfxUtility.PlayFromPool(Find.State<ResearchPools>().ShineEffectPool, spawned.transform);
+            }
 
 			state.OnUpdated.Invoke(material);
 		}
