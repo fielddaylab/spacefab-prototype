@@ -179,4 +179,10 @@ namespace SpaceFab.Research {
             return string.Empty;
         }
     }
+
+    [Serializable]
+    public struct ResearchMaterialPair {
+        public ResearchMaterial Base;
+        public ResearchMaterial Dopant;
+    }
 }
