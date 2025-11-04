@@ -348,9 +348,12 @@ namespace SpaceFab.ChipDesign
                         var cell = GridStack.Instance.GridLayers[layer].GetCell(col, row);
                         if (cell.CellType == CellType.NONE) { continue; }
 
-                        // Inputs, Outputs, and Gates are crucial nodes -- gather them
+                        // Inputs, Outputs, Gates, and P-N transitions are crucial nodes -- gather them
                         if ((cell.CellType == CellType.Input || cell.CellType == CellType.Output)
-                            || (cell.TransferType == TransferType.GateAbove) || (cell.TransferType == TransferType.GateBelow))
+                            || (cell.TransferType == TransferType.GateAbove)
+                            || (cell.TransferType == TransferType.GateBelow)
+                            || IsTransistorTransition(layer, col, row, ref coordNodeMap)
+                            )
                         {
                             var crucialNode = new CrucialGraphNode();
                             crucialNode.Init(layer, col, row);
@@ -374,6 +377,37 @@ namespace SpaceFab.ChipDesign
                     }
                 }
             }
+        }
+
+        private bool IsTransistorTransition(int layer, int col, int row, ref Dictionary<GraphCoord, GraphNode> coordNodeMap)
+        {
+            if (layer == GridStack.METAL_LAYER) { return false; }
+
+            var cell = GridStack.Instance.GridLayers[layer].GetCell(col, row);
+            if (cell.CellType != CellType.PTransistor && cell.CellType != CellType.NTransistor) { return false; }
+
+            var lookupCoord = new GraphCoord(layer, col, row);
+
+            for (int dir = 0; dir < 6; dir++)
+            {
+                if (cell.Edges[dir] == EdgeState.Connected)
+                {
+                    GridUtility.GetOffsetOfDir((EdgeDir)dir, out Vector2Int gridOffset, out int layerOffset);
+                    var adjLookupCoord = new GraphCoord(layer + layerOffset, col + gridOffset.x, row + gridOffset.y);
+
+                    var adjCell = GridStack.Instance.GetCellDirect(adjLookupCoord);
+                    if (cell.CellType == CellType.NTransistor && adjCell.CellType == CellType.PTransistor)
+                    {
+                        return true;
+                    }
+                    else if (cell.CellType == CellType.PTransistor && adjCell.CellType == CellType.NTransistor)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void GraphConstructEdges(ref Dictionary<GraphCoord, GraphNode> coordNodeMap)
@@ -463,7 +497,10 @@ namespace SpaceFab.ChipDesign
                                 // underlying gate is ready to be evaluated
                                 var belowCoord = accumulatedCrucialNodes[i].Coord;
                                 belowCoord.Layer = GridStack.TRANSISTOR_LAYER;
-                                nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
+                                if (crucialCoordNodeMap.ContainsKey(belowCoord))
+                                {
+                                    nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
+                                }
                             }
                             else
                             {
