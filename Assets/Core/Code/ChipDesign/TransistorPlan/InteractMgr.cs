@@ -517,7 +517,7 @@ namespace SpaceFab.ChipDesign
 
         private void DrawIONode(bool isInput, string subtype, ref GridCell cell, Vector2Int gridPos)
         {
-            if (cell.TransferType == TransferType.Gate || cell.TransferType == TransferType.Via) { return; }
+            if (cell.TransferType == TransferType.GateAbove || cell.TransferType == TransferType.GateBelow  ||  cell.TransferType == TransferType.Via) { return; }
             cell.CellType = isInput ? CellType.Input : CellType.Output;
             cell.SubtypeLabel = subtype;
             ConnectToMetalLayer(ref cell, gridPos);
@@ -548,13 +548,15 @@ namespace SpaceFab.ChipDesign
             var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
             var linkedCell = linkedLayer.GetCell(gridPos);
 
-            cell.TransferType = TransferType.Gate;
-            linkedCell.TransferType = TransferType.Gate;
+            cell.TransferType = ActiveLayer == GridInteractionLayer.Metal ? TransferType.GateAbove : TransferType.GateBelow;
+            linkedCell.TransferType = ActiveLayer == GridInteractionLayer.Metal ? TransferType.GateBelow : TransferType.GateAbove;
 
+            /*
             int cellEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.DESCEND : (int)EdgeDir.ASCEND;
             int linkedEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.ASCEND : (int)EdgeDir.DESCEND;
             cell.Edges[cellEdgeIndex] = EdgeState.Connected;
             linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+            */
         }
 
         private void EraseCell(GridCell cell, Vector2Int gridPos)

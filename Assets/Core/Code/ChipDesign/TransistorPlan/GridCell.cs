@@ -26,7 +26,8 @@ namespace SpaceFab.ChipDesign
     {
         NONE,
         Via,
-        Gate,
+        GateAbove,
+        GateBelow,
         Implicit // Input/Output to Metal
     }
 

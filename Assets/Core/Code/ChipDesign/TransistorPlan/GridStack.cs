@@ -80,6 +80,16 @@ namespace SpaceFab.ChipDesign
             return true;
         }
 
+        public GridCell GetCellDirect(int layer, int col, int row)
+        {
+            return GridLayers[layer].GetCell(col, row);
+        }
+
+        public GridCell GetCellDirect(EvaluationMgr.GraphCoord coord)
+        {
+            return GridLayers[coord.Layer].GetCell(coord.Col, coord.Row);
+        }
+
         #endregion // Queries
     }
 

@@ -92,7 +92,7 @@ namespace SpaceFab.ChipDesign
                 case TransferType.Via:
                     m_transferRenderer.sprite = SpriteDB.Instance.Via;
                     break;
-                case TransferType.Gate:
+                case TransferType.GateAbove:
                     m_transferRenderer.sprite = SpriteDB.Instance.Gate;
                     break;
                 default:

@@ -37,6 +37,7 @@ namespace SpaceFab.ChipDesign
             public string Name;
             public List<GraphEdge> Edges;
             public GraphCoord Coord;
+            public bool Visited;
 
             public void Init(int layerIndex, int col, int row)
             {
@@ -56,6 +57,8 @@ namespace SpaceFab.ChipDesign
                 Coord.Layer = layerIndex;
                 Coord.Col = col;
                 Coord.Row = row;
+
+                Visited = false;
             }
         }
 
@@ -81,6 +84,22 @@ namespace SpaceFab.ChipDesign
                 Col = col;
                 Row = row;
             }
+
+            public static bool operator ==(GraphCoord c1, GraphCoord c2)
+            {
+                return c1.Equals(c2);
+            }
+
+            public static bool operator !=(GraphCoord c1, GraphCoord c2)
+            {
+                return !c1.Equals(c2);
+            }
+
+            public override bool Equals(object obj)
+            {
+                var other = (GraphCoord)obj;
+                return (Layer == other.Layer) && (Col == other.Col) && (Row == other.Row);
+            }
         }
 
 
@@ -89,10 +108,13 @@ namespace SpaceFab.ChipDesign
             public string Name;
             public List<CrucialGraphEdge> Edges; // Edges to other CrucialNodes
             public GraphCoord Coord;
+            public int EvalDepth;
+            public List<GraphCoord> NoReturnList; // Prevent directed edges toward these nodes
 
             public void Init(int layerIndex, int col, int row)
             {
                 Edges = new List<CrucialGraphEdge>();
+                NoReturnList = new List<GraphCoord>();
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("L");
@@ -109,17 +131,32 @@ namespace SpaceFab.ChipDesign
                 Coord.Col = col;
                 Coord.Row = row;
             }
+
+            public bool ContainsCycle(CrucialGraphEdge toCheck)
+            {
+                foreach (var existingEdge in Edges)
+                {
+                    if (existingEdge.Other.Name == toCheck.Other.Name)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         private struct CrucialGraphEdge
         {
-            public GraphNode Other { get; private set; }
-            public List<GraphNode> Path { get; private set; }
+            public CrucialGraphNode Other;
+            public List<GraphNode> Path;
+            public int EvalDepth;
+            public bool CycleDetected;
 
-            public void Init(GraphNode other, List<GraphNode> path)
+            public void Init(CrucialGraphNode other, List<GraphNode> path, int evalDepth)
             {
                 Other = other;
                 Path = path;
+                EvalDepth = evalDepth;
             }
         }
 
@@ -160,6 +197,7 @@ namespace SpaceFab.ChipDesign
             int numCrucialEdges = 0;
             ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges);
 
+            /*
             #region CONVERT TOPOLOGICAL 
 
             // Convert to topological map
@@ -213,8 +251,11 @@ namespace SpaceFab.ChipDesign
             }
 
             #endregion // SOLVE TOPOLOGICAL
+            */
 
             // Handle result
+            EvalResult evalResult = EvalResult.Failure;
+
             switch (evalResult)
             {
                 case EvalResult.Failure:
@@ -261,14 +302,34 @@ namespace SpaceFab.ChipDesign
         private void ConstructGraph(out List<CrucialGraphNode> crucialNodes, out List<GraphNode> allNodes, out int numCrucialNodes, out int numCrucialEdges)
         {
             // SETUP
-
             crucialNodes = new List<CrucialGraphNode>();
             allNodes = new List<GraphNode>();
-
-            Dictionary<GraphCoord, GraphNode> CoordNodeMap = new Dictionary<GraphCoord, GraphNode>();
+            Dictionary<GraphCoord, GraphNode> coordNodeMap = new Dictionary<GraphCoord, GraphNode>();
+            Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap = new Dictionary<GraphCoord, CrucialGraphNode>();
 
             // CORE -- CREATE NODES
+            List<CrucialGraphNode> nodeWorkList = new List<CrucialGraphNode>();
+            GraphConstructNodes(ref allNodes, ref crucialNodes, ref nodeWorkList, ref coordNodeMap, ref crucialCoordNodeMap);
 
+            // CORE -- CREATE EDGES
+            GraphConstructEdges(ref coordNodeMap);
+
+            // CORE -- ASSEMBLE CRUCIAL NODES / EDGES
+            SetAllNodesAllPaths(ref coordNodeMap, ref crucialCoordNodeMap, ref nodeWorkList);
+
+            // SUMMARIZE AND RETURN
+
+            numCrucialNodes = crucialNodes.Count;
+            numCrucialEdges = 0;
+            foreach (var cNode in crucialNodes)
+            {
+                if (cNode.Edges == null) { continue; }
+                numCrucialEdges += cNode.Edges.Count;
+            }
+        }
+
+        private void GraphConstructNodes(ref List<GraphNode> allNodes, ref List<CrucialGraphNode> crucialNodes, ref List<CrucialGraphNode> startingCrucialNodes, ref Dictionary<GraphCoord, GraphNode> coordNodeMap, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap)
+        {
             var dims = GridStack.Instance.LayerDims;
             for (int layer = 0; layer < GridStack.Instance.GridLayers.Length; layer++)
             {
@@ -279,30 +340,37 @@ namespace SpaceFab.ChipDesign
                         var cell = GridStack.Instance.GridLayers[layer].GetCell(col, row);
                         if (cell.CellType == CellType.NONE) { continue; }
 
-                        // Inputs, Outputs, and Transistors under Gates are crucial nodes -- gather them on the transistor layer
-                        if (layer == GridStack.TRANSISTOR_LAYER)
+                        // Inputs, Outputs, and Gates are crucial nodes -- gather them
+                        if ((cell.CellType == CellType.Input || cell.CellType == CellType.Output)
+                            || (cell.TransferType == TransferType.GateAbove) || (cell.TransferType == TransferType.GateBelow))
                         {
-                            if ((cell.CellType == CellType.Input || cell.CellType == CellType.Output)
-                                || ((cell.CellType == CellType.NTransistor || cell.CellType == CellType.PTransistor) && cell.TransferType == TransferType.Gate))
-                            {
-                                var crucialNode = new CrucialGraphNode();
-                                crucialNode.Init(layer, col, row);
+                            var crucialNode = new CrucialGraphNode();
+                            crucialNode.Init(layer, col, row);
 
-                                crucialNodes.Add(crucialNode);
+                            crucialNodes.Add(crucialNode);
+
+                            var crucialCoordKey = crucialNode.Coord;
+                            crucialCoordNodeMap.Add(crucialCoordKey, crucialNode);
+
+                            if (cell.CellType == CellType.Input)
+                            {
+                                startingCrucialNodes.Add(crucialNode);
                             }
                         }
 
                         var newNode = new GraphNode();
                         newNode.Init(layer, col, row);
+                        allNodes.Add(newNode);
                         var coordKey = newNode.Coord;
-
-                        CoordNodeMap.Add(coordKey, newNode);
+                        coordNodeMap.Add(coordKey, newNode);
                     }
                 }
             }
+        }
 
-            // CORE -- CREATE EDGES
-
+        private void GraphConstructEdges(ref Dictionary<GraphCoord, GraphNode> coordNodeMap)
+        {
+            var dims = GridStack.Instance.LayerDims;
             for (int layer = 0; layer < GridStack.Instance.GridLayers.Length; layer++)
             {
                 for (int row = 0; row < dims.Y; row++)
@@ -313,7 +381,7 @@ namespace SpaceFab.ChipDesign
                         if (cell.CellType == CellType.NONE) { continue; }
 
                         var lookupCoord = new GraphCoord(layer, col, row);
-                        var dictNode = CoordNodeMap[lookupCoord];
+                        var dictNode = coordNodeMap[lookupCoord];
 
                         for (int dir = 0; dir < 6; dir++)
                         {
@@ -321,7 +389,7 @@ namespace SpaceFab.ChipDesign
                             {
                                 GridUtility.GetOffsetOfDir((EdgeDir)dir, out Vector2Int gridOffset, out int layerOffset);
                                 var adjLookupCoord = new GraphCoord(layer + layerOffset, col + gridOffset.x, row + gridOffset.y);
-                                GraphNode adjNode = CoordNodeMap[adjLookupCoord];
+                                GraphNode adjNode = coordNodeMap[adjLookupCoord];
 
                                 var newEdge = new GraphEdge();
                                 newEdge.Init(adjNode);
@@ -329,23 +397,162 @@ namespace SpaceFab.ChipDesign
                             }
                         }
 
-                        CoordNodeMap[lookupCoord] = dictNode;
+                        coordNodeMap[lookupCoord] = dictNode;
                     }
                 }
             }
+        }
 
-            // TODO: CORE -- ASSEMBLE CRUCIAL NODES / EDGES
+        private void SetAllNodesAllPaths(ref Dictionary<GraphCoord, GraphNode> coordNodeMap, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, ref List<CrucialGraphNode> nodeWorkList)
+        {
+            // reset visited to false for all nodes
+            ResetAllVisited(ref coordNodeMap);
 
-
-            // SUMMARY AND RETURN
-
-            numCrucialNodes = crucialNodes.Count;
-            numCrucialEdges = 0;
-            foreach (var cNode in crucialNodes)
+            // Follow BFS -- Start with Inputs, then append newly found nodes
+            int currDepth = 0;
+            while (nodeWorkList.Count > 0)
             {
-                if (cNode.Edges == null) { continue; }
-                numCrucialEdges += cNode.Edges.Count;
+                var currCrucialNode = nodeWorkList[0];
+                if (currCrucialNode.EvalDepth != currDepth)
+                {
+                    ResetAllVisited(ref coordNodeMap);
+                    currDepth = currCrucialNode.EvalDepth;
+                }
+
+                // "find all paths to all nodes" from starting node:
+
+                // lookup starting node in dict
+                var startingNode = coordNodeMap[currCrucialNode.Coord];
+                // perform DFS on each edge
+                foreach (var origEdge in startingNode.Edges)
+                {
+                    // init path from this edge
+                    var accumulatedPath = new List<GraphNode>();
+                    var accumulatedCrucialNodes = new List<CrucialGraphNode>();
+                    accumulatedPath.Add(startingNode);
+                    // keep track of the path of nodes
+                    SetAllNodesAllPathsRecursive(currCrucialNode.Coord, origEdge.Other.Coord, ref coordNodeMap, ref crucialCoordNodeMap, ref accumulatedPath, ref accumulatedCrucialNodes, currDepth);
+
+                    // For each found node along this edge, set crucial edge path to the accumulated edge path
+                    var cNode = crucialCoordNodeMap[currCrucialNode.Coord];
+
+                    for (int i = 0; i < accumulatedCrucialNodes.Count; i++)
+                    {
+                        var newCrucialEdge = new CrucialGraphEdge();
+                        newCrucialEdge.Init(accumulatedCrucialNodes[i], accumulatedPath, currDepth);
+
+                        if (!cNode.ContainsCycle(newCrucialEdge))
+                        {
+                            var transferType = GridStack.Instance.GetCellDirect(accumulatedCrucialNodes[i].Coord).TransferType;
+                            if (transferType == TransferType.GateBelow)
+                            {
+                                // do not evaluate until gate dependency is evaluated
+                            }
+                            else if (transferType == TransferType.GateAbove)
+                            {
+                                nodeWorkList.Add(accumulatedCrucialNodes[i]);
+
+                                // underlying gate is ready to be evaluated
+                                var belowCoord = accumulatedCrucialNodes[i].Coord;
+                                belowCoord.Layer = GridStack.TRANSISTOR_LAYER;
+                                nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
+                            }
+                            else
+                            {
+                                nodeWorkList.Add(accumulatedCrucialNodes[i]);
+                            }
+                        }
+                        else
+                        {
+                            newCrucialEdge.CycleDetected = true;
+                        }
+
+                        cNode.Edges.Add(newCrucialEdge);
+                    }
+
+                    crucialCoordNodeMap[currCrucialNode.Coord] = cNode;
+                }
+
+                nodeWorkList.RemoveAt(0);
             }
+        }
+
+        private bool ContainsByName(List<CrucialGraphNode> checkInList, CrucialGraphNode lookup)
+        {
+            for (int i = 0; i < checkInList.Count; i++)
+            {
+                if (checkInList[i].Name == lookup.Name) { return true; }
+            }
+
+            return false;
+        }
+
+        private void SetAllNodesAllPathsRecursive(GraphCoord originCoord, GraphCoord currCoord, ref Dictionary<GraphCoord, GraphNode> coordNodeMap, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, ref List<GraphNode> accumulatedPath, ref List<CrucialGraphNode> accumulatedCrucialNodes, int parentDepth)
+        {
+            var currNode = coordNodeMap[currCoord];
+            if (currNode.Visited) { return; }
+
+            accumulatedPath.Add(currNode);
+
+            // mark visited
+            currNode.Visited = true;
+
+            coordNodeMap[currCoord] = currNode;
+
+            if (crucialCoordNodeMap.ContainsKey(currCoord))
+            {
+                // Whenever reaching a crucial node (that is not this original node):
+                if (currNode.Coord != originCoord)
+                {
+                    // Do not allow edges back to the nodes that added this originNode to the work list
+                    if (!crucialCoordNodeMap[originCoord].NoReturnList.Contains(currCoord))
+                    {
+                        var cNode = crucialCoordNodeMap[currCoord];
+
+                        // track it as a connected node along crucial edge
+                        if (!ContainsByName(accumulatedCrucialNodes, crucialCoordNodeMap[currCoord]))
+                        {
+                            cNode.EvalDepth = parentDepth + 1;
+                            cNode.NoReturnList.Add(originCoord);
+                            crucialCoordNodeMap[currCoord] = cNode;
+                            accumulatedCrucialNodes.Add(crucialCoordNodeMap[currCoord]);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // continue recursion
+                foreach (var edge in currNode.Edges)
+                {
+                    SetAllNodesAllPathsRecursive(originCoord, edge.Other.Coord, ref coordNodeMap, ref crucialCoordNodeMap, ref accumulatedPath, ref accumulatedCrucialNodes, parentDepth);
+                }
+            }
+        }
+
+        private void ResetAllVisited(ref Dictionary<GraphCoord, GraphNode> coordNodeMap)
+        {
+            var dims = GridStack.Instance.LayerDims;
+            for (int layer = 0; layer < GridStack.Instance.GridLayers.Length; layer++)
+            {
+                for (int row = 0; row < dims.Y; row++)
+                {
+                    for (int col = 0; col < dims.X; col++)
+                    {
+                        var lookupCoord = new GraphCoord(layer, col, row);
+                        SetVisited(false, lookupCoord, ref coordNodeMap);
+                    }
+                }
+            }
+        }
+
+        private void SetVisited(bool visited, GraphCoord lookupCoord, ref Dictionary<GraphCoord, GraphNode> coordNodeMap)
+        {
+            if (!coordNodeMap.ContainsKey(lookupCoord)) { return; }
+
+            var node = coordNodeMap[lookupCoord];
+            node.Visited = visited;
+            coordNodeMap[lookupCoord] = node;
         }
 
         #endregion // Helpers
