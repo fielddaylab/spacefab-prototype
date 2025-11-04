@@ -197,7 +197,6 @@ namespace SpaceFab.ChipDesign
             int numCrucialEdges = 0;
             ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges);
 
-            /*
             #region CONVERT TOPOLOGICAL 
 
             // Convert to topological map
@@ -251,10 +250,8 @@ namespace SpaceFab.ChipDesign
             }
 
             #endregion // SOLVE TOPOLOGICAL
-            */
 
             // Handle result
-            EvalResult evalResult = EvalResult.Failure;
 
             switch (evalResult)
             {
@@ -268,7 +265,7 @@ namespace SpaceFab.ChipDesign
                     EvaluationInvalid();
                     break;
                 case EvalResult.Success:
-                    EvaluationFailure();
+                    EvaluationSuccess();
                     break;
                 default:
                     break;
