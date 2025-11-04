@@ -109,6 +109,8 @@ namespace SpaceFab.ChipDesign
             public List<CrucialGraphEdge> Edges; // Edges to other CrucialNodes
             public GraphCoord Coord;
             public int EvalDepth;
+            public bool AwaitingDependency;
+            public bool EvaluatedForDependency;
             public List<GraphCoord> NoReturnList; // Prevent directed edges toward these nodes
 
             public void Init(int layerIndex, int col, int row)
@@ -134,6 +136,7 @@ namespace SpaceFab.ChipDesign
 
             public bool ContainsCycle(CrucialGraphEdge toCheck)
             {
+                /*
                 foreach (var existingEdge in Edges)
                 {
                     if (existingEdge.Other.Name == toCheck.Other.Name)
@@ -141,6 +144,7 @@ namespace SpaceFab.ChipDesign
                         return true;
                     }
                 }
+                */
                 return false;
             }
         }
@@ -192,7 +196,7 @@ namespace SpaceFab.ChipDesign
 
         private unsafe void Evaluate()
         {
-            // TODO: Gather nodes and edges
+            // Gather nodes and edges
             var crucialGraph = new List<CrucialGraphNode>();
             var completeGraph = new List<GraphNode>();
             var orderedEdges = new List<CrucialGraphEdge>();
@@ -259,6 +263,13 @@ namespace SpaceFab.ChipDesign
             }
 
             #endregion // SOLVE TOPOLOGICAL
+
+            // EVALUATE FLOW
+            // For each edge:
+            //      determine the starting flow value
+            //      for each path node, check if visited
+            //          if visited, ensure past flow matches present flow
+            //      if no issues, set update visuals along chunk
 
 
             // Handle result
@@ -488,18 +499,43 @@ namespace SpaceFab.ChipDesign
                             var transferType = GridStack.Instance.GetCellDirect(accumulatedCrucialNodes[i].Coord).TransferType;
                             if (transferType == TransferType.GateBelow)
                             {
-                                // do not evaluate until gate dependency is evaluated
+                                // check if this underlying gate is ready to be evaluated
+                                var aboveCoord = accumulatedCrucialNodes[i].Coord;
+                                aboveCoord.Layer = GridStack.METAL_LAYER;
+                                if (crucialCoordNodeMap.ContainsKey(aboveCoord))
+                                {
+                                    var aboveNode = crucialCoordNodeMap[aboveCoord];
+                                    if (aboveNode.EvaluatedForDependency)
+                                    {
+                                        nodeWorkList.Add(accumulatedCrucialNodes[i]);
+                                    }
+                                    else
+                                    {
+                                        // do not evaluate until gate dependency is evaluated.
+                                        var otherNode = crucialCoordNodeMap[accumulatedCrucialNodes[i].Coord];
+                                        otherNode.AwaitingDependency = true;
+                                        crucialCoordNodeMap[accumulatedCrucialNodes[i].Coord] = otherNode;
+                                    }
+                                }
                             }
                             else if (transferType == TransferType.GateAbove)
                             {
-                                nodeWorkList.Add(accumulatedCrucialNodes[i]);
+                                var otherNode = crucialCoordNodeMap[accumulatedCrucialNodes[i].Coord];
+                                otherNode.EvaluatedForDependency = true;
+                                crucialCoordNodeMap[accumulatedCrucialNodes[i].Coord] = otherNode;
+                                nodeWorkList.Add(crucialCoordNodeMap[accumulatedCrucialNodes[i].Coord]);
 
                                 // underlying gate is ready to be evaluated
                                 var belowCoord = accumulatedCrucialNodes[i].Coord;
                                 belowCoord.Layer = GridStack.TRANSISTOR_LAYER;
                                 if (crucialCoordNodeMap.ContainsKey(belowCoord))
                                 {
-                                    nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
+                                    var belowNode = crucialCoordNodeMap[belowCoord];
+                                    if (belowNode.AwaitingDependency)
+                                    {
+                                        nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
+                                        belowNode.AwaitingDependency = false;
+                                    }
                                 }
                             }
                             else
