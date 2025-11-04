@@ -50,6 +50,8 @@ namespace SpaceFab.ChipDesign
         public EdgeState[] Edges = new EdgeState[6]; // one for each edge dir
         public TransferType TransferType; // informs how data is transferred between layers when either ASCEND or DESCEND edges are connected
 
+        public FlowState FlowState;
+
         #region Loading
 
         public void LoadCellConfig(GridCellConfig config)

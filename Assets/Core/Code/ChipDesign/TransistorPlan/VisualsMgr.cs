@@ -7,12 +7,19 @@ namespace SpaceFab.ChipDesign
 {
     public class VisualsMgr : MonoBehaviour
     {
+        public static VisualsMgr Instance;
+
         public SpriteRenderer GridRenderer;
         public GridStack GridData;
         public VisualGridStack GridVisuals;
 
         public GameObject CellVisualsPrefab;
         public Transform CellVisualsContainer;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Start()
         {
@@ -40,7 +47,7 @@ namespace SpaceFab.ChipDesign
                 );
         }
 
-        private void RefreshVisuals()
+        public void RefreshVisuals()
         {
             if (GridVisuals == null || GridVisuals.GridLayers == null || GridVisuals.GridLayers.Length == 0) { return; }
 
@@ -48,7 +55,6 @@ namespace SpaceFab.ChipDesign
             GridVisuals.GridLayers[0].RefreshAll();
             // Render Transistor Layer
             GridVisuals.GridLayers[1].RefreshAll();
-
         }
 
         #region Handlers

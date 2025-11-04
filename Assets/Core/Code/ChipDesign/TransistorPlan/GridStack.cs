@@ -90,6 +90,17 @@ namespace SpaceFab.ChipDesign
             return GridLayers[coord.Layer].GetCell(coord.Col, coord.Row);
         }
 
+        public void SetCellDirect(int layer, int col, int row, GridCell cell)
+        {
+            GridLayers[layer].SetCell(col, row, cell);
+
+        }
+
+        public void SetCellDirect(EvaluationMgr.GraphCoord coord, GridCell cell)
+        {
+            GridLayers[coord.Layer].SetCell(coord.Col, coord.Row, cell);
+        }
+
         #endregion // Queries
     }
 

@@ -1,3 +1,4 @@
+using BeauRoutine;
 using BeauUtil;
 using FieldDay;
 using FieldDay.Audio;
@@ -113,6 +114,10 @@ namespace SpaceFab.ChipDesign
             public bool EvaluatedForDependency;
             public List<GraphCoord> NoReturnList; // Prevent directed edges toward these nodes
 
+            public FlowState CurrFlowState;
+
+            public CellType TempTransformedType;
+
             public void Init(int layerIndex, int col, int row)
             {
                 Edges = new List<CrucialGraphEdge>();
@@ -180,6 +185,8 @@ namespace SpaceFab.ChipDesign
 
         #endregion // Inspector
 
+        private Routine m_EvaluationRoutine;
+
         #region Unity Callbacks
 
         private void Awake()
@@ -196,13 +203,16 @@ namespace SpaceFab.ChipDesign
 
         private unsafe void Evaluate()
         {
+            if (m_EvaluationRoutine.Exists()) { return; }
+
             // Gather nodes and edges
             var crucialGraph = new List<CrucialGraphNode>();
             var completeGraph = new List<GraphNode>();
             var orderedEdges = new List<CrucialGraphEdge>();
+            Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap = new Dictionary<GraphCoord, CrucialGraphNode>();
             int numCrucialNodes = 0;
             int numCrucialEdges = 0;
-            ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges, out orderedEdges);
+            ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges, out orderedEdges, ref crucialCoordNodeMap);
 
             #region CONVERT TOPOLOGICAL 
 
@@ -264,13 +274,152 @@ namespace SpaceFab.ChipDesign
 
             #endregion // SOLVE TOPOLOGICAL
 
-            // EVALUATE FLOW
-            // For each edge:
-            //      determine the starting flow value
-            //      for each path node, check if visited
-            //          if visited, ensure past flow matches present flow
-            //      if no issues, set update visuals along chunk
+            // Evaluation Visuals
+            ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
 
+            m_EvaluationRoutine.Replace(VisualFeedbackRoutine(evalResult, crucialGraph, crucialCoordNodeMap, orderedEdges));
+        }
+
+        private IEnumerator VisualFeedbackRoutine(EvalResult evalResult, List<CrucialGraphNode> crucialGraph, Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphEdge> orderedEdges)
+        {
+            Debug.Log("[EvaluationMgr] Eval Visuals Started...");
+
+            float timeBetweenSteps = 1;
+            float timeBetweenTests = 3;
+
+            // EVALUATE FLOW
+            // For each test in suite:
+            //      Reset type transformations
+            //      For each edge:
+            //          determine the starting flow value
+            //          for each path node, check if visited
+            //              if visited, ensure past flow matches present flow
+            //          update visuals along path chunk
+            for (int test = 0; test < 1; test++)
+            {
+                Debug.Log("[EvaluationMgr] Test " + test);
+
+                ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
+                ResetFlowStates();
+                VisualsMgr.Instance.RefreshVisuals();
+                for (int e = 0; e < orderedEdges.Count; e++)
+                {
+                    Debug.Log("[EvaluationMgr] edge " + e);
+
+                    var currEdge = orderedEdges[e];
+                    currEdge.Origin = crucialCoordNodeMap[currEdge.Origin.Coord];
+                    currEdge.Other = crucialCoordNodeMap[currEdge.Other.Coord];
+                    var originCell = GridStack.Instance.GetCellDirect(currEdge.Origin.Coord);
+                    var destCell = GridStack.Instance.GetCellDirect(currEdge.Other.Coord);
+
+                    FlowState flowState = FlowState.Empty;
+
+                    switch (originCell.CellType)
+                    {
+                        case CellType.Input:
+                            // TODO: lookup FlowState by cell's subtype
+                            flowState = FlowState.Hi;
+                            break;
+                        default:
+                            // Use origin's flow type
+                            flowState = currEdge.Origin.CurrFlowState;
+                            break;
+                    }
+
+                    // Try pass flow onto connection (passes by default)
+                    bool flowThrough = true;
+                    bool stable = flowState != FlowState.Unstable;
+
+                    // Special case: Diodes
+                    if (IsTransistorType(originCell.CellType) && IsTransistorType(destCell.CellType))
+                    {
+                        CellType originType = originCell.CellType;
+                        if (currEdge.Origin.TempTransformedType != CellType.NONE)
+                        {
+                            originType = currEdge.Origin.TempTransformedType;
+                        }
+
+                        CellType destType = destCell.CellType;
+                        if (currEdge.Other.TempTransformedType != CellType.NONE)
+                        {
+                            destType = currEdge.Other.TempTransformedType;
+                        }
+
+                        if (originType != destType)
+                        {
+                            flowThrough = EvaluateFlowThroughDiode(flowState, originType, destType);
+                        }
+                    }
+
+                    // Special case: GateAbove
+                    if (destCell.TransferType == TransferType.GateAbove)
+                    {
+                        var belowCoord = currEdge.Other.Coord;
+                        belowCoord.Layer = GridStack.TRANSISTOR_LAYER;
+                        var belowCell = GridStack.Instance.GetCellDirect(belowCoord);
+
+                        // if signal is HI, try invert P-type below to N-type
+                        if (flowState == FlowState.Hi)
+                        {
+                            if (belowCell.CellType == CellType.PTransistor)
+                            {
+                                var belowCNode = crucialCoordNodeMap[belowCoord];
+                                belowCNode.TempTransformedType = CellType.NTransistor;
+                                crucialCoordNodeMap[belowCoord] = belowCNode;
+                            }
+                        }
+                        // if signal is LO, try invert N-type below to P-type
+                        else if (flowState == FlowState.Lo)
+                        {
+                            if (belowCell.CellType == CellType.NTransistor)
+                            {
+                                var belowCNode = crucialCoordNodeMap[belowCoord];
+                                belowCNode.TempTransformedType = CellType.PTransistor;
+                                crucialCoordNodeMap[belowCoord] = belowCNode;
+                            }
+                        }
+                        // if signal is unstable, no inversion
+                    }
+
+                    // If flow state already exists, ensure they match. Otherwise unstable.
+                    if (currEdge.Other.CurrFlowState != FlowState.Empty)
+                    {
+                        stable = currEdge.Origin.CurrFlowState == currEdge.Other.CurrFlowState;
+                    }
+
+                    if (flowThrough)
+                    {
+                        if (!stable)
+                        {
+                            // flag all nodes along path as unstable
+                            // flag simulation as unstable
+                        }
+
+                        var updateNode = crucialCoordNodeMap[currEdge.Other.Coord];
+                        updateNode.CurrFlowState = flowState;
+                        crucialCoordNodeMap[currEdge.Other.Coord] = updateNode;
+
+                        foreach (var graphNode in currEdge.Path)
+                        {
+                            var coord = graphNode.Coord;
+                            var cell = GridStack.Instance.GetCellDirect(coord);
+                            cell.FlowState = flowState;
+                            GridStack.Instance.SetCellDirect(coord, cell);
+                        }
+                    }
+
+                    // Save changes to temporary transformations
+                    currEdge.Origin = crucialCoordNodeMap[currEdge.Origin.Coord];
+                    currEdge.Other = crucialCoordNodeMap[currEdge.Other.Coord];
+                    orderedEdges[e] = currEdge;
+
+                    VisualsMgr.Instance.RefreshVisuals();
+                    yield return timeBetweenSteps;
+                }
+                yield return timeBetweenTests;
+            }
+
+            Debug.Log("[EvaluationMgr] Eval Visuals Ended");
 
             // Handle result
 
@@ -291,6 +440,39 @@ namespace SpaceFab.ChipDesign
                 default:
                     break;
             }
+
+            yield return null;
+        }
+
+        private void ResetTypeTransformations(List<CrucialGraphNode> crucialGraph, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap)
+        {
+            for (int i = 0; i < crucialGraph.Count; i++)
+            {
+                var coord = crucialGraph[i].Coord;
+                var cNode = crucialCoordNodeMap[coord];
+                cNode.TempTransformedType = CellType.NONE;
+                crucialCoordNodeMap[coord] = cNode;
+            }
+        }
+
+        private void ResetFlowStates()
+        {
+            var dims = GridStack.Instance.LayerDims;
+            var numLayers = GridStack.Instance.GridLayers.Length;
+            for (int layer = 0; layer < numLayers; layer++)
+            {
+                for (int row = 0; row < dims.Y; row++)
+                {
+                    for (int col = 0; col < dims.X; col++)
+                    {
+                        var cell = GridStack.Instance.GetCellDirect(layer, col, row);
+                        cell.FlowState = FlowState.Empty;
+                        GridStack.Instance.SetCellDirect(layer, col, row, cell);
+                    }
+                }
+            }
+
+            VisualsMgr.Instance.RefreshVisuals();
         }
 
         private void EvaluationSuccess()
@@ -317,13 +499,13 @@ namespace SpaceFab.ChipDesign
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);
         }
 
-        private void ConstructGraph(out List<CrucialGraphNode> crucialNodes, out List<GraphNode> allNodes, out int numCrucialNodes, out int numCrucialEdges, out List<CrucialGraphEdge> orderedEdgeProcessList)
+        private void ConstructGraph(out List<CrucialGraphNode> crucialNodes, out List<GraphNode> allNodes, out int numCrucialNodes, out int numCrucialEdges, out List<CrucialGraphEdge> orderedEdgeProcessList, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap)
         {
             // SETUP
             crucialNodes = new List<CrucialGraphNode>();
             allNodes = new List<GraphNode>();
             Dictionary<GraphCoord, GraphNode> coordNodeMap = new Dictionary<GraphCoord, GraphNode>();
-            Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap = new Dictionary<GraphCoord, CrucialGraphNode>();
+            crucialCoordNodeMap = new Dictionary<GraphCoord, CrucialGraphNode>();
 
             // CORE -- CREATE NODES
             List<CrucialGraphNode> nodeWorkList = new List<CrucialGraphNode>();
@@ -416,6 +598,27 @@ namespace SpaceFab.ChipDesign
                         return true;
                     }
                 }
+            }
+
+            return false;
+        }
+
+        private bool IsTransistorType(CellType type)
+        {
+            return type == CellType.NTransistor || type == CellType.PTransistor;
+        }
+
+        private bool EvaluateFlowThroughDiode(FlowState flow, CellType originType, CellType destType)
+        {
+            // signals only from from P to N, and only when HI
+            if (flow != FlowState.Hi && flow != FlowState.Unstable)
+            {
+                return false;
+            }
+
+            if (originType == CellType.PTransistor && destType == CellType.NTransistor)
+            {
+                return true;
             }
 
             return false;
@@ -649,6 +852,8 @@ namespace SpaceFab.ChipDesign
         private void HandleResultCloseClicked()
         {
             ResultPanel.SetActive(false);
+
+            ResetFlowStates();
 
             Game.Events.Dispatch(GameEvents.OnResultsHidden);
         }

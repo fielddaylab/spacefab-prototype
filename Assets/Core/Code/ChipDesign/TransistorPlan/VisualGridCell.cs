@@ -20,7 +20,7 @@ namespace SpaceFab.ChipDesign
 
         [SerializeField] private SpriteRenderer m_flowIndicator;
 
-        public void SetFlow(FlowState flow)
+        public void UpdateFlowVisuals(FlowState flow)
         {
             m_flowIndicator.sortingOrder = FLOW_SORT_ORDER;
 
@@ -112,6 +112,8 @@ namespace SpaceFab.ChipDesign
                 angles.z = 90 * pathData.Turns;
                 m_pathRenderer.transform.rotation = Quaternion.Euler(angles);
             }
+
+            UpdateFlowVisuals(cellData.FlowState);
         }
 
         private void RenderNTransistor(ref GridCell cellData, ref PathLibrary.AssembledPathData pathData, ref bool lookedUpEdge, int layerIndex, int col, int row)
