@@ -564,6 +564,8 @@ namespace SpaceFab.ChipDesign
             // erase cell
             cell.Erase(out List<EdgeDir> danglingEdges);
 
+            // TODO: erase gate on BOTH layers
+
             // erase dangling edges
             foreach (var dangling in danglingEdges)
             {

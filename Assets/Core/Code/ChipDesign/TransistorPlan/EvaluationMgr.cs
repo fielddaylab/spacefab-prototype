@@ -147,13 +147,15 @@ namespace SpaceFab.ChipDesign
 
         private struct CrucialGraphEdge
         {
+            public CrucialGraphNode Origin;
             public CrucialGraphNode Other;
             public List<GraphNode> Path;
             public int EvalDepth;
             public bool CycleDetected;
 
-            public void Init(CrucialGraphNode other, List<GraphNode> path, int evalDepth)
+            public void Init(CrucialGraphNode origin, CrucialGraphNode other, List<GraphNode> path, int evalDepth)
             {
+                Origin = origin;
                 Other = other;
                 Path = path;
                 EvalDepth = evalDepth;
@@ -193,9 +195,10 @@ namespace SpaceFab.ChipDesign
             // TODO: Gather nodes and edges
             var crucialGraph = new List<CrucialGraphNode>();
             var completeGraph = new List<GraphNode>();
+            var orderedEdges = new List<CrucialGraphEdge>();
             int numCrucialNodes = 0;
             int numCrucialEdges = 0;
-            ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges);
+            ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges, out orderedEdges);
 
             #region CONVERT TOPOLOGICAL 
 
@@ -247,9 +250,16 @@ namespace SpaceFab.ChipDesign
                     default:
                         break;
                 }
+
+
+                for (int i = 0; i < numCrucialNodes; i++)
+                {
+                    Debug.Log("[EvaluationMgr] node at " + i + " : " + outputNodes[i].Id.ToDebugString() + " at " + outputNodes[i].OriginalIndex);
+                }
             }
 
             #endregion // SOLVE TOPOLOGICAL
+
 
             // Handle result
 
@@ -296,7 +306,7 @@ namespace SpaceFab.ChipDesign
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);
         }
 
-        private void ConstructGraph(out List<CrucialGraphNode> crucialNodes, out List<GraphNode> allNodes, out int numCrucialNodes, out int numCrucialEdges)
+        private void ConstructGraph(out List<CrucialGraphNode> crucialNodes, out List<GraphNode> allNodes, out int numCrucialNodes, out int numCrucialEdges, out List<CrucialGraphEdge> orderedEdgeProcessList)
         {
             // SETUP
             crucialNodes = new List<CrucialGraphNode>();
@@ -309,10 +319,11 @@ namespace SpaceFab.ChipDesign
             GraphConstructNodes(ref allNodes, ref crucialNodes, ref nodeWorkList, ref coordNodeMap, ref crucialCoordNodeMap);
 
             // CORE -- CREATE EDGES
+            orderedEdgeProcessList = new List<CrucialGraphEdge>();
             GraphConstructEdges(ref coordNodeMap);
 
             // CORE -- ASSEMBLE CRUCIAL NODES / EDGES
-            SetAllNodesAllPaths(ref coordNodeMap, ref crucialCoordNodeMap, ref nodeWorkList);
+            SetAllNodesAllPaths(ref coordNodeMap, ref crucialCoordNodeMap, ref nodeWorkList, ref orderedEdgeProcessList);
 
             // SUMMARIZE AND RETURN
 
@@ -400,7 +411,7 @@ namespace SpaceFab.ChipDesign
             }
         }
 
-        private void SetAllNodesAllPaths(ref Dictionary<GraphCoord, GraphNode> coordNodeMap, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, ref List<CrucialGraphNode> nodeWorkList)
+        private void SetAllNodesAllPaths(ref Dictionary<GraphCoord, GraphNode> coordNodeMap, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, ref List<CrucialGraphNode> nodeWorkList, ref List<CrucialGraphEdge> orderedEdgeProcessList)
         {
             // reset visited to false for all nodes
             ResetAllVisited(ref coordNodeMap);
@@ -436,7 +447,7 @@ namespace SpaceFab.ChipDesign
                     for (int i = 0; i < accumulatedCrucialNodes.Count; i++)
                     {
                         var newCrucialEdge = new CrucialGraphEdge();
-                        newCrucialEdge.Init(accumulatedCrucialNodes[i], accumulatedPath, currDepth);
+                        newCrucialEdge.Init(cNode, accumulatedCrucialNodes[i], accumulatedPath, currDepth);
 
                         if (!cNode.ContainsCycle(newCrucialEdge))
                         {
@@ -465,6 +476,7 @@ namespace SpaceFab.ChipDesign
                         }
 
                         cNode.Edges.Add(newCrucialEdge);
+                        orderedEdgeProcessList.Add(newCrucialEdge);
                     }
 
                     crucialCoordNodeMap[currCrucialNode.Coord] = cNode;
