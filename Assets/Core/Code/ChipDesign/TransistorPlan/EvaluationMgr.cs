@@ -294,10 +294,10 @@ namespace SpaceFab.ChipDesign
 
             orderedEdges = SortOrderedEdges(orderedEdges);
 
-            m_EvaluationRoutine.Replace(VisualFeedbackRoutine(evalResult, crucialGraph, crucialCoordNodeMap, orderedEdges));
+            m_EvaluationRoutine.Replace(VisualFeedbackRoutine(evalResult, crucialGraph, crucialCoordNodeMap, orderedEdges, completeGraph));
         }
 
-        private IEnumerator VisualFeedbackRoutine(EvalResult evalResult, List<CrucialGraphNode> crucialGraph, Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphEdge> orderedEdges)
+        private IEnumerator VisualFeedbackRoutine(EvalResult evalResult, List<CrucialGraphNode> crucialGraph, Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphEdge> orderedEdges, List<GraphNode> completeGraph)
         {
             Debug.Log("[EvaluationMgr] Eval Visuals Started...");
 
@@ -326,7 +326,7 @@ namespace SpaceFab.ChipDesign
 
                 yield return 0.5f;
 
-                /* DEBUG
+                /*
                 var sb = new StringBuilder();
                 sb.Clear();
                 foreach (var o in orderedEdges)
@@ -335,6 +335,20 @@ namespace SpaceFab.ChipDesign
                 }
                 NodeReadout.SetText(sb.ToString());
                 */
+
+                // reset edge state
+                foreach (var edge in orderedEdges)
+                {
+                    var origin = crucialCoordNodeMap[edge.Origin.Coord];
+                    origin.CurrFlowState = FlowState.Empty;
+                    origin.TempTransformedType = CellType.NONE;
+                    crucialCoordNodeMap[edge.Origin.Coord] = origin;
+
+                    var other = crucialCoordNodeMap[edge.Other.Coord];
+                    other.CurrFlowState = FlowState.Empty;
+                    other.TempTransformedType = CellType.NONE;
+                    crucialCoordNodeMap[edge.Other.Coord] = other;
+                }
 
                 int currDepth = 0;
                 for (int e = 0; e < orderedEdges.Count; e++)
@@ -427,19 +441,40 @@ namespace SpaceFab.ChipDesign
                         if (!stable)
                         {
                             // flag all nodes along path as unstable
+                            currEdge.Origin.CurrFlowState = FlowState.Unstable;
+                            currEdge.Other.CurrFlowState = FlowState.Unstable;
+                            flowState = FlowState.Unstable;
+
                             // flag simulation as unstable
+                            currTestCorrect = false;
                         }
 
                         var updateNode = crucialCoordNodeMap[currEdge.Other.Coord];
                         updateNode.CurrFlowState = flowState;
                         crucialCoordNodeMap[currEdge.Other.Coord] = updateNode;
 
-                        foreach (var graphNode in currEdge.Path)
+                        if (flowState == FlowState.Unstable)
                         {
-                            var coord = graphNode.Coord;
-                            var cell = GridStack.Instance.GetCellDirect(coord);
-                            cell.FlowState = flowState;
-                            GridStack.Instance.SetCellDirect(coord, cell);
+                            // turn all visited flows into unstable
+                            foreach (var graphNode in completeGraph)
+                            {
+                                var coord = graphNode.Coord;
+                                var cell = GridStack.Instance.GetCellDirect(coord);
+                                cell.FlowState = flowState;
+                                GridStack.Instance.SetCellDirect(coord, cell);
+                            }
+
+                            VisualsMgr.Instance.RefreshVisuals();
+                        }
+                        else
+                        {
+                            foreach (var graphNode in currEdge.Path)
+                            {
+                                var coord = graphNode.Coord;
+                                var cell = GridStack.Instance.GetCellDirect(coord);
+                                cell.FlowState = flowState;
+                                GridStack.Instance.SetCellDirect(coord, cell);
+                            }
                         }
                     }
 
@@ -458,7 +493,10 @@ namespace SpaceFab.ChipDesign
                 }
 
                 // Check if all relevant outputs have the correct flow state
-                currTestCorrect = OutputsCorrect(currTest, ref crucialCoordNodeMap, crucialGraph);
+                if (currTestCorrect)
+                {
+                    currTestCorrect = OutputsCorrect(currTest, ref crucialCoordNodeMap, crucialGraph);
+                }
 
                 if (!currTestCorrect) { allTestsCorrect = false; }
 
