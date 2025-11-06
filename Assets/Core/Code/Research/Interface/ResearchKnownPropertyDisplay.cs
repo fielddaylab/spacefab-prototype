@@ -21,6 +21,8 @@ namespace SpaceFab.Research {
         public PointerListener ThermalClick;
         public PointerListener SpecialClick;
         public PointerListener SubmitButton;
+        public GameObject DiagramGroup;
+        public SpriteRenderer DiagramDisplay;
         public ResearchGuessDisplay Guesser;
 
         [NonSerialized] public StringHash32 RootId;
@@ -50,7 +52,7 @@ namespace SpaceFab.Research {
 
             ElectricClick.GetComponent<Collider2D>().enabled = false;
             ThermalClick.GetComponent<Collider2D>().enabled = false;
-            SpecialClick.GetComponent<Collider2D>().enabled = false; ;
+            SpecialClick.GetComponent<Collider2D>().enabled = false;
             SubmitButton.gameObject.SetActive(false);
 
             yield return 1;
@@ -75,6 +77,8 @@ namespace SpaceFab.Research {
             SpecialClick.GetComponent<Collider2D>().enabled = false;;
             RootId = default;
             SubmitButton.gameObject.SetActive(false);
+            DiagramDisplay.sprite = null;
+            DiagramGroup.SetActive(false);
         }
 
         private void DisplayCurrent(ResearchMaterial material) {
@@ -113,22 +117,25 @@ namespace SpaceFab.Research {
                 ThermalClick.GetComponent<Collider2D>().enabled = true;
             }
 
-            //if ((knowledge & ResearchMaterialKnowledge.Special) != 0) {
-            //    SpecialProperty.SetText(ResearchMaterialUtility.GetTagLabel(material.SpecialTags));
-            //    SpecialClick.GetComponent<Collider2D>().enabled = false;
-            //} else if (guesses.Thermal != ThermalTag.Unknown) {
-            //    SpecialProperty.SetText(ResearchMaterialUtility.GetTagLabel(guesses.Thermal) + " (?)");
-            //    SpecialClick.GetComponent<Collider2D>().enabled = true;
-            //} else {
-            //    SpecialProperty.SetText("???");
-            //    SpecialClick.GetComponent<Collider2D>().enabled = true;
-            //}
+            if ((knowledge & ResearchMaterialKnowledge.Special) != 0) {
+                SpecialProperty.SetText(ResearchMaterialUtility.GetTagLabel(material.SpecialTags));
+                SpecialClick.GetComponent<Collider2D>().enabled = false;
+            } else if (guesses.Special != SpecialTag.Unknown) {
+                SpecialProperty.SetText(ResearchMaterialUtility.GetTagLabel(guesses.Special) + " (?)");
+                SpecialClick.GetComponent<Collider2D>().enabled = true;
+            } else {
+                SpecialProperty.SetText("???");
+                SpecialClick.GetComponent<Collider2D>().enabled = true;
+            }
 
             if (guesses.Special != SpecialTag.Unknown || guesses.Electric != ElectricalTag.Unknown || guesses.Thermal != ThermalTag.Unknown) {
                 SubmitButton.gameObject.SetActive(true);
             } else {
                 SubmitButton.gameObject.SetActive(false);
             }
+
+            DiagramDisplay.sprite = material.Diagram;
+            DiagramGroup.SetActive(true);
         }
     }
 }

@@ -140,7 +140,42 @@ namespace SpaceFab.Research {
             }
         }
 
+        static public StringHash32 GetSpecialGuessId(ResearchMaterialGuessState guessState) {
+            switch (guessState.Thermal) {
+                case ThermalTag.HighTemp: {
+                    return "HighTemp";
+                }
+                case ThermalTag.LowTemp: {
+                    return "LowTemp";
+                }
+                //case ThermalTag.ExtremeTemp: {
+                //    return "ExtremeTemp";
+                //}
+                case ThermalTag.Sensitive: {
+                    return "Sensitive";
+                }
+                case ThermalTag.Unknown:
+                default: {
+                    return StringHash32.Null;
+                }
+            }
+        }
+
         static public void PopulateThermalGuess(ref ResearchMaterialGuessState guessState, StringHash32 id) {
+            if (id == "HighTemp") {
+                guessState.Thermal = ThermalTag.HighTemp;
+            } else if (id == "LowTemp") {
+                guessState.Thermal = ThermalTag.LowTemp;
+            } else if (id == "ExtremeTemp") {
+                //guessState.Thermal = ThermalTag.ExtremeTemp;
+            } else if (id == "Sensitive") {
+                guessState.Thermal = ThermalTag.Sensitive;
+            } else {
+                guessState.Thermal = ThermalTag.Unknown;
+            }
+        }
+
+        static public void PopulateSpecialGuess(ref ResearchMaterialGuessState guessState, StringHash32 id) {
             if (id == "HighTemp") {
                 guessState.Thermal = ThermalTag.HighTemp;
             } else if (id == "LowTemp") {

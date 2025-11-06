@@ -10,6 +10,7 @@ namespace SpaceFab.Research {
         public string DisplayName;
         public string ChemicalSymbol;
         public Material Material;
+        public Sprite Diagram;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 Parent;
 
         [Header("Properties")]
