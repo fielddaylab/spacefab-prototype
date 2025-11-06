@@ -47,7 +47,7 @@ namespace SpaceFab.Research {
             ElectricalGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
-            ElectricalGroup.PopulateInitialSelection(ResearchGuessGroup.GetElectricalGuessId(guess));
+            ElectricalGroup.PopulateInitialSelection(ResearchGuessGroup.GetElectricalGuessList(guess));
         }
 
         public void PopupThermal(StringHash32 materialId) {
@@ -56,7 +56,7 @@ namespace SpaceFab.Research {
             ThermalGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
-            ThermalGroup.PopulateInitialSelection(ResearchGuessGroup.GetThermalGuessId(guess));
+            ThermalGroup.PopulateInitialSelection(ResearchGuessGroup.GetThermalGuessList(guess));
         }
 
         public void PopupSpecial(StringHash32 materialId) {
@@ -65,27 +65,25 @@ namespace SpaceFab.Research {
             SpecialGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
-            SpecialGroup.PopulateInitialSelection(ResearchGuessGroup.GetSpecialGuessId(guess));
+            SpecialGroup.PopulateInitialSelection(ResearchGuessGroup.GetSpecialGuessList(guess));
         }
 
-        private void UpdateElectricGuess(StringHash32 id) {
+        private void UpdateElectricGuess(ResearchSelectionList list) {
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
-            ResearchGuessGroup.PopulateElectricalGuess(ref guess, id);
+            ResearchGuessGroup.PopulateElectricalGuess(ref guess, list);
             ResearchMaterialUtility.SetGuess(MaterialId, guess);
         }
 
-        private void UpdateThermalGuess(StringHash32 id) {
+        private void UpdateThermalGuess(ResearchSelectionList list) {
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
-            ResearchGuessGroup.PopulateThermalGuess(ref guess, id);
+            ResearchGuessGroup.PopulateThermalGuess(ref guess, list);
             ResearchMaterialUtility.SetGuess(MaterialId, guess);
         }
 
-        private void UpdateSpecialGuess(StringHash32 id) {
+        private void UpdateSpecialGuess(ResearchSelectionList list) {
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
-            ResearchGuessGroup.PopulateSpecialGuess(ref guess, id);
+            ResearchGuessGroup.PopulateSpecialGuess(ref guess, list);
             ResearchMaterialUtility.SetGuess(MaterialId, guess);
         }
-
-        // TODO: Special
     }
 }

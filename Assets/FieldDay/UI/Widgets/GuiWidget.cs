@@ -12,6 +12,31 @@ namespace FieldDay.UI.Widgets {
 
         [SerializeField] private SerializedHash32 m_Id;
         [SerializeField] private SerializedHash32 m_Class;
+        [SerializeField] private SerializedHash32 m_Group;
+
+        /// <summary>
+        /// The identifier for this widget.
+        /// </summary>
+        public StringHash32 Id {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return m_Id; }
+        }
+
+        /// <summary>
+        /// The class identifier for this widget.
+        /// </summary>
+        public StringHash32 Class {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return m_Class; }
+        }
+
+        /// <summary>
+        /// The group identifier for this widget.
+        /// </summary>
+        public StringHash32 Group {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return m_Group; }
+        }
 
         /// <summary>
         /// The RectTransform.

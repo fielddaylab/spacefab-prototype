@@ -14,15 +14,18 @@ namespace SpaceFab.Research {
     public struct ResearchMaterialGuessState {
         public ElectricalTag Electric;
         public DopantType Dopant;
-        public ThermalTag Thermal;
-        public SpecialTag Special;
+
+        public ThermalTag? Thermal;
+        public SpecialTag? Special;
     }
 
     [Flags]
     public enum ResearchMaterialKnowledge {
         Electrical = 0x01,
         Thermal = 0x02,
-        Special = 0x04
+        Special = 0x04,
+        
+        All = Electrical | Thermal | Special
     }
 
     static public partial class ResearchMaterialUtility {
@@ -76,10 +79,19 @@ namespace SpaceFab.Research {
                     areAllGuessesCorrect = false;
                 }
             }
-            if (guess.Thermal != ThermalTag.Unknown) {
+
+            if (guess.Thermal.HasValue) {
                 if (guess.Thermal == mat.Thermal) {
                     guess.Thermal = default;
                     knowledge |= ResearchMaterialKnowledge.Thermal;
+                } else {
+                    areAllGuessesCorrect = false;
+                }
+            }
+            if (guess.Special.HasValue) {
+                if (guess.Special == mat.SpecialTags) {
+                    guess.Special = default;
+                    knowledge |= ResearchMaterialKnowledge.Special;
                 } else {
                     areAllGuessesCorrect = false;
                 }

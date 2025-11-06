@@ -10,13 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d57d038f46f5c947b2157e21d6457c0, type: 3}
-  m_Name: Boron
+  m_Name: CarbonDiamond_Magnesium
   m_EditorClassIdentifier: 
-  DisplayName: Boron
-  ChemicalSymbol: B
-  Material: {fileID: 2100000, guid: ec3ed3e944dfb2d4e96fcdc6dc308214, type: 2}
-  Electrical: 4
-  Thermal: 0
-  SpecialTags: 
+  DisplayName: Carbon+Magnesium
+  Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
+  ChemicalSymbol: C+Mg
+  Size: 67
+  ValenceElectrons: 4
+  Parent:
+    m_HashValue: 2574732592
+  Electrical: 1
+  Thermal: 1
+  SpecialTags: 5
   DielectricStrength: 0
-  DopantType: 1
+  DopantType: 2
+  ConductionMultiplier: 1

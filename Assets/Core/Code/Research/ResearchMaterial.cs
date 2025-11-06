@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Assets;
@@ -8,9 +10,13 @@ namespace SpaceFab.Research {
     [CreateAssetMenu(menuName = "Research/Research Material")]
     public sealed class ResearchMaterial : NamedAsset {
         public string DisplayName;
-        public string ChemicalSymbol;
         public Material Material;
-        public Sprite Diagram;
+
+        [Header("Atomic Info")]
+        public string ChemicalSymbol;
+        [Range(1, 200)] public int Size;
+        [Range(0, 8)] public int ValenceElectrons; // TODO: expand to account for compounds
+
         [AssetName(typeof(ResearchMaterial))] public StringHash32 Parent;
 
         [Header("Properties")]
@@ -21,34 +27,33 @@ namespace SpaceFab.Research {
         [Header("Fields")]
         public float DielectricStrength;
         public DopantType DopantType;
+        [Range(0, 2)] public float ConductionMultiplier = 1;
     }
 
     public enum ElectricalTag : uint {
         Unknown = 0,
         Conductor,
         Insulator,
-        Semiconductor,
-        Dopant
+        Semiconductor
     }
 
     [Flags]
     public enum ThermalTag : uint {
-        Unknown = 0,
+        None = 0,
         HighTemp = 0x01,
         LowTemp = 0x02,
-        Sensitive = 0x04
     }
 
     [Flags]
     public enum SpecialTag : uint {
-        Unknown = 0,
+        None = 0,
         HighMobility = 0x01,
         LightEmitting = 0x02,
         HighVoltage = 0x04
     }
 
     public enum DopantType : uint {
-        Unknown = 0,
+        None = 0,
         N,
         P
     }
@@ -56,11 +61,9 @@ namespace SpaceFab.Research {
     static public partial class ResearchMaterialUtility {
         static public float GetCurrent(ResearchMaterial material, float voltage, float temperature) {
             // TODO: implement correctly
-            float multiplier = (material.SpecialTags & SpecialTag.HighMobility) != 0 ? 1.5f : 1;
+            float multiplier = material.ConductionMultiplier * ((material.SpecialTags & SpecialTag.HighMobility) != 0 ? 1.5f : 1);
+
             switch(material.Electrical) {
-                case ElectricalTag.Dopant: {
-                    return 0;
-                }
                 case ElectricalTag.Insulator: {
                     return 0;
                 }
@@ -79,7 +82,6 @@ namespace SpaceFab.Research {
 
         static public bool BehavesAsInsulator(ResearchMaterial material) {
             switch(material.Electrical) {
-                case ElectricalTag.Dopant:
                 case ElectricalTag.Insulator:
                     return true;
 
@@ -106,84 +108,83 @@ namespace SpaceFab.Research {
             return true;
         }
 
-        static public string GetTagLabel(ElectricalTag tag, DopantType dopantType) {
+        static public void GetTagLabel(StringBuilder output, ElectricalTag tag, DopantType dopantType) {
             switch(tag) {
                 case ElectricalTag.Conductor: {
-                    return "Conductor";
+                    output.Append("Conductor");
+                    break;
                 }
                 case ElectricalTag.Semiconductor: {
-                    return "Semiconductor";
+                    output.Append("Semiconductor");
+                    break;
                 }
                 case ElectricalTag.Insulator: {
-                    return "Insulator";
-                }
-                case ElectricalTag.Dopant: {
-                    switch(dopantType) {
-                        case DopantType.Unknown: {
-                            return "Dopant";
-                        }
-                        case DopantType.N: {
-                            return "Dopant (N)";
-                        }
-                        case DopantType.P: {
-                            return "Dopant (P)";
-                        }
-                    }
+                    output.Append("Insulator");
                     break;
                 }
                 case ElectricalTag.Unknown: {
-                    return "???";
+                    output.Append("???");
+                    break;
                 }
             }
-
-            Assert.Fail("no tag label");
-            return string.Empty;
+            
+            switch(dopantType) {
+                case DopantType.N: {
+                    output.Append(" (N-Type Dopant)");
+                    break;
+                }
+                case DopantType.P: {
+                    output.Append(" (P-Type Dopant)");
+                    break;
+                }
+            }
         }
 
-        static public string GetTagLabel(ThermalTag tag) {
+        static public void GetTagLabel(StringBuilder output, ThermalTag tag) {
             switch (tag) {
                 case ThermalTag.LowTemp: {
-                    return "Low Temp";
+                    output.Append("Low Temps");
+                    break;
                 }
                 case ThermalTag.HighTemp: {
-                    return "High Temp";
+                    output.Append("High Temps");
+                    break;
                 }
-                case ThermalTag.Sensitive: {
-                    return "Sensitive";
+                case ThermalTag.HighTemp | ThermalTag.LowTemp: {
+                    output.Append("Extreme Temps");
+                    break;
                 }
-                case ThermalTag.Unknown: {
-                    return "???";
-                }
-            }
-
-            Assert.Fail("no tag label");
-            return string.Empty;
-        }
-
-        static public string GetTagLabel(SpecialTag tag) {
-            switch (tag) {
-                case SpecialTag.LightEmitting: {
-                    return "Light-Emitting";
-                }
-                case SpecialTag.HighMobility: {
-                    return "High Mobility";
-                }
-                case SpecialTag.HighVoltage: {
-                    return "High Voltage";
-                }
-                case SpecialTag.Unknown: {
-                    return "???";
+                case ThermalTag.None: {
+                    output.Append("Sensitive");
+                    break;
                 }
             }
-
-            Assert.Fail("no tag label");
-            return string.Empty;
         }
-    }
 
-    [Serializable]
-    public struct ResearchMaterialPair {
-        public ResearchMaterial Base;
-        public ResearchMaterial Dopant;
+        static public void GetTagLabel(StringBuilder output, SpecialTag tag) {
+            if (tag == SpecialTag.None) {
+                output.Append("None");
+            } else {
+                bool isFirst = true;
+                if ((tag & SpecialTag.HighMobility) != 0) {
+                    output.Append("High Mobility");
+                    isFirst = false;
+                }
+                if ((tag & SpecialTag.LightEmitting) != 0) {
+                    if (!isFirst) {
+                        output.Append(", ");
+                    }
+                    output.Append("Light Emitting");
+                    isFirst = false;
+                }
+                if ((tag & SpecialTag.HighVoltage) != 0) {
+                    if (!isFirst) {
+                        output.Append(", ");
+                    }
+                    output.Append("High Voltage");
+                    isFirst = false;
+                }
+            }
+        }
     }
 }

@@ -1,3 +1,4 @@
+using BeauPools;
 using BeauRoutine;
 using BeauUtil;
 using BeauUtil.UI;
@@ -22,7 +23,7 @@ namespace SpaceFab.Research {
         public PointerListener SpecialClick;
         public PointerListener SubmitButton;
         public GameObject DiagramGroup;
-        public SpriteRenderer DiagramDisplay;
+        public ResearchValenceDiagram DiagramDisplay;
         public ResearchGuessDisplay Guesser;
 
         [NonSerialized] public StringHash32 RootId;
@@ -42,6 +43,10 @@ namespace SpaceFab.Research {
             ThermalClick.onClick.Register(() => {
                 SubmitButton.gameObject.SetActive(false);
                 Guesser.PopupThermal(RootId);
+            });
+            SpecialClick.onClick.Register(() => {
+                SubmitButton.gameObject.SetActive(false);
+                Guesser.PopupSpecial(RootId);
             });
 
             SubmitButton.onClick.Register(() => Routine.Start(this, OnClickSubmit()).TryManuallyUpdate(0));
@@ -77,7 +82,6 @@ namespace SpaceFab.Research {
             SpecialClick.GetComponent<Collider2D>().enabled = false;;
             RootId = default;
             SubmitButton.gameObject.SetActive(false);
-            DiagramDisplay.sprite = null;
             DiagramGroup.SetActive(false);
         }
 
@@ -95,46 +99,62 @@ namespace SpaceFab.Research {
             ResearchMaterialKnowledge knowledge = ResearchMaterialUtility.GetKnownCategories(rootId);
             ResearchMaterialGuessState guesses = ResearchMaterialUtility.GetGuess(rootId);
 
-            if ((knowledge & ResearchMaterialKnowledge.Electrical) != 0) {
-                ElectricProperty.SetText(ResearchMaterialUtility.GetTagLabel(material.Electrical, material.DopantType));
-                ElectricClick.GetComponent<Collider2D>().enabled = false;
-            } else if (guesses.Electric != ElectricalTag.Unknown) {
-                ElectricProperty.SetText(ResearchMaterialUtility.GetTagLabel(guesses.Electric, guesses.Dopant) + " (?)");
-                ElectricClick.GetComponent<Collider2D>().enabled = true;
-            } else {
-                ElectricProperty.SetText("???");
-                ElectricClick.GetComponent<Collider2D>().enabled = true;
+            using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
+
+                if ((knowledge & ResearchMaterialKnowledge.Electrical) != 0) {
+                    ResearchMaterialUtility.GetTagLabel(psb, material.Electrical, material.DopantType);
+                    ElectricProperty.SetText(psb);
+                    ElectricClick.GetComponent<Collider2D>().enabled = false;
+                } else if (guesses.Electric != ElectricalTag.Unknown) {
+                    ResearchMaterialUtility.GetTagLabel(psb, guesses.Electric, guesses.Dopant);
+                    psb.Builder.Append(" (?)");
+                    ElectricProperty.SetText(psb);
+                    ElectricClick.GetComponent<Collider2D>().enabled = true;
+                } else {
+                    ElectricProperty.SetText("???");
+                    ElectricClick.GetComponent<Collider2D>().enabled = true;
+                }
+
+                psb.Builder.Clear();
+
+                if ((knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
+                    ResearchMaterialUtility.GetTagLabel(psb, material.Thermal);
+                    ThermalProperty.SetText(psb);
+                    ThermalClick.GetComponent<Collider2D>().enabled = false;
+                } else if (guesses.Thermal.HasValue) {
+                    ResearchMaterialUtility.GetTagLabel(psb, guesses.Thermal.Value);
+                    psb.Builder.Append(" (?)");
+                    ThermalProperty.SetText(psb);
+                    ThermalClick.GetComponent<Collider2D>().enabled = true;
+                } else {
+                    ThermalProperty.SetText("???");
+                    ThermalClick.GetComponent<Collider2D>().enabled = true;
+                }
+
+                psb.Builder.Clear();
+
+                if ((knowledge & ResearchMaterialKnowledge.Special) != 0) {
+                    ResearchMaterialUtility.GetTagLabel(psb, material.SpecialTags);
+                    SpecialProperty.SetText(psb);
+                    SpecialClick.GetComponent<Collider2D>().enabled = false;
+                } else if (guesses.Special.HasValue) {
+                    ResearchMaterialUtility.GetTagLabel(psb, guesses.Special.Value);
+                    psb.Builder.Append(" (?)");
+                    SpecialProperty.SetText(psb);
+                    SpecialClick.GetComponent<Collider2D>().enabled = true;
+                } else {
+                    SpecialProperty.SetText("???");
+                    SpecialClick.GetComponent<Collider2D>().enabled = true;
+                }
             }
 
-            if ((knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
-                ThermalProperty.SetText(ResearchMaterialUtility.GetTagLabel(material.Thermal));
-                ThermalClick.GetComponent<Collider2D>().enabled = false;
-            } else if (guesses.Thermal != ThermalTag.Unknown) {
-                ThermalProperty.SetText(ResearchMaterialUtility.GetTagLabel(guesses.Thermal) + " (?)");
-                ThermalClick.GetComponent<Collider2D>().enabled = true;
-            } else {
-                ThermalProperty.SetText("???");
-                ThermalClick.GetComponent<Collider2D>().enabled = true;
-            }
-
-            if ((knowledge & ResearchMaterialKnowledge.Special) != 0) {
-                SpecialProperty.SetText(ResearchMaterialUtility.GetTagLabel(material.SpecialTags));
-                SpecialClick.GetComponent<Collider2D>().enabled = false;
-            } else if (guesses.Special != SpecialTag.Unknown) {
-                SpecialProperty.SetText(ResearchMaterialUtility.GetTagLabel(guesses.Special) + " (?)");
-                SpecialClick.GetComponent<Collider2D>().enabled = true;
-            } else {
-                SpecialProperty.SetText("???");
-                SpecialClick.GetComponent<Collider2D>().enabled = true;
-            }
-
-            if (guesses.Special != SpecialTag.Unknown || guesses.Electric != ElectricalTag.Unknown || guesses.Thermal != ThermalTag.Unknown) {
+            if (guesses.Special.HasValue || guesses.Electric != ElectricalTag.Unknown || guesses.Thermal.HasValue) {
                 SubmitButton.gameObject.SetActive(true);
             } else {
                 SubmitButton.gameObject.SetActive(false);
             }
 
-            DiagramDisplay.sprite = material.Diagram;
+            ResearchMaterialUtility.PopulateDiagram(DiagramDisplay, material, knowledge == ResearchMaterialKnowledge.All);
             DiagramGroup.SetActive(true);
         }
     }

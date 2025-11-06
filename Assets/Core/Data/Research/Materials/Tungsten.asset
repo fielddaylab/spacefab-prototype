@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d57d038f46f5c947b2157e21d6457c0, type: 3}
-  m_Name: Zebesium
+  m_Name: Tungsten
   m_EditorClassIdentifier: 
-  DisplayName: Zebesium
-  ChemicalSymbol: Zbs
-  Material: {fileID: 2100000, guid: 587447a5989075f4b8bfc2ee0bbcf3a7, type: 2}
+  DisplayName: Tungsten
+  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  ChemicalSymbol: W
+  Size: 193
+  ValenceElectrons: 6
   Parent:
     m_HashValue: 0
   Electrical: 1
-  Thermal: 4
-  SpecialTags: 4294967295
+  Thermal: 1
+  SpecialTags: 0
   DielectricStrength: 0
-  DopantType: 0
+  DopantType: 2

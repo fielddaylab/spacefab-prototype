@@ -1,5 +1,7 @@
 using BeauUtil;
+using BeauUtil.Debugger;
 using BeauUtil.UI;
+using FieldDay;
 using FieldDay.Scenes;
 using System;
 using System.Collections.Generic;
@@ -7,12 +9,10 @@ using UnityEngine;
 
 namespace SpaceFab.Research {
     public sealed class ResearchGuessGroup : MonoBehaviour, IScenePreload {
-        public Transform SelectionArrow;
         public ResearchGuessButtonWidget[] Buttons;
 
-        public CastableEvent<StringHash32> OnSelectionUpdated = new CastableEvent<StringHash32>(1);
-        [NonSerialized] public StringHash32 SelectionId;
-        [NonSerialized] public int SelectionIndex = -1;
+        public CastableEvent<ResearchSelectionList> OnSelectionUpdated = new CastableEvent<ResearchSelectionList>(1);
+        [NonSerialized] public BitSet32 SelectedIndices;
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
             int idx = 0;
@@ -24,169 +24,245 @@ namespace SpaceFab.Research {
             return null;
         }
 
-        public void PopulateInitialSelection(StringHash32 id) {
+        public void PopulateInitialSelection(ResearchSelectionList selection) {
+            BitSet32 newSelections = default;
             foreach(var button in Buttons) {
-                if (button.Data == id) {
-                    button.Collider.enabled = false;
-                    SelectionArrow.position = button.Position.position;
-                    SelectionIndex = button.Index;
+                if (selection.Contains(button.Id)) {
+                    button.SelectionHighlight.SetActive(true);
+                    newSelections.Set(button.Index);
                 } else {
-                    button.Collider.enabled = true;
+                    button.SelectionHighlight.SetActive(false);
                 }
             }
 
-            SelectionArrow.gameObject.SetActive(!id.IsEmpty);
-            
-            SelectionId = id;
-            if (id.IsEmpty) {
-                SelectionIndex = -1;
-            }
+            SelectedIndices = newSelections;
         }
 
         private void OnButtonClicked(PointerListener.EventData evt) {
             ResearchGuessButtonWidget widget = (ResearchGuessButtonWidget) evt.Source.UserData;
-            if (SelectionId == widget.Data) {
-                SelectionArrow.gameObject.SetActive(false);
-                widget.Collider.enabled = true;
-                SelectionId = StringHash32.Null;
-                OnSelectionUpdated.Invoke(SelectionId);
+            if (SelectedIndices.IsSet(widget.Index)) {
+                SelectedIndices.Unset(widget.Index);
+                widget.SelectionHighlight.SetActive(false);
             } else {
-                if (SelectionIndex >= 0) {
-                    Buttons[SelectionIndex].Collider.enabled = true;
-                }
-                widget.Collider.enabled = false;
-                SelectionId = widget.Data;
-                SelectionIndex = widget.Index;
-                SelectionArrow.position = widget.Position.position;
-                SelectionArrow.gameObject.SetActive(true);
-                OnSelectionUpdated.Invoke(SelectionId);
-            }
-        }
+                SelectedIndices.Set(widget.Index);
+                widget.SelectionHighlight.SetActive(true);
 
-        static public StringHash32 GetElectricalGuessId(ResearchMaterialGuessState guessState) {
-            switch(guessState.Electric) {
-                case ElectricalTag.Conductor: {
-                    return "Conductor";
-                }
-                case ElectricalTag.Semiconductor: {
-                    return "Semiconductor";
-                }
-                case ElectricalTag.Insulator: {
-                    return "Insulator";
-                }
-                case ElectricalTag.Dopant: {
-                    switch(guessState.Dopant) {
-                        case DopantType.N: {
-                            return "DopantN";
+                switch(widget.ButtonType) {
+                    case ResearchGuessButtonType.DeselectOther: {
+                        foreach(var bit in SelectedIndices) {
+                            if (bit != widget.Index) {
+                                SelectedIndices.Unset(bit);
+                                Buttons[bit].SelectionHighlight.SetActive(false);
+                            }
                         }
-                        case DopantType.P: {
-                            return "DopantP";
+                        break;
+                    }
+                    case ResearchGuessButtonType.Exclusive: {
+                        foreach (var bit in SelectedIndices) {
+                            if (bit != widget.Index) {
+                                if (Buttons[bit].Group == widget.Group || Buttons[bit].ButtonType == ResearchGuessButtonType.DeselectOther) {
+                                    SelectedIndices.Unset(bit);
+                                    Buttons[bit].SelectionHighlight.SetActive(false);
+                                }
+                            }
                         }
-                        default: {
-                            return "Dopant";
+                        break;
+                    }
+                    case ResearchGuessButtonType.Default: {
+                        foreach (var bit in SelectedIndices) {
+                            if (bit != widget.Index) {
+                                if (Buttons[bit].ButtonType == ResearchGuessButtonType.DeselectOther) {
+                                    SelectedIndices.Unset(bit);
+                                    Buttons[bit].SelectionHighlight.SetActive(false);
+                                }
+                            }
                         }
+                        break;
                     }
                 }
-                case ElectricalTag.Unknown:
-                default: {
-                    return StringHash32.Null;
-                }
             }
+
+            OnSelectionUpdated.Invoke(GetSelectionList());
         }
 
-        static public void PopulateElectricalGuess(ref ResearchMaterialGuessState guessState, StringHash32 id) {
-            if (id == "Conductor") {
-                guessState.Dopant = DopantType.Unknown;
-                guessState.Electric = ElectricalTag.Conductor;
-            } else if (id == "Insulator") {
-                guessState.Dopant = DopantType.Unknown;
-                guessState.Electric = ElectricalTag.Insulator;
-            } else if (id == "Semiconductor") {
-                guessState.Dopant = DopantType.Unknown;
-                guessState.Electric = ElectricalTag.Semiconductor;
-            } else if (id == "Dopant") {
-                guessState.Dopant = DopantType.Unknown;
-                guessState.Electric = ElectricalTag.Dopant;
-            } else if (id == "DopantN") {
-                guessState.Dopant = DopantType.N;
-                guessState.Electric = ElectricalTag.Dopant;
-            } else if (id == "DopantP") {
-                guessState.Dopant = DopantType.P;
-                guessState.Electric = ElectricalTag.Dopant;
+        private ResearchSelectionList GetSelectionList() {
+            ResearchSelectionList list = ResearchSelectionList.Alloc(Buttons.Length);
+            foreach(var bit in SelectedIndices) {
+                list.Add(Buttons[bit].Id);
+            }
+            return list;
+        }
+
+        static public ResearchSelectionList GetElectricalGuessList(ResearchMaterialGuessState guessState) {
+            ResearchSelectionList list = ResearchSelectionList.Alloc(4);
+            switch(guessState.Electric) {
+                case ElectricalTag.Conductor:
+                    list.Add("Conductor");
+                    break;
+                case ElectricalTag.Semiconductor:
+                    list.Add("Semiconductor");
+                    break;
+                case ElectricalTag.Insulator: {
+                    list.Add("Insulator");
+                    break;
+                }
+            }
+
+            switch(guessState.Dopant) {
+                case DopantType.N: {
+                    list.Add("DopantN");
+                    break;
+                }
+                case DopantType.P: {
+                    list.Add("DopantP");
+                    break;
+                }
+            }
+
+            return list;
+        }
+
+        static public ResearchSelectionList GetThermalGuessList(ResearchMaterialGuessState guessState) {
+            if (!guessState.Thermal.HasValue) {
+                return default;
+            }
+
+            ResearchSelectionList list = ResearchSelectionList.Alloc(3);
+            ThermalTag thermalGuess = guessState.Thermal.Value;
+            if (thermalGuess == ThermalTag.None) {
+                list.Add("Sensitive");
             } else {
-                guessState.Dopant = DopantType.Unknown;
+                if ((thermalGuess & ThermalTag.HighTemp) != 0) {
+                    list.Add("HighTemp");
+                }
+                if ((thermalGuess & ThermalTag.LowTemp) != 0) {
+                    list.Add("LowTemp");
+                }
+            }
+
+            return list;
+        }
+
+        static public ResearchSelectionList GetSpecialGuessList(ResearchMaterialGuessState guessState) {
+            if (!guessState.Special.HasValue) {
+                return default;
+            }
+
+            ResearchSelectionList list = ResearchSelectionList.Alloc(4);
+            SpecialTag specialGuess = guessState.Special.Value;
+            if (specialGuess == SpecialTag.None) {
+                list.Add("Nothing");
+            } else {
+                if ((specialGuess & SpecialTag.HighMobility) != 0) {
+                    list.Add("HighMobility");
+                }
+                if ((specialGuess & SpecialTag.HighVoltage) != 0) {
+                    list.Add("HighVoltage");
+                }
+                if ((specialGuess & SpecialTag.LightEmitting) != 0) {
+                    list.Add("LightEmitting");
+                }
+            }
+
+            return list;
+        }
+
+        static public void PopulateElectricalGuess(ref ResearchMaterialGuessState guessState, ResearchSelectionList list) {
+            if (list.Contains("Conductor")) {
+                guessState.Electric = ElectricalTag.Conductor;
+            } else if (list.Contains("Semiconductor")) {
+                guessState.Electric = ElectricalTag.Semiconductor;
+            } else if (list.Contains("Insulator")) {
+                guessState.Electric = ElectricalTag.Insulator;
+            } else {
                 guessState.Electric = ElectricalTag.Unknown;
             }
-        }
 
-        static public StringHash32 GetThermalGuessId(ResearchMaterialGuessState guessState) {
-            switch (guessState.Thermal) {
-                case ThermalTag.HighTemp: {
-                    return "HighTemp";
-                }
-                case ThermalTag.LowTemp: {
-                    return "LowTemp";
-                }
-                //case ThermalTag.ExtremeTemp: {
-                //    return "ExtremeTemp";
-                //}
-                case ThermalTag.Sensitive: {
-                    return "Sensitive";
-                }
-                case ThermalTag.Unknown:
-                default: {
-                    return StringHash32.Null;
-                }
-            }
-        }
-
-        static public StringHash32 GetSpecialGuessId(ResearchMaterialGuessState guessState) {
-            switch (guessState.Thermal) {
-                case ThermalTag.HighTemp: {
-                    return "HighTemp";
-                }
-                case ThermalTag.LowTemp: {
-                    return "LowTemp";
-                }
-                //case ThermalTag.ExtremeTemp: {
-                //    return "ExtremeTemp";
-                //}
-                case ThermalTag.Sensitive: {
-                    return "Sensitive";
-                }
-                case ThermalTag.Unknown:
-                default: {
-                    return StringHash32.Null;
-                }
-            }
-        }
-
-        static public void PopulateThermalGuess(ref ResearchMaterialGuessState guessState, StringHash32 id) {
-            if (id == "HighTemp") {
-                guessState.Thermal = ThermalTag.HighTemp;
-            } else if (id == "LowTemp") {
-                guessState.Thermal = ThermalTag.LowTemp;
-            } else if (id == "ExtremeTemp") {
-                //guessState.Thermal = ThermalTag.ExtremeTemp;
-            } else if (id == "Sensitive") {
-                guessState.Thermal = ThermalTag.Sensitive;
+            if (list.Contains("DopantN")) {
+                guessState.Dopant = DopantType.N;
+            } else if (list.Contains("DopantP")) {
+                guessState.Dopant = DopantType.P;
             } else {
-                guessState.Thermal = ThermalTag.Unknown;
+                guessState.Dopant = DopantType.None;
             }
         }
 
-        static public void PopulateSpecialGuess(ref ResearchMaterialGuessState guessState, StringHash32 id) {
-            if (id == "HighTemp") {
-                guessState.Thermal = ThermalTag.HighTemp;
-            } else if (id == "LowTemp") {
-                guessState.Thermal = ThermalTag.LowTemp;
-            } else if (id == "ExtremeTemp") {
-                //guessState.Thermal = ThermalTag.ExtremeTemp;
-            } else if (id == "Sensitive") {
-                guessState.Thermal = ThermalTag.Sensitive;
+        static public void PopulateThermalGuess(ref ResearchMaterialGuessState guessState, ResearchSelectionList list) {
+            ThermalTag thermalTags = default;
+            if (list.Length == 0) {
+                guessState.Thermal = null;
             } else {
-                guessState.Thermal = ThermalTag.Unknown;
+                if (list.Contains("HighTemp")) {
+                    thermalTags |= ThermalTag.HighTemp;
+                }
+                if (list.Contains("LowTemp")) {
+                    thermalTags |= ThermalTag.LowTemp;
+                }
+                if (list.Contains("Sensitive")) {
+                    thermalTags = ThermalTag.None;
+                }
+                guessState.Thermal = thermalTags;
             }
+        }
+
+        static public void PopulateSpecialGuess(ref ResearchMaterialGuessState guessState, ResearchSelectionList list) {
+            SpecialTag specialTags = default;
+            if (list.Length == 0) {
+                guessState.Special = null;
+            } else {
+                if (list.Contains("HighMobility")) {
+                    specialTags |= SpecialTag.HighMobility;
+                }
+                if (list.Contains("HighVoltage")) {
+                    specialTags |= SpecialTag.HighVoltage;
+                }
+                if (list.Contains("LightEmitting")) {
+                    specialTags |= SpecialTag.LightEmitting;
+                }
+                if (list.Contains("Nothing")) {
+                    specialTags = SpecialTag.None;
+                }
+                guessState.Special = specialTags;
+            }
+        }
+    }
+
+    public struct ResearchSelectionList {
+        public int Length;
+        public UnsafeSpan<StringHash32> Data;
+
+        public void Add(StringHash32 id) {
+            Assert.True(Length < Data.Length, "Reached capacity");
+            Data[Length++] = id;
+        }
+
+        public void Commit() {
+            Data = Data.Slice(0, Length);
+        }
+
+        public int IndexOf(StringHash32 id) {
+            for(int i = 0, len = Length; i < Length; i++) {
+                if (Data[i] == id) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public bool Contains(StringHash32 id) {
+            for (int i = 0, len = Length; i < Length; i++) {
+                if (Data[i] == id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static public ResearchSelectionList Alloc(int capacity) {
+            ResearchSelectionList list;
+            list.Length = 0;
+            list.Data = Frame.AllocSpan<StringHash32>(capacity);
+            return list;
         }
     }
 }

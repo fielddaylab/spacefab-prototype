@@ -25,3 +25,15 @@ MonoBehaviour:
       m_HashValue: 541320182
     Output:
       m_HashValue: 2247801736
+  - InputA:
+      m_HashValue: 2574732592
+    InputB:
+      m_HashValue: 3317014541
+    Output:
+      m_HashValue: 3840603205
+  - InputA:
+      m_HashValue: 2574732592
+    InputB:
+      m_HashValue: 336354447
+    Output:
+      m_HashValue: 4029022135

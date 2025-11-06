@@ -10,15 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d57d038f46f5c947b2157e21d6457c0, type: 3}
-  m_Name: Silicon_Phosphorus
+  m_Name: CarbonDiamond_Boron
   m_EditorClassIdentifier: 
-  DisplayName: Silicon + Phosphorus
-  ChemicalSymbol: Si+P
-  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  DisplayName: Carbon+Boron
+  Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
+  ChemicalSymbol: C+B
+  Size: 67
+  ValenceElectrons: 4
   Parent:
-    m_HashValue: 1163381446
+    m_HashValue: 2574732592
   Electrical: 1
-  Thermal: 0
-  SpecialTags: 2
+  Thermal: 1
+  SpecialTags: 5
   DielectricStrength: 0
   DopantType: 2
+  ConductionMultiplier: 1

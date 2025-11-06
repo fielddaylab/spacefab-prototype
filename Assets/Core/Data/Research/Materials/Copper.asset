@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d57d038f46f5c947b2157e21d6457c0, type: 3}
-  m_Name: Silicon
+  m_Name: Copper
   m_EditorClassIdentifier: 
-  DisplayName: Silicon
-  ChemicalSymbol: Si
-  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  DisplayName: Copper
+  Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
+  ChemicalSymbol: Cu
+  Size: 145
+  ValenceElectrons: 1
   Parent:
     m_HashValue: 0
-  Electrical: 3
+  Electrical: 1
   Thermal: 0
-  SpecialTags: 2
+  SpecialTags: 0
   DielectricStrength: 0
   DopantType: 0

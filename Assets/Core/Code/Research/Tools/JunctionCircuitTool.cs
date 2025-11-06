@@ -35,7 +35,7 @@ namespace SpaceFab.Research {
                     current = Math.Min(Math.Abs(currentA), Math.Abs(currentB)) * Math.Sign(Voltage.InputVoltage);
                 }
 
-                bool lightEmitting = (inputA.SpecialTags & inputB.SpecialTags & SpecialTag.LightEmitting) != 0 && inputA.DopantType != DopantType.Unknown && inputB.DopantType != DopantType.Unknown;
+                bool lightEmitting = (inputA.SpecialTags & inputB.SpecialTags & SpecialTag.LightEmitting) != 0 && inputA.DopantType != DopantType.None && inputB.DopantType != DopantType.None;
                 bool highMobility = (inputA.SpecialTags & inputB.SpecialTags & SpecialTag.HighMobility) != 0;
 
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
