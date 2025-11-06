@@ -171,11 +171,25 @@ namespace SpaceFab.ChipDesign
             }
         }
 
+        private struct CNodeDependency
+        {
+            public GraphCoord NodeCoord;
+            public GraphCoord DependencyCoord;
+
+            public CNodeDependency(GraphCoord node, GraphCoord dep)
+            {
+                NodeCoord = node;
+                DependencyCoord = dep;
+            }
+        }
+
         #endregion // Structs
 
         #region Inspector
 
         public Button EvaluateButton;
+
+        public TMP_Text NodeReadout;
 
         [Header("Results")]
         public GameObject ResultPanel;
@@ -277,6 +291,8 @@ namespace SpaceFab.ChipDesign
             // Evaluation Visuals
             ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
 
+            // orderedEdges = SortOrderedEdges(orderedEdges);
+
             m_EvaluationRoutine.Replace(VisualFeedbackRoutine(evalResult, crucialGraph, crucialCoordNodeMap, orderedEdges));
         }
 
@@ -302,6 +318,17 @@ namespace SpaceFab.ChipDesign
                 ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
                 ResetFlowStates();
                 VisualsMgr.Instance.RefreshVisuals();
+
+                /* DEBUG
+                var sb = new StringBuilder();
+                sb.Clear();
+                foreach (var o in orderedEdges)
+                {
+                    sb.AppendLine("Node " + o.Origin.Name + " -> Node " + o.Other.Name);
+                }
+                NodeReadout.SetText(sb.ToString());
+                */
+
                 for (int e = 0; e < orderedEdges.Count; e++)
                 {
                     Debug.Log("[EvaluationMgr] edge " + e);
@@ -442,6 +469,27 @@ namespace SpaceFab.ChipDesign
             }
 
             yield return null;
+        }
+
+        private List<CrucialGraphEdge> SortOrderedEdges(List<CrucialGraphEdge> orderedEdges)
+        {
+            var newOrder = new List<CrucialGraphEdge>();
+
+            int currDepth = 0;
+            while (newOrder.Count < orderedEdges.Count)
+            {
+                for (int i = 0; i < orderedEdges.Count; i++)
+                {
+                    if (orderedEdges[i].EvalDepth == currDepth)
+                    {
+                        newOrder.Add(orderedEdges[i]);
+                    }
+                }
+
+                currDepth++;
+            }
+
+            return newOrder; 
         }
 
         private void ResetTypeTransformations(List<CrucialGraphNode> crucialGraph, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap)
@@ -664,6 +712,8 @@ namespace SpaceFab.ChipDesign
             // reset visited to false for all nodes
             ResetAllVisited(ref coordNodeMap);
 
+            List<CNodeDependency> postponedNodes = new List<CNodeDependency>();
+
             // Follow BFS -- Start with Inputs, then append newly found nodes
             int currDepth = 0;
             while (nodeWorkList.Count > 0)
@@ -694,6 +744,7 @@ namespace SpaceFab.ChipDesign
 
                     for (int i = 0; i < accumulatedCrucialNodes.Count; i++)
                     {
+                        bool addEdge = true;
                         var newCrucialEdge = new CrucialGraphEdge();
                         newCrucialEdge.Init(cNode, accumulatedCrucialNodes[i], accumulatedPath, currDepth);
 
@@ -714,10 +765,12 @@ namespace SpaceFab.ChipDesign
                                     }
                                     else
                                     {
+                                        addEdge = false;
                                         // do not evaluate until gate dependency is evaluated.
                                         var otherNode = crucialCoordNodeMap[accumulatedCrucialNodes[i].Coord];
                                         otherNode.AwaitingDependency = true;
                                         crucialCoordNodeMap[accumulatedCrucialNodes[i].Coord] = otherNode;
+                                        postponedNodes.Add(new CNodeDependency(cNode.Coord, otherNode.Coord));
                                     }
                                 }
                             }
@@ -736,7 +789,21 @@ namespace SpaceFab.ChipDesign
                                     var belowNode = crucialCoordNodeMap[belowCoord];
                                     if (belowNode.AwaitingDependency)
                                     {
-                                        nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
+                                        for (int p = 0; p < postponedNodes.Count; p++)
+                                        {
+                                            if (postponedNodes[p].DependencyCoord == belowCoord)
+                                            {
+                                                var postponedNode = crucialCoordNodeMap[postponedNodes[i].NodeCoord];
+                                                postponedNode.EvalDepth = belowNode.EvalDepth;
+                                                nodeWorkList.Add(crucialCoordNodeMap[postponedNodes[i].NodeCoord]);
+                                                var belowGraphNode = coordNodeMap[belowCoord];
+                                                belowGraphNode.Visited = false;
+                                                coordNodeMap[belowCoord] = belowGraphNode;
+                                                postponedNodes.RemoveAt(p);
+                                                p--;
+                                            }
+                                        }
+                                        // nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
                                         belowNode.AwaitingDependency = false;
                                     }
                                 }
@@ -751,8 +818,11 @@ namespace SpaceFab.ChipDesign
                             newCrucialEdge.CycleDetected = true;
                         }
 
-                        cNode.Edges.Add(newCrucialEdge);
-                        orderedEdgeProcessList.Add(newCrucialEdge);
+                        if (addEdge)
+                        {
+                            cNode.Edges.Add(newCrucialEdge);
+                            orderedEdgeProcessList.Add(newCrucialEdge);
+                        }
                     }
 
                     crucialCoordNodeMap[currCrucialNode.Coord] = cNode;
