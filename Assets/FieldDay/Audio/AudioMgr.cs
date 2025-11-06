@@ -13,6 +13,7 @@ using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
 using FieldDay.Files;
+using FieldDay.Perf;
 using FieldDay.Pipes;
 using UnityEngine;
 
@@ -616,5 +617,13 @@ namespace FieldDay.Audio {
 #endif // DEVELOPMENT
 
         #endregion // Debug
+    }
+
+    static public class AudioMetrics {
+        static public readonly PerfMetric AudioSourceUpdate = new PerfMetric(PerfMetric.Categories.Audio, "AudioSource.Update");
+        static public readonly PerfMetric UsedMemory = new PerfMetric(PerfMetric.Categories.Memory, "Audio Used Memory");
+        static public readonly PerfMetric ReservedMemory = new PerfMetric(PerfMetric.Categories.Memory, "Audio Reserved Memory");
+        static public readonly PerfMetric AudioClipCount = new PerfMetric(PerfMetric.Categories.Audio, "AudioClip Count");
+        static public readonly PerfMetric AudioClipMemory = new PerfMetric(PerfMetric.Categories.Audio, "AudioClip Memory");
     }
 }

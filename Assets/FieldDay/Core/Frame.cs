@@ -62,7 +62,7 @@ namespace FieldDay {
             if (index == InvalidIndex) {
                 return InvalidIndex;
             }
-            int age = index - Index;
+            int age = Index - index;
             return (ushort) ((age + MaxIndex) % MaxIndex);
         }
 

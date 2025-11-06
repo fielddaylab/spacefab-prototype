@@ -1,6 +1,5 @@
 using BeauUtil;
 using System;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 namespace SpaceFab.Research {

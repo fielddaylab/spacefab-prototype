@@ -798,6 +798,7 @@ namespace FieldDay {
 
                 Game.Memory.SwapAllocationBuffers();
                 Game.Memory.UpdateGCMarkers(Frame.Index);
+                Game.Perf.CleanUpUnusedMetrics();
 
                 FlushQueue(s_FrameStartQueue);
 

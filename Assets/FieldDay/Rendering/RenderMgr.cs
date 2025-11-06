@@ -16,6 +16,7 @@ using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
+using FieldDay.Perf;
 using UnityEngine;
 
 #if USE_SRP
@@ -225,6 +226,7 @@ namespace FieldDay.Rendering {
             GameLoop.OnCanvasPreRender.Register(OnCanvasPreUpdate);
             GameLoop.OnApplicationPreRender.Register(OnApplicationPreRender);
             GameLoop.OnFrameAdvance.Register(OnApplicationPostRender);
+
 #if DEVELOPMENT
             GameLoop.OnDebugUpdate.Register(OnDebugUpdate);
 #endif // DEVELOPMENT
@@ -767,11 +769,23 @@ namespace FieldDay.Rendering {
 
 #if DEVELOPMENT
 
+        private enum DebugMetricsGroup {
+            None,
+            Basic,
+            Vertex,
+            DrawCalls,
+            Batches,
+            RenderTargets,
+            Timings,
+        }
+
         static private string s_CachedGraphicsDeviceName;
         static private string s_CachedGraphicsDeviceVendor;
         static private string s_CachedGraphicsDeviceVersion;
         static private string s_CachedGraphicsDeviceType;
         static private string s_CachedNPOTSupport;
+
+        static private DebugMetricsGroup s_SelectedMetricsGroup;
 
         private void OnDebugUpdate() {
             if (DebugFlags.IsFlagSet(DebuggingFlags.DisplayGPUInfo)) {
@@ -791,29 +805,106 @@ namespace FieldDay.Rendering {
                     DebugDraw.AddLogText(psb, ColorBank.LightGray);
                 }
             }
+
+            if (s_SelectedMetricsGroup != DebugMetricsGroup.None) {
+                using(PooledStringBuilder psb = PooledStringBuilder.CreateLarge()) {
+                    switch(s_SelectedMetricsGroup) {
+                        case DebugMetricsGroup.Basic: {
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.VertexCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.TriangleCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.DrawCallsCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.SetPassCallsCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.BatchesCount);
+                            break;
+                        }
+                        case DebugMetricsGroup.Vertex: {
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.VertexCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.TriangleCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.StaticBatchedVerticesCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.StaticBatchedTrianglesCount);
+                            PerfMetric.WriteMetric(psb, RenderMetrics.VertexBufferUploadCount);
+                            psb.Builder.Append(" ("); PerfMetric.WriteMetricValue(psb, RenderMetrics.VertexBufferUploadBytes); psb.Builder.Append(")\n");
+                            PerfMetric.WriteMetric(psb, RenderMetrics.IndexBufferUploadCount);
+                            psb.Builder.Append(" ("); PerfMetric.WriteMetricValue(psb, RenderMetrics.IndexBufferUploadBytes); psb.Builder.Append(")\n");
+                            break;
+                        }
+
+                        case DebugMetricsGroup.DrawCalls: {
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.DrawCallsCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.SetPassCallsCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.MaterialSetPassFast);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.StaticBatchedDrawCallsCount);
+                            break;
+                        }
+
+                        case DebugMetricsGroup.Batches: {
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.BatchesCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.StaticBatchesCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.StaticBatchedVerticesCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.StaticBatchedTrianglesCount);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.StaticBatchedDrawCallsCount);
+                            break;
+                        }
+
+                        case DebugMetricsGroup.RenderTargets: {
+                            PerfMetric.WriteMetric(psb, RenderMetrics.RenderTexturesCount);
+                            psb.Builder.Append(" ("); PerfMetric.WriteMetricValue(psb, RenderMetrics.RenderTexturesBytes); psb.Builder.Append(")\n");
+                            break;
+                        }
+
+                        case DebugMetricsGroup.Timings: {
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.Culling);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.RenderPrepare);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.Clear);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.RenderOpaqueGeometry);
+                            PerfMetric.WriteMetricLine(psb, RenderMetrics.RenderTransparentGeometry);
+                            break;
+                        }
+                    }
+
+                    psb.Builder.TrimEnd(StringUtils.DefaultNewLineChars);
+                    DebugDraw.AddViewportText(new Vector2(1, 0), new Vector2(-8, 8), psb, Color.white, 0, TextAnchor.LowerRight, DebugTextStyle.BackgroundDarkOpaque);
+                }
+            }
         }
 
         [EngineMenuFactory]
         static private DMInfo CreateRenderDebugMenu() {
             DMInfo info = new DMInfo("Rendering", 16);
-            DebugFlags.Menu.AddFlagToggle(info, "Trace Execution", DebuggingFlags.TraceExecution);
-            DebugFlags.Menu.AddSingleFrameFlagButton(info, "Trace Execution (Frame)", DebuggingFlags.TraceExecution);
-            DebugFlags.Menu.AddFlagToggle(info, "Render Screen Info", DebuggingFlags.VisualizeEntireScreen);
-            DebugFlags.Menu.AddFlagToggle(info, "Display GPU Info", DebuggingFlags.DisplayGPUInfo);
+
+            DMInfo screenshots = new DMInfo("Screenshots");
+            screenshots.AddSlider("Resolution Scale", () => s_ScreenshotScale, (v) => s_ScreenshotScale = v, 1, 8, 0.5f, (f) => string.Format("{0:0.0}x", f));
+            info.AddSubmenu(screenshots);
+
             info.AddDivider();
 
-            info.AddSelector("Clear Mode",
+            info.AddSelector("Debug Metrics",
+                () => (int)s_SelectedMetricsGroup,
+                (i) => s_SelectedMetricsGroup = (DebugMetricsGroup)i,
+                new string[] { "---", "Basic Stats", "Vertices", "Draw Calls", "Batches", "Render Targets", "Timing" });
+            info.AddDivider();
+
+            DMInfo debugOptions = new DMInfo("Debug Options");
+
+            DebugFlags.Menu.AddFlagToggle(debugOptions, "Trace Execution", DebuggingFlags.TraceExecution);
+            DebugFlags.Menu.AddSingleFrameFlagButton(debugOptions, "Trace Execution (Frame)", DebuggingFlags.TraceExecution);
+            DebugFlags.Menu.AddFlagToggle(debugOptions, "Render Screen Info", DebuggingFlags.VisualizeEntireScreen);
+            DebugFlags.Menu.AddFlagToggle(debugOptions, "Display GPU Info", DebuggingFlags.DisplayGPUInfo);
+
+            debugOptions.AddSelector("Clear Mode",
                 () => (int)Game.Rendering.m_DebugPrimaryCameraAdjustments.Clear,
                 (i) => {
                     Game.Rendering.m_DebugPrimaryCameraAdjustments.Clear = (DebugCameraAdjustments.ClearMode)i;
                     Game.Rendering.CacheDebugCameraAdjustments();
                 }, new string[] { "---", "Depth Only", "Debug Color" });
 
-            info.AddSelector("Post Processing", () => Game.Rendering.m_DebugPrimaryCameraAdjustments.DisablePostProcessing ? 1 : 0,
+            debugOptions.AddSelector("Post Processing", () => Game.Rendering.m_DebugPrimaryCameraAdjustments.DisablePostProcessing ? 1 : 0,
                 (i) => {
                     Game.Rendering.m_DebugPrimaryCameraAdjustments.DisablePostProcessing = i == 1;
                     Game.Rendering.CacheDebugCameraAdjustments();
                 }, new string[] { "---", "Suppress" });
+
+            info.AddSubmenu(debugOptions);
 
             info.AddDivider();
 
@@ -846,6 +937,8 @@ namespace FieldDay.Rendering {
             }
 
             info.AddSubmenu(renderLayerMenu);
+
+            DMInfo qualitySettings = new DMInfo("Quality Settings");
 
             DMInfo antialiasingSettings = new DMInfo("Antialiasing");
             antialiasingSettings.MinimumWidth = 250;
@@ -896,9 +989,7 @@ namespace FieldDay.Rendering {
 
 #endif // USING_URP
 
-            info.AddSubmenu(antialiasingSettings);
-
-            DMInfo qualitySettings = new DMInfo("Quality Settings");
+            qualitySettings.AddSubmenu(antialiasingSettings);
 
             info.AddSubmenu(qualitySettings);
 
@@ -929,12 +1020,6 @@ namespace FieldDay.Rendering {
 
             info.AddSubmenu(shaderAudit);
 
-            DMInfo screenshots = new DMInfo("Screenshots");
-
-            screenshots.AddSlider("Resolution Scale", () => s_ScreenshotScale, (v) => s_ScreenshotScale = v, 1, 8, 0.5f, (f) => string.Format("{0:0.0}x", f));
-
-            info.AddSubmenu(screenshots);
-
             return info;
         }
 
@@ -954,5 +1039,46 @@ namespace FieldDay.Rendering {
         }
 
         #endregion // Manual Rendering
+    }
+
+    /// <summary>
+    /// Rendering metrics set.
+    /// </summary>
+    static public class RenderMetrics {
+        static public readonly PerfMetric VertexCount = new PerfMetric(PerfMetric.Categories.Render, "Vertices Count");
+        static public readonly PerfMetric TriangleCount = new PerfMetric(PerfMetric.Categories.Render, "Triangles Count");
+        static public readonly PerfMetric SetPassCallsCount = new PerfMetric(PerfMetric.Categories.Render, "SetPass Calls Count");
+        static public readonly PerfMetric DrawCallsCount = new PerfMetric(PerfMetric.Categories.Render, "Draw Calls Count");
+        static public readonly PerfMetric MaterialSetPassFast = new PerfMetric(PerfMetric.Categories.Render, "Material.SetPassFast", "Material SetPass");
+        static public readonly PerfMetric BatchesCount = new PerfMetric(PerfMetric.Categories.Render, "Batches Count");
+
+        static public readonly PerfMetric RenderTexturesCount = new PerfMetric(PerfMetric.Categories.Render, "Render Textures Count");
+        static public readonly PerfMetric RenderTexturesBytes = new PerfMetric(PerfMetric.Categories.Render, "Render Textures Bytes");
+
+        static public readonly PerfMetric UsedBuffersCount = new PerfMetric(PerfMetric.Categories.Render, "Used Buffers Count");
+        static public readonly PerfMetric UsedBuffersBytes = new PerfMetric(PerfMetric.Categories.Render, "Used Buffers Bytes");
+
+        static public readonly PerfMetric UsedTexturesCount = new PerfMetric(PerfMetric.Categories.Render, "Used Textures Count");
+        static public readonly PerfMetric UsedTexturesBytes = new PerfMetric(PerfMetric.Categories.Render, "Used Textures Bytes");
+
+        static public readonly PerfMetric VertexBufferUploadCount = new PerfMetric(PerfMetric.Categories.Render, "Vertex Buffer Upload In Frame Count");
+        static public readonly PerfMetric VertexBufferUploadBytes = new PerfMetric(PerfMetric.Categories.Render, "Vertex Buffer Upload In Frame Bytes");
+
+        static public readonly PerfMetric IndexBufferUploadCount = new PerfMetric(PerfMetric.Categories.Render, "Index Buffer Upload In Frame Count");
+        static public readonly PerfMetric IndexBufferUploadBytes = new PerfMetric(PerfMetric.Categories.Render, "Index Buffer Upload In Frame Bytes");
+
+        static public readonly PerfMetric StaticBatchedVerticesCount = new PerfMetric(PerfMetric.Categories.Render, "Static Batched Vertices Count");
+        static public readonly PerfMetric StaticBatchedTrianglesCount = new PerfMetric(PerfMetric.Categories.Render, "Static Batched Triangles Count");
+        static public readonly PerfMetric StaticBatchedDrawCallsCount = new PerfMetric(PerfMetric.Categories.Render, "Static Batched Draw Calls Count");
+        static public readonly PerfMetric StaticBatchesCount = new PerfMetric(PerfMetric.Categories.Render, "Static Batches Count");
+
+        static public readonly PerfMetric RenderOpaqueGeometry = new PerfMetric(PerfMetric.Categories.Render, "Render.OpaqueGeometry", "Render Opaque Geo");
+        static public readonly PerfMetric RenderTransparentGeometry = new PerfMetric(PerfMetric.Categories.Render, "Render.TransparentGeometry", "Render Transparent Geo");
+        static public readonly PerfMetric RenderPrepare = new PerfMetric(PerfMetric.Categories.Render, "Render.Prepare", "Render Prepare");
+        static public readonly PerfMetric Culling = new PerfMetric(PerfMetric.Categories.Render, "Culling");
+        static public readonly PerfMetric Clear = new PerfMetric(PerfMetric.Categories.Render, "Clear");
+
+        static public readonly PerfMetric ShaderParse = new PerfMetric(PerfMetric.Categories.Render, "Shader.ParseMainThread", "Shader Parse (Main)");
+        static public readonly PerfMetric ShaderParseThreaded = new PerfMetric(PerfMetric.Categories.Render, "Shader.ParseThreaded", "Shader Parse (Threaded)");
     }
 }
