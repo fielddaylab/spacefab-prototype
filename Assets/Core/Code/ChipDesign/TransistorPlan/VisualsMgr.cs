@@ -19,6 +19,9 @@ namespace SpaceFab.ChipDesign
         private void Awake()
         {
             Instance = this;
+
+            Game.Events.Register(GameEvents.OnLayoutChanged, HandleLayoutChanged);
+            Game.Events.Register(GameEvents.NewGridStackCreated, HandleNewGridStackCreated);
         }
 
         private void Start()
@@ -27,9 +30,6 @@ namespace SpaceFab.ChipDesign
 
             RefreshGrid();
             RefreshCamera();
-
-            Game.Events.Register(GameEvents.OnLayoutChanged, HandleLayoutChanged);
-            Game.Events.Register(GameEvents.NewGridStackCreated, HandleNewGridStackCreated);
         }
 
         private void RefreshGrid()
@@ -45,6 +45,9 @@ namespace SpaceFab.ChipDesign
                 GridData.LayerDims.Y / 2f,
                 Camera.main.transform.position.z
                 );
+
+            // Adjust zoom
+            Camera.main.orthographicSize = GridData.LayerDims.X / 1.81f;
         }
 
         public void RefreshVisuals()
@@ -71,6 +74,9 @@ namespace SpaceFab.ChipDesign
                 GridVisuals.Destroy();
             }
             GridVisuals.Init(GridData.LayerDims.X, GridData.LayerDims.Y, CellVisualsPrefab, CellVisualsContainer);
+
+            RefreshGrid();
+            RefreshCamera();
         }
 
         #endregion // Handlers
