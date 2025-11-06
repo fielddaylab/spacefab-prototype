@@ -23,7 +23,9 @@ namespace SpaceFab.ChipDesign
         DrawANodes,
         DrawBNodes,
         DrawVia,
-        DrawGate
+        DrawGate,
+        DrawOutXNodes,
+        DrawOutYNodes,
     }
 
     public enum GridInteractionLayer
@@ -58,6 +60,8 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private Button DrawANodesButton;
         [SerializeField] private Button DrawBNodesButton;
         [SerializeField] private Button DrawOutNodesButton;
+        [SerializeField] private Button DrawOutXNodesButton;
+        [SerializeField] private Button DrawOutYNodesButton;
 
 
         [Header("Links")]
@@ -75,6 +79,8 @@ namespace SpaceFab.ChipDesign
             DrawPNodesButton.onClick.AddListener(HandleDrawPNodesClicked);
             DrawInNodesButton.onClick.AddListener(HandleDrawInNodesClicked);
             DrawOutNodesButton.onClick.AddListener(HandleDrawOutNodesClicked);
+            DrawOutXNodesButton.onClick.AddListener(HandleDrawOutXNodesClicked);
+            DrawOutYNodesButton.onClick.AddListener(HandleDrawOutYNodesClicked);
             DrawVPlusNodesButton.onClick.AddListener(HandleDrawVPlusNodesClicked);
             DrawVMinusNodesButton.onClick.AddListener(HandleDrawVMinusNodesClicked);
             DrawANodesButton.onClick.AddListener(HandleDrawANodesClicked);
@@ -96,6 +102,8 @@ namespace SpaceFab.ChipDesign
             DrawPNodesButton.onClick.RemoveListener(HandleDrawPNodesClicked);
             DrawInNodesButton.onClick.RemoveListener(HandleDrawInNodesClicked);
             DrawOutNodesButton.onClick.RemoveListener(HandleDrawOutNodesClicked);
+            DrawOutXNodesButton.onClick.RemoveListener(HandleDrawOutXNodesClicked);
+            DrawOutYNodesButton.onClick.RemoveListener(HandleDrawOutYNodesClicked);
             DrawVPlusNodesButton.onClick.RemoveListener(HandleDrawVPlusNodesClicked);
             DrawVMinusNodesButton.onClick.RemoveListener(HandleDrawVMinusNodesClicked);
             DrawANodesButton.onClick.RemoveListener(HandleDrawANodesClicked);
@@ -192,6 +200,22 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawOutNodes);
+            }
+        }
+
+        private void HandleDrawOutXNodesClicked()
+        {
+            if (InteractMgr.Instance != null)
+            {
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawOutXNodes);
+            }
+        }
+
+        private void HandleDrawOutYNodesClicked()
+        {
+            if (InteractMgr.Instance != null)
+            {
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawOutYNodes);
             }
         }
 

@@ -3,6 +3,7 @@ using BeauUtil;
 using FieldDay;
 using FieldDay.Audio;
 using FieldDay.Mathematics;
+using SpaceFab.ChipFab;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -291,7 +292,7 @@ namespace SpaceFab.ChipDesign
             // Evaluation Visuals
             ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
 
-            // orderedEdges = SortOrderedEdges(orderedEdges);
+            orderedEdges = SortOrderedEdges(orderedEdges);
 
             m_EvaluationRoutine.Replace(VisualFeedbackRoutine(evalResult, crucialGraph, crucialCoordNodeMap, orderedEdges));
         }
@@ -300,8 +301,8 @@ namespace SpaceFab.ChipDesign
         {
             Debug.Log("[EvaluationMgr] Eval Visuals Started...");
 
-            float timeBetweenSteps = 1;
-            float timeBetweenTests = 3;
+            float timeBetweenSteps = 0.5f;
+            float timeBetweenTests = 2;
 
             // EVALUATE FLOW
             // For each test in suite:
@@ -311,24 +312,31 @@ namespace SpaceFab.ChipDesign
             //          for each path node, check if visited
             //              if visited, ensure past flow matches present flow
             //          update visuals along path chunk
-            for (int test = 0; test < 1; test++)
+            int numTests = LevelMgr.Instance.CurrLevelData.GetTestSuite() != null ? LevelMgr.Instance.CurrLevelData.GetTestSuite().Tests.Length : 0;
+            bool allTestsCorrect = true;
+            for (int test = 0; test < numTests; test++)
             {
+                bool currTestCorrect = true;
+                var currTest = LevelMgr.Instance.CurrLevelData.GetTestSuite().Tests[test];
                 Debug.Log("[EvaluationMgr] Test " + test);
 
                 ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
                 ResetFlowStates();
                 VisualsMgr.Instance.RefreshVisuals();
 
+                yield return 0.5f;
+
                 /* DEBUG
                 var sb = new StringBuilder();
                 sb.Clear();
                 foreach (var o in orderedEdges)
                 {
-                    sb.AppendLine("Node " + o.Origin.Name + " -> Node " + o.Other.Name);
+                    sb.AppendLine("Node " + o.Origin.Name + " -> Node " + o.Other.Name + " (" + o.EvalDepth + ")");
                 }
                 NodeReadout.SetText(sb.ToString());
                 */
 
+                int currDepth = 0;
                 for (int e = 0; e < orderedEdges.Count; e++)
                 {
                     Debug.Log("[EvaluationMgr] edge " + e);
@@ -344,8 +352,8 @@ namespace SpaceFab.ChipDesign
                     switch (originCell.CellType)
                     {
                         case CellType.Input:
-                            // TODO: lookup FlowState by cell's subtype
-                            flowState = FlowState.Hi;
+                            // lookup FlowState by cell's subtype
+                            flowState = EvalUtility.GetTestValBySubType(originCell.SubtypeLabel, currTest);
                             break;
                         default:
                             // Use origin's flow type
@@ -439,10 +447,21 @@ namespace SpaceFab.ChipDesign
                     currEdge.Origin = crucialCoordNodeMap[currEdge.Origin.Coord];
                     currEdge.Other = crucialCoordNodeMap[currEdge.Other.Coord];
                     orderedEdges[e] = currEdge;
+                    
+                    if (currEdge.EvalDepth > currDepth)
+                    {
+                        VisualsMgr.Instance.RefreshVisuals();
+                        currDepth = currEdge.EvalDepth;
 
-                    VisualsMgr.Instance.RefreshVisuals();
-                    yield return timeBetweenSteps;
+                        yield return timeBetweenSteps;
+                    }
                 }
+
+                // Check if all relevant outputs have the correct flow state
+                currTestCorrect = OutputsCorrect(currTest, ref crucialCoordNodeMap, crucialGraph);
+
+                if (!currTestCorrect) { allTestsCorrect = false; }
+
                 yield return timeBetweenTests;
             }
 
@@ -450,6 +469,16 @@ namespace SpaceFab.ChipDesign
 
             // Handle result
 
+            if (allTestsCorrect)
+            {
+                EvaluationSuccess();
+            }
+            else
+            {
+                EvaluationFailure();
+            }
+
+            /*
             switch (evalResult)
             {
                 case EvalResult.Failure:
@@ -467,6 +496,7 @@ namespace SpaceFab.ChipDesign
                 default:
                     break;
             }
+            */
 
             yield return null;
         }
@@ -490,6 +520,24 @@ namespace SpaceFab.ChipDesign
             }
 
             return newOrder; 
+        }
+
+        private bool OutputsCorrect(TestData currTest, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphNode> crucialGraph)
+        {
+            foreach (var cNode in crucialGraph)
+            {
+                var cell = GridStack.Instance.GetCellDirect(cNode.Coord);
+                if (cell.CellType == CellType.Output)
+                {
+                    var outputCNode = crucialCoordNodeMap[cNode.Coord];
+                    if (EvalUtility.GetTestValBySubType(cell.SubtypeLabel, currTest) != outputCNode.CurrFlowState)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         private void ResetTypeTransformations(List<CrucialGraphNode> crucialGraph, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap)
@@ -794,7 +842,9 @@ namespace SpaceFab.ChipDesign
                                             if (postponedNodes[p].DependencyCoord == belowCoord)
                                             {
                                                 var postponedNode = crucialCoordNodeMap[postponedNodes[i].NodeCoord];
-                                                postponedNode.EvalDepth = belowNode.EvalDepth;
+                                                var updateNode = crucialCoordNodeMap[postponedNodes[i].NodeCoord];
+                                                updateNode.EvalDepth = currDepth + 1;
+                                                crucialCoordNodeMap[postponedNodes[i].NodeCoord] = updateNode;
                                                 nodeWorkList.Add(crucialCoordNodeMap[postponedNodes[i].NodeCoord]);
                                                 var belowGraphNode = coordNodeMap[belowCoord];
                                                 belowGraphNode.Visited = false;

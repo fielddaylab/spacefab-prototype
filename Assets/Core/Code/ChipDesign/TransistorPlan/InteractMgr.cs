@@ -1,3 +1,4 @@
+using ChipFab.ChipDesign;
 using FieldDay;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace SpaceFab.ChipDesign
     public class InteractMgr : MonoBehaviour
     {
         public static InteractMgr Instance;
+
 
         #region Toolbar
 
@@ -235,22 +237,28 @@ namespace SpaceFab.ChipDesign
                     cell.CellType = CellType.PTransistor;
                     break;
                 case ToolType.DrawInNodes:
-                    DrawIONode(true, "IN", ref cell, gridPos);
+                    DrawIONode(true, GameConsts.IN_SUBTYPE, ref cell, gridPos);
                     break;
                 case ToolType.DrawOutNodes:
-                    DrawIONode(false, "OUT", ref cell, gridPos);
+                    DrawIONode(false, GameConsts.OUT_SUBTYPE, ref cell, gridPos);
+                    break;
+                case ToolType.DrawOutXNodes:
+                    DrawIONode(false, GameConsts.X_SUBTYPE, ref cell, gridPos);
+                    break;
+                case ToolType.DrawOutYNodes:
+                    DrawIONode(false, GameConsts.Y_SUBTYPE, ref cell, gridPos);
                     break;
                 case ToolType.DrawVPlusNodes:
-                    DrawIONode(true, "V+", ref cell, gridPos);
+                    DrawIONode(true, GameConsts.VPLUS_SUBTYPE, ref cell, gridPos);
                     break;
                 case ToolType.DrawVMinusNodes:
-                    DrawIONode(true, "V-", ref cell, gridPos);
+                    DrawIONode(true, GameConsts.VMINUS_SUBTYPE, ref cell, gridPos);
                     break;
                 case ToolType.DrawANodes:
-                    DrawIONode(true, "A", ref cell, gridPos);
+                    DrawIONode(true, GameConsts.A_SUBTYPE, ref cell, gridPos);
                     break;
                 case ToolType.DrawBNodes:
-                    DrawIONode(true, "B", ref cell, gridPos);
+                    DrawIONode(true, GameConsts.B_SUBTYPE, ref cell, gridPos);
                     break;
                 case ToolType.DrawVia:
                     DrawVia(ref cell, gridPos);
