@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BeauUtil;
 using BeauUtil.Debugger;
 
-namespace FieldDay.Data {
+namespace FieldDay.Collections {
     /// <summary>
     /// Set of nodes, both sorted and unsorted.
     /// </summary>

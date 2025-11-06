@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using BeauUtil;
 
-namespace FieldDay.Pipes {
+namespace FieldDay.Collections {
     public interface IPipe<T> where T : struct {
         /// <summary>
         /// Returns if the pipe is currently full.

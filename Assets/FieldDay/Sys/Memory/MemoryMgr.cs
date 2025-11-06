@@ -17,6 +17,7 @@ using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
 using FieldDay.Perf;
+using FieldDay.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
@@ -38,8 +39,7 @@ namespace FieldDay.Memory {
         private IPool<Material> m_MaterialPool;
         private Shader m_DefaultShader;
 
-        private StringArena m_CurrentFrameStringArena;
-        private StringArena m_AlternateFrameStringArena;
+        private DoubleBuffered<StringArena> m_StringSliceFrameAllocator;
 
         private Transform m_PersistentPoolRoot;
 
@@ -122,38 +122,37 @@ namespace FieldDay.Memory {
         #region Strings
 
         internal void SwapAllocationBuffers() {
-            Ref.Swap(ref m_CurrentFrameStringArena, ref m_AlternateFrameStringArena);
-            m_CurrentFrameStringArena.Reset();
+            m_StringSliceFrameAllocator.Next().Reset();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public StringSlice AllocString(string source) {
-            return m_CurrentFrameStringArena.Alloc(source);
+            return m_StringSliceFrameAllocator.Current.Alloc(source);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public StringSlice AllocString(StringSlice source) {
-            return m_CurrentFrameStringArena.Alloc(source);
+            return m_StringSliceFrameAllocator.Current.Alloc(source);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public StringSlice AllocString(StringBuilderSlice source) {
-            return m_CurrentFrameStringArena.Alloc(source);
+            return m_StringSliceFrameAllocator.Current.Alloc(source);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public StringSlice AllocString(UnsafeString source) {
-            return m_CurrentFrameStringArena.Alloc(source);
+            return m_StringSliceFrameAllocator.Current.Alloc(source);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public unsafe StringSlice AllocString(char* source, int sourceLength) {
-            return m_CurrentFrameStringArena.Alloc(source, sourceLength);
+            return m_StringSliceFrameAllocator.Current.Alloc(source, sourceLength);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public StringSlice AllocString(UnsafeSpan<char> source) {
-            return m_CurrentFrameStringArena.Alloc(source);
+            return m_StringSliceFrameAllocator.Current.Alloc(source);
         }
 
         #endregion // Strings
@@ -216,8 +215,8 @@ namespace FieldDay.Memory {
             m_GCCollectTimestamps = new long[genCount];
             m_LastKnownGenerationCount = genCount;
 
-            m_CurrentFrameStringArena = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB);
-            m_AlternateFrameStringArena = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB);
+            m_StringSliceFrameAllocator.Current = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB / 2);
+            m_StringSliceFrameAllocator.Back = new StringArena(configuration.DoubleBufferedStringCapacityKB * Unsafe.KiB / 2);
 
             m_MeshPool = new DynamicPool<Mesh>(configuration.MeshCapacity, (p) => new Mesh(), false);
             m_MeshPool.Config.RegisterOnDestruct((p, m) => GameObject.DestroyImmediate(m));
