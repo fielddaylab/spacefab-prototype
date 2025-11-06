@@ -8,8 +8,9 @@ namespace SpaceFab.ChipDesign
     public class VisualGridCell : MonoBehaviour
     {
         private const int FLOW_SORT_ORDER = 500;
-        private const int TRANSFER_SORT_ORDER = 200;
-        private const int METAL_SORT_ORDER = 100;
+        private const int GATE_SORT_ORDER = 300;
+        private const int METAL_SORT_ORDER = 200;
+        private const int VIA_SORT_ORDER = 100;
         private const int TRANSISTOR_SORT_ORDER = 0;
 
         [SerializeField] private SpriteRenderer m_pathRenderer;
@@ -103,7 +104,7 @@ namespace SpaceFab.ChipDesign
             m_subRenderer.sortingOrder = m_pathRenderer.sortingOrder - 10;
             m_textRenderer.GetComponent<Renderer>().sortingOrder = m_pathRenderer.sortingOrder + 10;
             foreach (var r in m_dirRenderers) { r.sortingOrder = m_pathRenderer.sortingOrder + 5; }
-            m_transferRenderer.sortingOrder = TRANSFER_SORT_ORDER;
+            m_transferRenderer.sortingOrder = cellData.TransferType == TransferType.Via ? VIA_SORT_ORDER : GATE_SORT_ORDER;
 
             if (lookedUpEdge)
             {

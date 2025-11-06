@@ -121,5 +121,20 @@ namespace SpaceFab.ChipDesign
 
             return condensed;
         }
+
+        public static int NumConnections(EdgeState[] edges)
+        {
+            int num = 0;
+
+            for (int i = 0; i < edges.Length; i++)
+            {
+                if (edges[i] == EdgeState.Connected)
+                {
+                    num++;
+                }
+            }
+
+            return num;
+        }
     }
 }

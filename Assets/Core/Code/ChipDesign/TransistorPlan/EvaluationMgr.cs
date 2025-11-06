@@ -455,8 +455,18 @@ namespace SpaceFab.ChipDesign
 
                         if (flowState == FlowState.Unstable)
                         {
+                            /*
                             // turn all visited flows into unstable
                             foreach (var graphNode in completeGraph)
+                            {
+                                var coord = graphNode.Coord;
+                                var cell = GridStack.Instance.GetCellDirect(coord);
+                                cell.FlowState = flowState;
+                                GridStack.Instance.SetCellDirect(coord, cell);
+                            }
+                            */
+
+                            foreach (var graphNode in currEdge.Path)
                             {
                                 var coord = graphNode.Coord;
                                 var cell = GridStack.Instance.GetCellDirect(coord);
@@ -676,11 +686,17 @@ namespace SpaceFab.ChipDesign
                         if (cell.CellType == CellType.NONE) { continue; }
 
                         // Inputs, Outputs, Gates, and P-N transitions are crucial nodes -- gather them
-                        if ((cell.CellType == CellType.Input || cell.CellType == CellType.Output)
+                        bool isCrucial = false;
+                        isCrucial |= (cell.CellType == CellType.Input || cell.CellType == CellType.Output)
                             || (cell.TransferType == TransferType.GateAbove)
                             || (cell.TransferType == TransferType.GateBelow)
-                            || IsTransistorTransition(layer, col, row, ref coordNodeMap)
-                            )
+                            || IsTransistorTransition(layer, col, row, ref coordNodeMap);
+
+                        // Path ends are also crucial nodes
+                        var condensedEdges = EdgeUtility.CondenseEdges(cell.Edges);
+                        isCrucial |= EdgeUtility.NumConnections(condensedEdges) == 1;
+
+                        if (isCrucial)
                         {
                             var crucialNode = new CrucialGraphNode();
                             crucialNode.Init(layer, col, row);
