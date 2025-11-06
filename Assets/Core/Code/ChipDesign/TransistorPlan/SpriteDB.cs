@@ -37,7 +37,9 @@ namespace SpaceFab.ChipDesign {
         public Sprite IOOuter;
 
         [Header("Flow")]
-        public Sprite FlowIndicator;
+        public Sprite FlowHi;
+        public Sprite FlowLo;
+        public Sprite FlowUnstable;
 
 
         private void Awake()

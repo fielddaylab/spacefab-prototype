@@ -17,30 +17,29 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private TMP_Text m_textRenderer;
         [SerializeField] private SpriteRenderer m_transferRenderer;
         [SerializeField] private SpriteRenderer[] m_dirRenderers;
+        [SerializeField] private SpriteMask m_flowMask;
 
         [SerializeField] private SpriteRenderer m_flowIndicator;
 
-        public void UpdateFlowVisuals(FlowState flow)
+        public void UpdateFlowVisuals(FlowState flow, int layerIndex)
         {
-            m_flowIndicator.sortingOrder = FLOW_SORT_ORDER;
+            // m_flowIndicator.sortingOrder = FLOW_SORT_ORDER;
+            m_flowIndicator.sortingOrder = layerIndex == 0 ? METAL_SORT_ORDER : TRANSISTOR_SORT_ORDER;
+            m_flowIndicator.sortingOrder += 50;
 
             switch (flow)
             {
                 case (FlowState.Hi):
-                    m_flowIndicator.sprite = SpriteDB.Instance.FlowIndicator;
-                    m_flowIndicator.color = Color.yellow;
+                    m_flowIndicator.sprite = SpriteDB.Instance.FlowHi;
                     break;
                 case (FlowState.Lo):
-                    m_flowIndicator.sprite = SpriteDB.Instance.FlowIndicator;
-                    m_flowIndicator.color = Color.blue;
+                    m_flowIndicator.sprite = SpriteDB.Instance.FlowLo;
                     break;
                 case (FlowState.Unstable):
-                    m_flowIndicator.sprite = SpriteDB.Instance.FlowIndicator;
-                    m_flowIndicator.color = Color.red;
+                    m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstable;
                     break;
                 default:
                     m_flowIndicator.sprite = null;
-                    m_flowIndicator.color = Color.white;
                     break;
             }
         }
@@ -54,6 +53,7 @@ namespace SpaceFab.ChipDesign
             m_pathRenderer.sprite = null;
             m_subRenderer.sprite = null;
             foreach (var r in m_dirRenderers) { r.sprite = null; }
+            m_flowMask.sprite = null;
             m_textRenderer.SetText("");
             m_pathRenderer.color = Color.white;
 
@@ -111,9 +111,12 @@ namespace SpaceFab.ChipDesign
                 var angles = m_pathRenderer.transform.rotation.eulerAngles;
                 angles.z = 90 * pathData.Turns;
                 m_pathRenderer.transform.rotation = Quaternion.Euler(angles);
+
+                m_flowMask.transform.rotation = Quaternion.Euler(angles);
+                m_flowMask.sprite = pathData.Sprite;
             }
 
-            UpdateFlowVisuals(cellData.FlowState);
+            UpdateFlowVisuals(cellData.FlowState, layerIndex);
         }
 
         private void RenderNTransistor(ref GridCell cellData, ref PathLibrary.AssembledPathData pathData, ref bool lookedUpEdge, int layerIndex, int col, int row)
