@@ -17,7 +17,7 @@ namespace SpaceFab
 
         private void Start()
         {
-            DontDestroyOnLoad(this);
+            // DontDestroyOnLoad(this);
         }
     }
 }

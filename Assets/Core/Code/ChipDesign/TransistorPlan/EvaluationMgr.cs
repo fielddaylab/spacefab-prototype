@@ -692,6 +692,7 @@ namespace SpaceFab.ChipDesign
 
         private bool OutputsCorrect(TestData currTest, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphNode> crucialGraph)
         {
+            bool allCorrect = true;
             foreach (var cNode in crucialGraph)
             {
                 var cell = GridStack.Instance.GetCellDirect(cNode.Coord);
@@ -700,12 +701,13 @@ namespace SpaceFab.ChipDesign
                     var outputCNode = crucialCoordNodeMap[cNode.Coord];
                     if (EvalUtility.GetTestValBySubType(cell.SubtypeLabel, currTest) != outputCNode.CurrFlowState)
                     {
-                        return false;
+                        allCorrect = false;
+                        // TODO: add testIndex-subtype-result to output list
                     }
                 }
             }
 
-            return true;
+            return allCorrect;
         }
 
         private void ResetTypeTransformations(List<CrucialGraphNode> crucialGraph, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap)
