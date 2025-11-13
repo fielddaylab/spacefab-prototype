@@ -6,6 +6,7 @@ using BeauUtil.Debugger;
 using BeauUtil.Tags;
 using BeauUtil.Variants;
 using FieldDay.Debugging;
+using FieldDay.Localization;
 using FieldDay.Vox;
 using Leaf;
 using Leaf.Runtime;
@@ -362,8 +363,14 @@ namespace FieldDay.Scripting {
         }
 
         protected virtual IEnumerator ExecuteChoice(ScriptThread thread, LeafChoice choice) {
-            // TODO: Implement
-            throw new NotImplementedException();
+            IDialogueChooser chooser = thread.GetChooser();
+            // TODO: resolve to default chooser if necessary
+            Assert.NotNull(chooser, "Chooser must be assigned before ExecuteChoice is called");
+            m_RuntimeState.OnLeafChoicePresented.Invoke(thread, choice);
+
+            thread.BeginChoice();
+            yield return Routine.Inline(chooser.ShowOptions(choice, thread.PeekNode(), thread));
+            thread.EndChoice();
         }
 
         #endregion // Choice
@@ -377,7 +384,11 @@ namespace FieldDay.Scripting {
         }
 
         public bool TryLookupLine(StringHash32 inLineCode, LeafNode inLocalNode, out string outLine) {
-            // TODO: if non-default language, lookup from localization instead
+            if (Loc.IsDefaultLanguage()) {
+                outLine = null;
+                return false;
+            }
+            // TODO: lookup from localization instead
             outLine = null;
             return false;
         }

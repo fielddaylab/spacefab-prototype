@@ -76,6 +76,9 @@ namespace FieldDay {
         [SerializeField]
         private ReflectionBootData m_ReflectionData;
 
+        [SerializeField]
+        private EngineHints.SerializedData[] m_ConfigHints;
+
         [Header("Modules")]
 
         [SerializeField]
@@ -243,6 +246,7 @@ namespace FieldDay {
             Log.Msg("[GameLoop] Starting...");
             Log.Msg("[GameLoop] Word Size = {0} ({1})", Unsafe.PointerSize, Unsafe.IsPointerSizeCompileTimeConstant ? "compile-time" : "runtime");
             Log.Msg("[GameLoop] Stopwatch Frequency = {0}hz", System.Diagnostics.Stopwatch.Frequency);
+            Log.Msg("[GameLoop] Graphics Device Type = {0}", SystemInfo.graphicsDeviceType);
 
             if (ReflectionBootData.ShouldUse()) {
                 ReflectionBootData.Mount(m_ReflectionData);
@@ -257,6 +261,8 @@ namespace FieldDay {
                 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
                 CultureInfo.CurrentUICulture = CultureInfo.InvariantCulture;
                 BuildInfo.Load();
+
+                EngineHints.Initialize();
 
                 CommandLineArgs.Initialize();
                 ApplyCommandLineArguments();
@@ -470,6 +476,7 @@ namespace FieldDay {
                 OnApplicationQuit();
             }
             Canvas.preWillRenderCanvases -= OnPreCanvasRender;
+            EngineHints.Shutdown();
             Frame.DestroyAllocator();
             CounterHandle.DestroyAllocator();
             CrashHandler.Deregister();

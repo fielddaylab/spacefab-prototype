@@ -76,6 +76,7 @@ namespace FieldDay.Scripting {
         #region Callbacks
 
         public readonly CastableEvent<ScriptThread, TagString> OnTaggedLineProcessed = new CastableEvent<ScriptThread, TagString>();
+        public readonly CastableEvent<ScriptThread, LeafChoice> OnLeafChoicePresented = new CastableEvent<ScriptThread, LeafChoice>();
 
         #endregion // Callbacks
 
