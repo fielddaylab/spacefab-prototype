@@ -9,19 +9,21 @@ namespace SpaceFab.ChipDesign
 {
     public class ChipDesignLoader : MonoBehaviour
     {
-        public Button StartBtn;
+        [SerializeField] private LevelLoaderButton[] LevelButtons;
         [SerializeField] private string m_ChipDesignScene;
-
-        public LevelData Level0Data;
 
         private void Awake()
         {
-            StartBtn.onClick.AddListener(HandleStartClicked);
+            for (int i = 0; i < LevelButtons.Length; i++)
+            {
+                int indexCopy = i;
+                LevelButtons[i].Button.onClick.AddListener(() => { HandleLevelClicked(indexCopy); });
+            }
         }
 
-        private void HandleStartClicked()
+        private void HandleLevelClicked(int index)
         {
-            ChipDesignConfig.Instance.ConfigLevel = Level0Data;
+            ChipDesignConfig.Instance.ConfigLevel = LevelButtons[index].LevelData;
             SceneManager.LoadScene(m_ChipDesignScene);
         }
     }
