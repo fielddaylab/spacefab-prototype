@@ -50,6 +50,7 @@ namespace SpaceFab.ChipDesign
                     return GameConsts.IN_SUBTYPE;
             }
         }
+
         public static FlowState GetTestValBySubType(string subtype, TestData testData)
         {
             if (subtype.Equals(GameConsts.IN_SUBTYPE))
@@ -86,6 +87,19 @@ namespace SpaceFab.ChipDesign
             }
 
             return FlowState.Empty;
+        }
+
+        public static int GetColIndexInHeaders(Placeable[] headers, string subtype)
+        {
+            for (int i = 0; i < headers.Length; i++)
+            {
+                if (GetSubtypeByPlacableID(headers[i]).Equals(subtype)) 
+                {
+                    return i;
+                }
+            }
+
+            return - 1;
         }
     }
 

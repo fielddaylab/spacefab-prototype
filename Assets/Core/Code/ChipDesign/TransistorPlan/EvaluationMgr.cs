@@ -28,6 +28,13 @@ namespace SpaceFab.ChipDesign
         MissingNode
     }
 
+    public struct EvalResultIndexer
+    {
+        public int RowIndex;
+        public int ColIndex;
+        public bool Success;
+    }
+
     public class EvaluationMgr : MonoBehaviour
     {
         #region Structs
@@ -430,9 +437,12 @@ namespace SpaceFab.ChipDesign
             //              if visited, ensure past flow matches present flow
             //          update visuals along path chunk
             int numTests = LevelMgr.Instance.CurrLevelData.GetTestSuite() != null ? LevelMgr.Instance.CurrLevelData.GetTestSuite().Tests.Length : 0;
+            List<EvalResultIndexer> evalIndexers = new List<EvalResultIndexer>();
             bool allTestsCorrect = true;
+            ClearSuiteEvals();
             for (int test = 0; test < numTests; test++)
             {
+                evalIndexers.Clear();
                 bool currTestCorrect = true;
                 var currTest = LevelMgr.Instance.CurrLevelData.GetTestSuite().Tests[test];
                 Debug.Log("[EvaluationMgr] Test " + test);
@@ -622,13 +632,15 @@ namespace SpaceFab.ChipDesign
                 // Check if all relevant outputs have the correct flow state
                 if (currTestCorrect)
                 {
-                    currTestCorrect = OutputsCorrect(currTest, ref crucialCoordNodeMap, crucialGraph);
+                    currTestCorrect = OutputsCorrect(test, currTest, ref crucialCoordNodeMap, crucialGraph, ref evalIndexers);
                 }
 
                 if (!currTestCorrect) { allTestsCorrect = false; }
 
-                // TODO: Map each output result
-                UpdateSuiteEvalsAtPos(test, 2, allTestsCorrect);
+                foreach (var result in evalIndexers)
+                {
+                    UpdateSuiteEvalsAtPos(result.RowIndex, result.ColIndex, result.Success);
+                }
 
                 yield return timeBetweenTests;
             }
@@ -690,7 +702,7 @@ namespace SpaceFab.ChipDesign
             return newOrder; 
         }
 
-        private bool OutputsCorrect(TestData currTest, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphNode> crucialGraph)
+        private bool OutputsCorrect(int testIndex, TestData currTest, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphNode> crucialGraph, ref List<EvalResultIndexer> evalIndexers)
         {
             bool allCorrect = true;
             foreach (var cNode in crucialGraph)
@@ -698,12 +710,20 @@ namespace SpaceFab.ChipDesign
                 var cell = GridStack.Instance.GetCellDirect(cNode.Coord);
                 if (cell.CellType == CellType.Output)
                 {
+                    bool thisCorrect = true;
                     var outputCNode = crucialCoordNodeMap[cNode.Coord];
+                    var evalIndexer = new EvalResultIndexer();
+                    evalIndexer.RowIndex = testIndex;
+                    evalIndexer.ColIndex = EvalUtility.GetColIndexInHeaders(LevelMgr.Instance.CurrLevelData.GetTestSuite().Headers, cell.SubtypeLabel);
+
                     if (EvalUtility.GetTestValBySubType(cell.SubtypeLabel, currTest) != outputCNode.CurrFlowState)
                     {
+                        thisCorrect = false;
                         allCorrect = false;
-                        // TODO: add testIndex-subtype-result to output list
                     }
+
+                    evalIndexer.Success = thisCorrect;
+                    evalIndexers.Add(evalIndexer);
                 }
             }
 
