@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44c1e2fa32ab07648b2432750a4ee889, type: 3}
-  m_Name: Level 0 Test Suite
+  m_Name: Level Test Suite 1b
   m_EditorClassIdentifier: 
   Headers: 0200000007000000
   Tests:

@@ -560,7 +560,10 @@ namespace SpaceFab.ChipDesign
                     // If flow state already exists, ensure they match. Otherwise unstable.
                     if (currEdge.Other.CurrFlowState != FlowState.Empty)
                     {
-                        stable = currEdge.Origin.CurrFlowState == currEdge.Other.CurrFlowState;
+                        if (currEdge.Origin.CurrFlowState != FlowState.Empty)
+                        {
+                            stable = currEdge.Origin.CurrFlowState == currEdge.Other.CurrFlowState;
+                        }
                     }
 
                     if (flowThrough)
@@ -576,9 +579,12 @@ namespace SpaceFab.ChipDesign
                             currTestCorrect = false;
                         }
 
-                        var updateNode = crucialCoordNodeMap[currEdge.Other.Coord];
-                        updateNode.CurrFlowState = flowState;
-                        crucialCoordNodeMap[currEdge.Other.Coord] = updateNode;
+                        if (flowState != FlowState.Empty)
+                        {
+                            var updateNode = crucialCoordNodeMap[currEdge.Other.Coord];
+                            updateNode.CurrFlowState = flowState;
+                            crucialCoordNodeMap[currEdge.Other.Coord] = updateNode;
+                        }
 
                         if (flowState == FlowState.Unstable)
                         {
@@ -603,7 +609,7 @@ namespace SpaceFab.ChipDesign
 
                             VisualsMgr.Instance.RefreshVisuals();
                         }
-                        else
+                        else if (flowState != FlowState.Empty)
                         {
                             foreach (var graphNode in currEdge.Path)
                             {

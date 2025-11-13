@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
-  m_Name: Level Data 0
+  m_Name: Level Data 1a
   m_EditorClassIdentifier: 
   m_allowedPlaceables: 
   m_gridConfig: {fileID: 11400000, guid: 4a841aac5140c024895654cdef13cffa, type: 2}

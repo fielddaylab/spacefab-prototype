@@ -234,7 +234,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 826183842827796980, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_text
-      value: 1
+      value: 1b
       objectReference: {fileID: 0}
     - target: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: LevelData
@@ -597,6 +597,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 665750835}
     m_Modifications:
+    - target: {fileID: 826183842827796980, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+      propertyPath: m_text
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+      propertyPath: LevelData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b23da67d80e53549acad5557cbff068, type: 2}
     - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Name
       value: Level Load Button
@@ -615,7 +623,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchorMin.x
@@ -623,7 +631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_SizeDelta.x
@@ -663,11 +671,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -37.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1026,7 +1034,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &665750835
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1044,9 +1052,9 @@ RectTransform:
   - {fileID: 1303564776}
   m_Father: {fileID: 1247563975}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 512, y: -384}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 804, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &665750836
@@ -1148,9 +1156,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 665750835}
     m_Modifications:
+    - target: {fileID: 826183842827796980, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+      propertyPath: m_text
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Name
       value: Level Load Button (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Pivot.x
@@ -1214,7 +1230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 642.6667
+      value: 673.3334
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1242,6 +1258,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
   m_PrefabInstance: {fileID: 1303564775}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1303564777 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+  m_PrefabInstance: {fileID: 1303564775}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b44df5796aa154eb680a1d7129260f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1444765018
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1309,7 +1336,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 826183842827796980, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_text
-      value: 2
+      value: 1c
       objectReference: {fileID: 0}
     - target: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: LevelData
@@ -1587,6 +1614,17 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &1683023839 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+  m_PrefabInstance: {fileID: 419128897}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b44df5796aa154eb680a1d7129260f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2136159015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1595,6 +1633,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 665750835}
     m_Modifications:
+    - target: {fileID: 826183842827796980, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+      propertyPath: m_text
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+      propertyPath: LevelData
+      value: 
+      objectReference: {fileID: 11400000, guid: fb9f64a09b8bc034592c5abf77732b68, type: 2}
     - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Name
       value: Level Load Button
@@ -1613,7 +1659,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1621,7 +1667,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1661,11 +1707,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 371.33334
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -37.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1689,6 +1735,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6414193842029823282, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
   m_PrefabInstance: {fileID: 2136159015}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2136159017 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+  m_PrefabInstance: {fileID: 2136159015}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19b44df5796aa154eb680a1d7129260f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &2373375232910060142
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1735,6 +1792,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 254685441}
     m_Modifications:
+    - target: {fileID: 826183842827796980, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
+      propertyPath: m_text
+      value: 1a
+      objectReference: {fileID: 0}
     - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Name
       value: Level Load Button
@@ -1922,6 +1983,9 @@ MonoBehaviour:
   - {fileID: 6467805165342093873}
   - {fileID: 42526694}
   - {fileID: 1500395721}
+  - {fileID: 1683023839}
+  - {fileID: 2136159017}
+  - {fileID: 1303564777}
   m_ChipDesignScene: ChipDesign
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

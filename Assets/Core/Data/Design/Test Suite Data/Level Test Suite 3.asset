@@ -10,31 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44c1e2fa32ab07648b2432750a4ee889, type: 3}
-  m_Name: Level 2 Test Suite
+  m_Name: Level Test Suite 3
   m_EditorClassIdentifier: 
-  Headers: 03000000040000000800000009000000
+  Headers: 030000000400000008000000
   Tests:
-  - InVal: 1
+  - InVal: 0
     AVal: 1
     BVal: 2
-    OutVal: 1
+    OutVal: 0
     OutXVal: 1
-    OutYVal: 2
-  - InVal: 2
+    OutYVal: 0
+  - InVal: 0
     AVal: 1
     BVal: 1
-    OutVal: 2
+    OutVal: 0
     OutXVal: 1
-    OutYVal: 1
+    OutYVal: 0
   - InVal: 0
     AVal: 2
     BVal: 2
     OutVal: 0
-    OutXVal: 2
-    OutYVal: 2
+    OutXVal: 0
+    OutYVal: 0
   - InVal: 0
     AVal: 2
     BVal: 1
     OutVal: 0
-    OutXVal: 2
-    OutYVal: 1
+    OutXVal: 1
+    OutYVal: 0
