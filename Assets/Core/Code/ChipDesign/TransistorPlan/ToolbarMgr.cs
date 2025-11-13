@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace SpaceFab.ChipDesign
@@ -68,6 +69,10 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private GameObject DrawLinksGroup;
         [SerializeField] private Button DrawLinksButton;
 
+        [Header("Nav")]
+        [SerializeField] private Button ReturnMenuButton;
+        [SerializeField] private string m_menuScene;
+
         private void Awake()
         {
             if (Instance == null) { Instance = this; }
@@ -89,6 +94,9 @@ namespace SpaceFab.ChipDesign
             DrawLinksButton.onClick.AddListener(HandleDrawLinksClicked);
             DrawViaButton.onClick.AddListener(HandleDrawViaClicked);
             DrawGateButton.onClick.AddListener(HandleDrawGateClicked);
+
+            ReturnMenuButton.onClick.AddListener(HandleReturnMenuClicked);
+
         }
 
         private void OnDestroy()
@@ -112,6 +120,8 @@ namespace SpaceFab.ChipDesign
             DrawLinksButton.onClick.RemoveListener(HandleDrawLinksClicked);
             DrawViaButton.onClick.RemoveListener(HandleDrawViaClicked);
             DrawGateButton.onClick.RemoveListener(HandleDrawGateClicked);
+
+            ReturnMenuButton.onClick.RemoveListener(HandleReturnMenuClicked);
         }
 
         private void Start()
@@ -132,6 +142,11 @@ namespace SpaceFab.ChipDesign
         }
 
         #region Handlers
+
+        private void HandleReturnMenuClicked()
+        {
+            SceneManager.LoadScene(m_menuScene);
+        }
 
         private void HandleLayerClicked()
         {

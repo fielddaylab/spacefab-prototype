@@ -8,7 +8,7 @@ namespace SpaceFab.ChipDesign
     {
         public static LevelMgr Instance;
 
-        [SerializeField] private LevelData CURR_LEVEL_DATA;
+        [SerializeField] private LevelData DEFAULT_LEVEL_DATA;
         public LevelDataCopy CurrLevelData { get; private set; }
 
         private void Awake()
@@ -16,7 +16,15 @@ namespace SpaceFab.ChipDesign
             Instance = this;
 
             CurrLevelData = new LevelDataCopy();
-            CurrLevelData.LoadData(CURR_LEVEL_DATA);
+
+            if (ChipDesignConfig.Instance != null)
+            {
+                CurrLevelData.LoadData(ChipDesignConfig.Instance.ConfigLevel);
+            }
+            else
+            {
+                CurrLevelData.LoadData(DEFAULT_LEVEL_DATA);
+            }
         }
     }
 }

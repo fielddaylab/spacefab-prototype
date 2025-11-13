@@ -57,8 +57,13 @@ namespace SpaceFab.ChipDesign
         public void LoadCellConfig(GridCellConfig config)
         {
             CellType = config.CellType;
+            SubtypeLabel = EvalUtility.GetSubtypeByPlacableID(config.SubtypeLabel);
             Edges = config.Edges;
-            if (config.Edges.Length != 6) { Debug.LogError("[CellConfig] config does not have 6 edges!"); }
+            if (config.Edges.Length == 0)
+            {
+                Edges = new EdgeState[6];
+            }
+            else if (config.Edges.Length != 6) { Debug.LogError("[CellConfig] config does not have 6 edges!"); }
             TransferType = config.TransferType;
         }
 

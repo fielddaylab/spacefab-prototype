@@ -32,6 +32,12 @@ namespace SpaceFab.ChipDesign
             RefreshCamera();
         }
 
+        private void OnDisable()
+        {
+            Game.Events?.Deregister(GameEvents.OnLayoutChanged, HandleLayoutChanged);
+            Game.Events?.Deregister(GameEvents.NewGridStackCreated, HandleNewGridStackCreated);
+        }
+
         private void RefreshGrid()
         {
             GridRenderer.size = new Vector2(GridData.LayerDims.X, GridData.LayerDims.Y);
@@ -77,6 +83,8 @@ namespace SpaceFab.ChipDesign
 
             RefreshGrid();
             RefreshCamera();
+
+            RefreshVisuals();
         }
 
         #endregion // Handlers

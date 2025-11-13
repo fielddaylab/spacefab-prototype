@@ -14,7 +14,7 @@ namespace SpaceFab.ChipDesign
         public int ColumnIndex;
 
         public CellType CellType;
-        public string SubtypeLabel;
+        public Placeable SubtypeLabel;
         public EdgeState[] Edges;
         public TransferType TransferType; // informs how data is transferred between layers when either ASCEND or DESCEND edges are connected
     }
