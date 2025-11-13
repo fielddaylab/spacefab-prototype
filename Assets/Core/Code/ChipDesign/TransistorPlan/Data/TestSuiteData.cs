@@ -47,7 +47,7 @@ namespace SpaceFab.ChipDesign
                 case Placeable.OUTY:
                     return GameConsts.Y_SUBTYPE;
                 default:
-                    return GameConsts.IN_SUBTYPE;
+                    return "";
             }
         }
 
