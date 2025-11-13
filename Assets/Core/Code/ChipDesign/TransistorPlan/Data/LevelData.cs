@@ -15,7 +15,9 @@ namespace SpaceFab.ChipDesign
         B,
         NNODE,
         PNODE,
-        OUT
+        OUT,
+        OUTX,
+        OUTY
     }
 
     [CreateAssetMenu(menuName = "Chip Design/New Level Data")]

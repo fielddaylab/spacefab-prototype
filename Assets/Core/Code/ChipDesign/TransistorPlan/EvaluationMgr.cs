@@ -1,9 +1,7 @@
 using BeauRoutine;
 using BeauUtil;
 using FieldDay;
-using FieldDay.Audio;
 using FieldDay.Mathematics;
-using SpaceFab.ChipFab;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +17,7 @@ namespace SpaceFab.ChipDesign
         Empty,
         Hi,
         Lo,
-        Unstable
+        Unstable,
     }
 
     public enum EvalResult
@@ -198,7 +196,21 @@ namespace SpaceFab.ChipDesign
         public TMP_Text ResultSubText;
         public Button ResultCloseButton;
 
+        [Header("Prefabs")]
+        public GameObject RowPrefab;
+        public GameObject HeaderPrefab;
+        public GameObject ContentsPrefab;
+        public GameObject CellEvalPrefab;
+
+        [Header("Spacing")]
+        public float DefaultCellWidth;
+        public float OutputCellWidth;
+        public Transform RowContainer;
+
         #endregion // Inspector
+
+        private Dictionary<Tuple<int, int>, SuiteCellEval> m_evalMap = new Dictionary<Tuple<int, int>, SuiteCellEval>();
+        private List<SuiteCellEval> m_allEvals = new List<SuiteCellEval>();
 
         private Routine m_EvaluationRoutine;
 
@@ -212,7 +224,112 @@ namespace SpaceFab.ChipDesign
             ResultPanel.SetActive(false);
         }
 
+        private void Start()
+        {
+            // Construct Test Suite Table
+            var suite = LevelMgr.Instance.CurrLevelData.GetTestSuite();
+            ConstructSuiteTable(suite);
+        }
+
         #endregion // Unity Callbacks
+
+        #region UI Construction
+
+        private void ConstructSuiteTable(TestSuiteData suite)
+        {
+            ClearSuiteEvals();
+            m_evalMap.Clear();
+            m_allEvals.Clear();
+
+            var numCols = suite.Headers.Length;
+            float tableWidth = 0;
+
+            // headers
+            Transform currCellContainer = Instantiate(RowPrefab, RowContainer).transform;
+            SuiteRow currRow = currCellContainer.GetComponent<SuiteRow>();
+            for (int i = 0; i < numCols; i++)
+            {
+                SuiteHeader currHeader = Instantiate(HeaderPrefab, currCellContainer).GetComponent<SuiteHeader>();
+                currHeader.Label.text = suite.Headers[i].ToString();
+                if (suite.Headers[i] == Placeable.OUT || suite.Headers[i] == Placeable.OUTX || suite.Headers[i] == Placeable.OUTY)
+                {
+                    var size = currHeader.Rect.sizeDelta;
+                    size.x = OutputCellWidth;
+                    currHeader.Rect.sizeDelta = size;
+                }
+                else
+                {
+                    var size = currHeader.Rect.sizeDelta;
+                    size.x = DefaultCellWidth;
+                    currHeader.Rect.sizeDelta = size;
+                }
+
+                tableWidth += currHeader.Rect.sizeDelta.x + currRow.Layout.spacing;
+            }
+
+            var tableRect = RowContainer.GetComponent<RectTransform>();
+            var tableSize = tableRect.sizeDelta;
+            tableSize.x = tableWidth;
+            tableRect.sizeDelta = tableSize;
+
+            // contents
+            for (int t = 0; t < suite.Tests.Length; t++)
+            {
+                currCellContainer = Instantiate(RowPrefab, RowContainer).transform;
+                currRow = currCellContainer.GetComponent<SuiteRow>();
+                for (int i = 0; i < numCols; i++)
+                {
+                    SuiteContents currContents = Instantiate(ContentsPrefab, currCellContainer).GetComponent<SuiteContents>();
+                    string subtype = EvalUtility.GetSubtypeByPlacableID(suite.Headers[i]);
+                    currContents.Label.text = EvalUtility.GetTestValBySubType(subtype, suite.Tests[t]).ToString();
+                    if (suite.Headers[i] == Placeable.OUT || suite.Headers[i] == Placeable.OUTX || suite.Headers[i] == Placeable.OUTY)
+                    {
+                        var size = currContents.Rect.sizeDelta;
+                        size.x = OutputCellWidth;
+                        currContents.Rect.sizeDelta = size;
+
+                        // Instantiate Cell Eval
+                        SuiteCellEval eval = Instantiate(CellEvalPrefab, currContents.transform).GetComponent<SuiteCellEval>();
+                        m_evalMap.Add(new Tuple<int, int>(t, i), eval);
+                        m_allEvals.Add(eval);
+                    }
+                    else
+                    {
+                        var size = currContents.Rect.sizeDelta;
+                        size.x = DefaultCellWidth;
+                        currContents.Rect.sizeDelta = size;
+                    }
+                }
+            }
+        }
+
+        private void ClearSuiteEvals()
+        {
+            foreach (var eval in m_allEvals)
+            {
+                eval.Img.enabled = false;
+            }
+        }
+
+        private void UpdateSuiteEvalsAtPos(int rowIndex, int colIndex, bool success)
+        {
+            var key = new Tuple<int, int>(rowIndex, colIndex);
+            if (!m_evalMap.ContainsKey(key)) { return; }
+
+            SuiteCellEval eval = m_evalMap[key];
+            eval.Img.enabled = true;
+
+            if (success)
+            {
+                eval.Img.color = UnityEngine.Color.green;
+            }
+            else
+            {
+                eval.Img.color = UnityEngine.Color.red;
+            }
+        }
+
+        #endregion // UI
 
         #region Helpers
 
@@ -509,6 +626,9 @@ namespace SpaceFab.ChipDesign
                 }
 
                 if (!currTestCorrect) { allTestsCorrect = false; }
+
+                // TODO: Map each output result
+                UpdateSuiteEvalsAtPos(test, 2, allTestsCorrect);
 
                 yield return timeBetweenTests;
             }
