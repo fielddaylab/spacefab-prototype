@@ -1,6 +1,6 @@
 {
     "name": "FieldDay.Scripting",
-    "rootNamespace": "",
+    "rootNamespace": "FieldDay.Scripting",
     "references": [
         "BeauRoutine",
         "BeauUtil",

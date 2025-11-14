@@ -1,6 +1,6 @@
 {
     "name": "FieldDay.Vox",
-    "rootNamespace": "",
+    "rootNamespace": "FieldDay.Vox",
     "references": [
         "FieldDay.Core",
         "BeauUtil",

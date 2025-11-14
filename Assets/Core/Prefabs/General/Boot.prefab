@@ -507,6 +507,9 @@ MonoBehaviour:
   m_DefaultPixelSprite: {fileID: 0}
   m_AllowMultiTouchInput: 0
   m_ReflectionData: {fileID: 11400000, guid: 8ba8df1aface7ec459a93e8b4abf6d1c, type: 2}
+  m_ConfigHints:
+  - Name: VOX_ENABLED
+    Value: false
   m_AudioConfig:
     Is3D: 0
     DefaultEmitterProfile: {fileID: 0}
@@ -524,6 +527,7 @@ MonoBehaviour:
     RetryDelay: 1
   m_RenderConfig:
     FallbackCamera: {fileID: 0}
+    DebugClearColor: {r: 1, g: 0, b: 1, a: 1}
   m_GlobalAssetPacks: []
 --- !u!114 &9123981151254193781
 MonoBehaviour:

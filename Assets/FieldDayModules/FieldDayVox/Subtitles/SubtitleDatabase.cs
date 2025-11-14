@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BeauRoutine;
 using BeauUtil;
+using FieldDay.Data;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
 using UnityEngine;
@@ -71,7 +72,9 @@ namespace FieldDay.Vox {
 
         [InvokePreBoot]
         static private void Initialize() {
-            Game.SharedState.Register(new SubtitleDatabase());
+            if (EngineHints.GetHintBool("VOX_ENABLED", true)) {
+                Game.SharedState.Register(new SubtitleDatabase());
+            }
         }
 
         /// <summary>

@@ -2,7 +2,6 @@ using BeauUtil;
 using UnityEngine;
 using System.ComponentModel;
 
-
 #if USING_TIMELINE
 using FieldDay.Animation.Timeline;
 #endif // USING_TIMELINE

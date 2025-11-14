@@ -56,6 +56,16 @@ namespace FieldDay {
     /// </summary>
     [DefaultExecutionOrder(-23000), DisallowMultipleComponent]
     public sealed class GameLoop : MonoBehaviour, ICameraPreCullCallback, ICameraPostRenderCallback, ICameraPreRenderCallback {
+        #region Types
+
+        [Serializable]
+        private struct EngineHintPair {
+            public string Name;
+            public string Value;
+        }
+
+        #endregion // Types
+
         #region Inspector
 
         [SerializeField, Tooltip("Size of the per-frame allocation buffer, in KiB")]
@@ -76,8 +86,8 @@ namespace FieldDay {
         [SerializeField]
         private ReflectionBootData m_ReflectionData;
 
-        [SerializeField]
-        private EngineHints.SerializedData[] m_ConfigHints;
+        [SerializeField, KeyValuePair("Name", "Value")]
+        private EngineHintPair[] m_ConfigHints;
 
         [Header("Modules")]
 
@@ -263,6 +273,10 @@ namespace FieldDay {
                 BuildInfo.Load();
 
                 EngineHints.Initialize();
+                for(int i = 0; i < m_ConfigHints.Length; i++) {
+                    EngineHintPair data = m_ConfigHints[i];
+                    EngineHints.SetHint(data.Name, data.Value);
+                }
 
                 CommandLineArgs.Initialize();
                 ApplyCommandLineArguments();

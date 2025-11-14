@@ -5,6 +5,7 @@ using BeauRoutine;
 using BeauUtil;
 using BeauUtil.Debugger;
 using BeauUtil.Streaming;
+using FieldDay.Data;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
 using UnityEngine;
@@ -104,10 +105,13 @@ namespace FieldDay.Vox {
 
         [InvokePreBoot]
         static private void Initialize() {
-            Game.SharedState.Register(new VoxDatabase());
-            Game.SharedState.Register(new VoxRequestState());
-            Game.Systems.Register(new VoxLoadingSystem());
-            Game.Systems.Register(new VoxRequestSystem());
+            EngineHints.LockHint("VOX_ENABLED");
+            if (EngineHints.GetHintBool("VOX_ENABLED", true)) {
+                Game.SharedState.Register(new VoxDatabase());
+                Game.SharedState.Register(new VoxRequestState());
+                Game.Systems.Register(new VoxLoadingSystem());
+                Game.Systems.Register(new VoxRequestSystem());
+            }
         }
 
         #region Configuration
