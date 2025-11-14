@@ -37,6 +37,8 @@ namespace SpaceFab.ChipDesign
 
     public class EvaluationMgr : MonoBehaviour
     {
+        public static EvaluationMgr Instance;
+
         #region Structs
 
         private struct GraphNode
@@ -202,6 +204,7 @@ namespace SpaceFab.ChipDesign
         public TMP_Text ResultHeaderText;
         public TMP_Text ResultSubText;
         public Button ResultCloseButton;
+        public TMP_Text UnstableText;
 
         [Header("Prefabs")]
         public GameObject RowPrefab;
@@ -216,6 +219,8 @@ namespace SpaceFab.ChipDesign
 
         #endregion // Inspector
 
+        [HideInInspector] public bool IsUnstable;
+
         private Dictionary<Tuple<int, int>, SuiteCellEval> m_evalMap = new Dictionary<Tuple<int, int>, SuiteCellEval>();
         private List<SuiteCellEval> m_allEvals = new List<SuiteCellEval>();
 
@@ -225,6 +230,8 @@ namespace SpaceFab.ChipDesign
 
         private void Awake()
         {
+            Instance = this;
+
             EvaluateButton.onClick.AddListener(HandleEvaluateClicked);
             ResultCloseButton.onClick.AddListener(HandleResultCloseClicked);
 
@@ -236,6 +243,8 @@ namespace SpaceFab.ChipDesign
             // Construct Test Suite Table
             var suite = LevelMgr.Instance.CurrLevelData.GetTestSuite();
             ConstructSuiteTable(suite);
+
+            UnstableText.gameObject.SetActive(false);
         }
 
         #endregion // Unity Callbacks
@@ -341,7 +350,7 @@ namespace SpaceFab.ChipDesign
         #region Helpers
 
         private unsafe void Evaluate()
-        {
+        { 
             if (m_EvaluationRoutine.Exists()) { return; }
 
             // Gather nodes and edges
@@ -439,9 +448,13 @@ namespace SpaceFab.ChipDesign
             int numTests = LevelMgr.Instance.CurrLevelData.GetTestSuite() != null ? LevelMgr.Instance.CurrLevelData.GetTestSuite().Tests.Length : 0;
             List<EvalResultIndexer> evalIndexers = new List<EvalResultIndexer>();
             bool allTestsCorrect = true;
+            IsUnstable = false;
+            UnstableText.gameObject.SetActive(IsUnstable);
             ClearSuiteEvals();
             for (int test = 0; test < numTests; test++)
             {
+                IsUnstable = false;
+                UnstableText.gameObject.SetActive(IsUnstable);
                 evalIndexers.Clear();
                 bool currTestCorrect = true;
                 var currTest = LevelMgr.Instance.CurrLevelData.GetTestSuite().Tests[test];
@@ -588,6 +601,8 @@ namespace SpaceFab.ChipDesign
 
                             // flag simulation as unstable
                             currTestCorrect = false;
+                            IsUnstable = true;
+                            UnstableText.gameObject.SetActive(IsUnstable);
                         }
 
                         if (flowState != FlowState.Empty)
@@ -595,6 +610,10 @@ namespace SpaceFab.ChipDesign
                             var updateNode = crucialCoordNodeMap[currEdge.Other.Coord];
                             updateNode.CurrFlowState = flowState;
                             crucialCoordNodeMap[currEdge.Other.Coord] = updateNode;
+
+                            updateNode = crucialCoordNodeMap[currEdge.Origin.Coord];
+                            updateNode.CurrFlowState = currEdge.Origin.CurrFlowState;
+                            crucialCoordNodeMap[currEdge.Origin.Coord] = updateNode;
                         }
 
                         if (flowState == FlowState.Unstable)
@@ -651,6 +670,11 @@ namespace SpaceFab.ChipDesign
                 {
                     currTestCorrect = OutputsCorrect(test, currTest, ref crucialCoordNodeMap, crucialGraph, ref evalIndexers);
                 }
+                else
+                {
+                    // flag as unstable
+                    OutputsCorrect(test, currTest, ref crucialCoordNodeMap, crucialGraph, ref evalIndexers, true);
+                }
 
                 if (!currTestCorrect) { allTestsCorrect = false; }
 
@@ -674,6 +698,9 @@ namespace SpaceFab.ChipDesign
             {
                 EvaluationFailure();
             }
+
+            IsUnstable = false;
+            UnstableText.gameObject.SetActive(IsUnstable);
 
             /*
             switch (evalResult)
@@ -719,7 +746,7 @@ namespace SpaceFab.ChipDesign
             return newOrder; 
         }
 
-        private bool OutputsCorrect(int testIndex, TestData currTest, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphNode> crucialGraph, ref List<EvalResultIndexer> evalIndexers)
+        private bool OutputsCorrect(int testIndex, TestData currTest, ref Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphNode> crucialGraph, ref List<EvalResultIndexer> evalIndexers, bool isUnstable = false)
         {
             bool allCorrect = true;
             foreach (var cNode in crucialGraph)
@@ -733,7 +760,12 @@ namespace SpaceFab.ChipDesign
                     evalIndexer.RowIndex = testIndex;
                     evalIndexer.ColIndex = EvalUtility.GetColIndexInHeaders(LevelMgr.Instance.CurrLevelData.GetTestSuite().Headers, cell.SubtypeLabel);
 
-                    if (EvalUtility.GetTestValBySubType(cell.SubtypeLabel, currTest) != outputCNode.CurrFlowState)
+                    if (isUnstable)
+                    {
+                        thisCorrect = false;
+                        allCorrect = false;
+                    }
+                    else if (EvalUtility.GetTestValBySubType(cell.SubtypeLabel, currTest) != outputCNode.CurrFlowState)
                     {
                         thisCorrect = false;
                         allCorrect = false;

@@ -45,6 +45,8 @@ namespace SpaceFab.ChipDesign
                     m_flowIndicator.sprite = null;
                     break;
             }
+
+            // if (EvaluationMgr.Instance.IsUnstable) { m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstable; }
         }
 
         public void RefreshVisual(GridCell cellData, int layerIndex, int col, int row)
