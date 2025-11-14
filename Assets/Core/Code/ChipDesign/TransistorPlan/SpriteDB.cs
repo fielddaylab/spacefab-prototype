@@ -18,6 +18,8 @@ namespace SpaceFab.ChipDesign {
         public Color PColor;
         public Sprite NSide;
         public Sprite PSide;
+        public Sprite InvertedOverlay;
+        public Sprite InvertedOverlayBase;
 
         [Header("Vias")]
         public Sprite Via;

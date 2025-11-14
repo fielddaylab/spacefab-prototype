@@ -505,6 +505,7 @@ namespace SpaceFab.ChipDesign
                     // Try pass flow onto connection (passes by default)
                     bool flowThrough = true;
                     bool stable = flowState != FlowState.Unstable;
+                    CellType tempTransformation = CellType.NONE;
 
                     // Special case: Diodes
                     if (IsTransistorType(originCell.CellType) && IsTransistorType(destCell.CellType))
@@ -541,6 +542,7 @@ namespace SpaceFab.ChipDesign
                             {
                                 var belowCNode = crucialCoordNodeMap[belowCoord];
                                 belowCNode.TempTransformedType = CellType.NTransistor;
+                                tempTransformation = belowCNode.TempTransformedType;
                                 crucialCoordNodeMap[belowCoord] = belowCNode;
                             }
                         }
@@ -551,9 +553,18 @@ namespace SpaceFab.ChipDesign
                             {
                                 var belowCNode = crucialCoordNodeMap[belowCoord];
                                 belowCNode.TempTransformedType = CellType.PTransistor;
+                                tempTransformation = belowCNode.TempTransformedType;
                                 crucialCoordNodeMap[belowCoord] = belowCNode;
                             }
                         }
+
+                        if (tempTransformation != CellType.NONE)
+                        {
+                            var cell = GridStack.Instance.GetCellDirect(belowCoord);
+                            cell.TempTransformation = tempTransformation;
+                            GridStack.Instance.SetCellDirect(belowCoord, cell);
+                        }
+
                         // if signal is unstable, no inversion
                     }
 
@@ -744,6 +755,21 @@ namespace SpaceFab.ChipDesign
                 var cNode = crucialCoordNodeMap[coord];
                 cNode.TempTransformedType = CellType.NONE;
                 crucialCoordNodeMap[coord] = cNode;
+            }
+
+            var dims = GridStack.Instance.LayerDims;
+            var numLayers = GridStack.Instance.GridLayers.Length;
+            for (int layer = 0; layer < numLayers; layer++)
+            {
+                for (int row = 0; row < dims.Y; row++)
+                {
+                    for (int col = 0; col < dims.X; col++)
+                    {
+                        var cell = GridStack.Instance.GetCellDirect(layer, col, row);
+                        cell.TempTransformation = CellType.NONE;
+                        GridStack.Instance.SetCellDirect(layer, col, row, cell);
+                    }
+                }
             }
         }
 

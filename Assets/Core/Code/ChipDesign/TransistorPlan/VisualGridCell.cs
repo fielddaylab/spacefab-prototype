@@ -15,6 +15,8 @@ namespace SpaceFab.ChipDesign
 
         [SerializeField] private SpriteRenderer m_pathRenderer;
         [SerializeField] private SpriteRenderer m_subRenderer;
+        [SerializeField] private SpriteRenderer m_pathOverlayRenderer;
+        [SerializeField] private SpriteRenderer m_pathOverlayBaseRenderer;
         [SerializeField] private TMP_Text m_textRenderer;
         [SerializeField] private SpriteRenderer m_transferRenderer;
         [SerializeField] private SpriteRenderer[] m_dirRenderers;
@@ -52,9 +54,13 @@ namespace SpaceFab.ChipDesign
 
             // Reset
             m_pathRenderer.sprite = null;
+            m_pathOverlayRenderer.sprite = null;
+            m_pathOverlayBaseRenderer.sprite = null;
             m_subRenderer.sprite = null;
             foreach (var r in m_dirRenderers) { r.sprite = null; }
             m_flowMask.sprite = null;
+            m_flowMask.backSortingOrder = 0;
+            m_flowMask.frontSortingOrder = 0;
             m_textRenderer.SetText("");
             m_pathRenderer.color = Color.white;
 
@@ -101,10 +107,15 @@ namespace SpaceFab.ChipDesign
             }
 
             m_pathRenderer.sortingOrder = layerIndex == 0 ? METAL_SORT_ORDER : TRANSISTOR_SORT_ORDER;
+            m_pathOverlayRenderer.sortingOrder = m_pathRenderer.sortingOrder + 3;
+            m_pathOverlayBaseRenderer.sortingOrder = m_pathOverlayRenderer.sortingOrder - 1;
             m_subRenderer.sortingOrder = m_pathRenderer.sortingOrder - 10;
             m_textRenderer.GetComponent<Renderer>().sortingOrder = m_pathRenderer.sortingOrder + 10;
             foreach (var r in m_dirRenderers) { r.sortingOrder = m_pathRenderer.sortingOrder + 5; }
             m_transferRenderer.sortingOrder = cellData.TransferType == TransferType.Via ? VIA_SORT_ORDER : GATE_SORT_ORDER;
+
+            m_flowMask.backSortingOrder = m_pathRenderer.sortingOrder - 50;
+            m_flowMask.frontSortingOrder = m_pathRenderer.sortingOrder + 50;
 
             if (lookedUpEdge)
             {
@@ -126,6 +137,19 @@ namespace SpaceFab.ChipDesign
             SpriteDB.Instance.TransistorLibrary.Lookup(condensedEdges, out pathData);
             lookedUpEdge = true;
             m_pathRenderer.color = SpriteDB.Instance.NColor;
+
+            if (cellData.TempTransformation != CellType.NONE)
+            {
+                if (cellData.TempTransformation == CellType.PTransistor)
+                {
+                    m_pathOverlayRenderer.sprite = SpriteDB.Instance.InvertedOverlay;
+                    m_pathOverlayBaseRenderer.sprite = SpriteDB.Instance.InvertedOverlayBase;
+                    m_pathOverlayRenderer.color = SpriteDB.Instance.PColor;
+                    m_pathOverlayBaseRenderer.color = SpriteDB.Instance.NColor;
+
+                    m_pathRenderer.color = SpriteDB.Instance.PColor;
+                }
+            }
 
             // set dir renderers
             for (int i = 0; i < 4; i++)
@@ -151,7 +175,10 @@ namespace SpaceFab.ChipDesign
                         // if P, set N to P half of renderer
                         if (adjCell.CellType == CellType.PTransistor)
                         {
-                            m_dirRenderers[i].sprite = SpriteDB.Instance.NSide;
+                            if (cellData.TempTransformation != CellType.PTransistor && adjCell.TempTransformation != CellType.NTransistor)
+                            {
+                                m_dirRenderers[i].sprite = SpriteDB.Instance.NSide;
+                            }
                         }
                     }
                 }
@@ -164,6 +191,19 @@ namespace SpaceFab.ChipDesign
             SpriteDB.Instance.TransistorLibrary.Lookup(condensedEdges, out pathData);
             lookedUpEdge = true;
             m_pathRenderer.color = SpriteDB.Instance.PColor;
+
+            if (cellData.TempTransformation != CellType.NONE)
+            {
+                if (cellData.TempTransformation == CellType.NTransistor)
+                {
+                    m_pathOverlayRenderer.sprite = SpriteDB.Instance.InvertedOverlay;
+                    m_pathOverlayBaseRenderer.sprite = SpriteDB.Instance.InvertedOverlayBase;
+                    m_pathOverlayRenderer.color = SpriteDB.Instance.NColor;
+                    m_pathOverlayBaseRenderer.color = SpriteDB.Instance.PColor;
+
+                    m_pathRenderer.color = SpriteDB.Instance.NColor;
+                }
+            }
 
             // set dir renderers
             for (int i = 0; i < 4; i++)
@@ -189,7 +229,10 @@ namespace SpaceFab.ChipDesign
                         // if P, set N to P half of renderer
                         if (adjCell.CellType == CellType.NTransistor)
                         {
-                            m_dirRenderers[i].sprite = SpriteDB.Instance.PSide;
+                            if (cellData.TempTransformation != CellType.NTransistor && adjCell.TempTransformation != CellType.PTransistor)
+                            {
+                                m_dirRenderers[i].sprite = SpriteDB.Instance.PSide;
+                            }
                         }
                     }
                 }

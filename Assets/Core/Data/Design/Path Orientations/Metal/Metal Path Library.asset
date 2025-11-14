@@ -48,7 +48,7 @@ MonoBehaviour:
   - PathIndices: 0500050005000500
     PathRotations: 0000010002000300
   m_Paths:
-  - Sprite: {fileID: 21300000, guid: 707f5d97044427243a799815b8aac7cb, type: 3}
+  - Sprite: {fileID: 21300000, guid: f94794b1337e6e340a4b393ccbf3daf0, type: 3}
     Rotation: {x: -0, y: -0, z: -0, w: 1}
     Scale: 1
     FlipX: 0

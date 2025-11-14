@@ -97,6 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ac897b4e849a13419f34405963b6a54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 21300000, guid: 707f5d97044427243a799815b8aac7cb, type: 3}
+  Sprite: {fileID: 21300000, guid: f94794b1337e6e340a4b393ccbf3daf0, type: 3}
   Edges: 00000000000000000100000000000000
   Radius: 1

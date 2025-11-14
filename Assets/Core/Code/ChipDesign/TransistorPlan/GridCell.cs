@@ -52,6 +52,8 @@ namespace SpaceFab.ChipDesign
 
         public FlowState FlowState;
 
+        public CellType TempTransformation;
+
         #region Loading
 
         public void LoadCellConfig(GridCellConfig config)
