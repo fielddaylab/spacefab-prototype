@@ -528,7 +528,8 @@ MonoBehaviour:
   m_RenderConfig:
     FallbackCamera: {fileID: 0}
     DebugClearColor: {r: 1, g: 0, b: 1, a: 1}
-  m_GlobalAssetPacks: []
+  m_GlobalAssetPacks:
+  - {fileID: 11400000, guid: 17246964d7bc05048a05ad2ab9bff5c3, type: 2}
 --- !u!114 &9123981151254193781
 MonoBehaviour:
   m_ObjectHideFlags: 0

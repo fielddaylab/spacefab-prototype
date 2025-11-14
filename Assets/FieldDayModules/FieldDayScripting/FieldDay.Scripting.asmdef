@@ -10,7 +10,8 @@
         "BeauPools",
         "FieldDay.Vox",
         "BeauData",
-        "Unity.Timeline"
+        "Unity.Timeline",
+        "ScriptableBake"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

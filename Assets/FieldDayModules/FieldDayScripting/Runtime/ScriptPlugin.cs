@@ -13,7 +13,7 @@ using Leaf.Runtime;
 using UnityEngine;
 
 namespace FieldDay.Scripting {
-    public class ScriptPlugin : ILeafPlugin<ScriptNode>, ILeafPlugin, ILeafVariableAccess {
+    public sealed class ScriptPlugin : ILeafPlugin<ScriptNode>, ILeafPlugin, ILeafVariableAccess {
         static public readonly StringHash32 VoxTag = "Script";
 
         private readonly ScriptRuntimeState m_RuntimeState;
@@ -190,6 +190,10 @@ namespace FieldDay.Scripting {
         #region Line
 
         public IEnumerator RunLine(LeafThreadState<ScriptNode> inThreadState, LeafLineInfo inLine) {
+            if (inLine.IsEmptyOrWhitespace) {
+                return null;
+            }
+
             ScriptThread thread = (ScriptThread) inThreadState;
             if (thread.IsSkipping()) {
                 if (LeafRuntime.PredictChoice(thread)) {
@@ -199,15 +203,11 @@ namespace FieldDay.Scripting {
                     return null;
                 }
             }
-
+            
             return ExecuteLine(thread, inLine);
         }
 
-        protected virtual void SkipLine(ScriptThread thread, LeafLineInfo line) {
-            if (line.IsEmptyOrWhitespace) {
-                return;
-            }
-
+        private void SkipLine(ScriptThread thread, LeafLineInfo line) {
             TagString str = thread.TagString;
             ScriptUtility.ParseTag(ref str, line.Text, thread);
             m_RuntimeState.OnTaggedLineProcessed.Invoke(thread, str);
@@ -226,35 +226,92 @@ namespace FieldDay.Scripting {
             }
         }
 
-        protected virtual IEnumerator ExecuteLine(ScriptThread thread, LeafLineInfo line) {
-            if (line.IsEmptyOrWhitespace) {
-                yield return null;
-            }
-
+        private IEnumerator ExecuteLine(ScriptThread thread, LeafLineInfo line) {
             LeafThreadHandle cachedHandle = thread.GetHandle();
 
             TagString tagStr = thread.TagString;
             ScriptUtility.ParseTag(ref tagStr, line.Text, thread);
             m_RuntimeState.OnTaggedLineProcessed.Invoke(thread, tagStr);
 
-            // TODO: handle evaluating if dialog box is required
+            DialogueCharacterState charState = thread.GetCharacterState();
 
-            StringHash32 charId = ScriptUtility.GetCharacterId(tagStr);
+            bool voxDesired = (m_RuntimeState.Flags & ScriptRuntimeConfigFlags.VoiceoverAllLinesByDefault) != 0;
+            bool dialogBoxDesired = (m_RuntimeState.Flags & ScriptRuntimeConfigFlags.UseDialogBoxByDefault) != 0;
+
+            StringHash32? newStyle = null;
+
+            // INITIAL DATA
+            
+            if (tagStr.EventCount > 0) {
+                var nodes = tagStr.Nodes;
+                for(int i = 0; i < nodes.Length; i++) {
+                    TagNodeData node = nodes[i];
+                    if (node.Type != TagNodeType.Event) {
+                        break;
+                    }
+
+                    StringHash32 eventType = node.Event.Type;
+                    if (eventType == TagEvents.HasNoVox) {
+                        voxDesired = false;
+                        dialogBoxDesired = true;
+                    } else if (eventType == TagEvents.HasVox) {
+                        voxDesired = true;
+                    } else if (eventType == TagEvents.VoxOnly) {
+                        voxDesired = true;
+                        dialogBoxDesired = false;
+                    } else if (eventType == TagEvents.SetStyle) {
+                        dialogBoxDesired = true;
+                        newStyle = node.Event.Argument0.AsStringHash();
+                    } else if (eventType == LeafUtils.Events.Character) {
+                        charState.CharacterId = node.Event.Argument0.AsStringHash();
+                        charState.PoseId = node.Event.Argument1.AsStringHash();
+                        charState.OverrideName = null;
+                    } else if (eventType == LeafUtils.Events.Pose) {
+                        charState.PoseId = node.Event.Argument0.AsStringHash();
+                    } else if (eventType == TagEvents.OverrideCharName) {
+                        charState.OverrideName = node.Event.StringArgument.ToString();
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            // CHARACTER ID
+
+            StringHash32 charId = charState.CharacterId;
             ILeafActor actor;
             VoxEmitter vox;
             if (!charId.IsEmpty) {
                 actor = ScriptUtility.FindActor(charId);
-                vox = VoxUtility.FindEmitter(charId);
+                vox = voxDesired ? VoxUtility.FindEmitter(charId) : null;
             } else {
                 actor = null;
                 vox = null;
             }
 
+            // DIALOG BOX
+
+            if (newStyle.HasValue) {
+                thread.TakeOwnership(ScriptUtility.GetDialoguePrinter(newStyle.Value));
+            }
+
+            IDialoguePrinter currentPrinter = thread.GetPrinter();
+
+            if (currentPrinter == null && dialogBoxDesired) {
+                thread.TakeOwnership(ScriptUtility.GetDialoguePrinter(StringHash32.Null));
+                currentPrinter = thread.GetPrinter();
+            }
+
+            TagStringEventHandler eventHandler = m_RuntimeState.TagEventHandler;
+            eventHandler = currentPrinter?.PrepareLine(tagStr, charState, eventHandler) ?? eventHandler;
+
+            // VOX
+
             VoxRequestHandle voxHandle;
             bool hadVox;
             SubtitleDisplayData fakeSubtitleData;
 
-            if (vox != null && VoxUtility.HasHumanReadableMapping(line.LineCode)) {
+            if (voxDesired && vox != null && VoxUtility.HasHumanReadableMapping(line.LineCode)) {
                 VoxRequest req = default;
                 req.CharacterId = charId;
                 req.Tag = VoxTag;
@@ -273,39 +330,57 @@ namespace FieldDay.Scripting {
                 hadVox = false;
             }
 
-            // peek ahead for loading
-            StringHash32 nextLineCode = LeafRuntime.PredictLine(thread);
-            if (!nextLineCode.IsEmpty && VoxUtility.HasHumanReadableMapping(nextLineCode)) {
-                VoxUtility.QueueLoad(nextLineCode);
-            }
-
-            if (voxHandle.IsValid) {
-                while(VoxUtility.IsLoading(voxHandle)) {
-                    yield return null;
+            if (voxDesired) {
+                // peek ahead for loading
+                StringHash32 nextLineCode = LeafRuntime.PredictLine(thread);
+                if (!nextLineCode.IsEmpty && VoxUtility.HasHumanReadableMapping(nextLineCode)) {
+                    VoxUtility.QueueLoad(nextLineCode);
                 }
 
-                VoxUtility.Play(voxHandle);
-            }
+                if (voxHandle.IsValid) {
+                    while (VoxUtility.IsLoading(voxHandle)) {
+                        yield return null;
+                    }
 
-            if (!hadVox) {
-                fakeSubtitleData = new SubtitleDisplayData() {
-                    CharacterId = charId,
-                    Priority = ScriptUtility.ScriptPriorityToVoxPriority(thread.Priority()),
-                    Subtitle = new SubtitleEntry(tagStr.RichTextString),
-                    VoxHandle = VoxRequestHandle.Dummy,
-                    Tag = VoxTag
-                };
+                    if (thread.GetPrinter() != currentPrinter) {
+                        currentPrinter = thread.GetPrinter();
+                        eventHandler = currentPrinter?.PrepareLine(tagStr, thread.GetCharacterState(), m_RuntimeState.TagEventHandler) ?? m_RuntimeState.TagEventHandler;
+                    }
+
+                    VoxUtility.Play(voxHandle);
+                }
+
+                if (!hadVox) {
+                    fakeSubtitleData = new SubtitleDisplayData() {
+                        CharacterId = charId,
+                        Priority = ScriptUtility.ScriptPriorityToVoxPriority(thread.Priority()),
+                        Subtitle = new SubtitleEntry(tagStr.RichTextString),
+                        VoxHandle = VoxRequestHandle.Dummy,
+                        Tag = VoxTag
+                    };
+                } else {
+                    fakeSubtitleData = default;
+                }
             } else {
                 fakeSubtitleData = default;
             }
 
+            // NODES
+
+            bool sentFakeSubtitleData = false;
+            int visibleCount = 0,
+                richCount = 0;
             var tagNodes = tagStr.Nodes;
             for(int i = 0; i < tagNodes.Length; i++) {
                 TagNodeData node = tagStr.Nodes[i];
                 switch (node.Type) {
                     case TagNodeType.Event: {
+                        if (thread.IsSkipping() && m_RuntimeState.SkippableTagEvents.Contains(node.Event.Type)) {
+                            continue;
+                        }
+
                         IEnumerator coroutine;
-                        if (m_RuntimeState.TagEventHandler.TryEvaluate(node.Event, thread, out coroutine)) {
+                        if (eventHandler.TryEvaluate(node.Event, thread, out coroutine)) {
                             if (!cachedHandle.IsRunning()) {
                                 yield break;
                             }
@@ -313,42 +388,63 @@ namespace FieldDay.Scripting {
                             if (coroutine != null) {
                                 yield return coroutine;
                             }
+
+                            if (thread.GetPrinter() != currentPrinter) {
+                                currentPrinter = thread.GetPrinter();
+                                eventHandler = currentPrinter?.PrepareLine(tagStr, thread.GetCharacterState(), m_RuntimeState.TagEventHandler) ?? m_RuntimeState.TagEventHandler;
+                                currentPrinter?.FastForwardLine(visibleCount, richCount);
+                            }
                         }
 
                         break;
                     }
 
                     case TagNodeType.Text: {
-                        if (!hadVox) {
-                            SubtitleUtility.RequestDisplay(fakeSubtitleData);
+                        visibleCount = node.Text.VisibleCharacterOffset + node.Text.VisibleCharacterCount;
+                        richCount = node.Text.RichCharacterOffset + node.Text.RichCharacterCount;
+
+                        if (thread.IsSkipping()) {
+                            continue;
                         }
-                        // TODO: Implement
+
+                        if (dialogBoxDesired) {
+                            yield return Routine.Inline(thread.GetPrinter()?.TypeLine(tagStr, node.Text));
+                        } else if (voxDesired && !hadVox && !sentFakeSubtitleData) {
+                            SubtitleUtility.RequestDisplay(fakeSubtitleData);
+                            sentFakeSubtitleData = true;
+                        }
                         break;
                     }
                 }
             }
 
-            if (hadVox) {
-                float voiceReleaseTime = thread.GetVoxReleaseTime();
-                if (voiceReleaseTime > 0) {
-                    while(VoxUtility.IsPlaying(voxHandle) && VoxUtility.GetPlaybackPosition(voxHandle) < voiceReleaseTime) {
-                        //Log.Msg("Waiting for vox to finish (overlap)");
-                        yield return null;
-                    }
-                    thread.ReleaseVox();
-                } else {
-                    while(VoxUtility.IsPlaying(voxHandle)) {
-                        //Log.Msg("Waiting for vox to finish");
-                        yield return null;
-                    }
-                }
-            } else {
-                float duration = fakeSubtitleData.Subtitle.Data.Length * 0.08f;
-                while((duration -= Routine.DeltaTime) > 0 && !thread.PopSkipSingle()) {
-                    yield return null;
-                }
+            // COMPLETION
 
-                SubtitleUtility.RequestDismiss(new SubtitleDismissData(fakeSubtitleData));
+            if (!thread.IsSkipping()) {
+                if (dialogBoxDesired && tagStr.RichText.Length > 0) {
+                    yield return Routine.Inline(thread.GetPrinter()?.CompleteLine());
+                } else if (voxDesired) {
+                    if (hadVox) {
+                        float voiceReleaseTime = thread.GetVoxReleaseTime();
+                        if (voiceReleaseTime > 0) {
+                            while (VoxUtility.IsPlaying(voxHandle) && VoxUtility.GetPlaybackPosition(voxHandle) < voiceReleaseTime) {
+                                yield return null;
+                            }
+                            thread.ReleaseVox();
+                        } else {
+                            while (VoxUtility.IsPlaying(voxHandle)) {
+                                yield return null;
+                            }
+                        }
+                    } else {
+                        float duration = fakeSubtitleData.Subtitle.Data.Length * 0.08f;
+                        while ((duration -= Routine.DeltaTime) > 0 && !thread.PopSkipSingle()) {
+                            yield return null;
+                        }
+
+                        SubtitleUtility.RequestDismiss(new SubtitleDismissData(fakeSubtitleData));
+                    }
+                }
             }
 
             yield return Routine.Command.BreakAndResume;
@@ -362,14 +458,21 @@ namespace FieldDay.Scripting {
             return ExecuteChoice((ScriptThread) inThreadState, inChoice);
         }
 
-        protected virtual IEnumerator ExecuteChoice(ScriptThread thread, LeafChoice choice) {
-            IDialogueChooser chooser = thread.GetChooser();
-            // TODO: resolve to default chooser if necessary
-            Assert.NotNull(chooser, "Chooser must be assigned before ExecuteChoice is called");
+        private IEnumerator ExecuteChoice(ScriptThread thread, LeafChoice choice) {
+            IDialogueChoicePresenter choicePresenter = thread.GetChoicePresenter();
+            if (choicePresenter == null) {
+                thread.TakeOwnership(ScriptUtility.GetDialogueChoicePresenter(StringHash32.Null));
+                choicePresenter = thread.GetChoicePresenter();
+            }
+            Assert.NotNull(choicePresenter, "ChoicePresenter must be assigned before ExecuteChoice is called");
             m_RuntimeState.OnLeafChoicePresented.Invoke(thread, choice);
 
             thread.BeginChoice();
-            yield return Routine.Inline(chooser.ShowOptions(choice, thread.PeekNode(), thread));
+            
+            yield return Routine.Inline(choicePresenter.ShowOptions(choice, thread.PeekNode(), thread, thread.GetCharacterState()));
+            
+            Assert.True(choice.HasChosen(), "LeafChoice must be chosen during ShowOptions");
+            m_RuntimeState.OnLeafChoiceChosen.Invoke(thread, choice);
             thread.EndChoice();
         }
 

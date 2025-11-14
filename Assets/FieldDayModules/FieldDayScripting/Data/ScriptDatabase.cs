@@ -44,6 +44,8 @@ namespace FieldDay.Scripting {
         // unload
         internal RingBuffer<UniqueId16> UnloadQueue = new RingBuffer<UniqueId16>();
 
+        internal bool AutoLoadCustomLineNamesIntoVox;
+
         #region ISceneLoadDepencency
 
         public bool IsLoaded(SceneLoadPhase loadPhase) {
@@ -194,7 +196,7 @@ namespace FieldDay.Scripting {
                 }
             }
 
-            if (VoxUtility.DB != null) {
+            if (db.AutoLoadCustomLineNamesIntoVox && VoxUtility.DB != null) {
                 using (PooledList<KeyValuePair<StringHash32, string>> customLineNames = PooledList<KeyValuePair<StringHash32, string>>.Create()) {
                     package.GatherAllLinesWithCustomNames(customLineNames);
                     foreach (var kv in customLineNames) {

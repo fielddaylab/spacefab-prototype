@@ -3,6 +3,7 @@ using BeauUtil.Debugger;
 using FieldDay;
 using FieldDay.Assets;
 using FieldDay.Scenes;
+using FieldDay.Scripting;
 using FieldDay.SharedState;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,10 @@ namespace SpaceFab.Research {
             }
             ResearchMaterialUtility.ArrangeTrayItems();
             return null;
+        }
+
+        protected override void OnSceneReady() {
+            ScriptUtility.Trigger("SceneReady");
         }
     }
 }

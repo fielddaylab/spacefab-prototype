@@ -1,20 +1,22 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using BeauPools;
 using BeauRoutine;
 using BeauUtil;
 using BeauUtil.Debugger;
 using BeauUtil.Tags;
 using BeauUtil.Variants;
+using FieldDay.Data;
 using FieldDay.Debugging;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
 using FieldDay.Vox;
 using Leaf;
 using Leaf.Runtime;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using Unity.IL2CPP.CompilerServices;
 using UnityEngine;
 
@@ -41,9 +43,19 @@ namespace FieldDay.Scripting {
         // Tag String
         internal CustomTagParserConfig TagParserConfig;
         internal TagStringEventHandler TagEventHandler;
-        internal HashSet<StringHash32> SkippableTagEvents;
-        internal HashSet<StringHash32> TextOutputTagEvents;
+
+        internal HashSet<StringHash32> SkippableTagEvents = new HashSet<StringHash32>(16);
+        internal HashSet<StringHash32> TagEventsContainingText = new HashSet<StringHash32>(8);
+        
         internal TagStringParser TagParser;
+
+        // Printers
+        internal readonly Dictionary<StringHash32, IDialoguePrinter> PrinterMap = MapUtils.Create<StringHash32, IDialoguePrinter>(4);
+        internal readonly Dictionary<StringHash32, IDialogueChoicePresenter> ChoicePresenterMap = MapUtils.Create<StringHash32, IDialogueChoicePresenter>(4);
+        internal StringHash32 DefaultPrinterId;
+
+        // Flags
+        internal ScriptRuntimeConfigFlags Flags;
 
         // Pools
         internal IPool<ScriptThread> ThreadPool;
@@ -77,6 +89,7 @@ namespace FieldDay.Scripting {
 
         public readonly CastableEvent<ScriptThread, TagString> OnTaggedLineProcessed = new CastableEvent<ScriptThread, TagString>();
         public readonly CastableEvent<ScriptThread, LeafChoice> OnLeafChoicePresented = new CastableEvent<ScriptThread, LeafChoice>();
+        public readonly CastableEvent<ScriptThread, LeafChoice> OnLeafChoiceChosen = new CastableEvent<ScriptThread, LeafChoice>();
 
         #endregion // Callbacks
 
@@ -139,6 +152,11 @@ namespace FieldDay.Scripting {
                 }
                 SceneLocalTable.Clear();
             });
+
+            if (!EngineHints.GetHintBool("VOX_ENABLED", true)) {
+                Flags &= ScriptRuntimeConfigFlags.VoiceoverAllLinesByDefault;
+                ScriptUtility.DB.AutoLoadCustomLineNamesIntoVox = false;
+            }
         }
 
         // TODO: Figure out why this needs to be called later in the scene loading process
@@ -158,6 +176,12 @@ namespace FieldDay.Scripting {
         }
 
         #endregion // ISceneLoadDependency
+    }
+
+    [Flags]
+    internal enum ScriptRuntimeConfigFlags : uint {
+        VoiceoverAllLinesByDefault = 0x01,
+        UseDialogBoxByDefault = 0x02
     }
 
     internal struct QueuedScriptEvent {
@@ -393,6 +417,98 @@ namespace FieldDay.Scripting {
         }
 
         #endregion // Actors
+
+        #region Dialog
+
+        /// <summary>
+        /// Default printer id.
+        /// </summary>
+        static public StringHash32 DefaultDialoguePrinterId {
+            get { return Runtime.DefaultPrinterId; }
+            set { Runtime.DefaultPrinterId = value; }
+        }
+
+        /// <summary>
+        /// Registers a dialog interface.
+        /// </summary>
+        static public void RegisterDialogueInterface<TInterface>(StringHash32 id, TInterface printerAndChoice)
+            where TInterface : class, IDialoguePrinter, IDialogueChoicePresenter {
+            Assert.NotNull(printerAndChoice);
+            RegisterDialoguePrinter(id, printerAndChoice);
+            RegisterDialogueChoicePresenter(id, printerAndChoice);
+        }
+
+        /// <summary>
+        /// Deregisters a dialog interface.
+        /// </summary>
+        static public void DeregisterDialogueInterface<TInterface>(StringHash32 id, TInterface printerAndChoice)
+            where TInterface : class, IDialoguePrinter, IDialogueChoicePresenter {
+            Assert.NotNull(printerAndChoice);
+            DeregisterDialoguePrinter(id, printerAndChoice);
+            DeregisterDialogueChoicePresenter(id, printerAndChoice);
+        }
+
+        /// <summary>
+        /// Registers a dialogue print interface.
+        /// </summary>
+        static public void RegisterDialoguePrinter(StringHash32 id, IDialoguePrinter printer) {
+            Assert.NotNull(printer);
+            Assert.False(Runtime.PrinterMap.ContainsKey(id), "DialoguePrinter with id '{0}' already registered", id.ToDebugString());
+            Runtime.PrinterMap.Add(id, printer);
+        }
+
+        /// <summary>
+        /// Deregisteres a dialogue printer interface.
+        /// </summary>
+        static public void DeregisterDialoguePrinter(StringHash32 id, IDialoguePrinter printer) {
+            Assert.NotNull(printer);
+            Assert.True(Runtime.PrinterMap.ContainsKey(id), "DialoguePrinter with id '{0}' not registered", id.ToDebugString());
+            Assert.True(Runtime.PrinterMap[id] == printer, "DialoguePrinter with id '{0}' is not registered to the given printer", id.ToDebugString());
+            Runtime.PrinterMap.Remove(id);
+        }
+
+        /// <summary>
+        /// Registers a dialogue choice interface.
+        /// </summary>
+        static public void RegisterDialogueChoicePresenter(StringHash32 id, IDialogueChoicePresenter choicePresenter) {
+            Assert.NotNull(choicePresenter);
+            Assert.False(Runtime.ChoicePresenterMap.ContainsKey(id), "DialogueChoicePresenter with id '{0}' already registered", id.ToDebugString());
+            Runtime.ChoicePresenterMap.Add(id, choicePresenter);
+        }
+
+        /// <summary>
+        /// Deregisters a dialogue choice interface.
+        /// </summary>
+        static public void DeregisterDialogueChoicePresenter(StringHash32 id, IDialogueChoicePresenter choicePresenter) {
+            Assert.NotNull(choicePresenter);
+            Assert.True(Runtime.ChoicePresenterMap.ContainsKey(id), "DialogueChoicePresenter with id '{0}' not registered", id.ToDebugString());
+            Assert.True(Runtime.ChoicePresenterMap[id] == choicePresenter, "DialogueChoicePresenter with id '{0}' is not registered to the given presenter", id.ToDebugString());
+            Runtime.ChoicePresenterMap.Remove(id);
+        }
+
+        /// <summary>
+        /// Returns the dialogue printer with the given id.
+        /// </summary>
+        static public IDialoguePrinter GetDialoguePrinter(StringHash32 id) {
+            // TODO: Handle pooled printers?
+            id = StringHash32.First(id, Runtime.DefaultPrinterId);
+            Runtime.PrinterMap.TryGetValue(id, out var printer);
+            Assert.NotNull(printer, "DialoguePrinter with id '{0}' not registered!", id.ToDebugString());
+            return printer;
+        }
+
+        /// <summary>
+        /// Returns the dialogue choice interface with the given id.
+        /// </summary>
+        static public IDialogueChoicePresenter GetDialogueChoicePresenter(StringHash32 id) {
+            // TODO: Handle pooled presenters?
+            id = StringHash32.First(id, Runtime.DefaultPrinterId);
+            Runtime.ChoicePresenterMap.TryGetValue(id, out var choicePresenter);
+            Assert.NotNull(choicePresenter, "DialogueChoicePresenter with id '{0}' not registered!", id.ToDebugString());
+            return choicePresenter;
+        }
+
+        #endregion // Dialog
 
         #region Context
 

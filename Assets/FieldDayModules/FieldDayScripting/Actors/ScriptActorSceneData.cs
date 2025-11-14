@@ -40,6 +40,7 @@ namespace FieldDay.Scripting {
                     }
                 }
                 m_CachedObjectsIds = cachedObjectIds.ToArray();
+                m_InitiallyDeactivatedObjects = null;
             }
         }
 
