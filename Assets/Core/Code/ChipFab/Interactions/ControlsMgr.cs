@@ -40,6 +40,10 @@ namespace SpaceFab.ChipFab
         public ConveyorMgr ConveyorMgr;
         public bool ConveyorEnabled;
 
+        [Header("Bot")]
+        public WaferBot BotInstance;
+        public bool BotEnabled;
+
         #region Unity Callbacks
 
         private void Awake()
@@ -81,6 +85,10 @@ namespace SpaceFab.ChipFab
                 if (ConveyorEnabled)
                 {
                     ConveyorMgr.ProcessInputs();
+                }
+                if (BotEnabled)
+                {
+                    BotInstance.ProcessInputs();
                 }
             }
         }

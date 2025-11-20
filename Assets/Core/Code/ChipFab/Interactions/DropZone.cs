@@ -83,6 +83,22 @@ namespace SpaceFab.ChipFab
                 }
             }
             */
+
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                // Activate / Deactivate stations with click
+                if (ControlsMgr.Instance.BotInstance.State == ConveyorState.Full)
+                {
+                    if (ControlsMgr.Instance.BotInstance.IsAtStation(this.GetComponent<IStationMicrogame>()))
+                    {
+                        ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                    }
+                }
+                else if (ControlsMgr.Instance.BotInstance.State == ConveyorState.Empty)
+                {
+                    // ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+                }
+            }
         }
 
         private void CheckTriggerHoverDisplays()

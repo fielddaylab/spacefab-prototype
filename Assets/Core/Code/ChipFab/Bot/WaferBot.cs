@@ -1,20 +1,12 @@
+using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceFab.ChipFab
 {
-    public enum ConveyorState
+    public class WaferBot : MonoBehaviour
     {
-        Empty,
-        Full,
-        Uninitialized
-    }
-
-    public class ConveyorMgr : MonoBehaviour
-    {
-        public static ConveyorMgr Instance;
-
         [Header("Nav Keys")]
         public KeyCode NavLeftKey = KeyCode.LeftArrow;
         public KeyCode NavRightKey = KeyCode.RightArrow;
@@ -23,22 +15,21 @@ namespace SpaceFab.ChipFab
 
         public ConveyorState State;
 
-        public Transform CarryPos;
+        public float WaferOffset = 1.5f;
 
         private ControlNavNode m_currNode;
         private int m_currNodeIndex;
-
-        private void Awake()
-        {
-            State = ConveyorState.Empty;
-
-            Instance = this;
-        }
 
         private void Start()
         {
             m_currNodeIndex = 0;
             m_currNode = NavNodesMgr.Instance.Nodes[0];
+
+            SetAtIndex(m_currNodeIndex);
+
+            State = ConveyorState.Uninitialized;
+
+            Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
         }
 
         public void SetCurrNode(int index)
@@ -50,14 +41,14 @@ namespace SpaceFab.ChipFab
         {
             if (Input.GetKeyDown(NavLeftKey))
             {
-                if (State == ConveyorState.Full)
+                if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
                     TryShift(-1);
                 }
             }
             else if (Input.GetKeyDown(NavRightKey))
             {
-                if (State == ConveyorState.Full)
+                if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
                     TryShift(1);
                 }
@@ -82,11 +73,6 @@ namespace SpaceFab.ChipFab
 
         private void TryShift(int amt)
         {
-            if (DragMgr.WaferInstance == null)
-            {
-                return;
-            }
-
             if (m_currNodeIndex + amt >= NavNodesMgr.Instance.Nodes.Count || m_currNodeIndex + amt < 0)
             {
                 return;
@@ -116,6 +102,11 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        public bool IsAtStation(IStationMicrogame station)
+        {
+            return m_currNode.GetComponent<IStationMicrogame>() == station;
+        }
+
         public void TryReturnToConveyor()
         {
             State = ConveyorState.Full;
@@ -128,20 +119,32 @@ namespace SpaceFab.ChipFab
             m_currNodeIndex = index;
             m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];
 
-            var pos = DragMgr.WaferInstance.transform.position;
+            var pos = this.transform.position;
             pos.x = m_currNode.transform.position.x;
-            pos.y = CarryPos.transform.position.y;
-            DragMgr.WaferInstance.transform.position = pos;
+            this.transform.position = pos;
 
-            DragMgr.WaferInstance.transform.rotation = default;
+            if (DragMgr.WaferInstance)
+            {
+                DragMgr.WaferInstance.transform.parent = this.transform;
+                pos.x = 0;
+                pos.y = WaferOffset;
+                DragMgr.WaferInstance.transform.localPosition = pos;
+                DragMgr.WaferInstance.transform.rotation = default;
+            }
 
             ControlsMgr.Instance.CurrDropZone = m_currNode.GetComponent<DropZone>();
+
+            var station = ControlsMgr.Instance.CurrDropZone.GetComponent<StationMicrogame>();
+            if (station)
+            {
+                CamMgr.Instance.LoadCamPos(station.CamPos.Pos);
+            }
         }
 
-        public void AssignWafer()
+        private void HandleNewWaferCreated()
         {
             State = ConveyorState.Full;
-            SetAtIndex(0);
+            SetAtIndex(m_currNodeIndex);
         }
     }
 }
