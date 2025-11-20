@@ -1,4 +1,5 @@
 using FieldDay;
+using FieldDay.HID;
 using UnityEngine;
 
 namespace SpaceFab {

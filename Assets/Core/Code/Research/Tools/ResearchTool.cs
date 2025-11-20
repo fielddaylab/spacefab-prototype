@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceFab.Research {
+    [PreloadOrder(5)]
     public sealed class ResearchTool : BatchedComponent, IScenePreload {
         public string ToolName;
         public ResearchSlot[] Slots;
@@ -19,6 +20,7 @@ namespace SpaceFab.Research {
         [NonSerialized] public bool AllSlotsFilled;
 
         public CastableEvent<ResearchTool> OnInputSlotsUpdated = new CastableEvent<ResearchTool>();
+        public CastableEvent<ResearchTool> OnReset = new CastableEvent<ResearchTool>();
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
             Action onUpdate = () => ResearchToolUtility.UpdateSlotFillState(this);

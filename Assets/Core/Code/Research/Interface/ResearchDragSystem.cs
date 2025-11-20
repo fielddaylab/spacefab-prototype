@@ -21,7 +21,7 @@ namespace SpaceFab.Research {
             }
             
             if (Game.Input.IsMousePressed(0)) {
-                if (!cursorOnWorld) {
+                if (!cursorOnWorld || !CursorUtility.IsCursorWithinVirtualViewport()) {
                     cancelQueued = true;
                 } else {
                     Collider2D overlappingSlot = Physics2D.OverlapCircle(worldPos, 0.01f, LayerMasks.ResearchSlot_Mask);

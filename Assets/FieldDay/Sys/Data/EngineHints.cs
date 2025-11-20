@@ -21,7 +21,8 @@ namespace FieldDay.Data {
             }
 
             public readonly bool AsBool() {
-                return !string.IsNullOrEmpty(StringValue) && !string.Equals(StringValue, "false", StringComparison.OrdinalIgnoreCase);
+                return !string.IsNullOrEmpty(StringValue) && !string.Equals(StringValue, "false", StringComparison.OrdinalIgnoreCase)
+                    && !string.Equals(StringValue, "0", StringComparison.Ordinal);
             }
 
             public bool Equals(HintValue other) {

@@ -90,7 +90,7 @@ namespace FieldDay.HID {
             
             if (evtData != null) {
                 var baseRaycaster = evtData.pointerCurrentRaycast.module;
-                return baseRaycaster && baseRaycaster is GraphicRaycaster;
+                return baseRaycaster is GraphicRaycaster;
             }
 
             return false;
@@ -131,7 +131,7 @@ namespace FieldDay.HID {
                     OnModeChanged?.Invoke(m_Mode);
                 }
             } else {
-                if (newMousePos != m_LastKnownMousePosition || cachedInput.GetMouseButtonDown(0) || cachedInput.GetMouseButtonDown(1) || cachedInput.GetMouseButtonDown(2)) {
+                if (cachedInput.touchCount == 0 && (newMousePos != m_LastKnownMousePosition || cachedInput.GetMouseButtonDown(0) || cachedInput.GetMouseButtonDown(1) || cachedInput.GetMouseButtonDown(2))) {
                     m_Mode = PointerInputMode.Mouse;
                     OnModeChanged?.Invoke(m_Mode);
                 }
@@ -156,7 +156,7 @@ namespace FieldDay.HID {
                 OnPointerOverChanged?.Invoke(over);
             }
 
-            if (m_EditingText != inputField) {
+            if (!ReferenceEquals(m_EditingText, inputField)) {
                 m_EditingText = inputField;
                 OnTextEditFocusChanged?.Invoke(inputField);
             }

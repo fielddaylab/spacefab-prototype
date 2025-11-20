@@ -1,13 +1,17 @@
 using BeauRoutine;
 using BeauUtil;
+using FieldDay;
 using FieldDay.Audio;
 using FieldDay.Components;
+using FieldDay.Scenes;
 using FieldDay.UI;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceFab.Research {
-    public sealed class BatteryCircuitTool : MonoBehaviour {
+    [PreloadOrder(10)]
+    public sealed class BatteryCircuitTool : MonoBehaviour, IScenePreload {
         public VoltageControl Voltage;
         [Range(0, 1)] public float Temperature;
 
@@ -18,6 +22,10 @@ namespace SpaceFab.Research {
 
             m_Tool.OnInputSlotsUpdated.Register(OnSlotFillUpdated);
             Voltage.OnVoltageModified.Register(OnSlotFillUpdated);
+        }
+
+        private void OnUnlockedToolsChanged(ResearchToolsMask toolsMask) {
+            Voltage.SetAdjustable((toolsMask & ResearchToolsMask.AdjustableBattery) != 0);
         }
 
         private void OnSlotFillUpdated() {
@@ -35,6 +43,12 @@ namespace SpaceFab.Research {
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
                 ResearchToolUtility.SetHighMobilityStrength(null, 0);
             }
+        }
+
+        public IEnumerator<WorkSlicer.Result?> Preload() {
+            Find.State<ResearchToolState>().OnUnlockedToolsChanged.Register(OnUnlockedToolsChanged);
+            Voltage.SetAdjustable(false);
+            return null;
         }
     }
 }

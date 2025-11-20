@@ -28,6 +28,9 @@ namespace SpaceFab.Research {
         public float DielectricStrength;
         public DopantType DopantType;
         [Range(0, 2)] public float ConductionMultiplier = 1;
+
+        [Header("Diagram")]
+        public Color32 DiagramColor = Color.white;
     }
 
     public enum ElectricalTag : uint {

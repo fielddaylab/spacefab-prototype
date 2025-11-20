@@ -1,22 +1,26 @@
 using BeauRoutine;
+using BeauUtil.UI;
+using FieldDay;
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpaceFab.Research {
     public sealed class ResearchValenceDiagram : MonoBehaviour {
-        public MeshRenderer Nucleus;
+        public RegularPolyGraphic Nucleus;
         public float ScaleReference = 1;
         public TMP_Text Symbol;
 
         [Header("Electrons")]
+        public float ElectronOrbitMultiplier = 1;
         public float ElectronOrbitOffset = 0.5f;
         public Transform[] Electrons;
     }
 
     static public partial class ResearchMaterialUtility {
         static public void PopulateDiagram(ResearchValenceDiagram diagram, ResearchMaterial material, bool symbolKnown) {
-            diagram.Nucleus.sharedMaterial = material.Material;
+            diagram.Nucleus.color = material.DiagramColor;
             diagram.Symbol.SetText(symbolKnown ? material.ChemicalSymbol : "?");
 
             Transform nucleusTransform = diagram.Nucleus.transform;
@@ -24,7 +28,7 @@ namespace SpaceFab.Research {
             float scale = material.Size / diagram.ScaleReference;
             nucleusTransform.SetScale(scale);
 
-            float electronOffset = scale * 0.5f + diagram.ElectronOrbitOffset;
+            float electronOffset = diagram.ElectronOrbitMultiplier * scale + diagram.ElectronOrbitOffset;
             
             float angleRad = Mathf.Deg2Rad * 100f;
             float angleIncrement = Mathf.PI * 2 / diagram.Electrons.Length;

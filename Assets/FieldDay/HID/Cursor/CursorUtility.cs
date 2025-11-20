@@ -19,6 +19,17 @@ namespace FieldDay.HID {
         }
 
         /// <summary>
+        /// Returns if the main cursor is within the virtual viewport.
+        /// </summary>
+        static public bool IsCursorWithinVirtualViewport() {
+            Rect virtualViewport = Game.Rendering.VirtualViewport;
+            Vector2 mousePos = Input.mousePosition;
+            mousePos.x /= Screen.width;
+            mousePos.y /= Screen.height;
+            return virtualViewport.Contains(mousePos);
+        }
+
+        /// <summary>
         /// Hides the cursor.
         /// </summary>
         static public void HideCursor() {

@@ -37,9 +37,6 @@ namespace SpaceFab {
         public TagStringEventHandler PrepareLine(TagString text, DialogueCharacterState character, TagStringEventHandler parentHandler) {
             m_Text.SetText(text.RichText);
             m_Text.maxVisibleCharacters = 0;
-            Vector2 size = m_Text.GetPreferredValues();
-            Log.Msg("text size: {0}x{1}", size.x, size.y);
-            m_Size.SetSize(size);
             GuiCommands.SetActive(m_ContinueButton.gameObject, false);
             return parentHandler;
         }
@@ -50,6 +47,10 @@ namespace SpaceFab {
         public IEnumerator TypeLine(TagString text, TagTextData textData) {
             if (m_Text.maxVisibleCharacters == 0) {
                 Show();
+                yield return null;
+                GuiCommands.RebuildLayout(m_Text.rectTransform);
+                GuiCommands.ExecuteAction(m_Size.Sync);
+                yield return null;
             }
 
             int charsToType = textData.VisibleCharacterCount;
@@ -82,6 +83,11 @@ namespace SpaceFab {
         #endregion // IDialoguePrinter
 
         #region Panel
+
+        protected override void OnShow(bool inbInstant) {
+            GuiCommands.RebuildLayout(m_Text.rectTransform);
+            GuiCommands.ExecuteAction(m_Size.Sync);
+        }
 
         protected override void OnHideComplete(bool inbInstant) {
             m_Text.SetText(string.Empty);

@@ -78,7 +78,7 @@ namespace FieldDay.Assets {
             NamedAsset[] named = Baking.FindAssets<NamedAsset>(myDir);
             LiteAssetGroup[] lite = Baking.FindAssets<LiteAssetGroup>(myDir);
 
-            Array.Sort(pack.m_NamedAssets, (a, b) => a.GetType().FullName.CompareTo(b.GetType().FullName));
+            Array.Sort(named, (a, b) => a.GetType().FullName.CompareTo(b.GetType().FullName));
 
             bool isChanged = false;
             if (!ArrayUtils.ContentEquals(pack.m_GlobalAssets, global)) {

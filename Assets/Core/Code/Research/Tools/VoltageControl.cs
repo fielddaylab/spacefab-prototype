@@ -19,7 +19,7 @@ namespace SpaceFab.Research {
         public Transform BatteryFlip;
 
         [NonSerialized] public int VoltageIndex;
-
+        [NonSerialized] public bool CanAdjust = true;
         [NonSerialized] private ResearchVoltageConfig m_Config;
 
         public CastableEvent<float> OnVoltageModified = new CastableEvent<float>(1);
@@ -31,14 +31,38 @@ namespace SpaceFab.Research {
 
             IncreaseButton.Cursor.onClick.Register(OnClickIncrease);
             DecreaseButton.Cursor.onClick.Register(OnClickDecrease);
+
+            GetComponentInParent<ResearchTool>().OnReset.Register(ResetToolState);
         }
 
         private void OnDisable() {
+            ResetToolState();
+        }
+
+        public void SetAdjustable(bool adjustable) {
+            if (CanAdjust != adjustable) {
+                CanAdjust = adjustable;
+                if (!CanAdjust) {
+                    if (VoltageIndex != m_Config.DefaultIndex) {
+                        VoltageIndex = m_Config.DefaultIndex;
+                        OnVoltageAdjusted();
+                    } else {
+                        GuiCommands.SetActive(IncreaseButton.gameObject, false);
+                        GuiCommands.SetActive(DecreaseButton.gameObject, false);
+                    }
+                } else {
+                    GuiCommands.SetActive(IncreaseButton.gameObject, CanAdjust && VoltageIndex < m_Config.Voltages.Length - 1);
+                    GuiCommands.SetActive(DecreaseButton.gameObject, CanAdjust && VoltageIndex > 0);
+                }
+            }
+        }
+
+        private void ResetToolState() {
             VoltageIndex = m_Config.DefaultIndex;
             VoltageIcon.sprite = m_Config.VoltageIcons[VoltageIndex];
             InputVoltage = m_Config.Voltages[VoltageIndex];
-            IncreaseButton.gameObject.SetActive(true);
-            DecreaseButton.gameObject.SetActive(true);
+            IncreaseButton.gameObject.SetActive(CanAdjust && VoltageIndex < m_Config.Voltages.Length - 1);
+            DecreaseButton.gameObject.SetActive(CanAdjust && VoltageIndex > 0);
             BatteryFlip.localEulerAngles = new Vector3(0, 0, 0);
         }
 
@@ -63,8 +87,8 @@ namespace SpaceFab.Research {
             }
             InputVoltage = m_Config.Voltages[VoltageIndex];
 
-            GuiCommands.SetActive(IncreaseButton.gameObject, VoltageIndex < m_Config.Voltages.Length - 1);
-            GuiCommands.SetActive(DecreaseButton.gameObject, VoltageIndex > 0);
+            GuiCommands.SetActive(IncreaseButton.gameObject, CanAdjust && VoltageIndex < m_Config.Voltages.Length - 1);
+            GuiCommands.SetActive(DecreaseButton.gameObject, CanAdjust && VoltageIndex > 0);
 
             OnVoltageModified.Invoke(InputVoltage);
         }

@@ -1,7 +1,0 @@
-# basePath Research.Test
-
-:: Start
-@trigger SceneReady
-Do the thing!
-This should be a text box!
-Are you ready to do the thing? Please be ready to do the thing!
