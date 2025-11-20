@@ -1,6 +1,4 @@
 using FieldDay;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceFab.ChipFab
@@ -28,9 +26,6 @@ namespace SpaceFab.ChipFab
         public float ApplyHeatIncrement;
         public float HeatLossRate;
 
-        public GameObject HeatingGroup;
-        public Transform ThermoSlider;
-
         public Transform DopantSlotPos;
 
         public ClickBox StartButton;
@@ -48,24 +43,23 @@ namespace SpaceFab.ChipFab
 
         private static KeyCode StokeKey = KeyCode.UpArrow;
 
+        [Space(5)]
+        [Header("Heating Visuals")]
+        public GameObject HeatingGroup;
+        public Transform Gauge;
+        public Transform TargetIndicator;
+        public Transform TargetZone;
+        // public Transform ThermoSlider;
+
+        public Transform MicrogameGauge;
+        public Transform MicrogameGaugeTargetIndicator;
+        public Transform MicrogameGaugeTargetZone;
+
         #region IStationMicrogame
 
         public override void Activate(WaferState waferState)
         {
             base.Activate(waferState);
-
-            StartButton.OnMouseDown.RemoveAllListeners();
-            FinishButton.OnMouseDown.RemoveAllListeners();
-
-            StartButton.transform.parent.gameObject.SetActive(false);
-            //ApplyHeatButton.transform.parent.gameObject.SetActive(false);
-            FinishButton.transform.parent.gameObject.SetActive(false);
-
-            StartButton.OnMouseDown.AddListener(HandleStartMouseDown);
-            //ApplyHeatButton.OnMouseDown.AddListener(HandleApplyHeat);
-            FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
-
-            Game.Events.Register(GameEvents.NewDopantCreated, HandleNewDopantCreated);
 
             TransitionToActivated();
         }
@@ -103,6 +97,28 @@ namespace SpaceFab.ChipFab
         private void Awake()
         {
             Instance = this;
+            m_state = FurnaceMicrogameState.Deactivated;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            var targetTemp = (TargetMaxTemp + TargetMinTemp) / 2.0f;
+
+            var ratio = (targetTemp - MinTemp) / (MaxTemp - MinTemp);
+
+            // Align Target Indicator
+            var angles = TargetIndicator.transform.localEulerAngles;
+            angles.z = -180 * ratio;
+            TargetIndicator.transform.localEulerAngles = angles;
+            MicrogameGaugeTargetIndicator.transform.localEulerAngles = angles;
+
+            // Align Target Zone
+            angles = TargetZone.transform.localEulerAngles;
+            angles.z = -180 * ratio;
+            TargetZone.transform.localEulerAngles = angles;
+            MicrogameGaugeTargetZone.transform.localEulerAngles = angles;
         }
 
         private void Update()
@@ -113,19 +129,13 @@ namespace SpaceFab.ChipFab
                     TransitionToReady();
                     break;
                 case FurnaceMicrogameState.Ready:
-                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
-                        // auto start with automation
-                        HandleStartMouseDown();
-                    }
+                    TryStartFurnace();
                     break;
                 case FurnaceMicrogameState.Heating:
                     ProcessMicrogame();
                     break;
                 case FurnaceMicrogameState.Finished:
-                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
-                        // auto end with automation
-                        HandleFinishClicked();
-                    }
+                    FinishFurnace();
                     break;
                 default:
                     break;
@@ -187,9 +197,13 @@ namespace SpaceFab.ChipFab
 
         private void UpdateHeatingVisuals()
         {
-            var scale = ThermoSlider.localScale;
-            scale.y = (m_currTemp - MinTemp) / (MaxTemp - MinTemp) * 2;
-            ThermoSlider.localScale = scale;
+            var ratio = (m_currTemp - MinTemp) / (MaxTemp - MinTemp);
+
+            // Align Needle
+            var angles = Gauge.transform.localEulerAngles;
+            angles.z = -180 * ratio;
+            Gauge.transform.localEulerAngles = angles;
+            MicrogameGauge.transform.localEulerAngles = angles;
         }
 
         private void EvaluatePrecision()
@@ -212,12 +226,12 @@ namespace SpaceFab.ChipFab
                 if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
                 {
                     // generate dopant
-                    DopantMgr.Instance.NDispenser.Dispense(false);
+                    // DopantMgr.Instance.NDispenser.Dispense(false);
                 }
                 else if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.P)
                 {
                     // generate dopant
-                    DopantMgr.Instance.PDispenser.Dispense(false);
+                    // DopantMgr.Instance.PDispenser.Dispense(false);
                 }
             }
 
@@ -235,6 +249,7 @@ namespace SpaceFab.ChipFab
             m_state = FurnaceMicrogameState.Heating;
             m_heatTimer = HeatTime;
             m_currTemp = (TargetMaxTemp + TargetMinTemp) / 2.0f;
+
             TransitionCommon();
         }
 
@@ -266,6 +281,11 @@ namespace SpaceFab.ChipFab
 
         private void HandleStartMouseDown()
         {
+            TryStartFurnace();
+        }
+
+        private bool TryStartFurnace()
+        {
             // check if valid combo
             // PREREQ: Oxide STRIPPED & DOPANT or Oxide EMPTY
             bool dopantMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && m_usedDopant;
@@ -274,12 +294,13 @@ namespace SpaceFab.ChipFab
             {
                 DragMgr.Instance.DragWaferEnabled = false;
                 TransitionToHeating();
+                return true;
             }
             else
             {
                 Debug.Log("Invalid prereqs");
                 Deactivate();
-                return;
+                return false;
             }
         }
 
@@ -290,10 +311,26 @@ namespace SpaceFab.ChipFab
 
         private void HandleFinishClicked()
         {
-            DragMgr.Instance.DragWaferEnabled = true;
-            RemoveDopant();
-            Deactivate();
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            FinishFurnace();
+        }
+
+        private void FinishFurnace()
+        {
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                DragMgr.Instance.DragWaferEnabled = true;
+                RemoveDopant();
+                Deactivate();
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+                Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            }
+            else
+            {
+                DragMgr.Instance.DragWaferEnabled = true;
+                RemoveDopant();
+                Deactivate();
+                Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            }
         }
 
         private void HandleNewDopantCreated()
@@ -303,32 +340,16 @@ namespace SpaceFab.ChipFab
 
         #endregion // Handlers
 
-        public void AssignDopant(Dispensable dispensable)
+        public void AssignDopant(DopingType dopantType)
         {
-            if (m_usedDopant)
-            {
-                RemoveDopant();
-            }
-
-            if (dispensable == null) { return; }
-
-            dispensable.transform.position = DopantSlotPos.transform.position;
-            dispensable.transform.rotation = DopantSlotPos.transform.rotation;
-
-            var dopant = dispensable.GetComponent<Dopant>();
-
+            // TODO: assign
             m_usedDopant = true;
-            m_appliedDopant = dopant.Type;
-            m_dopantObj = dispensable.gameObject;
+            m_appliedDopant = dopantType;
         }
 
         public void RemoveDopant()
         {
-            if (m_dopantObj)
-            {
-                Destroy(m_dopantObj);
-                m_usedDopant = false;
-            }
+            m_usedDopant = false;
         }
     }
 }

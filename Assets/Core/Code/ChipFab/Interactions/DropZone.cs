@@ -134,7 +134,7 @@ namespace SpaceFab.ChipFab
                 var furnace = Microgame.GetComponent<FurnaceMicrogame>();
                 if (furnace)
                 {
-                    furnace.AssignDopant(toAssign);
+                    // furnace.AssignDopant(toAssign);
                 }
             }
         }

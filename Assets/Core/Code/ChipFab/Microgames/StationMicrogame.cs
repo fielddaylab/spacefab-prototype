@@ -23,7 +23,7 @@ namespace SpaceFab.ChipFab
 
         protected Routine m_AutomationRoutine;
 
-        protected void Start()
+        protected virtual void Start()
         {
             if (Container)
             {
