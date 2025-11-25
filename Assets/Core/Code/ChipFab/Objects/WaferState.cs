@@ -256,7 +256,7 @@ namespace SpaceFab.ChipFab
             }
         }
         
-        public void SetPhotoState(MaskId mask, int rotation)
+        public void SetPhotoState(MaskId mask, int rotation, float precision)
         {
             Data.ResistLayer.State = ResistState.Developed;
 
@@ -267,6 +267,8 @@ namespace SpaceFab.ChipFab
             oriented.Rotation = rotation;
 
             Data.ResistLayer.Mask = oriented;
+
+            Data.Precision.Values.Add(precision);
         }
 
         public void SetResistState(float precision)

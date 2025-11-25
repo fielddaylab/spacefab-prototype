@@ -1,4 +1,5 @@
 using FieldDay;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,75 +9,68 @@ namespace SpaceFab.ChipFab
 {
     public class PhotolithoMicrogame : StationMicrogame, IStationMicrogame
     {
-        public ClickBox MaskAButton;
-        public ClickBox MaskBButton;
-        public ClickBox MaskCButton;
-
-        public ClickBox RotateCCButton;
-        public ClickBox RotateCButton;
-
-        public ClickBox DevelopButton;
-
-        public TMP_Text RotText;
-
-        public Transform PreviewPos;
-        public GameObject PreviewPrefab;
-        private GameObject m_currPreview;
-        private SpriteRenderer m_currPreviewRenderer;
-
-        private MaskId m_currSelectedMask = MaskId.NONE;
-        private int m_currRotation = 0;
-
-        private float m_rotateCooldown = 0.1f;
-        private float m_cooldownTimer = 0;
-
         private bool m_autoRoutineStarted = false;
+        public EtchMaskData CurrMaskData;
+        private MaskId m_currSelectedMask = MaskId.NONE;
 
+        [Header("Etch")]
+        public LineRenderer TargetPath;
+        public Transform TargetCircle;
+        public LineRenderer PlayerPath;
+        public Transform PlayerCircle;
+
+        public float TracerSpeed = 1.5f;
+        public float SampleTime = 1f;
+
+        private int TargetPointIndex;
+        private bool TracerReachedNext;
+        private float SampleTimer;
+
+        private Vector2 PlayerMoveDir;
+        private Vector2 LastKnownMoveDir;
+        private bool NewMoveDir;
+
+        private bool Activated;
+
+        private float TotalDif;
+        private int NumSamples;
 
         public override void Activate(WaferState waferState)
         {
             base.Activate(waferState);
 
-            MaskAButton.OnMouseDown.RemoveAllListeners();
-            MaskBButton.OnMouseDown.RemoveAllListeners();
-            MaskCButton.OnMouseDown.RemoveAllListeners();
-            RotateCCButton.OnMouseDown.RemoveAllListeners();
-            RotateCButton.OnMouseDown.RemoveAllListeners();
-            DevelopButton.OnMouseDown.RemoveAllListeners();
-
-
-            MaskAButton.OnMouseDown.AddListener(HandleMaskADown);
-            MaskBButton.OnMouseDown.AddListener(HandleMaskBDown);
-            MaskCButton.OnMouseDown.AddListener(HandleMaskCDown);
-
-            RotateCCButton.OnMouseDown.AddListener(HandleRotateCCDown);
-            RotateCButton.OnMouseDown.AddListener(HandleRotateCDown);
-
-            DevelopButton.OnMouseDown.AddListener(HandleDevelopDown);
-
-            m_currSelectedMask = MaskId.NONE;
-            m_currRotation = 0;
-
-            DevelopButton.transform.parent.gameObject.SetActive(false);
-
-            m_currPreview = Instantiate(PreviewPrefab, PreviewPos);
-            m_currPreviewRenderer = m_currPreview.GetComponent<SpriteRenderer>();
-            m_currPreviewRenderer.enabled = false;
-
             m_autoRoutineStarted = false;
+            m_currSelectedMask = CurrMaskData.MaskId;
+            TargetPath.positionCount = CurrMaskData.TracePoints.Length;
+            TargetPath.SetPositions(CurrMaskData.TracePoints);
+            TargetPointIndex = 0;
+            TracerReachedNext = true;
+            TargetCircle.transform.localPosition = CurrMaskData.TracePoints[0];
+            SampleTimer = SampleTime;
+            PlayerMoveDir = new Vector2(1, 0);
+            LastKnownMoveDir = PlayerMoveDir;
+            NewMoveDir = true;
 
-            RotText.SetText("0°");
+            Activated = true;
+
+            ControlsMgr.Instance.InputsEnabled = false;
+
+            PlayerCircle.transform.localPosition = CurrMaskData.TracePoints[0];
+            PlayerPath.positionCount = 1;
+            PlayerPath.SetPosition(PlayerPath.positionCount - 1, PlayerCircle.transform.localPosition);
 
             // PREREQS: Resist FULL
             if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Full)
             {
                 Debug.Log("Invalid Prereqs");
-                Deactivate();
+                // Deactivate();
             }
         }
 
         public override void Deactivate()
         {
+            Activated = false;
+
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
             {
                 if (ControlsMgr.Instance.ConveyorEnabled)
@@ -87,30 +81,14 @@ namespace SpaceFab.ChipFab
 
             base.Deactivate();
 
-            MaskAButton.OnMouseDown.RemoveAllListeners();
-            MaskBButton.OnMouseDown.RemoveAllListeners();
-            MaskCButton.OnMouseDown.RemoveAllListeners();
-
-            RotateCCButton.OnMouseDown.RemoveAllListeners();
-            RotateCButton.OnMouseDown.RemoveAllListeners();
-
-            DevelopButton.OnMouseDown.RemoveAllListeners();
+            ControlsMgr.Instance.InputsEnabled = true;
         }
 
-        public override bool TryCancel()
-        {
-            Deactivate();
-            return true;
-        }
-
-        #region Handlers
+        #region Unity Callbacks
 
         private void Update()
         {
-            if (m_cooldownTimer > 0)
-            {
-                m_cooldownTimer -= Time.deltaTime;
-            }
+            if (!Activated) { return; }
 
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
             {
@@ -120,111 +98,144 @@ namespace SpaceFab.ChipFab
                     m_autoRoutineStarted = true;
                 }
             }
+            else
+            {
+                ProcessMicrogame();
+            }
         }
+
+        #endregion // Unity Callbacks
+
+        public override bool TryCancel()
+        {
+            Deactivate();
+            return true;
+        }
+
+        private void ProcessMicrogame()
+        {
+            // Handle inputs
+            ProcessInputs();
+
+            if (NewMoveDir)
+            {
+                PlayerPath.positionCount++;
+                NewMoveDir = false;
+            }
+
+            PlayerPath.SetPosition(PlayerPath.positionCount - 1, PlayerCircle.transform.localPosition);
+
+            ProcessPlayerTracer();
+
+            // Calculate Differences
+            SampleTimer -= Time.deltaTime;
+            if (SampleTimer <= 0)
+            {
+                SampleTimer = SampleTime;
+                // Sample
+                NumSamples++;
+                var dif = Vector3.Distance(PlayerCircle.transform.localPosition, TargetCircle.transform.localPosition);
+                TotalDif += dif;
+            }
+
+            ProcessTargetTracer();
+        }
+
+        private void ProcessInputs()
+        {
+            var newDir = Vector2.zero;
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                newDir.y = 1;
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                newDir.y = -1;
+            }
+
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                newDir.x = 1;
+            }
+            else if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                newDir.x = -1;
+            }
+
+
+            newDir = newDir.normalized;
+
+            if (newDir != Vector2.zero)
+            {
+                if (newDir != PlayerMoveDir)
+                {
+                    PlayerMoveDir = newDir;
+                    LastKnownMoveDir = PlayerMoveDir;
+                    NewMoveDir = true;
+                }
+            }
+        }
+
+        private void ProcessPlayerTracer()
+        {
+            var playerVector = PlayerMoveDir * TracerSpeed * Time.deltaTime;
+            PlayerCircle.transform.localPosition += new Vector3(playerVector.x, playerVector.y, 0);
+        }
+
+        private void ProcessTargetTracer()
+        {
+            // Tracer auto follow path
+            if (TracerReachedNext)
+            {
+                TracerReachedNext = false;
+                // get next
+                var nextIndex = TargetPointIndex + 1;
+                if (nextIndex < CurrMaskData.TracePoints.Length)
+                {
+                    TargetPointIndex = nextIndex;
+                }
+                else
+                {
+                    // reached end
+                    HandleDevelopEnded();
+                    return;
+                }
+            }
+
+            // continue moving
+            float margin = 0.1f;
+            var vector = CurrMaskData.TracePoints[TargetPointIndex] - TargetCircle.transform.localPosition;
+            if (vector.magnitude <= margin)
+            {
+                TargetCircle.transform.localPosition = CurrMaskData.TracePoints[TargetPointIndex];
+                TracerReachedNext = true;
+            }
+            else
+            {
+                var moveVector = vector.normalized;
+                moveVector *= TracerSpeed * Time.deltaTime;
+                TargetCircle.transform.localPosition += moveVector;
+            }
+        }
+
+        #region Handlers
 
         private IEnumerator AutomationRoutine()
         {
             yield return 0.5f;
 
             var instruction = AutomationMgr.Instance.CurrInstruction;
-            switch (instruction.MaskToApply)
-            {
-                case MaskId.A:
-                    HandleMaskADown();
-                    break;
-                case MaskId.B:
-                    HandleMaskBDown();
-                    break;
-                case MaskId.C:
-                    HandleMaskCDown();
-                    break;
-                default:
-                    break;
-            }
 
             yield return 0.5f;
 
-            m_currRotation = -instruction.Rotation;
-            if (m_currRotation < 0) { m_currRotation += 360; }
-            else if (m_currRotation > 359) { m_currRotation -= 360; }
-            SetRotation();
-
-            yield return 0.5f;
-
-            HandleDevelopDown();
+            HandleDevelopEnded();
         }
 
-        private void HandleMaskADown()
+        private void HandleDevelopEnded()
         {
-            m_currPreviewRenderer.enabled = true;
-            m_currSelectedMask = MaskId.A;
-            m_currPreviewRenderer.sprite = GameDB.Instance.MaskA;
-            DevelopButton.transform.parent.gameObject.SetActive(true);
-        }
-
-        private void HandleMaskBDown()
-        {
-            m_currPreviewRenderer.enabled = true;
-            m_currSelectedMask = MaskId.B;
-            m_currPreviewRenderer.sprite = GameDB.Instance.MaskB;
-            DevelopButton.transform.parent.gameObject.SetActive(true);
-        }
-
-        private void HandleMaskCDown()
-        {
-            m_currPreviewRenderer.enabled = true;
-            m_currSelectedMask = MaskId.C;
-            m_currPreviewRenderer.sprite = GameDB.Instance.MaskC;
-            DevelopButton.transform.parent.gameObject.SetActive(true);
-        }
-
-        private void HandleRotateCCDown()
-        {
-            if (m_cooldownTimer > 0) { return; }
-
-            m_cooldownTimer = m_rotateCooldown;
-
-            m_currRotation += 90;
-
-            if (m_currRotation == 360) { m_currRotation = 0; }
-
-            SetRotation();
-        }
-
-        private void HandleRotateCDown()
-        {
-            if (m_cooldownTimer > 0) { return; }
-
-            m_cooldownTimer = m_rotateCooldown;
-
-            m_currRotation -= 90;
-
-            if (m_currRotation == -360) { m_currRotation = 0; }
-
-            SetRotation();
-        }
-
-        private void SetRotation()
-        {
-            var angles = DragMgr.WaferInstance.transform.localEulerAngles;
-            angles.z = m_currRotation;
-            DragMgr.WaferInstance.transform.localEulerAngles = angles;
-
-            RotText.SetText(m_currRotation + "°");
-        }
-
-        private void HandleDevelopDown()
-        {
-            if (!m_currPreview) { return; }
-            // pattern rotates inverse of wafer
-            DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, -m_currRotation);
-            m_currPreview.transform.SetParent(DragMgr.WaferInstance.transform, true);
-            DragMgr.WaferInstance.LatestMaskRenderer = m_currPreviewRenderer;
-            m_currPreviewRenderer.sortingOrder = m_currPreviewRenderer.sortingOrder + (++DragMgr.WaferInstance.NumLayers);
-            m_currPreview.transform.localScale = Vector3.one;
-            m_currPreview.transform.localPosition = Vector3.zero;
-            m_currPreview = null;
-            m_currPreviewRenderer = null;
+            // TODO: normalize diff values
+            var precision = 1 - (TotalDif / NumSamples);
+            DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, 0, precision);
             Deactivate();
 
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
