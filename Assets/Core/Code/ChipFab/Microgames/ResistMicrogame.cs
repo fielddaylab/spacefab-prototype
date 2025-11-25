@@ -30,13 +30,9 @@ namespace SpaceFab.ChipFab
         public float DropperXExtents;
         public float DropperSpeed;
 
-        private KeyCode m_nextKey;
-
         private float m_currSpeed;
 
         private static KeyCode DropperKey = KeyCode.Space;
-        private static KeyCode Key1 = KeyCode.LeftArrow;
-        private static KeyCode Key2 = KeyCode.RightArrow;
 
         private ResistMicrogameState m_state;
 
@@ -191,7 +187,6 @@ namespace SpaceFab.ChipFab
             }
 
             m_state = ResistMicrogameState.Activated;
-            m_nextKey = KeyCode.Space; // neutral key
             FluidVisual.localScale = Vector3.one * StartFluidScale;
             m_currSpeed = 0;
             TransitionCommon();

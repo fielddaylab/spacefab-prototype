@@ -63,7 +63,7 @@ namespace SpaceFab.ChipFab
             if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Full)
             {
                 Debug.Log("Invalid Prereqs");
-                // Deactivate();
+                Deactivate();
             }
         }
 

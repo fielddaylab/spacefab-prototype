@@ -21,6 +21,16 @@ namespace SpaceFab.ChipFab
 
         public Transform ParentFrame;
 
+        [Header("Stencil")]
+        public Transform StencilVisual;
+        public float StencilXExtents;
+        public float StencilSpeed;
+
+        private bool PlacedStencil;
+        private bool StencilMovingRight;
+
+        private static KeyCode PlaceKey = KeyCode.Space;
+
         #region IStationMicrogame
 
         public override void Activate(WaferState waferState)
@@ -103,17 +113,58 @@ namespace SpaceFab.ChipFab
 
         private void ProcessManual()
         {
+            // Move dropper back and forth until input
+            if (!PlacedStencil)
+            {
+                var stencilPos = StencilVisual.localPosition;
+                if (StencilMovingRight)
+                {
+                    stencilPos.x = stencilPos.x + StencilSpeed * Time.deltaTime;
+                    if (stencilPos.x >= StencilXExtents)
+                    {
+                        stencilPos.x = StencilXExtents;
+                        StencilMovingRight = false;
+                    }
+                }
+                else
+                {
+                    stencilPos.x = stencilPos.x - StencilSpeed * Time.deltaTime;
+                    if (stencilPos.x <= -StencilXExtents)
+                    {
+                        stencilPos.x = -StencilXExtents;
+                        StencilMovingRight = true;
+                    }
+                }
+                StencilVisual.localPosition = stencilPos;
 
+                if (Input.GetKeyDown(PlaceKey))
+                {
+                    // apply impulse
+                    PlaceStencil();
+                }
+            }
         }
 
         private IEnumerator AutomationRoutine()
         {
+            PlaceStencil();
             yield return null;
+            HandleFinishClicked();
+        }
+
+        private void PlaceStencil()
+        {
+            PlacedStencil = true;
+
             HandleFinishClicked();
         }
 
         private void TransitionToActivated()
         {
+            PlacedStencil = false;
+            StencilVisual.gameObject.SetActive(true);
+            StencilMovingRight = true;
+
             m_state = EtchMicrogameState.Activated;
             TransitionCommon();
         }
@@ -155,7 +206,14 @@ namespace SpaceFab.ChipFab
             {
                 DragMgr.WaferInstance.SetOxideStateEtch(precision);
             }
+
             Deactivate();
+
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+            }
+
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
     }
