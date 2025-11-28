@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,18 +19,12 @@ namespace SpaceFab.ChipFab
     {
         private static KeyCode FIRE_KEY = KeyCode.Space;
 
-        public Blaster Blaster;
-
-        public ClickBox FinishButton;
-
-        public SideWaferDisplay WaferDisplay;
-
-        public LayerMask SputterLayer;
-
-        public Transform LeftBoundPos;
-        public Transform RightBoundPos;
-
         private SputteringMicrogameState m_state;
+
+        public ClickBox SprayerBox;
+        public SpriteRenderer StencilFill;
+
+        private Routine m_StencilFillRoutine;
 
         #region IStationMicrogame
 
@@ -37,15 +32,9 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
-            FinishButton.OnMouseDown.RemoveAllListeners();
-
-
-            FinishButton.transform.parent.gameObject.SetActive(false);
-            FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
-
             DragMgr.Instance.DragWaferEnabled = false;
-
-            WaferDisplay.UpdateDisplay(DragMgr.WaferInstance.Data);
+            SprayerBox.OnMouseDown.AddListener(HandleSprayMouseDown);
+            StencilFill.enabled = false;
 
             TransitionToActivated();
         }
@@ -62,9 +51,9 @@ namespace SpaceFab.ChipFab
 
             base.Deactivate();
 
-            m_state = SputteringMicrogameState.Deactivated;
+            SprayerBox.OnMouseDown.RemoveListener(HandleSprayMouseDown);
 
-            FinishButton.OnMouseDown.RemoveListener(HandleFinishClicked);
+            m_state = SputteringMicrogameState.Deactivated;
         }
 
         public override bool TryCancel()
@@ -115,25 +104,14 @@ namespace SpaceFab.ChipFab
         {
             if (Input.GetKey(FIRE_KEY))
             {
-                Blaster.Blast();
+                HandleSprayMouseDown();
             }
         }
 
         private IEnumerator AutomationRoutine()
         {
-            Blaster.transform.eulerAngles = new Vector3(0, 0, -40);
 
             yield return 0.5f;
-
-            int steps = 50;
-            float amt = 80;
-            float stepAmt = amt / steps;
-            for (int i = 0; i < steps; i++)
-            {
-                Blaster.Blast(true);
-                Blaster.transform.Rotate(new Vector3(0, 0, 1) * stepAmt);
-                yield return 0.02f;
-            }
 
             yield return 0.5f;
 
@@ -150,7 +128,7 @@ namespace SpaceFab.ChipFab
             if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Empty)
             {
                 DragMgr.Instance.DragWaferEnabled = true;
-                Deactivate();
+                // Deactivate();
             }
         }
 
@@ -163,7 +141,6 @@ namespace SpaceFab.ChipFab
         private void TransitionToSputtering()
         {
             m_state = SputteringMicrogameState.Sputtering;
-            FinishButton.transform.parent.gameObject.SetActive(true);
             TransitionCommon();
         }
 
@@ -174,24 +151,9 @@ namespace SpaceFab.ChipFab
 
         private float EvaluatePrecision()
         {
-            // suite of raycasts
-            int numSections = 100;
-            int hitCount = 0;
-            float xStep = (RightBoundPos.position.x - LeftBoundPos.position.x) / numSections;
+            float precision = 1;
 
-            for (int i = 0; i < numSections; i++)
-            {
-                // raycast at step
-                float x = LeftBoundPos.position.x + xStep * i;
-                Vector2 pos = new Vector2(x, LeftBoundPos.position.y);
-                var collider = Physics2D.OverlapPoint(pos, SputterLayer);
-                if (collider)
-                {
-                    hitCount++;
-                }
-            }
 
-            float precision = hitCount / (float)numSections;
             return precision;
         }
 
@@ -201,7 +163,39 @@ namespace SpaceFab.ChipFab
             DragMgr.Instance.DragWaferEnabled = true;
             DragMgr.WaferInstance.SetMetallizationState(precision);
             Deactivate();
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+            }
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+        }
+
+        private void HandleSprayMouseDown()
+        {
+            if (m_StencilFillRoutine.Exists())
+            {
+                return;
+            }
+
+            m_StencilFillRoutine.Replace(StencilFillRoutine());
+        }
+
+        private IEnumerator StencilFillRoutine()
+        {
+            StencilFill.enabled = true;
+
+            var currColor = StencilFill.color;
+            currColor.a = 0;
+            StencilFill.color = currColor;
+
+            var targetColor = currColor;
+            targetColor.a = 1;
+
+            yield return StencilFill.ColorTo(targetColor, 1f, ColorUpdate.FullColor);
+
+            yield return 1.5f;
+
+            HandleFinishClicked();
         }
     }
 }
