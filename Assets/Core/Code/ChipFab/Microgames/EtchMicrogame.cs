@@ -188,9 +188,9 @@ namespace SpaceFab.ChipFab
 
         private float EvaluatePrecision()
         {
-            int hitCount = 0;
+            float distance = Mathf.Abs(StencilVisual.localPosition.x);
 
-            return 1;
+            return 1 - (distance / StencilXExtents);
         }
 
         private void HandleFinishClicked()
