@@ -56,6 +56,15 @@ namespace SpaceFab.ChipFab
             m_state = SputteringMicrogameState.Deactivated;
         }
 
+        private void TryDeactivate()
+        {
+            Deactivate();
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+            }
+        }
+
         public override bool TryCancel()
         {
             return m_state == SputteringMicrogameState.Deactivated;
@@ -123,12 +132,19 @@ namespace SpaceFab.ChipFab
             m_state = SputteringMicrogameState.Activated;
             TransitionCommon();
 
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.AddStencil_SPUTTER,
+                SequenceStepID.FillStencil_SPUTTER,
+            };
+
             // disallow oxide state
             // PREREQS Oxide EMPTY
-            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Empty)
+            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Empty
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
             {
                 DragMgr.Instance.DragWaferEnabled = true;
-                // Deactivate();
+                TryDeactivate();
             }
         }
 
@@ -162,12 +178,9 @@ namespace SpaceFab.ChipFab
             var precision = EvaluatePrecision();
             DragMgr.Instance.DragWaferEnabled = true;
             DragMgr.WaferInstance.SetMetallizationState(precision);
-            Deactivate();
-            if (ControlsMgr.Instance.BotEnabled)
-            {
-                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
-            }
+            TryDeactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
 
         private void HandleSprayMouseDown()

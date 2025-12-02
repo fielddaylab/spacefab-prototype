@@ -305,8 +305,8 @@ namespace SpaceFab.ChipFab
             Data.MetallizationLayer.State = MetallizationState.Stripped;
             // Data.MetallizationLayer.Precision = precision;
 
-            LatestMaskRenderer.color = Color.yellow;
-            LatestMaskRenderer = null;
+            //LatestMaskRenderer.color = Color.yellow;
+            //LatestMaskRenderer = null;
 
             Data.MetallizationLayer.Mask.Id = Data.ResistLayer.Mask.Id;
             Data.MetallizationLayer.Mask.Rotation = Data.ResistLayer.Mask.Rotation;

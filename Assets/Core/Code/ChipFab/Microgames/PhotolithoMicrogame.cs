@@ -59,11 +59,17 @@ namespace SpaceFab.ChipFab
             PlayerPath.positionCount = 1;
             PlayerPath.SetPosition(PlayerPath.positionCount - 1, PlayerCircle.transform.localPosition);
 
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.DrawPattern,
+            };
+
             // PREREQS: Resist FULL
-            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Full)
+            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Full
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
             {
                 Debug.Log("Invalid Prereqs");
-                Deactivate();
+                TryDeactivate();
             }
         }
 
@@ -82,6 +88,16 @@ namespace SpaceFab.ChipFab
             base.Deactivate();
 
             ControlsMgr.Instance.InputsEnabled = true;
+        }
+
+        private void TryDeactivate()
+        {
+            Deactivate();
+
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+            }
         }
 
         #region Unity Callbacks
@@ -236,9 +252,10 @@ namespace SpaceFab.ChipFab
             // TODO: normalize diff values
             var precision = 1 - (TotalDif / NumSamples);
             DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, 0, precision);
-            Deactivate();
+            TryDeactivate();
 
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
 
         #endregion // Handlers

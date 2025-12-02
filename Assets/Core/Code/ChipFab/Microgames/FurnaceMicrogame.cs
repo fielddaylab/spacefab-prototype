@@ -1,6 +1,7 @@
 using BeauRoutine;
 using FieldDay;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SpaceFab.ChipFab
@@ -214,6 +215,37 @@ namespace SpaceFab.ChipFab
             m_currTemp = 0;
             HeatingCompleted = false;
 
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.AddStencil_OXIDE,
+                SequenceStepID.FillStencil_DOPE
+            };
+
+            // PREREQ: Oxide not FUll and Metal not FULL
+            if (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Full
+                || DragMgr.WaferInstance.Data.MetallizationLayer.State == MetallizationState.Full
+                || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
+            {
+                Debug.Log("Invalid prereqs");
+                TryDeactivate();
+                return;
+            }
+
+            // Auto assign dopant for now
+            if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
+            {
+                var chunk = FabSequenceMgr.Instance.CurrChunkID();
+                if (chunk == ChunkID.N)
+                {
+                    AssignDopant(DopingType.N);
+                }
+                else if (chunk == ChunkID.P)
+                {
+                    AssignDopant(DopingType.P);
+                }
+            }
+
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
             {
                 if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
@@ -300,7 +332,7 @@ namespace SpaceFab.ChipFab
             else
             {
                 Debug.Log("Invalid prereqs");
-                Deactivate();
+                TryDeactivate();
                 return false;
             }
         }
@@ -323,6 +355,13 @@ namespace SpaceFab.ChipFab
         }
 
         private void FinishFurnace()
+        {
+            TryDeactivate();
+
+            Game.Events.Dispatch(GameEvents.StationCompleted);
+        }
+
+        private void TryDeactivate()
         {
             if (ControlsMgr.Instance.BotEnabled)
             {

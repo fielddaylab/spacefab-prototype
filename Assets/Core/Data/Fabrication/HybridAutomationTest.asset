@@ -647,3 +647,4 @@ MonoBehaviour:
         DopingType: 0
     Precision:
       Values: []
+  m_fabSequence: {fileID: 11400000, guid: 161b650b315d2764da394dd26a4fa5c8, type: 2}

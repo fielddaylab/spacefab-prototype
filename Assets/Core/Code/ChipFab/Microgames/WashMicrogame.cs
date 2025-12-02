@@ -86,6 +86,7 @@ namespace SpaceFab.ChipFab
             DragMgr.WaferInstance.SetResistStateWash();
             Deactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
     }
 }

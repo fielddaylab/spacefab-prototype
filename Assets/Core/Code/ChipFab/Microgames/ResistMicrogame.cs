@@ -64,6 +64,16 @@ namespace SpaceFab.ChipFab
             m_state = ResistMicrogameState.Deactivated;
         }
 
+        private void TryDeactivate()
+        {
+            Deactivate();
+
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+            }
+        }
+
         public override bool TryCancel()
         {
             return m_state == ResistMicrogameState.Deactivated || m_state == ResistMicrogameState.Finished;
@@ -178,11 +188,19 @@ namespace SpaceFab.ChipFab
         {
             InputsEnabled = true;
 
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.ApplyResist,
+            };
+
             // PREREQ: Oxide FUll or Metal FULL
-            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full)
+            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full
+                && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full
+                || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
             {
                 Debug.Log("Invalid prereqs");
-                Deactivate();
+                TryDeactivate();
                 return;
             }
 
@@ -226,13 +244,10 @@ namespace SpaceFab.ChipFab
             DragMgr.WaferInstance.SetResistState(precision);
             TransitionCommon();
 
-            if (ControlsMgr.Instance.BotEnabled)
-            {
-                Deactivate();
-                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
-            }
+            TryDeactivate();
 
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
 
         private void TransitionCommon()

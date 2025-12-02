@@ -39,12 +39,18 @@ namespace SpaceFab.ChipFab
 
             DragMgr.Instance.DragWaferEnabled = false;
 
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.EtchPattern,
+            };
+
             // PREREQS Resist DEVELOPED
-            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Developed)
+            if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Developed
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
             {
                 Debug.Log("Invalid prereqs");
                 DragMgr.Instance.DragWaferEnabled = true;
-                Deactivate();
+                TryDeactivate();
                 return;
             }
 
@@ -207,14 +213,20 @@ namespace SpaceFab.ChipFab
                 DragMgr.WaferInstance.SetOxideStateEtch(precision);
             }
 
+            TryDeactivate();
+
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
+        }
+
+        private void TryDeactivate()
+        {
             Deactivate();
 
             if (ControlsMgr.Instance.BotEnabled)
             {
                 ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
             }
-
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
         }
     }
 }
