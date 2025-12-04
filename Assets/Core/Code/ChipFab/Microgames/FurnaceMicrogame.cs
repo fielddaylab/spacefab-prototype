@@ -291,6 +291,8 @@ namespace SpaceFab.ChipFab
             }
 
             DragMgr.WaferInstance.SetOxideStateFurnace(precision, m_usedDopant, m_appliedDopant);
+            // Auto wash
+            DragMgr.WaferInstance.SetResistStateWash();
             TransitionCommon();
         }
 

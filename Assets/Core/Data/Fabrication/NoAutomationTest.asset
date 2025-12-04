@@ -44,22 +44,22 @@ MonoBehaviour:
     MetallizationLayer:
       Mask:
         Id: 1
-        Rotation: 180
+        Rotation: 0
       State: 2
     OxideLayer:
       Mask:
         Id: 0
         Rotation: 0
-      State: 1
+      State: 0
     SemiconductorLayer:
       DopingPatterns:
       - Mask:
-          Id: 2
+          Id: 1
           Rotation: 0
         DopingType: 1
       - Mask:
-          Id: 3
-          Rotation: 90
+          Id: 1
+          Rotation: 0
         DopingType: 0
     Precision:
       Values: []

@@ -11,6 +11,8 @@ namespace SpaceFab.ChipFab
 {
     public class LevelMgr : MonoBehaviour
     {
+        public static LevelMgr Instance;
+
         public SideWaferDisplay Current;
 
         public SideWaferDisplay TargetSide;
@@ -18,9 +20,12 @@ namespace SpaceFab.ChipFab
 
         public ClickBox SubmitButton;
 
+        public GameObject ResultsGroup;
         public GameObject SuccessGroup;
         public GameObject FailureGroup;
         public TMP_Text PrecisionText;
+        public TMP_Text TimeText;
+        public TMP_Text CycleText;
 
         public ClickBox ReturnBtn;
 
@@ -28,6 +33,7 @@ namespace SpaceFab.ChipFab
 
         private void Awake()
         {
+            Instance = this;
             if (Camera.main.GetComponent<PrimaryWorldCamera>())
             {
                 Destroy(Camera.main.gameObject);
@@ -45,6 +51,8 @@ namespace SpaceFab.ChipFab
 
             SubmitButton.OnMouseDown.AddListener(HandleSubmitClicked);
             ReturnBtn.OnMouseDown.AddListener(HandleReturnClicked);
+
+            ResultsGroup.SetActive(false);
         }
 
         private void OnDestroy()
@@ -65,6 +73,7 @@ namespace SpaceFab.ChipFab
                 Current.UpdateDisplay(default);
             }
 
+            ResultsGroup.SetActive(false);
             SuccessGroup.SetActive(false);
             FailureGroup.SetActive(false);
             PrecisionText.gameObject.SetActive(false);
@@ -82,15 +91,20 @@ namespace SpaceFab.ChipFab
 
         #endregion // Handlers
     
-        private void Evaluate()
+        public void Evaluate()
         {
             var currState = DragMgr.WaferInstance.Data;
             bool success = WaferData.IsEqual(currState, TargetData);
 
+            float secondsPerCycle = 30;
+
+            ResultsGroup.SetActive(true);
             SuccessGroup.SetActive(success);
             FailureGroup.SetActive(!success);
             PrecisionText.gameObject.SetActive(true);
-            PrecisionText.SetText("Precision: " + (currState.Precision.Avg() * 100).ToString("#.##") + "%");
+            PrecisionText.SetText("Accuracy: " + (currState.Precision.Avg() * 100).ToString("#.##") + "%");
+            TimeText.SetText("Time: " + TimeMgr.Instance.RunningText.text);
+            CycleText.SetText("Total Production Time: " + Mathf.Ceil(TimeMgr.Instance.GetElapsedTime() / secondsPerCycle));
 
             Game.Events.Dispatch(GameEvents.WaferSubmitted);
         }

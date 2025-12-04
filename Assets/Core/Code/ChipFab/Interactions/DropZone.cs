@@ -35,6 +35,13 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        private void OnDestroy()
+        {
+            if (Game.IsShuttingDown) { return; }
+            Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Deregister(GameEvents.WaferPickedUp, HandleWaferPickedUp);
+        }
+
         private void HandleMouseEnter()
         {
             CheckTriggerHoverDisplays();

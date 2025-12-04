@@ -206,6 +206,8 @@ namespace SpaceFab.ChipFab
             if (DragMgr.WaferInstance.Data.MetallizationLayer.State == MetallizationState.Full)
             {
                 DragMgr.WaferInstance.SetMetallizationStateEtch(precision);
+                // auto wash
+                DragMgr.WaferInstance.SetResistStateWash();
 
             }
             else if (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Full)

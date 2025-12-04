@@ -32,6 +32,11 @@ namespace SpaceFab.ChipFab
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
         }
 
+        private void OnDestroy()
+        {
+            Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+        }
+
         public void SetCurrNode(int index)
         {
             m_currNode = NavNodesMgr.Instance.Nodes[index];

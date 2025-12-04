@@ -16,9 +16,6 @@ namespace SpaceFab.ChipFab
         public SpriteRenderer ChunkRenderer;
         public SpriteRenderer StepRenderer;
 
-        [Header("Results")]
-        public GameObject ResultsPanel;
-
         private void Awake()
         {
             Instance = this;
@@ -30,7 +27,6 @@ namespace SpaceFab.ChipFab
             CurrSequence.Copy(ChipFabConfig.Instance.CurrLevel.FabSequence());
 
             Game.Events.Register(GameEvents.StationCompleted, HandleStationCompleted);
-            HideResultsPanel();
 
             if (CurrSequence.Steps.Count > 0)
             {
@@ -40,6 +36,13 @@ namespace SpaceFab.ChipFab
             {
                 FinishSequenceDisplay();
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (Game.IsShuttingDown) { return; }
+
+            Game.Events.Deregister(GameEvents.StationCompleted, HandleStationCompleted);
         }
 
         private void UpdateSequenceDisplay(int stepIndex)
@@ -56,17 +59,7 @@ namespace SpaceFab.ChipFab
             ChunkRenderer.sprite = null;
             StepRenderer.sprite = null;
 
-            ShowResultsPanel();
-        }
-
-        private void HideResultsPanel()
-        {
-            ResultsPanel.SetActive(false);
-        }
-
-        private void ShowResultsPanel()
-        {
-            ResultsPanel.SetActive(true);
+            LevelMgr.Instance.Evaluate();
         }
 
         public SequenceStepID CurrStepID()

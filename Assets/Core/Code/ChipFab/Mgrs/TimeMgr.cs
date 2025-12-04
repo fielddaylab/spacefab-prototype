@@ -9,6 +9,7 @@ namespace SpaceFab.ChipFab
 {
     public class TimeMgr : MonoBehaviour
     {
+        public static TimeMgr Instance;
         public TMP_Text CountdownText;
         public TMP_Text RunningText;
 
@@ -21,6 +22,11 @@ namespace SpaceFab.ChipFab
         private float m_elapsedTime;
         private Routine m_startRoutine;
         private TimeState m_state;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Start()
         {
@@ -65,6 +71,11 @@ namespace SpaceFab.ChipFab
         public void Begin()
         {
             m_startRoutine.Replace(BeginSequence());
+        }
+
+        public float GetElapsedTime()
+        {
+            return m_elapsedTime;
         }
 
         private IEnumerator BeginSequence()
