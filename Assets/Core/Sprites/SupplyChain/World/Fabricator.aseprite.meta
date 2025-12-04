@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 978dcae305381d6408fa1bd212776bbb
+guid: 6607c25c6ba50d14e8e5058b36f3113e
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -32,7 +32,7 @@ ScriptedImporter:
     sRGBTexture: 1
     spriteMode: 2
     spriteExtrude: 1
-    spriteMeshType: 0
+    spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
     spritePixelsToUnits: 100
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638962230849511198
+  platformSettingsDirtyTick: 639002871902360169
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,7 +121,47 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Defense0
+  - name: Fabricator
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 208
+      width: 233
+      height: 93
+    spriteID: 14924bb857cf7cf4d94a67bae35e732b
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 208}
+  - name: Fabricator_OutlineA
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 107
+      width: 237
+      height: 97
+    spriteID: 90af30c91b4ee36469d9ac8c32d8afea
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 107}
+  - name: Fabricator_OutlineB
     originalName: 
     pivot: {x: 0.5, y: 0.5}
     alignment: 0
@@ -130,9 +170,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 101
-      height: 111
-    spriteID: 6ca54684896d44043b558db107c991d4
+      width: 241
+      height: 101
+    spriteID: 948cbc131c988a444aeecae6024ff7cf
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -141,111 +181,11 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 2, y: 2}
-  - name: Defense1
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 2
-      y: 117
-      width: 101
-      height: 111
-    spriteID: 4f3f480d046927d459e3e34d683814bd
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 2, y: 117}
-  - name: Defense2
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 2
-      y: 232
-      width: 101
-      height: 111
-    spriteID: 047be6c4b55e3574faae3485a12e2324
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 2, y: 232}
-  - name: Defense3
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 2
-      y: 347
-      width: 101
-      height: 111
-    spriteID: 84d015c0e13bb8847b4fdbfe1be3e5e2
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 2, y: 347}
-  - name: Defense4
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 107
-      y: 2
-      width: 101
-      height: 111
-    spriteID: cf655aa8b6d2ad34f94ee41f770fd2b2
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 107, y: 2}
-  - name: DefenseAlert
-    originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 107
-      y: 117
-      width: 101
-      height: 111
-    spriteID: c3a545ca055886a4899cb3e6f7694c60
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 107, y: 117}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 752422512
-    name: DefenseIcons
+    guid: 606619525
+    name: Fabricator
     layerFlags: 0
     layerType: 0
     blendMode: 0
@@ -254,56 +194,29 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 12
-        y: 10
-        width: 101
-        height: 111
-      spriteId: 6ca54684896d44043b558db107c991d4
+        x: 9
+        y: 11
+        width: 233
+        height: 93
+      spriteId: 14924bb857cf7cf4d94a67bae35e732b
     - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
-        x: 12
-        y: 10
-        width: 101
-        height: 111
-      spriteId: 4f3f480d046927d459e3e34d683814bd
+        x: 7
+        y: 9
+        width: 237
+        height: 97
+      spriteId: 90af30c91b4ee36469d9ac8c32d8afea
     - name: Frame_2
       frameIndex: 2
       additiveSortOrder: 0
       cellRect:
-        x: 12
-        y: 10
-        width: 101
-        height: 111
-      spriteId: 047be6c4b55e3574faae3485a12e2324
-    - name: Frame_3
-      frameIndex: 3
-      additiveSortOrder: 0
-      cellRect:
-        x: 12
-        y: 10
-        width: 101
-        height: 111
-      spriteId: 84d015c0e13bb8847b4fdbfe1be3e5e2
-    - name: Frame_4
-      frameIndex: 4
-      additiveSortOrder: 0
-      cellRect:
-        x: 12
-        y: 10
-        width: 101
-        height: 111
-      spriteId: cf655aa8b6d2ad34f94ee41f770fd2b2
-    - name: Frame_5
-      frameIndex: 5
-      additiveSortOrder: 0
-      cellRect:
-        x: 12
-        y: 10
-        width: 101
-        height: 111
-      spriteId: c3a545ca055886a4899cb3e6f7694c60
+        x: 5
+        y: 7
+        width: 241
+        height: 101
+      spriteId: 948cbc131c988a444aeecae6024ff7cf
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -370,4 +283,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 128, y: 128}
+  canvasSize: {x: 256, y: 128}

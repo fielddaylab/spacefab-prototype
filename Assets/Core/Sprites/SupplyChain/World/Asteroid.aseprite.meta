@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e8c1a1b5b68a1dc499f44c7276ea9868
+guid: 0c9614fe19157234192fcd7ce639f6ac
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -32,10 +32,10 @@ ScriptedImporter:
     sRGBTexture: 1
     spriteMode: 2
     spriteExtrude: 1
-    spriteMeshType: 0
+    spriteMeshType: 1
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 100
+    spritePixelsToUnits: 64
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -74,7 +74,7 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 1
+    defaultPivotSpace: 0
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 2
@@ -87,7 +87,7 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 1
+    defaultPivotSpace: 0
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 2
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638962230849521169
+  platformSettingsDirtyTick: 639002871902360169
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,18 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: TempNode
+  - name: Asteroid_0
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 0
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 55
-      height: 57
-    spriteID: d4ed771a65132a94ab1b28454b116d90
+      width: 64
+      height: 64
+    spriteID: f4ee483e6e07d0a459da8534fc23a9c2
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -141,24 +141,53 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 2, y: 2}
+  - name: Asteroid_1
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 70
+      width: 64
+      height: 64
+    spriteID: 0d07cca2df1a68f4fb9dff3b76418200
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 70}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 666495128
-    name: TempNode
+    guid: -1834712921
+    name: Asteroid
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: TempNode
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 6
-        y: 4
-        width: 55
-        height: 57
-      spriteId: d4ed771a65132a94ab1b28454b116d90
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      spriteId: f4ee483e6e07d0a459da8534fc23a9c2
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 0
+        width: 64
+        height: 64
+      spriteId: 0d07cca2df1a68f4fb9dff3b76418200
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -180,7 +209,7 @@ ScriptedImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
     crunchedCompression: 0

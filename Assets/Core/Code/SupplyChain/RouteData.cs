@@ -17,6 +17,7 @@ namespace SpaceFab.SupplyChain {
 
     static public partial class SupplyUtility {
         public const byte MaxReliability = 128;
+        public const int MaxDefense = 5;
         public const int MaterialTypeCount = 5;
 
         static public bool EvaluateRoute(in SupplyRouteStats routeData, ref PseudoRandom pseudoRand) {

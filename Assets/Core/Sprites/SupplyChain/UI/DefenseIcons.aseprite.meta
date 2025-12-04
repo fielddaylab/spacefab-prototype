@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0c9614fe19157234192fcd7ce639f6ac
+guid: 978dcae305381d6408fa1bd212776bbb
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -35,7 +35,7 @@ ScriptedImporter:
     spriteMeshType: 0
     alignment: 0
     spritePivot: {x: 0.5, y: 0.5}
-    spritePixelsToUnits: 64
+    spritePixelsToUnits: 100
     spriteBorder: {x: 0, y: 0, z: 0, w: 0}
     spriteGenerateFallbackPhysicsShape: 0
     generateCubemap: 6
@@ -74,7 +74,7 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 0
+    defaultPivotSpace: 1
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 2
@@ -87,7 +87,7 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 0
+    defaultPivotSpace: 1
     defaultPivotAlignment: 0
     customPivotPosition: {x: 0.5, y: 0.5}
     mosaicPadding: 2
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638962232130354047
+  platformSettingsDirtyTick: 638962230849511198
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,18 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Asteroid_0
+  - name: Defense0
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 64
-      height: 64
-    spriteID: f4ee483e6e07d0a459da8534fc23a9c2
+      width: 108
+      height: 98
+    spriteID: 6ca54684896d44043b558db107c991d4
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -141,18 +141,18 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 2, y: 2}
-  - name: Asteroid_1
+  - name: Defense1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
-    alignment: 9
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
-      y: 70
-      width: 64
-      height: 64
-    spriteID: 0d07cca2df1a68f4fb9dff3b76418200
+      y: 104
+      width: 108
+      height: 98
+    spriteID: 4f3f480d046927d459e3e34d683814bd
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -160,12 +160,112 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 2, y: 70}
+    uvTransform: {x: 2, y: 104}
+  - name: Defense2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 206
+      width: 108
+      height: 98
+    spriteID: 047be6c4b55e3574faae3485a12e2324
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 206}
+  - name: Defense3
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 308
+      width: 108
+      height: 98
+    spriteID: 84d015c0e13bb8847b4fdbfe1be3e5e2
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 308}
+  - name: Defense4
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 410
+      width: 108
+      height: 98
+    spriteID: cf655aa8b6d2ad34f94ee41f770fd2b2
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 410}
+  - name: DefenseAlert
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 114
+      y: 2
+      width: 108
+      height: 98
+    spriteID: c3a545ca055886a4899cb3e6f7694c60
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 114, y: 2}
+  - name: Defense5
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 114
+      y: 104
+      width: 108
+      height: 98
+    spriteID: 9e08efe13bd30d14e84cfc036afc6967
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 114, y: 104}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: -1834712921
-    name: Asteroid
+    guid: 752422512
+    name: DefenseIcons
     layerFlags: 0
     layerType: 0
     blendMode: 0
@@ -174,20 +274,65 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 0
-        y: 0
-        width: 64
-        height: 64
-      spriteId: f4ee483e6e07d0a459da8534fc23a9c2
+        x: 11
+        y: 13
+        width: 108
+        height: 98
+      spriteId: 6ca54684896d44043b558db107c991d4
     - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
-        x: 0
-        y: 0
-        width: 64
-        height: 64
-      spriteId: 0d07cca2df1a68f4fb9dff3b76418200
+        x: 11
+        y: 13
+        width: 108
+        height: 98
+      spriteId: 4f3f480d046927d459e3e34d683814bd
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 11
+        y: 13
+        width: 108
+        height: 98
+      spriteId: 047be6c4b55e3574faae3485a12e2324
+    - name: Frame_3
+      frameIndex: 3
+      additiveSortOrder: 0
+      cellRect:
+        x: 11
+        y: 13
+        width: 108
+        height: 98
+      spriteId: 84d015c0e13bb8847b4fdbfe1be3e5e2
+    - name: Frame_4
+      frameIndex: 4
+      additiveSortOrder: 0
+      cellRect:
+        x: 11
+        y: 13
+        width: 108
+        height: 98
+      spriteId: cf655aa8b6d2ad34f94ee41f770fd2b2
+    - name: Frame_5
+      frameIndex: 5
+      additiveSortOrder: 0
+      cellRect:
+        x: 11
+        y: 13
+        width: 108
+        height: 98
+      spriteId: c3a545ca055886a4899cb3e6f7694c60
+    - name: Frame_6
+      frameIndex: 6
+      additiveSortOrder: 0
+      cellRect:
+        x: 11
+        y: 13
+        width: 108
+        height: 98
+      spriteId: 9e08efe13bd30d14e84cfc036afc6967
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -209,7 +354,7 @@ ScriptedImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
     crunchedCompression: 0
@@ -239,7 +384,19 @@ ScriptedImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     androidETC2FallbackOverride: 0
+  - name: Android
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 64, y: 64}
+  canvasSize: {x: 128, y: 128}

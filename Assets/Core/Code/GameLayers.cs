@@ -36,6 +36,27 @@ static public class LayerMasks {
     // Layer 11: FloorNodes
     public const int FloorNodes_Index = 11;
     public const int FloorNodes_Mask = 2048;
+    // Layer 12: ChipFabDrag
+    public const int ChipFabDrag_Index = 12;
+    public const int ChipFabDrag_Mask = 4096;
+    // Layer 13: ChipFabClickBox
+    public const int ChipFabClickBox_Index = 13;
+    public const int ChipFabClickBox_Mask = 8192;
+    // Layer 14: ChipFabEtchProjectile
+    public const int ChipFabEtchProjectile_Index = 14;
+    public const int ChipFabEtchProjectile_Mask = 16384;
+    // Layer 15: ChipFabSputterProjectile
+    public const int ChipFabSputterProjectile_Index = 15;
+    public const int ChipFabSputterProjectile_Mask = 32768;
+    // Layer 16: ChipFabSemi
+    public const int ChipFabSemi_Index = 16;
+    public const int ChipFabSemi_Mask = 65536;
+    // Layer 17: ChipFabOxide-Metal
+    public const int ChipFabOxide_Metal_Index = 17;
+    public const int ChipFabOxide_Metal_Mask = 131072;
+    // Layer 18: ChipFabResist
+    public const int ChipFabResist_Index = 18;
+    public const int ChipFabResist_Mask = 262144;
     // Layer 27: ResearchSlot
     public const int ResearchSlot_Index = 27;
     public const int ResearchSlot_Mask = 134217728;
@@ -66,6 +87,8 @@ static public class SortingLayers {
     public const int GridOverlay = 114194533;
     // Layer UI
     public const int UI = 1132335069;
+    // Layer ChipFab Microgame
+    public const int ChipFabMicrogame = 1897548539;
 }
 static public class UnityTags {
     

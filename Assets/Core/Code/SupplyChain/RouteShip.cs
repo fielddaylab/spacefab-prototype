@@ -15,7 +15,6 @@ namespace SpaceFab.SupplyChain {
         [Header("Stats")]
         [Range(1, 4)] public int Speed;
         [Range(1, 4)] public int Capacity;
-        [Obsolete, HideInInspector, Range(1, 4)] public int Defense;
         [Range(1, 4)] public int Cost;
     }
 }
