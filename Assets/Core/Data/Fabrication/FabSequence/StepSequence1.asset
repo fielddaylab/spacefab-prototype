@@ -34,10 +34,12 @@ MonoBehaviour:
   - Chunk: 1
     Step: 6
   - Chunk: 2
-    Step: 1
+    Step: 0
   - Chunk: 2
     Step: 2
   - Chunk: 2
     Step: 3
   - Chunk: 2
     Step: 4
+  - Chunk: 2
+    Step: 5

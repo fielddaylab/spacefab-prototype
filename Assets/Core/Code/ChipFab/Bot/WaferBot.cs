@@ -34,6 +34,7 @@ namespace SpaceFab.ChipFab
 
         private void OnDestroy()
         {
+            if (Game.IsShuttingDown) { return; }
             Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
         }
 

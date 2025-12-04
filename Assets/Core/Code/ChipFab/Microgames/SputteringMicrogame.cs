@@ -137,9 +137,11 @@ namespace SpaceFab.ChipFab
                 SequenceStepID.FillStencil_SPUTTER,
             };
 
-            // disallow oxide state
-            // PREREQS Oxide EMPTY
-            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Empty
+            // PREREQS (Oxide STRIPPED & Resist STRIPPED) or (Oxide EMPTY & Resist EMPTY)
+            bool oxideAndResistPrereq = (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Stripped)
+                || (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Empty);
+            
+            if (!oxideAndResistPrereq
                 || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
                 )
             {
@@ -177,7 +179,16 @@ namespace SpaceFab.ChipFab
         {
             var precision = EvaluatePrecision();
             DragMgr.Instance.DragWaferEnabled = true;
-            DragMgr.WaferInstance.SetMetallizationState(precision);
+            bool fillStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Stripped;
+            bool createStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Empty;
+            if (fillStencil)
+            {
+                DragMgr.WaferInstance.SetMetallizationStateFillStencil(precision);
+            }
+            else if (createStencil)
+            {
+                DragMgr.WaferInstance.SetMetallizationStateCreateStencil(precision);
+            }
             TryDeactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
             Game.Events.Dispatch(GameEvents.StationCompleted);
