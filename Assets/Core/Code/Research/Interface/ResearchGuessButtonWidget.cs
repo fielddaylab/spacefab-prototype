@@ -4,11 +4,11 @@ using FieldDay.Components;
 using FieldDay.UI.Widgets;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpaceFab.Research {
     public sealed class ResearchGuessButtonWidget : GuiWidget {
-        public Transform Position;
-        public Collider2D Collider;
+        public Graphic Collider;
         public PointerListener Listener;
         public GameObject SelectionHighlight;
         public ResearchGuessButtonType ButtonType;

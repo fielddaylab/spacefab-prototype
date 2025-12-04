@@ -36,9 +36,9 @@ namespace SpaceFab.Research {
             DisplayNull();
 
             Find.State<ResearchSelectionState>().OnUpdated.Register(DisplayCurrent);
-            //Guesser.OnClose.Register(() => {
-            //    DisplayCurrent(Find.State<ResearchSelectionState>().Current);
-            //});
+            Guesser.OnClose.Register(() => {
+                DisplayCurrent(Find.State<ResearchSelectionState>().Current);
+            });
 
             //ElectricClick.onClick.Register(() => {
             //    SubmitButton.gameObject.SetActive(false);
