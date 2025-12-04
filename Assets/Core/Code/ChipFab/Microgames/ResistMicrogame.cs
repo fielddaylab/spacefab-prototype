@@ -175,10 +175,11 @@ namespace SpaceFab.ChipFab
 
         private void UseDropper()
         {
+            FluidVisual.gameObject.SetActive(true);
             var fluidPos = FluidVisual.position;
             fluidPos.x = DropperVisual.position.x - 0.06f;
             FluidVisual.position = fluidPos;
-            m_currSpeed = 1.25f;
+            m_currSpeed = 1.15f;
             InputsEnabled = false;
             UsedDropper = true;
             DropperVisual.gameObject.SetActive(false);
@@ -205,13 +206,15 @@ namespace SpaceFab.ChipFab
             }
 
             m_state = ResistMicrogameState.Activated;
+            FluidVisual.gameObject.SetActive(false);
             FluidVisual.localScale = Vector3.one * StartFluidScale;
             m_currSpeed = 0;
             TransitionCommon();
 
+            // randomize starting pos
             float centerOffset = -0.06f; // 0.156f;
             var xPos = DropperVisual.localPosition;
-            xPos.x = centerOffset;
+            xPos.x = Random.Range(-DropperXExtents, DropperXExtents);
             DropperVisual.localPosition = xPos;
 
             xPos = FluidVisual.localPosition;
@@ -228,8 +231,6 @@ namespace SpaceFab.ChipFab
             m_state = ResistMicrogameState.Ready;
             TransitionCommon();
         }
-
-
 
         private void TransitionToSpinning()
         {

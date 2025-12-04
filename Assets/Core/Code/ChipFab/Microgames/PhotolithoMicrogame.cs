@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System;
 using System.Collections;
@@ -35,6 +36,8 @@ namespace SpaceFab.ChipFab
         private float TotalDif;
         private int NumSamples;
 
+        private Routine m_startupRoutine;
+
         public override void Activate(WaferState waferState)
         {
             base.Activate(waferState);
@@ -50,8 +53,6 @@ namespace SpaceFab.ChipFab
             PlayerMoveDir = new Vector2(1, 0);
             LastKnownMoveDir = PlayerMoveDir;
             NewMoveDir = true;
-
-            Activated = true;
 
             ControlsMgr.Instance.InputsEnabled = false;
 
@@ -71,6 +72,8 @@ namespace SpaceFab.ChipFab
                 Debug.Log("Invalid Prereqs");
                 TryDeactivate();
             }
+
+            m_startupRoutine.Replace(StartupRoutine());
         }
 
         public override void Deactivate()
@@ -232,6 +235,13 @@ namespace SpaceFab.ChipFab
                 moveVector *= TracerSpeed * Time.deltaTime;
                 TargetCircle.transform.localPosition += moveVector;
             }
+        }
+
+        private IEnumerator StartupRoutine()
+        {
+            yield return 1;
+
+            Activated = true;
         }
 
         #region Handlers

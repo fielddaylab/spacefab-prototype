@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System;
 using System.Collections;
@@ -30,6 +31,8 @@ namespace SpaceFab.ChipFab
         private bool StencilMovingRight;
 
         private static KeyCode PlaceKey = KeyCode.Space;
+
+        private Routine m_startupRoutine;
 
         #region IStationMicrogame
 
@@ -170,6 +173,10 @@ namespace SpaceFab.ChipFab
             PlacedStencil = false;
             StencilVisual.gameObject.SetActive(true);
             StencilMovingRight = true;
+
+            var xPos = StencilVisual.localPosition;
+            xPos.x = UnityEngine.Random.Range(-StencilXExtents, StencilXExtents);
+            StencilVisual.localPosition = xPos;
 
             m_state = EtchMicrogameState.Activated;
             TransitionCommon();
