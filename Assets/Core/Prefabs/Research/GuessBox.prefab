@@ -493,6 +493,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: ButtonType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
       value: DopantP
       objectReference: {fileID: 0}
@@ -985,6 +989,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: ButtonType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
       value: DopantN

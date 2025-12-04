@@ -8248,12 +8248,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaterialTitle: {fileID: 1409937829}
-  ElectricProperty: {fileID: 238239402}
-  ThermalProperty: {fileID: 491585364}
-  SpecialProperty: {fileID: 1934888109}
-  ElectricClick: {fileID: 2137655617}
-  ThermalClick: {fileID: 1441354418}
-  SpecialClick: {fileID: 1437092150}
+  ElectricProperty: {fileID: 0}
+  ThermalProperty: {fileID: 0}
+  SpecialProperty: {fileID: 0}
   SubmitButton: {fileID: 988436020}
   Guesser: {fileID: 1692013308}
   ValenceDiagram: {fileID: 0}
@@ -9937,6 +9934,7 @@ MonoBehaviour:
   - m_HashValue: 3317014541
   - m_HashValue: 541320182
   - m_HashValue: 2574732592
+  Tools: 0
 --- !u!114 &2020295783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11659,22 +11657,6 @@ PrefabInstance:
     - target: {fileID: 253063538986359490, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -14
-      objectReference: {fileID: 0}
-    - target: {fileID: 670853853975621423, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 670853853975621423, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 670853853975621423, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 670853853975621423, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 680292289692063841, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y

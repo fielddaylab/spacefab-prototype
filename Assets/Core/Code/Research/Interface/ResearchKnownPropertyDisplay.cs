@@ -11,17 +11,15 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpaceFab.Research {
 	public sealed class ResearchKnownPropertyDisplay : MonoBehaviour {
         [Header("Data Panel")]
-		public TMP_Text MaterialTitle;
-        public TMP_Text ElectricProperty;
-        public TMP_Text ThermalProperty;
-        public TMP_Text SpecialProperty;
-        public PointerListener ElectricClick;
-        public PointerListener ThermalClick;
-        public PointerListener SpecialClick;
+        public TMP_Text MaterialTitle;
+        public ResearchKnownPropertyRow ElectricProperty;
+        public ResearchKnownPropertyRow ThermalProperty;
+        public ResearchKnownPropertyRow SpecialProperty;
         public PointerListener SubmitButton;
         public ResearchGuessDisplay Guesser;
 
@@ -40,28 +38,28 @@ namespace SpaceFab.Research {
                 DisplayCurrent(Find.State<ResearchSelectionState>().Current);
             });
 
-            //ElectricClick.onClick.Register(() => {
-            //    SubmitButton.gameObject.SetActive(false);
-            //    Guesser.PopupElectrical(RootId);
-            //});
-            //ThermalClick.onClick.Register(() => {
-            //    SubmitButton.gameObject.SetActive(false);
-            //    Guesser.PopupThermal(RootId);
-            //});
-            //SpecialClick.onClick.Register(() => {
-            //    SubmitButton.gameObject.SetActive(false);
-            //    Guesser.PopupSpecial(RootId);
-            //});
+            ElectricProperty.Click.onClick.Register(() => {
+                SubmitButton.gameObject.SetActive(false);
+                Guesser.PopupElectrical(RootId);
+            });
+            ThermalProperty.Click.onClick.Register(() => {
+                SubmitButton.gameObject.SetActive(false);
+                Guesser.PopupThermal(RootId);
+            });
+            SpecialProperty.Click.onClick.Register(() => {
+                SubmitButton.gameObject.SetActive(false);
+                Guesser.PopupSpecial(RootId);
+            });
 
-            //SubmitButton.onClick.Register(() => Routine.Start(this, OnClickSubmit()).TryManuallyUpdate(0));
+            SubmitButton.onClick.Register(() => Routine.Start(this, OnClickSubmit()).TryManuallyUpdate(0));
         }
 
         private IEnumerator OnClickSubmit() {
             Find.State<ResearchSelectionState>().Locked = true;
 
-            ElectricClick.GetComponent<Collider2D>().enabled = false;
-            ThermalClick.GetComponent<Collider2D>().enabled = false;
-            SpecialClick.GetComponent<Collider2D>().enabled = false;
+            ElectricProperty.Click.GetComponent<Graphic>().raycastTarget = false;
+            ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = false;
+            SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = false;
             SubmitButton.gameObject.SetActive(false);
 
             yield return 1;
@@ -79,15 +77,18 @@ namespace SpaceFab.Research {
         private void DisplayNull() {
             RootId = default;
             MaterialTitle.SetText("???");
+            
             SelectedValenceAppearance.SetActive(false);
             UnselectedValenceAppearance.SetActive(true);
-            //ElectricProperty.SetText("???");
-            //ThermalProperty.SetText("???");
-            //SpecialProperty.SetText("???");
-            //ElectricClick.GetComponent<Collider2D>().enabled = false;
-            //ThermalClick.GetComponent<Collider2D>().enabled = false;
-            //SpecialClick.GetComponent<Collider2D>().enabled = false;;
-            //SubmitButton.gameObject.SetActive(false);
+
+            ElectricProperty.WriteEmptyRow();
+            ThermalProperty.WriteEmptyRow();
+            SpecialProperty.WriteEmptyRow();
+
+            ElectricProperty.Click.GetComponent<Graphic>().raycastTarget = false;
+            ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = false;
+            SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = false;
+            SubmitButton.gameObject.SetActive(false);
         }
 
         private void DisplayCurrent(ResearchMaterial material) {
@@ -104,65 +105,101 @@ namespace SpaceFab.Research {
             ResearchMaterialKnowledge knowledge = ResearchMaterialUtility.GetKnownCategories(rootId);
             ResearchMaterialGuessState guesses = ResearchMaterialUtility.GetGuess(rootId);
 
-            //using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
+            ElectricProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Electrical) == 0;
+            ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Thermal) == 0;
+            SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Special) == 0;
 
-            //    if ((knowledge & ResearchMaterialKnowledge.Electrical) != 0) {
-            //        ResearchMaterialUtility.GetTagLabel(psb, material.Electrical, material.DopantType);
-            //        ElectricProperty.SetText(psb);
-            //        ElectricClick.GetComponent<Collider2D>().enabled = false;
-            //    } else if (guesses.Electric != ElectricalTag.Unknown) {
-            //        ResearchMaterialUtility.GetTagLabel(psb, guesses.Electric, guesses.Dopant);
-            //        psb.Builder.Append(" (?)");
-            //        ElectricProperty.SetText(psb);
-            //        ElectricClick.GetComponent<Collider2D>().enabled = true;
-            //    } else {
-            //        ElectricProperty.SetText("???");
-            //        ElectricClick.GetComponent<Collider2D>().enabled = true;
-            //    }
+            ElectricProperty.PrepareWrite();
+            if ((knowledge & ResearchMaterialKnowledge.Electrical) != 0) {
+                WriteChips(ElectricProperty, material.Electrical, material.DopantType, true);
+            } else if (guesses.Electric != ElectricalTag.Unknown || guesses.Dopant != DopantType.None) {
+                WriteChips(ElectricProperty, guesses.Electric, guesses.Dopant, false);
+            }
+            ElectricProperty.FinishWrite();
 
-            //    psb.Builder.Clear();
+            ThermalProperty.PrepareWrite();
+            if ((knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
+                WriteChips(ThermalProperty, material.Thermal, true);
+            } else if (guesses.Thermal.HasValue) {
+                WriteChips(ThermalProperty, guesses.Thermal.Value, false);
+            }
+            ThermalProperty.FinishWrite();
 
-            //    if ((knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
-            //        ResearchMaterialUtility.GetTagLabel(psb, material.Thermal);
-            //        ThermalProperty.SetText(psb);
-            //        ThermalClick.GetComponent<Collider2D>().enabled = false;
-            //    } else if (guesses.Thermal.HasValue) {
-            //        ResearchMaterialUtility.GetTagLabel(psb, guesses.Thermal.Value);
-            //        psb.Builder.Append(" (?)");
-            //        ThermalProperty.SetText(psb);
-            //        ThermalClick.GetComponent<Collider2D>().enabled = true;
-            //    } else {
-            //        ThermalProperty.SetText("???");
-            //        ThermalClick.GetComponent<Collider2D>().enabled = true;
-            //    }
+            SpecialProperty.PrepareWrite();
+            if ((knowledge & ResearchMaterialKnowledge.Special) != 0) {
+                WriteChips(SpecialProperty, material.SpecialTags, true);
+            } else if (guesses.Special.HasValue) {
+                WriteChips(SpecialProperty, guesses.Special.Value, false);
+            }
+            SpecialProperty.FinishWrite();
 
-            //    psb.Builder.Clear();
-
-            //    if ((knowledge & ResearchMaterialKnowledge.Special) != 0) {
-            //        ResearchMaterialUtility.GetTagLabel(psb, material.SpecialTags);
-            //        SpecialProperty.SetText(psb);
-            //        SpecialClick.GetComponent<Collider2D>().enabled = false;
-            //    } else if (guesses.Special.HasValue) {
-            //        ResearchMaterialUtility.GetTagLabel(psb, guesses.Special.Value);
-            //        psb.Builder.Append(" (?)");
-            //        SpecialProperty.SetText(psb);
-            //        SpecialClick.GetComponent<Collider2D>().enabled = true;
-            //    } else {
-            //        SpecialProperty.SetText("???");
-            //        SpecialClick.GetComponent<Collider2D>().enabled = true;
-            //    }
-            //}
-
-            //if (guesses.Special.HasValue || guesses.Electric != ElectricalTag.Unknown || guesses.Thermal.HasValue) {
-            //    SubmitButton.gameObject.SetActive(true);
-            //} else {
-            //    SubmitButton.gameObject.SetActive(false);
-            //}
+            if (guesses.Special.HasValue || guesses.Electric != ElectricalTag.Unknown || guesses.Dopant != DopantType.None || guesses.Thermal.HasValue) {
+                SubmitButton.gameObject.SetActive(true);
+            } else {
+                SubmitButton.gameObject.SetActive(false);
+            }
 
             UnselectedValenceAppearance.SetActive(false);
             SelectedValenceAppearance.SetActive(true);
 
             ResearchMaterialUtility.PopulateDiagram(ValenceDiagram, material, knowledge == ResearchMaterialKnowledge.All);
+        }
+
+        static private void WriteChips(ResearchKnownPropertyRow row, ElectricalTag electrical, DopantType dopant, bool confirmed) {
+            switch(electrical) {
+                case ElectricalTag.Conductor: {
+                    row.WriteChip("COND", confirmed);
+                    break;
+                }
+                case ElectricalTag.Semiconductor: {
+                    row.WriteChip("SEMI", confirmed);
+                    break;
+                }
+                case ElectricalTag.Insulator: {
+                    row.WriteChip("INSL", confirmed);
+                    break;
+                }
+            }
+
+            switch(dopant) {
+                case DopantType.N: {
+                    row.WriteChip("N.DOPE", confirmed);
+                    break;
+                }
+                case DopantType.P: {
+                    row.WriteChip("P.DOPE", confirmed);
+                    break;
+                }
+            }
+        }
+
+        static private void WriteChips(ResearchKnownPropertyRow row, ThermalTag thermal, bool confirmed) {
+            if (thermal == ThermalTag.None) {
+                row.WriteChip("WEAK", confirmed);
+            } else {
+                if ((thermal & ThermalTag.HighTemp) != 0) {
+                    row.WriteChip("HIGH", confirmed);
+                }
+                if ((thermal & ThermalTag.LowTemp) != 0) {
+                    row.WriteChip("LOW", confirmed);
+                }
+            }
+        }
+
+        static private void WriteChips(ResearchKnownPropertyRow row, SpecialTag special, bool confirmed) {
+            if (special == SpecialTag.None) {
+                row.WriteChip("NONE", confirmed);
+            } else {
+                if ((special & SpecialTag.LightEmitting) != 0) {
+                    row.WriteChip("LIGHT", confirmed);
+                }
+                if ((special & SpecialTag.HighMobility) != 0) {
+                    row.WriteChip("H.MOB", confirmed);
+                }
+                if ((special & SpecialTag.HighVoltage) != 0) {
+                    row.WriteChip("H.VOLT", confirmed);
+                }
+            }
         }
     }
 }

@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &471500352961760857
 RectTransform:
   m_ObjectHideFlags: 0
@@ -76,7 +76,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1455467017889461371}
-  - component: {fileID: 7431939914237311120}
+  - component: {fileID: 7474208000181712456}
   m_Layer: 0
   m_Name: KnowledgeChip
   m_TagString: Untagged
@@ -106,7 +106,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 68, y: 24}
   m_Pivot: {x: 1, y: 1}
---- !u!114 &7431939914237311120
+--- !u!114 &7474208000181712456
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2053123574095542292}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b70b6d236b1d6ef478f6509a6463e6e6, type: 3}
+  m_Script: {fileID: 11500000, guid: d9becfecfa4ebc94ebfdbff5f4d31b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Id:
@@ -127,10 +127,9 @@ MonoBehaviour:
   m_Group:
     m_Source: 
     m_HashValue: 0
-  Collider: {fileID: 2571571367423250683}
-  Listener: {fileID: 5663381278024690645}
-  SelectionHighlight: {fileID: 390864059781104262}
-  ButtonType: 0
+  Background: {fileID: 2571571367423250683}
+  Text: {fileID: 3340728278362051831}
+  ConfirmedGroup: {fileID: 390864059781104262}
 --- !u!1 &7961270807117509232
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,15 +189,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 0.25490198, g: 0.25490198, b: 0.25490198, a: 1}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Outline: 0
-  m_Thickness: 1
+  m_Outline: 1
+  m_Thickness: 4
 --- !u!114 &5663381278024690645
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -280,17 +279,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CND
+  m_text: ---
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
-  m_sharedMaterial: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
+  m_sharedMaterial: {fileID: 2821296471360535536, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4282466625
+  m_fontColor: {r: 0.255, g: 0.255, b: 0.255, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

@@ -44,6 +44,14 @@ namespace SpaceFab.Research {
             }
             tool.OnReset.Invoke(tool);
         }
+
+        static public void SetUnlocks(ResearchToolsMask unlocks) {
+            ResearchToolState toolState = Find.State<ResearchToolState>();
+            if (toolState.CurrentUnlocks != unlocks) {
+                toolState.CurrentUnlocks = unlocks;
+                toolState.OnUnlockedToolsChanged.Invoke(unlocks);
+            }
+        }
         
         static public void SetCurrentStation(ResearchToolStation station) {
             Assert.NotNullOrDestroyed(station);
