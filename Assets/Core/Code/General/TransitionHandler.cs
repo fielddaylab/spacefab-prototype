@@ -41,12 +41,12 @@ namespace SpaceFab {
 
         private IEnumerator UnloadHandler(Scene scene, StringHash32 tag, MainSceneTransitionArgs transition) {
             Canvas.enabled = true;
+            Renderer.SetCutoff(0);
             Renderer.RandomizeBackground();
             Renderer.RandomizeMasks();
             Renderer.SetInvertedBlend(false);
-            Renderer.SetCutoff(0);
 
-            yield return Tween.ZeroToOne(Renderer.SetCutoff, 0.5f);
+            yield return Tween.ZeroToOne(Renderer.SetCutoff, 1f);
             yield return 0.05f;
         }
 
@@ -54,7 +54,7 @@ namespace SpaceFab {
             Renderer.SetInvertedBlend(true);
             Renderer.RandomizeMasks();
 
-            yield return Tween.OneToZero(Renderer.SetCutoff, 0.5f);
+            yield return Tween.OneToZero(Renderer.SetCutoff, 1f);
             Canvas.enabled = false;
         }
     }
