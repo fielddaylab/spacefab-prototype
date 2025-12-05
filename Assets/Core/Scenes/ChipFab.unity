@@ -5061,6 +5061,7 @@ MonoBehaviour:
   ApplyHeatButtonRenderer: {fileID: 2000735418}
   DefaultButton: {fileID: 21300000, guid: 72de22740ae99184881e6e01644c251a, type: 3}
   PressedButton: {fileID: 21300000, guid: 27007817c4f64a744821607809c1c739, type: 3}
+  AutoTime: 1.75
   HeatingGroup: {fileID: 1406581072}
   Gauge: {fileID: 1987489336}
   TargetIndicator: {fileID: 1150396883}
@@ -20588,7 +20589,7 @@ MonoBehaviour:
     Temperature: 0
     MaskToApply: 0
     Rotation: 0
-  ActivelyChecking: 1
+  ActivelyChecking: 0
 --- !u!4 &2118945581
 Transform:
   m_ObjectHideFlags: 0

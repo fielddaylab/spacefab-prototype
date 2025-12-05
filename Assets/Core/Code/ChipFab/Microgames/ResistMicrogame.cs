@@ -118,6 +118,9 @@ namespace SpaceFab.ChipFab
                 // add initial impulse
                 if (InputsEnabled)
                 {
+                    var pos = DropperVisual.localPosition;
+                    pos.x = 0;
+                    DropperVisual.localPosition = pos;
                     UseDropper();
                 }
             }

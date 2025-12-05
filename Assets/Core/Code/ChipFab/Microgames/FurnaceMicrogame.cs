@@ -52,6 +52,10 @@ namespace SpaceFab.ChipFab
 
         private static KeyCode StokeKey = KeyCode.Space;
 
+        [Header("Automation")]
+        public float AutoTime;
+        private float AutoTimer;
+
         [Space(5)]
         [Header("Heating Visuals")]
         public GameObject HeatingGroup;
@@ -77,6 +81,8 @@ namespace SpaceFab.ChipFab
             ApplyHeatButton.OnMouseUp.AddListener(HandleEndHeat);
 
             ApplyHeatButtonRenderer.sprite = DefaultButton;
+
+            AutoTimer = AutoTime;
 
             TransitionToActivated();
         }
@@ -181,18 +187,32 @@ namespace SpaceFab.ChipFab
             {
                 ProcessManual();
             }
+
+            if (m_isHeating)
+            {
+                m_finalTemp += ApplyHeatIncrement * Time.deltaTime;
+                if (m_finalTemp > MaxTemp)
+                {
+                    m_finalTemp = MaxTemp;
+                }
+            }
         }
 
         private void ProcessAutomation()
         {
             var instruction = AutomationMgr.Instance.CurrInstruction;
 
-            /* TODO
-            if (m_currTemp <= instruction.Temperature)
+            if (AutoTimer == AutoTime)
             {
-                HandleApplyHeat();
+                HandleStartHeat();
             }
-            */
+
+            AutoTimer -= Time.deltaTime;
+
+            if (AutoTimer <= 0 && m_isHeating)
+            {
+                HandleEndHeat();
+            }
         }
 
         private void ProcessManual()
@@ -204,15 +224,6 @@ namespace SpaceFab.ChipFab
             if (Input.GetKeyUp(StokeKey))
             {
                 HandleEndHeat();
-            }
-
-            if (m_isHeating)
-            {
-                m_finalTemp += ApplyHeatIncrement * Time.deltaTime;
-                if (m_finalTemp > MaxTemp)
-                {
-                    m_finalTemp = MaxTemp;
-                }
             }
         }
 

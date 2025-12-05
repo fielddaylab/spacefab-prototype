@@ -120,7 +120,7 @@ namespace SpaceFab.ChipFab
             SetAtIndex(m_currNodeIndex);
         }
 
-        private void SetAtIndex(int index)
+        public void SetAtIndex(int index)
         {
             m_currNodeIndex = index;
             m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];

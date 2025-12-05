@@ -130,8 +130,18 @@ namespace SpaceFab.ChipFab
 
         private void SetWaferAtIndex(int index)
         {
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.SetAtIndex(index);
+                ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                return;
+            }
+
             var currNode = NavNodesMgr.Instance.Nodes[index];
-            ConveyorMgr.Instance.SetCurrNode(index);
+            if (ControlsMgr.Instance.ConveyorEnabled)
+            {
+                ConveyorMgr.Instance.SetCurrNode(index);
+            }
 
             var pos = DragMgr.WaferInstance.transform.position;
             pos.x = currNode.transform.position.x;

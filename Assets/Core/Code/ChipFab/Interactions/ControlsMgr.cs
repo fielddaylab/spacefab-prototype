@@ -194,6 +194,7 @@ namespace SpaceFab.ChipFab
             if (ModeMgr.Instance.Mode == GameMode.Timed)
             {
                 InputsEnabled = true;
+                AutomationMgr.Instance.ActivelyChecking = true;
             }
         }
 
