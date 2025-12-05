@@ -19,7 +19,8 @@ namespace SpaceFab.ChipFab
     public enum DopingType
     {
         N,
-        P
+        P,
+        NONE
     }
 
     [Serializable]

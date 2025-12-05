@@ -68,6 +68,11 @@ namespace SpaceFab.ChipFab
         public Transform MicrogameGaugeTargetIndicator;
         public Transform MicrogameGaugeTargetZone;
 
+        [Header("Dopant Selection")]
+        public ClickBox EmptyDopeBox;
+        public ClickBox NDopeBox;
+        public ClickBox PDopeBox;
+
         private Routine m_applyHeatRoutine;
         private bool HeatingCompleted;
 
@@ -79,6 +84,12 @@ namespace SpaceFab.ChipFab
 
             ApplyHeatButton.OnMouseDown.AddListener(HandleStartHeat);
             ApplyHeatButton.OnMouseUp.AddListener(HandleEndHeat);
+
+            EmptyDopeBox.OnMouseDown.AddListener(HandleEmptyDopeDown);
+            NDopeBox.OnMouseDown.AddListener(HandleNDopeDown);
+            PDopeBox.OnMouseDown.AddListener(HandlePDopeDown);
+
+            m_appliedDopant = DopingType.NONE;
 
             ApplyHeatButtonRenderer.sprite = DefaultButton;
 
@@ -101,6 +112,10 @@ namespace SpaceFab.ChipFab
 
             ApplyHeatButton.OnMouseDown.RemoveListener(HandleStartHeat);
             ApplyHeatButton.OnMouseUp.RemoveListener(HandleEndHeat);
+
+            EmptyDopeBox.OnMouseDown.RemoveListener(HandleEmptyDopeDown);
+            NDopeBox.OnMouseDown.RemoveListener(HandleNDopeDown);
+            PDopeBox.OnMouseDown.RemoveListener(HandlePDopeDown);
 
             TransitionToDeactivated();
         }
@@ -255,32 +270,21 @@ namespace SpaceFab.ChipFab
             }
 
             Game.Events.Dispatch(GameEvents.StationStarted);
-
-            // Auto assign dopant for now
-            if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
-            {
-                var chunk = FabSequenceMgr.Instance.CurrChunkID();
-                if (chunk == ChunkID.N)
-                {
-                    AssignDopant(DopingType.N);
-                }
-                else if (chunk == ChunkID.P)
-                {
-                    AssignDopant(DopingType.P);
-                }
-            }
-
+            
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
             {
-                if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
+                // Auto assign dopant for now
+                if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
                 {
-                    // generate dopant
-                    // DopantMgr.Instance.NDispenser.Dispense(false);
-                }
-                else if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.P)
-                {
-                    // generate dopant
-                    // DopantMgr.Instance.PDispenser.Dispense(false);
+                    var chunk = FabSequenceMgr.Instance.CurrChunkID();
+                    if (chunk == ChunkID.N)
+                    {
+                        AssignDopant(DopingType.N);
+                    }
+                    else if (chunk == ChunkID.P)
+                    {
+                        AssignDopant(DopingType.P);
+                    }
                 }
             }
 
@@ -347,7 +351,7 @@ namespace SpaceFab.ChipFab
         {
             // check if valid combo
             // PREREQ: Oxide STRIPPED & DOPANT or Oxide EMPTY
-            bool dopantMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && m_usedDopant;
+            bool dopantMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped /* && m_usedDopant*/;
             bool emptyMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty;
             if (dopantMode || emptyMode)
             {
@@ -365,12 +369,35 @@ namespace SpaceFab.ChipFab
 
         private void HandleStartHeat()
         {
+            if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
+            {
+                var currChunk = FabSequenceMgr.Instance.CurrChunkID();
+                // Check for correct dopant
+                if (currChunk == ChunkID.N && m_appliedDopant != DopingType.N)
+                {
+                    return;
+                }
+                else if (currChunk == ChunkID.P && m_appliedDopant != DopingType.P)
+                {
+                    return;
+                }
+            }
+            else if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.AddStencil_OXIDE)
+            {
+                if (m_appliedDopant != DopingType.NONE)
+                {
+                    return;
+                }
+            }
+
             m_isHeating = true;
             ApplyHeatButtonRenderer.sprite = PressedButton;
         }
 
         private void HandleEndHeat()
         {
+            if (!m_isHeating) { return; }
+
             m_isHeating = false;
             ApplyHeatButtonRenderer.sprite = DefaultButton;
 
@@ -382,6 +409,21 @@ namespace SpaceFab.ChipFab
             TryDeactivate();
 
             Game.Events.Dispatch(GameEvents.StationCompleted);
+        }
+
+        private void HandleEmptyDopeDown()
+        {
+            RemoveDopant();
+        }
+
+        private void HandleNDopeDown()
+        {
+            AssignDopant(DopingType.N);
+        }
+
+        private void HandlePDopeDown()
+        {
+            AssignDopant(DopingType.P);
         }
 
         private void TryDeactivate()
@@ -440,14 +482,23 @@ namespace SpaceFab.ChipFab
 
         public void AssignDopant(DopingType dopantType)
         {
-            // TODO: assign
-            m_usedDopant = true;
+            if (dopantType == DopingType.NONE)
+            {
+                m_usedDopant = false;
+            }
+            else
+            {
+                m_usedDopant = true;
+            }
+
             m_appliedDopant = dopantType;
         }
 
         public void RemoveDopant()
         {
             m_usedDopant = false;
+            m_appliedDopant = DopingType.NONE;
+
         }
     }
 }
