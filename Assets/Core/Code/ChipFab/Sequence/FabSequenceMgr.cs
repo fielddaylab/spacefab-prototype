@@ -74,6 +74,10 @@ namespace SpaceFab.ChipFab
 
         public bool IsCurrStepAmong(List<SequenceStepID> ids)
         {
+            if (m_currIndex >= CurrSequence.Steps.Count) {
+                return false;
+            }
+
             var currStep = CurrSequence.Steps[m_currIndex].Step;
             foreach (var id in ids)
             {

@@ -12,9 +12,489 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6528b2aa790eb2441b6fd12999031423, type: 3}
   m_Name: Level 3
   m_EditorClassIdentifier: 
-  m_levelId: level3
+  m_levelId: level0
   m_availableStations: 000000000100000002000000030000000400000005000000
-  m_automatedStationTriggers: []
+  m_automatedStationTriggers:
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 0
+      DopantToApply: 1
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 0
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 2
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 1
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 1
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 2
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 4
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 3
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 2
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 0
+      DopantToApply: 1
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 0
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 0
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 2
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 1
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 1
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 2
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 4
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 3
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 2
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 0
+      DopantToApply: 2
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 1
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 0
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 0
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 1
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 2
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 1
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 1
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 1
+      Rotation: 0
+  - Disable: 1
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 2
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 1
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 4
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
+  - Disable: 0
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 3
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 1
+          Rotation: 0
+        State: 2
+      SemiconductorLayer:
+        DopingPatterns:
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 0
+        - Mask:
+            Id: 1
+            Rotation: 0
+          DopingType: 1
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 3
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
   m_initialWafer:
     ResistLayer:
       Mask:

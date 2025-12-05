@@ -175,6 +175,12 @@ namespace SpaceFab.ChipFab
 
             yield return 0.5f;
 
+            foreach (var dot in FillDots)
+            {
+                dot.enabled = true;
+                // fillCount++;
+            }
+
             yield return 0.5f;
 
             HandleFinishClicked();
@@ -201,6 +207,8 @@ namespace SpaceFab.ChipFab
                 DragMgr.Instance.DragWaferEnabled = true;
                 TryDeactivate();
             }
+
+            Game.Events.Dispatch(GameEvents.StationStarted);
         }
 
         private void TransitionToReady()

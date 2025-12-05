@@ -73,6 +73,8 @@ namespace SpaceFab.ChipFab
                 TryDeactivate();
             }
 
+            Game.Events.Dispatch(GameEvents.StationStarted);
+
             m_startupRoutine.Replace(StartupRoutine());
         }
 
@@ -111,11 +113,14 @@ namespace SpaceFab.ChipFab
 
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
             {
+                /*
                 if (!m_autoRoutineStarted)
                 {
                     m_AutomationRoutine.Replace(AutomationRoutine());
                     m_autoRoutineStarted = true;
                 }
+                */
+                ProcessMicrogame();
             }
             else
             {
@@ -153,7 +158,17 @@ namespace SpaceFab.ChipFab
                 SampleTimer = SampleTime;
                 // Sample
                 NumSamples++;
-                var dif = Vector3.Distance(PlayerCircle.transform.localPosition, TargetCircle.transform.localPosition);
+
+                float dif = 0;
+                if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
+                {
+                    dif = 0;
+                }
+                else
+                {
+                    dif = Vector3.Distance(PlayerCircle.transform.localPosition, TargetCircle.transform.localPosition);
+                }
+
                 TotalDif += dif;
             }
 
@@ -180,7 +195,6 @@ namespace SpaceFab.ChipFab
             {
                 newDir.x = -1;
             }
-
 
             newDir = newDir.normalized;
 
@@ -239,6 +253,17 @@ namespace SpaceFab.ChipFab
 
         private IEnumerator StartupRoutine()
         {
+            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
+            {
+                PlayerPath.enabled = false;
+                PlayerCircle.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            else
+            {
+                PlayerPath.enabled = true;
+                PlayerCircle.GetComponent<SpriteRenderer>().enabled = true;
+            }
+
             yield return 1;
 
             Activated = true;
@@ -248,6 +273,8 @@ namespace SpaceFab.ChipFab
 
         private IEnumerator AutomationRoutine()
         {
+            yield return null;
+            /*
             yield return 0.5f;
 
             var instruction = AutomationMgr.Instance.CurrInstruction;
@@ -255,6 +282,7 @@ namespace SpaceFab.ChipFab
             yield return 0.5f;
 
             HandleDevelopEnded();
+            */
         }
 
         private void HandleDevelopEnded()

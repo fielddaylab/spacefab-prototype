@@ -254,6 +254,8 @@ namespace SpaceFab.ChipFab
                 return;
             }
 
+            Game.Events.Dispatch(GameEvents.StationStarted);
+
             // Auto assign dopant for now
             if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
             {
@@ -303,13 +305,13 @@ namespace SpaceFab.ChipFab
         {
             m_state = FurnaceMicrogameState.Finished;
             float precision = 1;
-            if (m_currTemp > TargetMaxTemp)
+            if (m_finalTemp > TargetMaxTemp)
             {
-                precision -= (m_currTemp - TargetMaxTemp) / (MaxTemp - MinTemp);
+                precision -= (m_finalTemp - TargetMaxTemp) / (MaxTemp - MinTemp);
             }
-            else if (m_currTemp < TargetMinTemp)
+            else if (m_finalTemp < TargetMinTemp)
             {
-                precision -= (TargetMinTemp - m_currTemp) / (MaxTemp - MinTemp);
+                precision -= (TargetMinTemp - m_finalTemp) / (MaxTemp - MinTemp);
             }
 
             DragMgr.WaferInstance.SetOxideStateFurnace(precision, m_usedDopant, m_appliedDopant);
@@ -373,11 +375,6 @@ namespace SpaceFab.ChipFab
             ApplyHeatButtonRenderer.sprite = DefaultButton;
 
             m_applyHeatRoutine.Replace(ApplyHeatRoutine());
-        }
-
-        private void HandleFinishClicked()
-        {
-            FinishFurnace();
         }
 
         private void FinishFurnace()

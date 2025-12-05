@@ -197,8 +197,8 @@ namespace SpaceFab.ChipFab
             };
 
             // PREREQ: Oxide FUll or Metal FULL
-            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full
-                && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full
+            if ((DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full
+                && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full)
                 || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full
                 || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
                 )
@@ -207,6 +207,8 @@ namespace SpaceFab.ChipFab
                 TryDeactivate();
                 return;
             }
+
+            Game.Events.Dispatch(GameEvents.StationStarted);
 
             m_state = ResistMicrogameState.Activated;
             FluidVisual.gameObject.SetActive(false);

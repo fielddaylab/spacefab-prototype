@@ -57,6 +57,8 @@ namespace SpaceFab.ChipFab
                 return;
             }
 
+            Game.Events.Dispatch(GameEvents.StationStarted);
+
             TransitionToActivated();
         }
 
@@ -156,9 +158,13 @@ namespace SpaceFab.ChipFab
 
         private IEnumerator AutomationRoutine()
         {
+            var stencilPos = StencilVisual.localPosition;
+            stencilPos.x = 0;
+            StencilVisual.localPosition = stencilPos;
+
+            yield return 0.5f;
+
             PlaceStencil();
-            yield return null;
-            HandleFinishClicked();
         }
 
         private void PlaceStencil()
