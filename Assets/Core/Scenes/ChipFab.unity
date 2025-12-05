@@ -5058,6 +5058,9 @@ MonoBehaviour:
   StartButton: {fileID: 476771188}
   ApplyHeatButton: {fileID: 2000735417}
   FinishButton: {fileID: 494568058}
+  ApplyHeatButtonRenderer: {fileID: 2000735418}
+  DefaultButton: {fileID: 21300000, guid: 72de22740ae99184881e6e01644c251a, type: 3}
+  PressedButton: {fileID: 21300000, guid: 27007817c4f64a744821607809c1c739, type: 3}
   HeatingGroup: {fileID: 1406581072}
   Gauge: {fileID: 1987489336}
   TargetIndicator: {fileID: 1150396883}
@@ -19487,7 +19490,7 @@ Transform:
   m_GameObject: {fileID: 2000735414}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.31446955, y: -0.36633396, z: 0}
+  m_LocalPosition: {x: 0.31446955, y: -0.366334, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

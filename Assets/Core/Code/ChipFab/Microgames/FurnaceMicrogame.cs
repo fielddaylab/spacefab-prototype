@@ -35,6 +35,11 @@ namespace SpaceFab.ChipFab
         public ClickBox ApplyHeatButton;
         public ClickBox FinishButton;
 
+        public SpriteRenderer ApplyHeatButtonRenderer;
+
+        public Sprite DefaultButton;
+        public Sprite PressedButton;
+
         private FurnaceMicrogameState m_state;
         private float m_currTemp;
         private float m_finalTemp;
@@ -70,6 +75,8 @@ namespace SpaceFab.ChipFab
 
             ApplyHeatButton.OnMouseDown.AddListener(HandleStartHeat);
             ApplyHeatButton.OnMouseUp.AddListener(HandleEndHeat);
+
+            ApplyHeatButtonRenderer.sprite = DefaultButton;
 
             TransitionToActivated();
         }
@@ -346,11 +353,13 @@ namespace SpaceFab.ChipFab
         private void HandleStartHeat()
         {
             m_isHeating = true;
+            ApplyHeatButtonRenderer.sprite = PressedButton;
         }
 
         private void HandleEndHeat()
         {
             m_isHeating = false;
+            ApplyHeatButtonRenderer.sprite = DefaultButton;
 
             m_applyHeatRoutine.Replace(ApplyHeatRoutine());
         }
