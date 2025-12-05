@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6528b2aa790eb2441b6fd12999031423, type: 3}
-  m_Name: FullAutomationTest
+  m_Name: HybridAutomationTest_v1
   m_EditorClassIdentifier: 
-  m_levelId: full-auto-test
+  m_levelId: hybrid-auto-test
   m_availableStations: 000000000100000002000000030000000400000005000000
   m_automatedStationTriggers:
   - Disable: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
-  - Disable: 0
+  - Disable: 1
     TriggerState:
       ResistLayer:
         Mask:
@@ -251,7 +251,7 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 1
       Rotation: 0
-  - Disable: 0
+  - Disable: 1
     TriggerState:
       ResistLayer:
         Mask:
@@ -455,7 +455,7 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
-  - Disable: 0
+  - Disable: 1
     TriggerState:
       ResistLayer:
         Mask:
