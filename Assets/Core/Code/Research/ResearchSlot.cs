@@ -12,6 +12,7 @@ namespace SpaceFab.Research {
         public GameObject EmptyContents;
         public bool AllowSwap;
 
+        [NonSerialized] public bool Locked;
         [NonSerialized] public ResearchMaterialItem Item;
 
         public CastableEvent<ResearchSlot, ResearchMaterialItem> OnSlotUpdated = new CastableEvent<ResearchSlot, ResearchMaterialItem>();

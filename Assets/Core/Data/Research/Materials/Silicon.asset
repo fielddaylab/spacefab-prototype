@@ -19,11 +19,11 @@ MonoBehaviour:
   Atoms:
   - Size: 111
     ValenceElectrons: 4
-    Appearance: 0
-    Symbol: Si
+    Appearance: 1
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4291809231
+    Symbol: Si
   Parent:
     m_HashValue: 0
   Electrical: 3

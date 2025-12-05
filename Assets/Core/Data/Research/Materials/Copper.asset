@@ -19,11 +19,11 @@ MonoBehaviour:
   Atoms:
   - Size: 145
     ValenceElectrons: 1
-    Appearance: 0
-    Symbol: Cu
+    Appearance: 2
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4282758655
+    Symbol: Cu
   Parent:
     m_HashValue: 0
   Electrical: 1

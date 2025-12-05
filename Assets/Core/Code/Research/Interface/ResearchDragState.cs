@@ -38,7 +38,7 @@ namespace SpaceFab.Research {
         }
 
 		static public bool DepositCurrentDrag(ResearchSlot slot) {
-			if (!slot) {
+			if (!slot || slot.Locked) {
 				CancelCurrentDrag();
 				return false;
 			}

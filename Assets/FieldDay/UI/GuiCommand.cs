@@ -79,6 +79,14 @@ namespace FieldDay.UI {
 
         static public void SetActive(Behaviour behaviour, bool state) {
             Game.Gui.QueueCommand(new GuiCommandData() {
+                Type = GuiCommandType.SetActive_GO,
+                Arg = new GuiCommandArgument(state),
+                Target = behaviour.gameObject
+            });
+        }
+
+        static public void SetEnabled(Behaviour behaviour, bool state) {
+            Game.Gui.QueueCommand(new GuiCommandData() {
                 Type = GuiCommandType.SetActive_Behaviour,
                 Arg = new GuiCommandArgument(state),
                 Target = behaviour

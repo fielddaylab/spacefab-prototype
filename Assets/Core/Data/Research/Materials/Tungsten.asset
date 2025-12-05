@@ -19,11 +19,11 @@ MonoBehaviour:
   Atoms:
   - Size: 193
     ValenceElectrons: 6
-    Appearance: 0
-    Symbol: W
+    Appearance: 3
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4278233824
+    Symbol: W
   Parent:
     m_HashValue: 0
   Electrical: 1

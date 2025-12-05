@@ -19,18 +19,18 @@ MonoBehaviour:
   Atoms:
   - Size: 136
     ValenceElectrons: 3
-    Appearance: 0
-    Symbol: Ga
+    Appearance: 3
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4286282619
+    Symbol: Ga
   - Size: 56
     ValenceElectrons: 5
-    Appearance: 0
-    Symbol: N
+    Appearance: 5
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4285923198
+    Symbol: N
   Parent:
     m_HashValue: 0
   Electrical: 3

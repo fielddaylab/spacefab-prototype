@@ -9,7 +9,8 @@ namespace SpaceFab.Research {
         public ResearchToolsMask AvailableTools;
         public ResearchMaterialKnowledge AvailableProperties = ResearchMaterialKnowledge.All;
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] AvailableMaterials;
-        public ResearchObjective[] Objectives;
+        public ResearchMaterialKnowledgePair[] PrePopulate;
+        public ResearchMaterialKnowledgePair[] Objectives;
     }
 
     [Flags]
@@ -21,7 +22,7 @@ namespace SpaceFab.Research {
     }
 
     [Serializable]
-    public struct ResearchObjective {
+    public struct ResearchMaterialKnowledgePair {
         [AssetName(typeof(ResearchMaterial))] public StringHash32 MaterialId;
         public ResearchMaterialKnowledge Knowledge;
     }

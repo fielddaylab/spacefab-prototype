@@ -132,6 +132,7 @@ namespace FieldDay.Scenes {
             public SceneImportFlags Flags;
             public Matrix4x4? Transform;
             public MainSceneTransitionArgs Transition;
+            public RawStateBlock256 CustomData;
         }
 
         private struct UninitializedSceneCallback {

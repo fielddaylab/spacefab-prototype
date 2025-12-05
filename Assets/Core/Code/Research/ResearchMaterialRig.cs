@@ -10,6 +10,7 @@ namespace SpaceFab.Research {
         public TMP_Text Label;
         public Transform ShadowPosition;
         public Transform RendererPosition;
+        public GameObject Highlight;
     }
 
     static public partial class ResearchMaterialUtility {

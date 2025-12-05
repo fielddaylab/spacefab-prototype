@@ -19,11 +19,11 @@ MonoBehaviour:
   Atoms:
   - Size: 87
     ValenceElectrons: 3
-    Appearance: 0
-    Symbol: B
+    Appearance: 1
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4288302080
+    Symbol: B
   Parent:
     m_HashValue: 0
   Electrical: 2

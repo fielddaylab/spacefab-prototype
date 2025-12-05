@@ -97,13 +97,14 @@ namespace SpaceFab.Research {
                 return;
             }
 
-            MaterialTitle.SetText(material.DisplayName);
 
             StringHash32 rootId = ResearchMaterialUtility.GetRootMaterial(material);
             RootId = rootId;
 
             ResearchMaterialKnowledge knowledge = ResearchMaterialUtility.GetKnownCategories(rootId);
             ResearchMaterialGuessState guesses = ResearchMaterialUtility.GetGuess(rootId);
+
+            MaterialTitle.SetText(knowledge == ResearchMaterialKnowledge.All ? material.DisplayName : material.UnknownDisplayName);
 
             ElectricProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Electrical) == 0;
             ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Thermal) == 0;

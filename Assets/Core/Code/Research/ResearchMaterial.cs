@@ -29,9 +29,6 @@ namespace SpaceFab.Research {
         [Range(0, 2)] public float ConductionMultiplier = 1;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantN;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantP;
-
-        [Header("Diagram")]
-        public Color32 DiagramColor = Color.white;
     }
 
     public enum ElectricalTag : uint {
@@ -68,8 +65,8 @@ namespace SpaceFab.Research {
         [Range(1, 200)] public byte Size;
         [Range(0, 8)] public byte ValenceElectrons;
         public AtomicAppearance Appearance;
-        public string Symbol;
         public Color32 Color;
+        public string Symbol;
     }
 
     public enum AtomicAppearance : byte {
@@ -77,7 +74,8 @@ namespace SpaceFab.Research {
         Square,
         Diamond,
         Pentagon,
-        Hexagon
+        Hexagon,
+        Circle
     }
 
     static public partial class ResearchMaterialUtility {

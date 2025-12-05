@@ -19,6 +19,8 @@ namespace SpaceFab.Research {
 
         [NonSerialized] public bool AllSlotsFilled;
 
+        public CastableEvent<ResearchTool> OnActivate = new CastableEvent<ResearchTool>();
+        public CastableEvent<ResearchTool> OnDeactivate = new CastableEvent<ResearchTool>();
         public CastableEvent<ResearchTool> OnInputSlotsUpdated = new CastableEvent<ResearchTool>();
         public CastableEvent<ResearchTool> OnReset = new CastableEvent<ResearchTool>();
 

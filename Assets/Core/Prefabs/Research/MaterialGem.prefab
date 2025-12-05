@@ -134,6 +134,7 @@ MonoBehaviour:
   Label: {fileID: 4852069638948720738}
   ShadowPosition: {fileID: 594318183271135650}
   RendererPosition: {fileID: 6466765261630097642}
+  Highlight: {fileID: 0}
 --- !u!1 &1669591149575411715
 GameObject:
   m_ObjectHideFlags: 0

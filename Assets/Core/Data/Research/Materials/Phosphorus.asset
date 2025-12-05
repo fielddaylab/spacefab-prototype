@@ -20,10 +20,10 @@ MonoBehaviour:
   - Size: 98
     ValenceElectrons: 5
     Appearance: 0
-    Symbol: P
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4283822847
+    Symbol: P
   Parent:
     m_HashValue: 0
   Electrical: 1

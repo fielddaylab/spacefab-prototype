@@ -19,11 +19,11 @@ MonoBehaviour:
   Atoms:
   - Size: 64
     ValenceElectrons: 4
-    Appearance: 0
-    Symbol: C
+    Appearance: 2
     Color:
       serializedVersion: 2
-      rgba: 4294967295
+      rgba: 4293459855
+    Symbol: C
   Parent:
     m_HashValue: 0
   Electrical: 3
