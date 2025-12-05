@@ -19,6 +19,21 @@ namespace SpaceFab.ChipFab
     {
         private static KeyCode FIRE_KEY = KeyCode.Space;
 
+        private static KeyCode LEFT_KEY = KeyCode.LeftArrow;
+        private static KeyCode RIGHT_KEY = KeyCode.RightArrow;
+        private static KeyCode UP_KEY = KeyCode.UpArrow;
+        private static KeyCode DOWN_KEY = KeyCode.DownArrow;
+
+        public Vector3 SprayStartPos;
+        public Transform Sprayer;
+        public float SprayerMoveSpeed;
+        public Transform Aim;
+
+        public LayerMask FillDotLayer;
+        public List<SpriteRenderer> FillDots;
+
+        private int fillCount = 0;
+
         private SputteringMicrogameState m_state;
 
         public ClickBox SprayerBox;
@@ -35,6 +50,14 @@ namespace SpaceFab.ChipFab
             DragMgr.Instance.DragWaferEnabled = false;
             SprayerBox.OnMouseDown.AddListener(HandleSprayMouseDown);
             StencilFill.enabled = false;
+
+            Sprayer.localPosition = SprayStartPos;
+            fillCount = 0;
+
+            foreach (var dot in FillDots)
+            {
+                dot.enabled = false;
+            }
 
             TransitionToActivated();
         }
@@ -111,9 +134,39 @@ namespace SpaceFab.ChipFab
 
         private void ProcessManual()
         {
+            Vector3 moveVector = Vector3.zero;
+
+            if (Input.GetKey(UP_KEY))
+            {
+                moveVector += Vector3.up;
+            }
+            if (Input.GetKey(DOWN_KEY))
+            {
+                moveVector += Vector3.down;
+            }
+            if (Input.GetKey(LEFT_KEY))
+            {
+                moveVector += Vector3.left;
+            }
+            if (Input.GetKey(RIGHT_KEY))
+            {
+                moveVector += Vector3.right;
+            }
+
+            moveVector = moveVector.normalized;
+            moveVector *= SprayerMoveSpeed * Time.deltaTime;
+
+            Sprayer.transform.localPosition += moveVector;
+
             if (Input.GetKey(FIRE_KEY))
             {
                 HandleSprayMouseDown();
+            }
+
+            // Check if sufficiently sprayed
+            if (fillCount == FillDots.Count)
+            {
+                HandleFinishClicked();
             }
         }
 
@@ -196,16 +249,32 @@ namespace SpaceFab.ChipFab
 
         private void HandleSprayMouseDown()
         {
+            Vector3 sprayPos = Aim.position;
+
+            Collider2D hit = Physics2D.OverlapPoint(sprayPos, FillDotLayer);
+            if (hit != null)
+            {
+                SpriteRenderer dot = hit.GetComponent<SpriteRenderer>();
+                if (dot && !dot.enabled)
+                {
+                    dot.enabled = true;
+                    fillCount++;
+                }
+            }
+
+            /*
             if (m_StencilFillRoutine.Exists())
             {
                 return;
             }
 
             m_StencilFillRoutine.Replace(StencilFillRoutine());
+            */
         }
 
         private IEnumerator StencilFillRoutine()
         {
+
             StencilFill.enabled = true;
 
             var currColor = StencilFill.color;

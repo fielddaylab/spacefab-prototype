@@ -202,6 +202,10 @@ namespace SpaceFab.ChipFab
             if (m_isHeating)
             {
                 m_finalTemp += ApplyHeatIncrement * Time.deltaTime;
+                if (m_finalTemp > MaxTemp)
+                {
+                    m_finalTemp = MaxTemp;
+                }
             }
         }
 
