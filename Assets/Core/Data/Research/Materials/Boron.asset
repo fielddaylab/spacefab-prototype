@@ -13,15 +13,28 @@ MonoBehaviour:
   m_Name: Boron
   m_EditorClassIdentifier: 
   DisplayName: Boron
+  UnknownDisplayName: Sample 1
   Material: {fileID: 2100000, guid: ec3ed3e944dfb2d4e96fcdc6dc308214, type: 2}
   ChemicalSymbol: B
-  Size: 87
-  ValenceElectrons: 3
+  Atoms:
+  - Size: 87
+    ValenceElectrons: 3
+    Appearance: 0
+    Symbol: B
+    Color:
+      serializedVersion: 2
+      rgba: 4294967295
   Parent:
     m_HashValue: 0
   Electrical: 2
   Thermal: 0
   SpecialTags: 0
-  DielectricStrength: 0
   DopantType: 1
   ConductionMultiplier: 1
+  DopantN:
+    m_HashValue: 0
+  DopantP:
+    m_HashValue: 0
+  DiagramColor:
+    serializedVersion: 2
+    rgba: 4294967295

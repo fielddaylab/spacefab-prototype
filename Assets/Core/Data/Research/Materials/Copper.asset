@@ -13,14 +13,28 @@ MonoBehaviour:
   m_Name: Copper
   m_EditorClassIdentifier: 
   DisplayName: Copper
+  UnknownDisplayName: Sample 3
   Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
   ChemicalSymbol: Cu
-  Size: 145
-  ValenceElectrons: 1
+  Atoms:
+  - Size: 145
+    ValenceElectrons: 1
+    Appearance: 0
+    Symbol: Cu
+    Color:
+      serializedVersion: 2
+      rgba: 4294967295
   Parent:
     m_HashValue: 0
   Electrical: 1
   Thermal: 0
   SpecialTags: 0
-  DielectricStrength: 0
   DopantType: 0
+  ConductionMultiplier: 1
+  DopantN:
+    m_HashValue: 0
+  DopantP:
+    m_HashValue: 0
+  DiagramColor:
+    serializedVersion: 2
+    rgba: 4294967295

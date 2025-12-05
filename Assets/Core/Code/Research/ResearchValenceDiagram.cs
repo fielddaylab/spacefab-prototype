@@ -25,7 +25,7 @@ namespace SpaceFab.Research {
 
             Transform nucleusTransform = diagram.Nucleus.transform;
             Vector3 centerPos = nucleusTransform.localPosition;
-            float scale = material.Size / diagram.ScaleReference;
+            float scale = material.Atoms[0].Size / diagram.ScaleReference;
             nucleusTransform.SetScale(scale);
 
             float electronOffset = diagram.ElectronOrbitMultiplier * scale + diagram.ElectronOrbitOffset;
@@ -33,7 +33,7 @@ namespace SpaceFab.Research {
             float angleRad = Mathf.Deg2Rad * 100f;
             float angleIncrement = Mathf.PI * 2 / diagram.Electrons.Length;
 
-            int electronCount = Math.Min(material.ValenceElectrons, diagram.Electrons.Length);
+            int electronCount = Math.Min(material.Atoms[0].ValenceElectrons, diagram.Electrons.Length);
             
             for(int i = 0; i < electronCount; i++) {
                 diagram.Electrons[i].gameObject.SetActive(true);

@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AvailableTools: 7
   AvailableProperties: -1
+  AvailableMaterials:
+  - m_HashValue: 3821421172
+  - m_HashValue: 3383598718
+  - m_HashValue: 1163381446
+  - m_HashValue: 541320182
   Objectives:
   - MaterialId:
       m_HashValue: 541320182

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: ResearchAssets
   m_EditorClassIdentifier: 
   m_GlobalAssets:
-  - {fileID: 11400000, guid: 5862afb180b6a964dba14eb8fdc4d2eb, type: 2}
   - {fileID: 11400000, guid: f5a99173894285d44b4ea7e29e001a83, type: 2}
   m_NamedAssets:
   - {fileID: 11400000, guid: 4c7864a20f51bcb46b1ad4dc947df087, type: 2}
@@ -22,21 +21,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: bab6204e392a5e34687c5a05da72c71c, type: 2}
   - {fileID: 11400000, guid: fb8a0a57794920c47b317abc5b979902, type: 2}
   - {fileID: 11400000, guid: 32510c29da53b2e48ab2098cde21ef61, type: 2}
-  - {fileID: 11400000, guid: 3957caa13e362c84b8823364fec53ecc, type: 2}
-  - {fileID: 11400000, guid: 150439d5521a5b34286b3edf714b6c75, type: 2}
-  - {fileID: 11400000, guid: 0871e7074e5efc4489d18b11a3d51a8e, type: 2}
-  - {fileID: 11400000, guid: bae977ea321c10d4584811cc35403b5d, type: 2}
-  - {fileID: 11400000, guid: 627b648c012b3cf43b1f8a7630fe6d16, type: 2}
-  - {fileID: 11400000, guid: 83541b9db8e852345a16eb760966fd2e, type: 2}
-  - {fileID: 11400000, guid: fb833b08a89dee2479716be0969175f9, type: 2}
-  - {fileID: 11400000, guid: 08a068dbf59c4264aabf5875a89b2ec5, type: 2}
-  - {fileID: 11400000, guid: 6a37996da00b7dc45b1504d9c439427a, type: 2}
-  - {fileID: 11400000, guid: 278143704fa23f749b1059ecbccf0a30, type: 2}
-  - {fileID: 11400000, guid: 58d9d9509db07c54e8f7dbdbe130ee92, type: 2}
-  - {fileID: 11400000, guid: cf5c6b0bbf3278f4687b3b3bc946b343, type: 2}
-  - {fileID: 11400000, guid: 548aa603b57d5a24f85738d7590ec822, type: 2}
   - {fileID: 11400000, guid: 1e662b2942ec97d4594fb497c53b3a3d, type: 2}
-  - {fileID: 11400000, guid: 6a438bd2112c636488d08cecff696066, type: 2}
-  - {fileID: 11400000, guid: 793f2415c6c1e9043b396d654439f38b, type: 2}
+  - {fileID: 11400000, guid: 548aa603b57d5a24f85738d7590ec822, type: 2}
+  - {fileID: 11400000, guid: 278143704fa23f749b1059ecbccf0a30, type: 2}
+  - {fileID: 11400000, guid: 695b1321dd20c364ca6bdb9bf1702a15, type: 2}
   - {fileID: 11400000, guid: 4d86891549bb8c649905f954fc95f837, type: 2}
+  - {fileID: 11400000, guid: fb833b08a89dee2479716be0969175f9, type: 2}
+  - {fileID: 11400000, guid: 83541b9db8e852345a16eb760966fd2e, type: 2}
+  - {fileID: 11400000, guid: 627b648c012b3cf43b1f8a7630fe6d16, type: 2}
+  - {fileID: 11400000, guid: 0f74c3a7101edbe479ef2dd1205a46e9, type: 2}
+  - {fileID: 11400000, guid: 150439d5521a5b34286b3edf714b6c75, type: 2}
+  - {fileID: 11400000, guid: 5d3ab46b7dd03a84691bb9ed729a894d, type: 2}
   m_LiteAssets: []

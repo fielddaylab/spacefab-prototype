@@ -13,15 +13,28 @@ MonoBehaviour:
   m_Name: Magnesium
   m_EditorClassIdentifier: 
   DisplayName: Magnesium
+  UnknownDisplayName: Sample 4
   Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
   ChemicalSymbol: Mg
-  Size: 145
-  ValenceElectrons: 2
+  Atoms:
+  - Size: 145
+    ValenceElectrons: 2
+    Appearance: 0
+    Symbol: Mg
+    Color:
+      serializedVersion: 2
+      rgba: 4294967295
   Parent:
     m_HashValue: 0
   Electrical: 1
   Thermal: 0
   SpecialTags: 0
-  DielectricStrength: 0
-  DopantType: 2
+  DopantType: 4294967295
   ConductionMultiplier: 1
+  DopantN:
+    m_HashValue: 0
+  DopantP:
+    m_HashValue: 0
+  DiagramColor:
+    serializedVersion: 2
+    rgba: 4294967295

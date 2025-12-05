@@ -13,15 +13,28 @@ MonoBehaviour:
   m_Name: Phosphorus
   m_EditorClassIdentifier: 
   DisplayName: Phosphorus
+  UnknownDisplayName: Sample 5
   Material: {fileID: 2100000, guid: e7ce83bbfbaa8e04488a8871c7acc025, type: 2}
   ChemicalSymbol: P
-  Size: 98
-  ValenceElectrons: 5
+  Atoms:
+  - Size: 98
+    ValenceElectrons: 5
+    Appearance: 0
+    Symbol: P
+    Color:
+      serializedVersion: 2
+      rgba: 4294967295
   Parent:
     m_HashValue: 0
   Electrical: 1
   Thermal: 0
   SpecialTags: 0
-  DielectricStrength: 0
   DopantType: 1
   ConductionMultiplier: 1
+  DopantN:
+    m_HashValue: 0
+  DopantP:
+    m_HashValue: 0
+  DiagramColor:
+    serializedVersion: 2
+    rgba: 4294967295

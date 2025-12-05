@@ -13,14 +13,28 @@ MonoBehaviour:
   m_Name: CarbonDiamond
   m_EditorClassIdentifier: 
   DisplayName: Carbon
+  UnknownDisplayName: Sample 2
   Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
   ChemicalSymbol: C
-  Size: 67
-  ValenceElectrons: 4
+  Atoms:
+  - Size: 64
+    ValenceElectrons: 4
+    Appearance: 0
+    Symbol: C
+    Color:
+      serializedVersion: 2
+      rgba: 4294967295
   Parent:
     m_HashValue: 0
   Electrical: 3
   Thermal: 1
   SpecialTags: 5
-  DielectricStrength: 0
   DopantType: 0
+  ConductionMultiplier: 1
+  DopantN:
+    m_HashValue: 336354447
+  DopantP:
+    m_HashValue: 3317014541
+  DiagramColor:
+    serializedVersion: 2
+    rgba: 4294967295

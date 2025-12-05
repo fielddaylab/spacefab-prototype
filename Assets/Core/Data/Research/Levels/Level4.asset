@@ -10,17 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55426b3fefba51d4a9e042406bdc47d5, type: 3}
-  m_Name: Level1
+  m_Name: Level4
   m_EditorClassIdentifier: 
-  AvailableTools: 0
-  AvailableProperties: 1
+  AvailableTools: 7
+  AvailableProperties: -1
   AvailableMaterials:
   - m_HashValue: 3821421172
   - m_HashValue: 3383598718
+  - m_HashValue: 1163381446
+  - m_HashValue: 541320182
+  - m_HashValue: 3774176290
+  - m_HashValue: 3317014541
   Objectives:
   - MaterialId:
-      m_HashValue: 3821421172
-    Knowledge: 1
+      m_HashValue: 3774176290
+    Knowledge: -1
   - MaterialId:
-      m_HashValue: 3383598718
-    Knowledge: 1
+      m_HashValue: 3317014541
+    Knowledge: -1

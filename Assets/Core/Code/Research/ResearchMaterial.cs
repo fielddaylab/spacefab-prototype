@@ -10,12 +10,12 @@ namespace SpaceFab.Research {
     [CreateAssetMenu(menuName = "Research/Research Material")]
     public sealed class ResearchMaterial : NamedAsset {
         public string DisplayName;
+        public string UnknownDisplayName;
         public Material Material;
 
         [Header("Atomic Info")]
         public string ChemicalSymbol;
-        [Range(1, 200)] public int Size;
-        [Range(0, 8)] public int ValenceElectrons; // TODO: expand to account for compounds
+        public AtomicStructure[] Atoms;
 
         [AssetName(typeof(ResearchMaterial))] public StringHash32 Parent;
 
@@ -25,9 +25,10 @@ namespace SpaceFab.Research {
         public SpecialTag SpecialTags;
 
         [Header("Fields")]
-        public float DielectricStrength;
         public DopantType DopantType;
         [Range(0, 2)] public float ConductionMultiplier = 1;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantN;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantP;
 
         [Header("Diagram")]
         public Color32 DiagramColor = Color.white;
@@ -55,10 +56,28 @@ namespace SpaceFab.Research {
         HighVoltage = 0x04
     }
 
+    [Flags]
     public enum DopantType : uint {
         None = 0,
-        N,
-        P
+        N = 0x01,
+        P = 0x02
+    }
+
+    [Serializable]
+    public struct AtomicStructure {
+        [Range(1, 200)] public byte Size;
+        [Range(0, 8)] public byte ValenceElectrons;
+        public AtomicAppearance Appearance;
+        public string Symbol;
+        public Color32 Color;
+    }
+
+    public enum AtomicAppearance : byte {
+        Triangle,
+        Square,
+        Diamond,
+        Pentagon,
+        Hexagon
     }
 
     static public partial class ResearchMaterialUtility {

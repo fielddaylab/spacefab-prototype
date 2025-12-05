@@ -13,14 +13,35 @@ MonoBehaviour:
   m_Name: Quartz
   m_EditorClassIdentifier: 
   DisplayName: Quartz
+  UnknownDisplayName: Sample 6
   Material: {fileID: 2100000, guid: b5750e4285f43c3428783dfd512f9c1b, type: 2}
   ChemicalSymbol: SiO<sub>2
-  Size: 100
-  ValenceElectrons: 0
+  Atoms:
+  - Size: 111
+    ValenceElectrons: 0
+    Appearance: 0
+    Symbol: Si
+    Color:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Size: 48
+    ValenceElectrons: 0
+    Appearance: 0
+    Symbol: O
+    Color:
+      serializedVersion: 2
+      rgba: 4294967295
   Parent:
     m_HashValue: 0
   Electrical: 2
   Thermal: 0
   SpecialTags: 0
-  DielectricStrength: 0
   DopantType: 0
+  ConductionMultiplier: 1
+  DopantN:
+    m_HashValue: 0
+  DopantP:
+    m_HashValue: 0
+  DiagramColor:
+    serializedVersion: 2
+    rgba: 4294967295

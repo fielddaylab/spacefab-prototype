@@ -8,6 +8,7 @@ namespace SpaceFab.Research {
     public sealed class ResearchLevel : NamedAsset {
         public ResearchToolsMask AvailableTools;
         public ResearchMaterialKnowledge AvailableProperties = ResearchMaterialKnowledge.All;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32[] AvailableMaterials;
         public ResearchObjective[] Objectives;
     }
 
