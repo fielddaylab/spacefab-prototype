@@ -201,7 +201,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawLinks:
                     DrawMetal(ref cell, gridPos);
@@ -228,7 +228,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawNNodes:
                     cell.CellType = CellType.NTransistor;
@@ -282,7 +282,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawLinks:
                     // Do nothing. Click only matters if node is empty.
@@ -315,7 +315,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawNNodes:
                     // only relevant if the occupied cell is a transistor
@@ -371,7 +371,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawLinks:
                     DragDrawNodeOfType(CellType.Metal, gridPos);
@@ -390,7 +390,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawNNodes:
                     DragDrawNodeOfType(CellType.NTransistor, gridPos);
@@ -412,7 +412,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawLinks:
                     DragDrawNodeOfType(CellType.Metal, gridPos);
@@ -431,7 +431,7 @@ namespace SpaceFab.ChipDesign
             switch (ActiveTool)
             {
                 case ToolType.Erase:
-                    EraseCell(cell, gridPos);
+                    EraseCellBothLayers(gridPos);
                     break;
                 case ToolType.DrawNNodes:
                     // do not allow dragging onto inputs/outputs
@@ -567,12 +567,28 @@ namespace SpaceFab.ChipDesign
             */
         }
 
-        private void EraseCell(GridCell cell, Vector2Int gridPos)
+        private void EraseCellBothLayers(Vector2Int gridPos)
+        {
+            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            var cell = layer.GetCell(gridPos);
+
+            EraseCellOneLayer(cell, gridPos);
+
+            var twinLayer = GridStack.Instance.GridLayers[(int)GetOppositeLayer(ActiveLayer)];
+            var twinCell = twinLayer.GetCell(gridPos);
+            EraseCellOneLayer(cell, gridPos);
+        }
+
+        private GridInteractionLayer GetOppositeLayer(GridInteractionLayer layer)
+        {
+            if (layer == GridInteractionLayer.Metal) { return GridInteractionLayer.Transistor; }
+            else { return GridInteractionLayer.Metal; }
+        }
+
+        private void EraseCellOneLayer(GridCell cell, Vector2Int gridPos)
         {
             // erase cell
             cell.Erase(out List<EdgeDir> danglingEdges);
-
-            // TODO: erase gate on BOTH layers
 
             // erase dangling edges
             foreach (var dangling in danglingEdges)

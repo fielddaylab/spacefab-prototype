@@ -205,6 +205,7 @@ namespace SpaceFab.ChipDesign
         public TMP_Text ResultSubText;
         public Button ResultCloseButton;
         public TMP_Text UnstableText;
+        public RectTransform ResultRect;
 
         [Header("Prefabs")]
         public GameObject RowPrefab;
@@ -216,6 +217,9 @@ namespace SpaceFab.ChipDesign
         public float DefaultCellWidth;
         public float OutputCellWidth;
         public Transform RowContainer;
+        public float HeaderHeight;
+        public float RowHeight;
+        public VerticalLayoutGroup VertLayout;
 
         #endregion // Inspector
 
@@ -283,13 +287,16 @@ namespace SpaceFab.ChipDesign
                 tableWidth += currHeader.Rect.sizeDelta.x + currRow.Layout.spacing;
             }
 
-            var tableRect = RowContainer.GetComponent<RectTransform>();
-            var tableSize = tableRect.sizeDelta;
-            tableSize.x = tableWidth;
-            tableRect.sizeDelta = tableSize;
+            var numRows = suite.Tests.Length;
+
+            var margin = 10;
+            var tableSize = ResultRect.sizeDelta;
+            tableSize.x = tableWidth + margin * 2;
+            tableSize.y = HeaderHeight + RowHeight * numRows + (VertLayout.spacing * numRows) + margin * 2;
+            ResultRect.sizeDelta = tableSize;
 
             // contents
-            for (int t = 0; t < suite.Tests.Length; t++)
+            for (int t = 0; t < numRows; t++)
             {
                 currCellContainer = Instantiate(RowPrefab, RowContainer).transform;
                 currRow = currCellContainer.GetComponent<SuiteRow>();

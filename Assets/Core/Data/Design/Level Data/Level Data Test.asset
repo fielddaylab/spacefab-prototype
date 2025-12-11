@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
   m_Name: Level Data Test
   m_EditorClassIdentifier: 
+  m_title: Level TEST
   m_allowedPlaceables: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
   m_gridConfig: {fileID: 11400000, guid: ba767115e778e0a4d8d504195c6fb5f5, type: 2}
   m_testSuite: {fileID: 11400000, guid: 1d6ae989481ed154a9012103a66316c6, type: 2}

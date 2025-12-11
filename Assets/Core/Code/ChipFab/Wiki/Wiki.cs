@@ -54,6 +54,8 @@ namespace SpaceFab.ChipFab {
         {
             foreach (var page in AllPages)
             {
+                if (page == null) { continue; }
+
                 if (page.CategoryId == m_currCategory && page.SubCategoryId == m_currSubCategory)
                 {
                     page.gameObject.SetActive(true);

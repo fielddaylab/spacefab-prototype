@@ -41,6 +41,8 @@ namespace SpaceFab.ChipDesign
 
         [Header("Layer")]
         [SerializeField] private Button LayerButton;
+        [SerializeField] private Sprite LayerBtnTopImg;
+        [SerializeField] private Sprite LayerBtnBottomImg;
         [SerializeField] private TMP_Text LayerText;
         [SerializeField] private TMP_Text LayerLabelText;
 
@@ -72,6 +74,7 @@ namespace SpaceFab.ChipDesign
         [Header("Nav")]
         [SerializeField] private Button ReturnMenuButton;
         [SerializeField] private string m_menuScene;
+        [SerializeField] private TMP_Text m_titleText;
 
         private void Awake()
         {
@@ -139,6 +142,8 @@ namespace SpaceFab.ChipDesign
                 DrawNNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.NNODE));
                 DrawPNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.PNODE));
             }
+
+            m_titleText.SetText(LevelMgr.Instance.CurrLevelData.GetTitle());
         }
 
         #region Handlers
@@ -162,22 +167,24 @@ namespace SpaceFab.ChipDesign
             switch (activeLayer)
             {
                 case GridInteractionLayer.Transistor:
-                    LayerText.SetText("+");
-                    LayerLabelText.SetText("Nodes");
-                    DrawNodesGroup.SetActive(true);
-                    if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(false); }
+                    //LayerText.SetText("+");
+                    LayerButton.image.sprite = LayerBtnBottomImg;
+                    //LayerLabelText.SetText("Nodes");
+                    //DrawNodesGroup.SetActive(true);
+                    //if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(false); }
                     break;
                 case GridInteractionLayer.Metal:
-                    LayerText.SetText("-");
-                    LayerLabelText.SetText("Links");
-                    DrawNodesGroup.SetActive(false);
-                    if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(true); }
+                    //LayerText.SetText("-");
+                    LayerButton.image.sprite = LayerBtnTopImg;
+                    //LayerLabelText.SetText("Links");
+                    //DrawNodesGroup.SetActive(false);
+                    //if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(true); }
                     break;
                 default:
                     break;
             }
 
-            InteractMgr.Instance?.SetActiveTool(ToolType.None);
+            // InteractMgr.Instance?.SetActiveTool(ToolType.None);
         }
 
         private void HandleToolChanged()
@@ -193,6 +200,7 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawNNodes);
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Transistor);
             }
         }
 
@@ -201,6 +209,7 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawPNodes);
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Transistor);
             }
         }
 
@@ -281,6 +290,7 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawLinks);
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Metal);
             }
         }
 

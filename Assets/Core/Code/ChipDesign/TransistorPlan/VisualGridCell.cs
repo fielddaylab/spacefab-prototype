@@ -9,6 +9,7 @@ namespace SpaceFab.ChipDesign
     {
         private const int FLOW_SORT_ORDER = 500;
         private const int GATE_SORT_ORDER = 300;
+        private const int SECONDARY_SORT_ORDER = 250;
         private const int METAL_SORT_ORDER = 200;
         private const int VIA_SORT_ORDER = 100;
         private const int TRANSISTOR_SORT_ORDER = 0;
@@ -19,6 +20,7 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private SpriteRenderer m_pathOverlayBaseRenderer;
         [SerializeField] private TMP_Text m_textRenderer;
         [SerializeField] private SpriteRenderer m_transferRenderer;
+        [SerializeField] private SpriteRenderer m_secondaryTransferRenderer;
         [SerializeField] private SpriteRenderer[] m_dirRenderers;
         [SerializeField] private SpriteMask m_flowMask;
 
@@ -95,11 +97,13 @@ namespace SpaceFab.ChipDesign
 
             // Reset
             m_transferRenderer.sprite = null;
+            m_secondaryTransferRenderer.sprite = null;
 
             switch (cellData.TransferType)
             {
                 case TransferType.Via:
                     m_transferRenderer.sprite = SpriteDB.Instance.Via;
+                    m_secondaryTransferRenderer.sprite = SpriteDB.Instance.Via;
                     break;
                 case TransferType.GateAbove:
                     m_transferRenderer.sprite = SpriteDB.Instance.Gate;
@@ -115,6 +119,7 @@ namespace SpaceFab.ChipDesign
             m_textRenderer.GetComponent<Renderer>().sortingOrder = m_pathRenderer.sortingOrder + 10;
             foreach (var r in m_dirRenderers) { r.sortingOrder = m_pathRenderer.sortingOrder + 5; }
             m_transferRenderer.sortingOrder = cellData.TransferType == TransferType.Via ? VIA_SORT_ORDER : GATE_SORT_ORDER;
+            m_secondaryTransferRenderer.sortingOrder = SECONDARY_SORT_ORDER;
 
             m_flowMask.backSortingOrder = m_pathRenderer.sortingOrder - 50;
             m_flowMask.frontSortingOrder = m_pathRenderer.sortingOrder + 50;
