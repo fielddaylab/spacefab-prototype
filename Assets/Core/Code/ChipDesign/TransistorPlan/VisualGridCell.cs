@@ -26,8 +26,9 @@ namespace SpaceFab.ChipDesign
 
         [SerializeField] private SpriteRenderer m_flowIndicator;
 
-        public void UpdateFlowVisuals(FlowState flow, int layerIndex)
+        public void UpdateFlowVisuals(GridCell cell, int layerIndex)
         {
+            var flow = cell.FlowState;
             // m_flowIndicator.sortingOrder = FLOW_SORT_ORDER;
             m_flowIndicator.sortingOrder = layerIndex == 0 ? METAL_SORT_ORDER : TRANSISTOR_SORT_ORDER;
             m_flowIndicator.sortingOrder += 50;
@@ -35,20 +36,64 @@ namespace SpaceFab.ChipDesign
             switch (flow)
             {
                 case (FlowState.Hi):
-                    m_flowIndicator.sprite = SpriteDB.Instance.FlowHi;
+                    UpdateHiFlow(cell);
                     break;
                 case (FlowState.Lo):
-                    m_flowIndicator.sprite = SpriteDB.Instance.FlowLo;
+                    UpdateLoFlow(cell);
                     break;
                 case (FlowState.Unstable):
-                    m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstable;
+                    UpdateUnstableFlow(cell);
                     break;
                 default:
-                    m_flowIndicator.sprite = null;
+                    UpdateDefaultFlow(cell);
                     break;
             }
 
             // if (EvaluationMgr.Instance.IsUnstable) { m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstable; }
+        }
+
+        private void UpdateHiFlow(GridCell cell)
+        {
+            m_flowIndicator.sprite = SpriteDB.Instance.FlowHi;
+
+            SetTransferWithFlow(cell, FlowState.Hi);
+        }
+
+        private void UpdateLoFlow(GridCell cell)
+        {
+            m_flowIndicator.sprite = SpriteDB.Instance.FlowLo;
+
+            SetTransferWithFlow(cell, FlowState.Lo);
+        }
+
+        private void UpdateUnstableFlow(GridCell cell)
+        {
+            m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstable;
+
+            SetTransferWithFlow(cell, FlowState.Unstable);
+        }
+
+        private void UpdateDefaultFlow(GridCell cell)
+        {
+            m_flowIndicator.sprite = null;
+
+            SetTransferWithFlow(cell, FlowState.Empty);
+        }
+
+        private void SetTransferWithFlow(GridCell cell, FlowState flow)
+        {
+            if (cell.TransferType == TransferType.Via)
+            {
+                // lookup via for flow state
+                var sprite = SpriteDB.Instance.LookupViaSprite(flow);
+                m_transferRenderer.sprite = sprite;
+                m_secondaryTransferRenderer.sprite = sprite;
+            }
+            else if (cell.TransferType == TransferType.GateAbove)
+            {
+                var sprite = SpriteDB.Instance.LookupGateSprite(flow);
+                m_transferRenderer.sprite = sprite;
+            }
         }
 
         public void RefreshVisual(GridCell cellData, int layerIndex, int col, int row)
@@ -102,11 +147,11 @@ namespace SpaceFab.ChipDesign
             switch (cellData.TransferType)
             {
                 case TransferType.Via:
-                    m_transferRenderer.sprite = SpriteDB.Instance.Via;
-                    m_secondaryTransferRenderer.sprite = SpriteDB.Instance.Via;
+                    m_transferRenderer.sprite = SpriteDB.Instance.LookupViaSprite(FlowState.Empty);
+                    m_secondaryTransferRenderer.sprite = SpriteDB.Instance.LookupViaSprite(FlowState.Empty);
                     break;
                 case TransferType.GateAbove:
-                    m_transferRenderer.sprite = SpriteDB.Instance.Gate;
+                    m_transferRenderer.sprite = SpriteDB.Instance.LookupGateSprite(FlowState.Empty);
                     break;
                 default:
                     break;
@@ -135,7 +180,7 @@ namespace SpaceFab.ChipDesign
                 m_flowMask.sprite = pathData.Sprite;
             }
 
-            UpdateFlowVisuals(cellData.FlowState, layerIndex);
+            UpdateFlowVisuals(cellData, layerIndex);
         }
 
         private void RenderNTransistor(ref GridCell cellData, ref PathLibrary.AssembledPathData pathData, ref bool lookedUpEdge, int layerIndex, int col, int row)

@@ -271,19 +271,20 @@ namespace SpaceFab.ChipDesign
             {
                 SuiteHeader currHeader = Instantiate(HeaderPrefab, currCellContainer).GetComponent<SuiteHeader>();
                 currHeader.Label.text = suite.Headers[i].ToString();
+                var size = currHeader.Rect.sizeDelta;
                 if (suite.Headers[i] == Placeable.OUT || suite.Headers[i] == Placeable.OUTX || suite.Headers[i] == Placeable.OUTY)
                 {
-                    var size = currHeader.Rect.sizeDelta;
                     size.x = OutputCellWidth;
                     currHeader.Rect.sizeDelta = size;
                 }
                 else
                 {
-                    var size = currHeader.Rect.sizeDelta;
                     size.x = DefaultCellWidth;
                     currHeader.Rect.sizeDelta = size;
                 }
 
+                size.y = HeaderHeight;
+                currHeader.Rect.sizeDelta = size;
                 tableWidth += currHeader.Rect.sizeDelta.x + currRow.Layout.spacing;
             }
 
@@ -305,9 +306,9 @@ namespace SpaceFab.ChipDesign
                     SuiteContents currContents = Instantiate(ContentsPrefab, currCellContainer).GetComponent<SuiteContents>();
                     string subtype = EvalUtility.GetSubtypeByPlacableID(suite.Headers[i]);
                     currContents.Label.text = EvalUtility.GetTestValBySubType(subtype, suite.Tests[t]).ToString();
+                    var size = currContents.Rect.sizeDelta;
                     if (suite.Headers[i] == Placeable.OUT || suite.Headers[i] == Placeable.OUTX || suite.Headers[i] == Placeable.OUTY)
                     {
-                        var size = currContents.Rect.sizeDelta;
                         size.x = OutputCellWidth;
                         currContents.Rect.sizeDelta = size;
 
@@ -318,10 +319,12 @@ namespace SpaceFab.ChipDesign
                     }
                     else
                     {
-                        var size = currContents.Rect.sizeDelta;
                         size.x = DefaultCellWidth;
                         currContents.Rect.sizeDelta = size;
                     }
+
+                    size.y = RowHeight;
+                    currContents.Rect.sizeDelta = size;
                 }
             }
         }
@@ -344,11 +347,11 @@ namespace SpaceFab.ChipDesign
 
             if (success)
             {
-                eval.Img.color = UnityEngine.Color.green;
+                eval.SetCorrect();
             }
             else
             {
-                eval.Img.color = UnityEngine.Color.red;
+                eval.SetIncorrect();
             }
         }
 

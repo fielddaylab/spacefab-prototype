@@ -576,7 +576,7 @@ namespace SpaceFab.ChipDesign
 
             var twinLayer = GridStack.Instance.GridLayers[(int)GetOppositeLayer(ActiveLayer)];
             var twinCell = twinLayer.GetCell(gridPos);
-            EraseCellOneLayer(cell, gridPos);
+            EraseCellOneLayer(twinCell, gridPos);
         }
 
         private GridInteractionLayer GetOppositeLayer(GridInteractionLayer layer)
@@ -587,6 +587,8 @@ namespace SpaceFab.ChipDesign
 
         private void EraseCellOneLayer(GridCell cell, Vector2Int gridPos)
         {
+            // TODO: check if eraseable
+
             // erase cell
             cell.Erase(out List<EdgeDir> danglingEdges);
 

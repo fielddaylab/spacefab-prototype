@@ -33,11 +33,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2, y: -2}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: 15, y: 15}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &2554300149751621993
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -89,3 +89,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Img: {fileID: 3649967337299251765}
+  CorrectImg: {fileID: 21300000, guid: 1ddf6d7b6e085294488d8a66ffde0cac, type: 3}
+  IncorrectImg: {fileID: 21300000, guid: 599fb7d4d104f104ea8808cbbb025ef9, type: 3}

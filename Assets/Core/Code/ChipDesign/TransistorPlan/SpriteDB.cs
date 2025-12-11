@@ -25,7 +25,6 @@ namespace SpaceFab.ChipDesign {
         public Sprite Via;
         public Sprite ViaHigh;
         public Sprite ViaLow;
-        public Sprite ViaNeutral;
         public Sprite ViaUnstable;
 
         [Header("Gates")]
@@ -47,6 +46,40 @@ namespace SpaceFab.ChipDesign {
         private void Awake()
         {
             Instance = this;
+        }
+
+        public Sprite LookupViaSprite(FlowState state)
+        {
+            switch (state)
+            {
+                case FlowState.Empty:
+                    return Via;
+                case FlowState.Hi:
+                    return ViaHigh;
+                case FlowState.Lo:
+                    return ViaLow;
+                case FlowState.Unstable:
+                    return ViaUnstable;
+                default:
+                    return null;
+            }
+        }
+
+        public Sprite LookupGateSprite(FlowState state)
+        {
+            switch (state)
+            {
+                case FlowState.Empty:
+                    return Gate;
+                case FlowState.Hi:
+                    return GateHigh;
+                case FlowState.Lo:
+                    return GateLow;
+                case FlowState.Unstable:
+                    return GateUnstable;
+                default:
+                    return null;
+            }
         }
     }
 }

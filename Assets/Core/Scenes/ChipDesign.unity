@@ -1644,11 +1644,11 @@ MonoBehaviour:
   HeaderPrefab: {fileID: 2401438714973592766, guid: 6947a79b87271cf4d83036ad72e981c0, type: 3}
   ContentsPrefab: {fileID: 2110094385204548695, guid: 8c06b27fe8476dd4f82b2c84234e1219, type: 3}
   CellEvalPrefab: {fileID: 1983442289292327397, guid: 1f5c5f0905035db429650203b9630e1d, type: 3}
-  DefaultCellWidth: 50
+  DefaultCellWidth: 100
   OutputCellWidth: 100
   RowContainer: {fileID: 615516681}
   HeaderHeight: 50
-  RowHeight: 50
+  RowHeight: 25
   VertLayout: {fileID: 615516682}
   IsUnstable: 0
 --- !u!4 &1717424314
@@ -1707,10 +1707,9 @@ MonoBehaviour:
   InvertedOverlay: {fileID: 21300000, guid: 598d496783b3adb47a14ea514a4605fd, type: 3}
   InvertedOverlayBase: {fileID: 21300000, guid: c9cb3f3cb69fc2841933aabc683be7f8, type: 3}
   Via: {fileID: 21300000, guid: 05d2062e5fb10b54aa7bbca4f930ab1a, type: 3}
-  ViaHigh: {fileID: 21300000, guid: 9bde03c1bebb85c4dad27598ca1e4245, type: 3}
-  ViaLow: {fileID: 21300000, guid: 90c1592dce8c93348996a9459d500048, type: 3}
-  ViaNeutral: {fileID: 21300000, guid: 010f9310c85bfbc489c6cbe2cdabd2d2, type: 3}
-  ViaUnstable: {fileID: 21300000, guid: aca0caa03b6d9034fb9e305337fbc1c4, type: 3}
+  ViaHigh: {fileID: 21300000, guid: 4ee84c461b63743429ee62f42a4deace, type: 3}
+  ViaLow: {fileID: 21300000, guid: c7a324dab8093684c890e74d9d8b9e94, type: 3}
+  ViaUnstable: {fileID: 21300000, guid: 0c5994f82a1a3ea4f9fb9cb66a97f5db, type: 3}
   Gate: {fileID: 21300000, guid: ee3828dae7623154aa8e5c634dcfdeab, type: 3}
   GateHigh: {fileID: 21300000, guid: 78efde9288f7f3a4aaf83cc0749ad714, type: 3}
   GateLow: {fileID: 21300000, guid: 725213504f6c2e34c90c40ae6fbd6ea3, type: 3}
