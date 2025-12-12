@@ -234,6 +234,9 @@ namespace SpaceFab.ChipDesign
 
         private Routine m_EvaluationRoutine;
 
+        private List<CrucialGraphNode> m_crucialGraph = new List<CrucialGraphNode>();
+        private Dictionary<GraphCoord, CrucialGraphNode> m_crucialCoordNodeMap = new Dictionary<GraphCoord, CrucialGraphNode>();
+
         #region Unity Callbacks
 
         private void Awake()
@@ -408,13 +411,13 @@ namespace SpaceFab.ChipDesign
             if (m_EvaluationRoutine.Exists()) { return; }
 
             // Gather nodes and edges
-            var crucialGraph = new List<CrucialGraphNode>();
+            m_crucialGraph.Clear();
             var completeGraph = new List<GraphNode>();
             var orderedEdges = new List<CrucialGraphEdge>();
-            Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap = new Dictionary<GraphCoord, CrucialGraphNode>();
+            m_crucialCoordNodeMap.Clear();
             int numCrucialNodes = 0;
             int numCrucialEdges = 0;
-            ConstructGraph(out crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges, out orderedEdges, ref crucialCoordNodeMap);
+            ConstructGraph(out m_crucialGraph, out completeGraph, out numCrucialNodes, out numCrucialEdges, out orderedEdges, ref m_crucialCoordNodeMap);
 
             #region CONVERT TOPOLOGICAL 
 
@@ -424,15 +427,15 @@ namespace SpaceFab.ChipDesign
 
             for (int i = 0; i < numCrucialNodes; i++)
             {
-                nodes[i].Id = crucialGraph[i].Name;
+                nodes[i].Id = m_crucialGraph[i].Name;
 
-                if (crucialGraph[i].Edges.Count != 0)
+                if (m_crucialGraph[i].Edges.Count != 0)
                 {
-                    for (int e = 0; e < crucialGraph[i].Edges.Count; e++)
+                    for (int e = 0; e < m_crucialGraph[i].Edges.Count; e++)
                     {
-                        edges[i + e].Endpoint = crucialGraph[i].Edges[e].Other.Name;
+                        edges[i + e].Endpoint = m_crucialGraph[i].Edges[e].Other.Name;
                     }
-                    nodes[i].Edges = new OffsetLengthU16((ushort)i, (ushort)crucialGraph[i].Edges.Count);
+                    nodes[i].Edges = new OffsetLengthU16((ushort)i, (ushort)m_crucialGraph[i].Edges.Count);
                 }
                 else
                 {
@@ -477,11 +480,11 @@ namespace SpaceFab.ChipDesign
             #endregion // SOLVE TOPOLOGICAL
 
             // Evaluation Visuals
-            ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
+            ResetTypeTransformations(m_crucialGraph, ref m_crucialCoordNodeMap);
 
             orderedEdges = SortOrderedEdges(orderedEdges);
 
-            m_EvaluationRoutine.Replace(VisualFeedbackRoutine(evalResult, crucialGraph, crucialCoordNodeMap, orderedEdges, completeGraph));
+            m_EvaluationRoutine.Replace(VisualFeedbackRoutine(evalResult, m_crucialGraph, m_crucialCoordNodeMap, orderedEdges, completeGraph));
         }
 
         private IEnumerator VisualFeedbackRoutine(EvalResult evalResult, List<CrucialGraphNode> crucialGraph, Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphEdge> orderedEdges, List<GraphNode> completeGraph)
@@ -1302,6 +1305,8 @@ namespace SpaceFab.ChipDesign
             ResultPanel.SetActive(false);
 
             ResetFlowStates();
+            VisualsMgr.Instance.RefreshVisuals();
+            ResetTypeTransformations(m_crucialGraph, ref m_crucialCoordNodeMap);
 
             Game.Events.Dispatch(GameEvents.OnResultsHidden);
         }
