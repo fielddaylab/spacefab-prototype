@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,18 +19,27 @@ namespace SpaceFab.ChipFab
     {
         private static KeyCode FIRE_KEY = KeyCode.Space;
 
-        public Blaster Blaster;
+        private static KeyCode LEFT_KEY = KeyCode.LeftArrow;
+        private static KeyCode RIGHT_KEY = KeyCode.RightArrow;
+        private static KeyCode UP_KEY = KeyCode.UpArrow;
+        private static KeyCode DOWN_KEY = KeyCode.DownArrow;
 
-        public ClickBox FinishButton;
+        public Vector3 SprayStartPos;
+        public Transform Sprayer;
+        public float SprayerMoveSpeed;
+        public Transform Aim;
 
-        public SideWaferDisplay WaferDisplay;
+        public LayerMask FillDotLayer;
+        public List<SpriteRenderer> FillDots;
 
-        public LayerMask SputterLayer;
-
-        public Transform LeftBoundPos;
-        public Transform RightBoundPos;
+        private int fillCount = 0;
 
         private SputteringMicrogameState m_state;
+
+        public ClickBox SprayerBox;
+        public SpriteRenderer StencilFill;
+
+        private Routine m_StencilFillRoutine;
 
         #region IStationMicrogame
 
@@ -37,15 +47,17 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
-            FinishButton.OnMouseDown.RemoveAllListeners();
-
-
-            FinishButton.transform.parent.gameObject.SetActive(false);
-            FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
-
             DragMgr.Instance.DragWaferEnabled = false;
+            SprayerBox.OnMouseDown.AddListener(HandleSprayMouseDown);
+            StencilFill.enabled = false;
 
-            WaferDisplay.UpdateDisplay(DragMgr.WaferInstance.Data);
+            Sprayer.localPosition = SprayStartPos;
+            fillCount = 0;
+
+            foreach (var dot in FillDots)
+            {
+                dot.enabled = false;
+            }
 
             TransitionToActivated();
         }
@@ -62,9 +74,18 @@ namespace SpaceFab.ChipFab
 
             base.Deactivate();
 
-            m_state = SputteringMicrogameState.Deactivated;
+            SprayerBox.OnMouseDown.RemoveListener(HandleSprayMouseDown);
 
-            FinishButton.OnMouseDown.RemoveListener(HandleFinishClicked);
+            m_state = SputteringMicrogameState.Deactivated;
+        }
+
+        private void TryDeactivate()
+        {
+            Deactivate();
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+            }
         }
 
         public override bool TryCancel()
@@ -113,26 +134,51 @@ namespace SpaceFab.ChipFab
 
         private void ProcessManual()
         {
+            Vector3 moveVector = Vector3.zero;
+
+            if (Input.GetKey(UP_KEY))
+            {
+                moveVector += Vector3.up;
+            }
+            if (Input.GetKey(DOWN_KEY))
+            {
+                moveVector += Vector3.down;
+            }
+            if (Input.GetKey(LEFT_KEY))
+            {
+                moveVector += Vector3.left;
+            }
+            if (Input.GetKey(RIGHT_KEY))
+            {
+                moveVector += Vector3.right;
+            }
+
+            moveVector = moveVector.normalized;
+            moveVector *= SprayerMoveSpeed * Time.deltaTime;
+
+            Sprayer.transform.localPosition += moveVector;
+
             if (Input.GetKey(FIRE_KEY))
             {
-                Blaster.Blast();
+                HandleSprayMouseDown();
+            }
+
+            // Check if sufficiently sprayed
+            if (fillCount == FillDots.Count)
+            {
+                HandleFinishClicked();
             }
         }
 
         private IEnumerator AutomationRoutine()
         {
-            Blaster.transform.eulerAngles = new Vector3(0, 0, -40);
 
             yield return 0.5f;
 
-            int steps = 50;
-            float amt = 80;
-            float stepAmt = amt / steps;
-            for (int i = 0; i < steps; i++)
+            foreach (var dot in FillDots)
             {
-                Blaster.Blast(true);
-                Blaster.transform.Rotate(new Vector3(0, 0, 1) * stepAmt);
-                yield return 0.02f;
+                dot.enabled = true;
+                // fillCount++;
             }
 
             yield return 0.5f;
@@ -145,13 +191,24 @@ namespace SpaceFab.ChipFab
             m_state = SputteringMicrogameState.Activated;
             TransitionCommon();
 
-            // disallow oxide state
-            // PREREQS Oxide EMPTY
-            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Empty)
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.AddStencil_SPUTTER,
+                SequenceStepID.FillStencil_SPUTTER,
+            };
+
+            // PREREQS (Oxide STRIPPED & Resist STRIPPED) or (Oxide EMPTY & Resist EMPTY)
+            bool oxideAndResistPrereq = (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Stripped)
+                || (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Empty);
+            
+            if (!oxideAndResistPrereq
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
             {
                 DragMgr.Instance.DragWaferEnabled = true;
-                Deactivate();
+                TryDeactivate();
             }
+
+            Game.Events.Dispatch(GameEvents.StationStarted);
         }
 
         private void TransitionToReady()
@@ -163,7 +220,6 @@ namespace SpaceFab.ChipFab
         private void TransitionToSputtering()
         {
             m_state = SputteringMicrogameState.Sputtering;
-            FinishButton.transform.parent.gameObject.SetActive(true);
             TransitionCommon();
         }
 
@@ -174,24 +230,9 @@ namespace SpaceFab.ChipFab
 
         private float EvaluatePrecision()
         {
-            // suite of raycasts
-            int numSections = 100;
-            int hitCount = 0;
-            float xStep = (RightBoundPos.position.x - LeftBoundPos.position.x) / numSections;
+            float precision = 1;
 
-            for (int i = 0; i < numSections; i++)
-            {
-                // raycast at step
-                float x = LeftBoundPos.position.x + xStep * i;
-                Vector2 pos = new Vector2(x, LeftBoundPos.position.y);
-                var collider = Physics2D.OverlapPoint(pos, SputterLayer);
-                if (collider)
-                {
-                    hitCount++;
-                }
-            }
 
-            float precision = hitCount / (float)numSections;
             return precision;
         }
 
@@ -199,9 +240,63 @@ namespace SpaceFab.ChipFab
         {
             var precision = EvaluatePrecision();
             DragMgr.Instance.DragWaferEnabled = true;
-            DragMgr.WaferInstance.SetMetallizationState(precision);
-            Deactivate();
+            bool fillStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Stripped;
+            bool createStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Empty;
+            if (fillStencil)
+            {
+                DragMgr.WaferInstance.SetMetallizationStateFillStencil(precision);
+            }
+            else if (createStencil)
+            {
+                DragMgr.WaferInstance.SetMetallizationStateCreateStencil(precision);
+            }
+            TryDeactivate();
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
+        }
+
+        private void HandleSprayMouseDown()
+        {
+            Vector3 sprayPos = Aim.position;
+
+            Collider2D hit = Physics2D.OverlapPoint(sprayPos, FillDotLayer);
+            if (hit != null)
+            {
+                SpriteRenderer dot = hit.GetComponent<SpriteRenderer>();
+                if (dot && !dot.enabled)
+                {
+                    dot.enabled = true;
+                    fillCount++;
+                }
+            }
+
+            /*
+            if (m_StencilFillRoutine.Exists())
+            {
+                return;
+            }
+
+            m_StencilFillRoutine.Replace(StencilFillRoutine());
+            */
+        }
+
+        private IEnumerator StencilFillRoutine()
+        {
+
+            StencilFill.enabled = true;
+
+            var currColor = StencilFill.color;
+            currColor.a = 0;
+            StencilFill.color = currColor;
+
+            var targetColor = currColor;
+            targetColor.a = 1;
+
+            yield return StencilFill.ColorTo(targetColor, 1f, ColorUpdate.FullColor);
+
+            yield return 1.5f;
+
+            HandleFinishClicked();
         }
     }
 }

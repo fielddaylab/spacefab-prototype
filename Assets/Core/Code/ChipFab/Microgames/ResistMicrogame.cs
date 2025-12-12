@@ -25,16 +25,20 @@ namespace SpaceFab.ChipFab
         public float Impulse;
         public float Friction;
 
-        private KeyCode m_nextKey;
+        [Header("Dropper")]
+        public Transform DropperVisual;
+        public float DropperXExtents;
+        public float DropperSpeed;
 
         private float m_currSpeed;
 
-        private static KeyCode Key1 = KeyCode.LeftArrow;
-        private static KeyCode Key2 = KeyCode.RightArrow;
+        private static KeyCode DropperKey = KeyCode.Space;
 
         private ResistMicrogameState m_state;
 
         private bool InputsEnabled;
+        private bool UsedDropper;
+        private bool DropperMovingRight;
 
         #region IStationMicrogame
 
@@ -58,6 +62,16 @@ namespace SpaceFab.ChipFab
             base.Deactivate();
 
             m_state = ResistMicrogameState.Deactivated;
+        }
+
+        private void TryDeactivate()
+        {
+            Deactivate();
+
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+            }
         }
 
         public override bool TryCancel()
@@ -104,42 +118,44 @@ namespace SpaceFab.ChipFab
                 // add initial impulse
                 if (InputsEnabled)
                 {
-                    m_currSpeed = 1.5f;
-                    InputsEnabled = false;
+                    var pos = DropperVisual.localPosition;
+                    pos.x = 0;
+                    DropperVisual.localPosition = pos;
+                    UseDropper();
                 }
             }
             else
             {
-                // apply impulse
-                if (InputsEnabled)
+                // Move dropper back and forth until input
+                if (!UsedDropper)
                 {
-                    if (m_nextKey == KeyCode.Space)
+                    var dropperPos = DropperVisual.localPosition;
+                    if (DropperMovingRight)
                     {
-                        if (Input.GetKeyDown(Key1))
+                        dropperPos.x = dropperPos.x + DropperSpeed * Time.deltaTime;
+                        if (dropperPos.x >= DropperXExtents)
                         {
-                            m_currSpeed += Impulse;
-                            m_nextKey = Key2;
-                        }
-                        else if (Input.GetKeyDown(Key2))
-                        {
-                            m_currSpeed += Impulse;
-                            m_nextKey = Key1;
+                            dropperPos.x = DropperXExtents;
+                            DropperMovingRight = false;
                         }
                     }
-                    else if (m_nextKey == Key1)
+                    else
                     {
-                        if (Input.GetKeyDown(Key1))
+                        dropperPos.x = dropperPos.x - DropperSpeed * Time.deltaTime;
+                        if (dropperPos.x <= -DropperXExtents)
                         {
-                            m_currSpeed += Impulse;
-                            m_nextKey = Key2;
+                            dropperPos.x = -DropperXExtents;
+                            DropperMovingRight = true;
                         }
                     }
-                    else if (m_nextKey == Key2)
+                    DropperVisual.localPosition = dropperPos;
+
+                    if (InputsEnabled)
                     {
-                        if (Input.GetKeyDown(Key2))
+                        if (Input.GetKeyDown(DropperKey))
                         {
-                            m_currSpeed += Impulse;
-                            m_nextKey = Key1;
+                            // apply impulse
+                            UseDropper();
                         }
                     }
                 }
@@ -160,23 +176,59 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        private void UseDropper()
+        {
+            FluidVisual.gameObject.SetActive(true);
+            var fluidPos = FluidVisual.position;
+            fluidPos.x = DropperVisual.position.x - 0.06f;
+            FluidVisual.position = fluidPos;
+            m_currSpeed = 1.15f;
+            InputsEnabled = false;
+            UsedDropper = true;
+            DropperVisual.gameObject.SetActive(false);
+        }
+
         private void TransitionToActivated()
         {
             InputsEnabled = true;
 
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.ApplyResist,
+            };
+
             // PREREQ: Oxide FUll or Metal FULL
-            if (DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full)
+            if ((DragMgr.WaferInstance.Data.OxideLayer.State != OxideState.Full
+                && DragMgr.WaferInstance.Data.MetallizationLayer.State != MetallizationState.Full)
+                || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
             {
                 Debug.Log("Invalid prereqs");
-                Deactivate();
+                TryDeactivate();
                 return;
             }
 
+            Game.Events.Dispatch(GameEvents.StationStarted);
+
             m_state = ResistMicrogameState.Activated;
-            m_nextKey = KeyCode.Space; // neutral key
+            FluidVisual.gameObject.SetActive(false);
             FluidVisual.localScale = Vector3.one * StartFluidScale;
             m_currSpeed = 0;
             TransitionCommon();
+
+            // randomize starting pos
+            float centerOffset = -0.06f; // 0.156f;
+            var xPos = DropperVisual.localPosition;
+            xPos.x = Random.Range(-DropperXExtents, DropperXExtents);
+            DropperVisual.localPosition = xPos;
+
+            xPos = FluidVisual.localPosition;
+            xPos.x = centerOffset;
+            FluidVisual.localPosition = xPos;
+
+            UsedDropper = false;
+            DropperVisual.gameObject.SetActive(true);
+            DropperMovingRight = true;
         }
 
         private void TransitionToReady()
@@ -184,8 +236,6 @@ namespace SpaceFab.ChipFab
             m_state = ResistMicrogameState.Ready;
             TransitionCommon();
         }
-
-
 
         private void TransitionToSpinning()
         {
@@ -200,7 +250,10 @@ namespace SpaceFab.ChipFab
             DragMgr.WaferInstance.SetResistState(precision);
             TransitionCommon();
 
+            TryDeactivate();
+
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
 
         private void TransitionCommon()

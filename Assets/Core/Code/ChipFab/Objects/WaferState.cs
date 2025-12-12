@@ -19,7 +19,8 @@ namespace SpaceFab.ChipFab
     public enum DopingType
     {
         N,
-        P
+        P,
+        NONE
     }
 
     [Serializable]
@@ -256,7 +257,7 @@ namespace SpaceFab.ChipFab
             }
         }
         
-        public void SetPhotoState(MaskId mask, int rotation)
+        public void SetPhotoState(MaskId mask, int rotation, float precision)
         {
             Data.ResistLayer.State = ResistState.Developed;
 
@@ -267,6 +268,8 @@ namespace SpaceFab.ChipFab
             oriented.Rotation = rotation;
 
             Data.ResistLayer.Mask = oriented;
+
+            Data.Precision.Values.Add(precision);
         }
 
         public void SetResistState(float precision)
@@ -292,10 +295,29 @@ namespace SpaceFab.ChipFab
             Data.Precision.Values.Add(precision);
         }
 
-        public void SetMetallizationState(float precision)
+        public void SetMetallizationStateCreateStencil(float precision)
         {
             Data.MetallizationLayer.State = MetallizationState.Full;
             Data.Precision.Values.Add(precision);
+        }
+
+        public void SetMetallizationStateFillStencil(float precision)
+        {
+            Data.MetallizationLayer.State = MetallizationState.Stripped;
+
+            Data.MetallizationLayer.Mask.Id = Data.ResistLayer.Mask.Id;
+            Data.MetallizationLayer.Mask.Rotation = Data.ResistLayer.Mask.Rotation;
+
+            Data.Precision.Values.Add(precision);
+
+            // Auto wash
+            DragMgr.WaferInstance.SetResistStateWash();
+
+            // Clear oxide
+            Data.OxideLayer.State = OxideState.Empty;
+
+            Data.OxideLayer.Mask.Id = MaskId.NONE;
+            Data.OxideLayer.Mask.Rotation = 0;
         }
 
         public void SetMetallizationStateEtch(float precision)
@@ -303,8 +325,8 @@ namespace SpaceFab.ChipFab
             Data.MetallizationLayer.State = MetallizationState.Stripped;
             // Data.MetallizationLayer.Precision = precision;
 
-            LatestMaskRenderer.color = Color.yellow;
-            LatestMaskRenderer = null;
+            //LatestMaskRenderer.color = Color.yellow;
+            //LatestMaskRenderer = null;
 
             Data.MetallizationLayer.Mask.Id = Data.ResistLayer.Mask.Id;
             Data.MetallizationLayer.Mask.Rotation = Data.ResistLayer.Mask.Rotation;

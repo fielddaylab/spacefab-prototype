@@ -35,6 +35,13 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        private void OnDestroy()
+        {
+            if (Game.IsShuttingDown) { return; }
+            Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Deregister(GameEvents.WaferPickedUp, HandleWaferPickedUp);
+        }
+
         private void HandleMouseEnter()
         {
             CheckTriggerHoverDisplays();
@@ -83,6 +90,22 @@ namespace SpaceFab.ChipFab
                 }
             }
             */
+
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                // Activate / Deactivate stations with click
+                if (ControlsMgr.Instance.BotInstance.State == ConveyorState.Full)
+                {
+                    if (ControlsMgr.Instance.BotInstance.IsAtStation(this.GetComponent<IStationMicrogame>()))
+                    {
+                        ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                    }
+                }
+                else if (ControlsMgr.Instance.BotInstance.State == ConveyorState.Empty)
+                {
+                    // ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+                }
+            }
         }
 
         private void CheckTriggerHoverDisplays()
@@ -118,7 +141,7 @@ namespace SpaceFab.ChipFab
                 var furnace = Microgame.GetComponent<FurnaceMicrogame>();
                 if (furnace)
                 {
-                    furnace.AssignDopant(toAssign);
+                    // furnace.AssignDopant(toAssign);
                 }
             }
         }

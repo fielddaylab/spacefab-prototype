@@ -24,6 +24,7 @@ namespace  SpaceFab.ChipFab
         [HideInInspector] public UnityEvent OnHoverExit;
 
         [HideInInspector] public UnityEvent OnMouseDown;
+        // [HideInInspector] public UnityEvent OnMouseContinue;
         [HideInInspector] public UnityEvent OnMouseUp;
 
         private int m_lastMouseDownFrame = 0;
@@ -55,6 +56,10 @@ namespace  SpaceFab.ChipFab
                         OnMouseDown?.Invoke();
                         m_lastMouseDownFrame = Time.frameCount;
                     }
+                }
+                else if (Input.GetMouseButton(0)) // Left mouse button held
+                {
+                    // OnMouseContinue?.Invoke();
                 }
                 if (Input.GetMouseButtonUp(0)) // Left mouse button released
                 {

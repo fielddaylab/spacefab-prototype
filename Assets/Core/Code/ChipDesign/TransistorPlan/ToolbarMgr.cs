@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace SpaceFab.ChipDesign
@@ -13,34 +15,41 @@ namespace SpaceFab.ChipDesign
         None,
         DrawNNodes,
         DrawPNodes,
-        DrawLinks,
+        DrawLinks, // DrawMetal
         Erase,
         DrawInNodes,
         DrawOutNodes,
         DrawVPlusNodes,
         DrawVMinusNodes,
         DrawANodes,
-        DrawBNodes
+        DrawBNodes,
+        DrawVia,
+        DrawGate,
+        DrawOutXNodes,
+        DrawOutYNodes,
     }
 
-    public enum LinkType
+    public enum GridInteractionLayer
     {
-        Grey,
-        Gold
+        Metal,
+        Transistor
     }
 
     public class ToolbarMgr : MonoBehaviour
     {
         public static ToolbarMgr Instance;
 
-
         [Header("Layer")]
         [SerializeField] private Button LayerButton;
+        [SerializeField] private Sprite LayerBtnTopImg;
+        [SerializeField] private Sprite LayerBtnBottomImg;
         [SerializeField] private TMP_Text LayerText;
         [SerializeField] private TMP_Text LayerLabelText;
 
         [Header("Common")]
         [SerializeField] private Button EraseButton;
+        [SerializeField] private Button DrawViaButton;
+        [SerializeField] private Button DrawGateButton;
         [SerializeField] private TMP_Text ActiveToolText;
 
         [Header("Nodes")]
@@ -54,15 +63,18 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private Button DrawANodesButton;
         [SerializeField] private Button DrawBNodesButton;
         [SerializeField] private Button DrawOutNodesButton;
+        [SerializeField] private Button DrawOutXNodesButton;
+        [SerializeField] private Button DrawOutYNodesButton;
 
 
         [Header("Links")]
         [SerializeField] private GameObject DrawLinksGroup;
         [SerializeField] private Button DrawLinksButton;
 
-        [SerializeField] private GameObject DrawFloorLinksGroup;
-        [SerializeField] private Button DrawGreyLinksButton;
-        [SerializeField] private Button DrawGoldLinksButton;
+        [Header("Nav")]
+        [SerializeField] private Button ReturnMenuButton;
+        [SerializeField] private string m_menuScene;
+        [SerializeField] private TMP_Text m_titleText;
 
         private void Awake()
         {
@@ -75,15 +87,19 @@ namespace SpaceFab.ChipDesign
             DrawPNodesButton.onClick.AddListener(HandleDrawPNodesClicked);
             DrawInNodesButton.onClick.AddListener(HandleDrawInNodesClicked);
             DrawOutNodesButton.onClick.AddListener(HandleDrawOutNodesClicked);
+            DrawOutXNodesButton.onClick.AddListener(HandleDrawOutXNodesClicked);
+            DrawOutYNodesButton.onClick.AddListener(HandleDrawOutYNodesClicked);
             DrawVPlusNodesButton.onClick.AddListener(HandleDrawVPlusNodesClicked);
             DrawVMinusNodesButton.onClick.AddListener(HandleDrawVMinusNodesClicked);
             DrawANodesButton.onClick.AddListener(HandleDrawANodesClicked);
             DrawBNodesButton.onClick.AddListener(HandleDrawBNodesClicked);
             EraseButton.onClick.AddListener(HandleEraseClicked);
             DrawLinksButton.onClick.AddListener(HandleDrawLinksClicked);
+            DrawViaButton.onClick.AddListener(HandleDrawViaClicked);
+            DrawGateButton.onClick.AddListener(HandleDrawGateClicked);
 
-            DrawGreyLinksButton.onClick.AddListener(HandleDrawGreyLinksClicked);
-            DrawGoldLinksButton.onClick.AddListener(HandleDrawGoldLinksClicked);
+            ReturnMenuButton.onClick.AddListener(HandleReturnMenuClicked);
+
         }
 
         private void OnDestroy()
@@ -97,230 +113,201 @@ namespace SpaceFab.ChipDesign
             DrawPNodesButton.onClick.RemoveListener(HandleDrawPNodesClicked);
             DrawInNodesButton.onClick.RemoveListener(HandleDrawInNodesClicked);
             DrawOutNodesButton.onClick.RemoveListener(HandleDrawOutNodesClicked);
+            DrawOutXNodesButton.onClick.RemoveListener(HandleDrawOutXNodesClicked);
+            DrawOutYNodesButton.onClick.RemoveListener(HandleDrawOutYNodesClicked);
             DrawVPlusNodesButton.onClick.RemoveListener(HandleDrawVPlusNodesClicked);
             DrawVMinusNodesButton.onClick.RemoveListener(HandleDrawVMinusNodesClicked);
             DrawANodesButton.onClick.RemoveListener(HandleDrawANodesClicked);
             DrawBNodesButton.onClick.RemoveListener(HandleDrawBNodesClicked);
             EraseButton.onClick.RemoveListener(HandleEraseClicked);
             DrawLinksButton.onClick.RemoveListener(HandleDrawLinksClicked);
+            DrawViaButton.onClick.RemoveListener(HandleDrawViaClicked);
+            DrawGateButton.onClick.RemoveListener(HandleDrawGateClicked);
+
+            ReturnMenuButton.onClick.RemoveListener(HandleReturnMenuClicked);
         }
 
         private void Start()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                DrawInNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.IN));
-                DrawOutNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.OUT));
-                DrawVPlusNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VPLUS));
-                DrawVMinusNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VMINUS));
-                DrawANodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.A));
-                DrawBNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.B));
-                DrawNNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.NNODE));
-                DrawPNodesButton.gameObject.SetActive(InteractionMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.PNODE));
+                DrawInNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.IN));
+                DrawOutNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.OUT));
+                DrawOutXNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.OUTX));
+                DrawOutYNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.OUTY));
+                DrawVPlusNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VPLUS));
+                DrawVMinusNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VMINUS));
+                DrawANodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.A));
+                DrawBNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.B));
+                DrawNNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.NNODE));
+                DrawPNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.PNODE));
             }
-            else
-            {
-                DrawInNodesButton.gameObject.SetActive(false);
-                DrawOutNodesButton.gameObject.SetActive(false);
-                DrawVPlusNodesButton.gameObject.SetActive(false);
-                DrawVMinusNodesButton.gameObject.SetActive(false);
-                DrawANodesButton.gameObject.SetActive(false);
-                DrawBNodesButton.gameObject.SetActive(false);
-                DrawNNodesButton.gameObject.SetActive(false);
-                DrawPNodesButton.gameObject.SetActive(false);
-                EraseButton.gameObject.SetActive(FloorInteractionMgr.Instance.ActiveLayer == GridInteractionLayer.Links);
-            }
+
+            m_titleText.SetText(LevelMgr.Instance.CurrLevelData.GetTitle());
         }
 
         #region Handlers
 
+        private void HandleReturnMenuClicked()
+        {
+            SceneManager.LoadScene(m_menuScene);
+        }
+
         private void HandleLayerClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveLayer(InteractionMgr.Instance.ActiveLayer == GridInteractionLayer.Nodes ? GridInteractionLayer.Links : GridInteractionLayer.Nodes);
-            }
-            else if (FloorInteractionMgr.Instance != null)
-            {
-                FloorInteractionMgr.Instance.SetActiveLayer(FloorInteractionMgr.Instance.ActiveLayer == GridInteractionLayer.Nodes ? GridInteractionLayer.Links : GridInteractionLayer.Nodes);
+                InteractMgr.Instance.SetActiveLayer(InteractMgr.Instance.ActiveLayer == GridInteractionLayer.Transistor ? GridInteractionLayer.Metal : GridInteractionLayer.Transistor);
             }
         }
 
         private void HandleLayerChanged()
         {
-            var activeLayer = InteractionMgr.Instance != null ? InteractionMgr.Instance.ActiveLayer : FloorInteractionMgr.Instance.ActiveLayer;
+            var activeLayer = InteractMgr.Instance.ActiveLayer;
             switch (activeLayer)
             {
-                case GridInteractionLayer.Nodes:
-                    LayerText.SetText("+");
-                    LayerLabelText.SetText("Nodes");
-                    DrawNodesGroup.SetActive(true);
-                    if (InteractionMgr.Instance != null) { DrawLinksGroup.SetActive(false); }
-                    if (FloorInteractionMgr.Instance != null) { 
-                        EraseButton.gameObject.SetActive(false);
-                        DrawFloorLinksGroup.SetActive(false); 
-                    }
+                case GridInteractionLayer.Transistor:
+                    //LayerText.SetText("+");
+                    LayerButton.image.sprite = LayerBtnBottomImg;
+                    //LayerLabelText.SetText("Nodes");
+                    //DrawNodesGroup.SetActive(true);
+                    //if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(false); }
                     break;
-                case GridInteractionLayer.Links:
-                    LayerText.SetText("-");
-                    LayerLabelText.SetText("Links");
-                    DrawNodesGroup.SetActive(false);
-                    if (InteractionMgr.Instance != null) { DrawLinksGroup.SetActive(true); }
-                    if (FloorInteractionMgr.Instance != null) {
-                        EraseButton.gameObject.SetActive(true);
-                        DrawFloorLinksGroup.SetActive(true);
-                    }
+                case GridInteractionLayer.Metal:
+                    //LayerText.SetText("-");
+                    LayerButton.image.sprite = LayerBtnTopImg;
+                    //LayerLabelText.SetText("Links");
+                    //DrawNodesGroup.SetActive(false);
+                    //if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(true); }
                     break;
                 default:
                     break;
             }
 
-            InteractionMgr.Instance?.SetActiveTool(ToolType.None);
-            FloorInteractionMgr.Instance?.SetActiveTool(ToolType.None);
+            // InteractMgr.Instance?.SetActiveTool(ToolType.None);
         }
 
         private void HandleToolChanged()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                ActiveToolText.SetText(InteractionMgr.Instance.ActiveTool.ToString());
-            }
-            else
-            {
-                ActiveToolText.SetText(FloorInteractionMgr.Instance.ActiveTool.ToString());
+                ActiveToolText.SetText(InteractMgr.Instance.ActiveTool.ToString());
             }
         }
 
         private void HandleDrawNNodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawNNodes);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawNNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawNNodes);
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Transistor);
             }
         }
 
         private void HandleDrawPNodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawPNodes);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawPNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawPNodes);
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Transistor);
             }
         }
 
         private void HandleDrawInNodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawInNodes);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawInNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawInNodes);
             }
         }
 
         private void HandleDrawOutNodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawOutNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawOutNodes);
             }
-            else
+        }
+
+        private void HandleDrawOutXNodesClicked()
+        {
+            if (InteractMgr.Instance != null)
             {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawOutNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawOutXNodes);
+            }
+        }
+
+        private void HandleDrawOutYNodesClicked()
+        {
+            if (InteractMgr.Instance != null)
+            {
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawOutYNodes);
             }
         }
 
         private void HandleDrawVPlusNodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawVPlusNodes);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawVPlusNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawVPlusNodes);
             }
         }
 
         private void HandleDrawVMinusNodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawVMinusNodes);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawVMinusNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawVMinusNodes);
             }
         }
 
         private void HandleDrawANodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawANodes);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawANodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawANodes);
             }
         }
 
         private void HandleDrawBNodesClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawBNodes);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawBNodes);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawBNodes);
             }
         }
 
         private void HandleEraseClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.Erase);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.Erase);
+                InteractMgr.Instance.SetActiveTool(ToolType.Erase);
             }
         }
 
         private void HandleDrawLinksClicked()
         {
-            if (InteractionMgr.Instance != null)
+            if (InteractMgr.Instance != null)
             {
-                InteractionMgr.Instance.SetActiveTool(ToolType.DrawLinks);
-            }
-            else
-            {
-                FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawLinks);
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawLinks);
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Metal);
             }
         }
 
-        private void HandleDrawGreyLinksClicked()
+        private void HandleDrawViaClicked()
         {
-            FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawLinks);
-            FloorInteractionMgr.Instance.ActiveLinkType = LinkType.Grey;
+            if (InteractMgr.Instance != null)
+            {
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawVia);
+            }
         }
 
-        private void HandleDrawGoldLinksClicked()
+        private void HandleDrawGateClicked()
         {
-            FloorInteractionMgr.Instance.SetActiveTool(ToolType.DrawLinks);
-            FloorInteractionMgr.Instance.ActiveLinkType = LinkType.Gold;
+            if (InteractMgr.Instance != null)
+            {
+                InteractMgr.Instance.SetActiveTool(ToolType.DrawGate);
+            }
         }
 
         #endregion // Handlers

@@ -936,8 +936,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ChipDesignButton: {fileID: 2514940972887114145}
   m_ChipDesignScene:
-    m_ScenePath: Assets/Core/Scenes/ChipDesign.unity
-    m_GUID: f80c004d1479711409dc1c126bf4f6a8
+    m_ScenePath: Assets/Core/Scenes/ChipDesignLoader.unity
+    m_GUID: 4f5eae4ef44d7bc4589ceab90ffe221a
   m_FloorPlanButton: {fileID: 2166757809088035805}
   m_FloorPlanScene:
     m_ScenePath: Assets/Core/Scenes/Floorplan.unity

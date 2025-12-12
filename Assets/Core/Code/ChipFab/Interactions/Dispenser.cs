@@ -69,7 +69,7 @@ namespace SpaceFab.ChipFab
                     DragMgr.DopantInstance = newObj;
 
                     // only place to put dopant is in the furnace
-                    FurnaceMicrogame.Instance.AssignDopant(dispensable);
+                    // FurnaceMicrogame.Instance.AssignDopant(dispensable);
                 }
             }
         }

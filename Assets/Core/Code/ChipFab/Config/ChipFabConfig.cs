@@ -10,6 +10,7 @@ namespace SpaceFab.ChipFab
 
         public GameMode Mode;
         public LevelSetupData CurrLevel;
+        public string ChipFabScene;
 
         private void Awake()
         {

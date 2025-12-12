@@ -42,6 +42,8 @@ namespace SpaceFab.ChipFab
 
         public bool ActivelyChecking = false;
 
+        private bool StationControlReleased = true;
+
         private void Awake()
         {
             Instance = this;
@@ -51,17 +53,21 @@ namespace SpaceFab.ChipFab
         {
             CurrInstruction.Valid = false;
 
+            Game.Events.Register(GameEvents.StationStarted, HandleStationStarted);
+            Game.Events.Register(GameEvents.StationCompleted, HandleStationCompleted);
             Game.Events.Register(GameEvents.AutomationCompleted, HandleAutomationCompleted);
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
 
             m_allTriggers = ChipFabConfig.Instance.CurrLevel.AutomatedStationTriggers();
+
+            StationControlReleased = true;
 
             ResetTriggers();
         }
 
         private void Update()
         {
-            if (ActivelyChecking && !CurrInstruction.Valid)
+            if (ActivelyChecking && !CurrInstruction.Valid && StationControlReleased)
             {
                 CheckForAutomation();
             }
@@ -99,6 +105,16 @@ namespace SpaceFab.ChipFab
             CurrInstruction.Valid = false;
         }
 
+        private void HandleStationStarted()
+        {
+            StationControlReleased = false;
+        }
+
+        private void HandleStationCompleted()
+        {
+            StationControlReleased = true;
+        }
+
         private void HandleNewWaferCreated()
         {
             ResetTriggers();
@@ -130,8 +146,18 @@ namespace SpaceFab.ChipFab
 
         private void SetWaferAtIndex(int index)
         {
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                ControlsMgr.Instance.BotInstance.SetAtIndex(index);
+                ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                return;
+            }
+
             var currNode = NavNodesMgr.Instance.Nodes[index];
-            ConveyorMgr.Instance.SetCurrNode(index);
+            if (ControlsMgr.Instance.ConveyorEnabled)
+            {
+                ConveyorMgr.Instance.SetCurrNode(index);
+            }
 
             var pos = DragMgr.WaferInstance.transform.position;
             pos.x = currNode.transform.position.x;

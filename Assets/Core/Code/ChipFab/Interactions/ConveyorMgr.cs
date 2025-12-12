@@ -7,7 +7,8 @@ namespace SpaceFab.ChipFab
     public enum ConveyorState
     {
         Empty,
-        Full
+        Full,
+        Uninitialized
     }
 
     public class ConveyorMgr : MonoBehaviour

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
+  m_Name: Level Data 5
+  m_EditorClassIdentifier: 
+  m_title: Level 5
+  m_allowedPlaceables: 0500000006000000
+  m_gridConfig: {fileID: 11400000, guid: bf5d2741c5785aa4faf0136e9a96c79c, type: 2}
+  m_testSuite: {fileID: 11400000, guid: 0f404ac4b182f4b49a738ae7d045abc0, type: 2}

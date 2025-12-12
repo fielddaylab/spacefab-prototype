@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,25 +29,52 @@ namespace SpaceFab.ChipFab
         public float ApplyHeatIncrement;
         public float HeatLossRate;
 
-        public GameObject HeatingGroup;
-        public Transform ThermoSlider;
-
         public Transform DopantSlotPos;
 
         public ClickBox StartButton;
-        // public ClickBox ApplyHeatButton;
+        public ClickBox ApplyHeatButton;
         public ClickBox FinishButton;
 
+        public SpriteRenderer ApplyHeatButtonRenderer;
+
+        public Sprite DefaultButton;
+        public Sprite PressedButton;
+
         private FurnaceMicrogameState m_state;
-        private float m_heatTimer;
         private float m_currTemp;
-        private float m_precisionTimer;
+        private float m_finalTemp;
 
         private GameObject m_dopantObj;
         private DopingType m_appliedDopant;
         private bool m_usedDopant;
 
-        private static KeyCode StokeKey = KeyCode.UpArrow;
+        private bool m_isHeating = false;
+
+        private static KeyCode StokeKey = KeyCode.Space;
+
+        [Header("Automation")]
+        public float AutoTime;
+        private float AutoTimer;
+
+        [Space(5)]
+        [Header("Heating Visuals")]
+        public GameObject HeatingGroup;
+        public Transform Gauge;
+        public Transform TargetIndicator;
+        public Transform TargetZone;
+        // public Transform ThermoSlider;
+
+        public Transform MicrogameGauge;
+        public Transform MicrogameGaugeTargetIndicator;
+        public Transform MicrogameGaugeTargetZone;
+
+        [Header("Dopant Selection")]
+        public ClickBox EmptyDopeBox;
+        public ClickBox NDopeBox;
+        public ClickBox PDopeBox;
+
+        private Routine m_applyHeatRoutine;
+        private bool HeatingCompleted;
 
         #region IStationMicrogame
 
@@ -54,18 +82,18 @@ namespace SpaceFab.ChipFab
         {
             base.Activate(waferState);
 
-            StartButton.OnMouseDown.RemoveAllListeners();
-            FinishButton.OnMouseDown.RemoveAllListeners();
+            ApplyHeatButton.OnMouseDown.AddListener(HandleStartHeat);
+            ApplyHeatButton.OnMouseUp.AddListener(HandleEndHeat);
 
-            StartButton.transform.parent.gameObject.SetActive(false);
-            //ApplyHeatButton.transform.parent.gameObject.SetActive(false);
-            FinishButton.transform.parent.gameObject.SetActive(false);
+            EmptyDopeBox.OnMouseDown.AddListener(HandleEmptyDopeDown);
+            NDopeBox.OnMouseDown.AddListener(HandleNDopeDown);
+            PDopeBox.OnMouseDown.AddListener(HandlePDopeDown);
 
-            StartButton.OnMouseDown.AddListener(HandleStartMouseDown);
-            //ApplyHeatButton.OnMouseDown.AddListener(HandleApplyHeat);
-            FinishButton.OnMouseDown.AddListener(HandleFinishClicked);
+            m_appliedDopant = DopingType.NONE;
 
-            Game.Events.Register(GameEvents.NewDopantCreated, HandleNewDopantCreated);
+            ApplyHeatButtonRenderer.sprite = DefaultButton;
+
+            AutoTimer = AutoTime;
 
             TransitionToActivated();
         }
@@ -82,9 +110,12 @@ namespace SpaceFab.ChipFab
 
             base.Deactivate();
 
-            StartButton.OnMouseDown.RemoveListener(HandleStartMouseDown);
-            //ApplyHeatButton.OnMouseDown.RemoveListener(HandleApplyHeat);
-            FinishButton.OnMouseDown.RemoveListener(HandleFinishClicked);
+            ApplyHeatButton.OnMouseDown.RemoveListener(HandleStartHeat);
+            ApplyHeatButton.OnMouseUp.RemoveListener(HandleEndHeat);
+
+            EmptyDopeBox.OnMouseDown.RemoveListener(HandleEmptyDopeDown);
+            NDopeBox.OnMouseDown.RemoveListener(HandleNDopeDown);
+            PDopeBox.OnMouseDown.RemoveListener(HandlePDopeDown);
 
             TransitionToDeactivated();
         }
@@ -103,6 +134,28 @@ namespace SpaceFab.ChipFab
         private void Awake()
         {
             Instance = this;
+            m_state = FurnaceMicrogameState.Deactivated;
+        }
+
+        protected override void Start()
+        {
+            base.Start();
+
+            var targetTemp = (TargetMaxTemp + TargetMinTemp) / 2.0f;
+
+            var ratio = (targetTemp - MinTemp) / (MaxTemp - MinTemp);
+
+            // Align Target Indicator
+            var angles = TargetIndicator.transform.localEulerAngles;
+            angles.z = -180 * ratio;
+            TargetIndicator.transform.localEulerAngles = angles;
+            MicrogameGaugeTargetIndicator.transform.localEulerAngles = angles;
+
+            // Align Target Zone
+            angles = TargetZone.transform.localEulerAngles;
+            angles.z = -180 * ratio;
+            TargetZone.transform.localEulerAngles = angles;
+            MicrogameGaugeTargetZone.transform.localEulerAngles = angles;
         }
 
         private void Update()
@@ -113,19 +166,13 @@ namespace SpaceFab.ChipFab
                     TransitionToReady();
                     break;
                 case FurnaceMicrogameState.Ready:
-                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
-                        // auto start with automation
-                        HandleStartMouseDown();
-                    }
+                    TryStartFurnace();
                     break;
                 case FurnaceMicrogameState.Heating:
                     ProcessMicrogame();
                     break;
                 case FurnaceMicrogameState.Finished:
-                    if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace) {
-                        // auto end with automation
-                        HandleFinishClicked();
-                    }
+                    FinishFurnace();
                     break;
                 default:
                     break;
@@ -142,16 +189,9 @@ namespace SpaceFab.ChipFab
 
         private void ProcessMicrogame()
         {
-            m_heatTimer -= Time.deltaTime;
-
-            if (m_heatTimer <= 0)
+            if (HeatingCompleted)
             {
                 TransitionToFinished();
-            }
-            else
-            {
-                // reduce heat by steady amount
-                m_currTemp -= Time.deltaTime * HeatLossRate;
             }
 
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
@@ -163,40 +203,42 @@ namespace SpaceFab.ChipFab
                 ProcessManual();
             }
 
-            UpdateHeatingVisuals();
-            EvaluatePrecision();
+            if (m_isHeating)
+            {
+                m_finalTemp += ApplyHeatIncrement * Time.deltaTime;
+                if (m_finalTemp > MaxTemp)
+                {
+                    m_finalTemp = MaxTemp;
+                }
+            }
         }
 
         private void ProcessAutomation()
         {
             var instruction = AutomationMgr.Instance.CurrInstruction;
 
-            if (m_currTemp <= instruction.Temperature)
+            if (AutoTimer == AutoTime)
             {
-                HandleApplyHeat();
+                HandleStartHeat();
+            }
+
+            AutoTimer -= Time.deltaTime;
+
+            if (AutoTimer <= 0 && m_isHeating)
+            {
+                HandleEndHeat();
             }
         }
 
         private void ProcessManual()
         {
-            if (Input.GetKeyDown(StokeKey))
+            if (Input.GetKeyDown(StokeKey) && !m_AutomationRoutine.Exists() && !HeatingCompleted)
             {
-                HandleApplyHeat();
+                HandleStartHeat();
             }
-        }
-
-        private void UpdateHeatingVisuals()
-        {
-            var scale = ThermoSlider.localScale;
-            scale.y = (m_currTemp - MinTemp) / (MaxTemp - MinTemp) * 2;
-            ThermoSlider.localScale = scale;
-        }
-
-        private void EvaluatePrecision()
-        {
-            if (m_currTemp > TargetMaxTemp || m_currTemp < TargetMinTemp)
+            if (Input.GetKeyUp(StokeKey))
             {
-                m_precisionTimer += Time.deltaTime;
+                HandleEndHeat();
             }
         }
 
@@ -205,19 +247,44 @@ namespace SpaceFab.ChipFab
         private void TransitionToActivated()
         {
             m_state = FurnaceMicrogameState.Activated;
-            m_precisionTimer = 0;
+            m_isHeating = false;
+            m_finalTemp = 0;
+            m_currTemp = 0;
+            HeatingCompleted = false;
 
+            var validSteps = new List<SequenceStepID>() {
+                SequenceStepID.AddStencil_OXIDE,
+                SequenceStepID.FillStencil_DOPE
+            };
+
+            // PREREQ: Oxide not FUll and Metal not FULL
+            if (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Full
+                || DragMgr.WaferInstance.Data.MetallizationLayer.State == MetallizationState.Full
+                || DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Full
+                || !FabSequenceMgr.Instance.IsCurrStepAmong(validSteps)
+                )
+            {
+                Debug.Log("Invalid prereqs");
+                TryDeactivate();
+                return;
+            }
+
+            Game.Events.Dispatch(GameEvents.StationStarted);
+            
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Furnace)
             {
-                if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.N)
+                // Auto assign dopant for now
+                if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
                 {
-                    // generate dopant
-                    DopantMgr.Instance.NDispenser.Dispense(false);
-                }
-                else if (AutomationMgr.Instance.CurrInstruction.DopantToApply == Research.DopantType.P)
-                {
-                    // generate dopant
-                    DopantMgr.Instance.PDispenser.Dispense(false);
+                    var chunk = FabSequenceMgr.Instance.CurrChunkID();
+                    if (chunk == ChunkID.N)
+                    {
+                        AssignDopant(DopingType.N);
+                    }
+                    else if (chunk == ChunkID.P)
+                    {
+                        AssignDopant(DopingType.P);
+                    }
                 }
             }
 
@@ -233,16 +300,27 @@ namespace SpaceFab.ChipFab
         private void TransitionToHeating()
         {
             m_state = FurnaceMicrogameState.Heating;
-            m_heatTimer = HeatTime;
-            m_currTemp = (TargetMaxTemp + TargetMinTemp) / 2.0f;
+            m_currTemp = 0;
+
             TransitionCommon();
         }
 
         private void TransitionToFinished()
         {
             m_state = FurnaceMicrogameState.Finished;
-            float precision = (HeatTime - m_precisionTimer) / HeatTime;
+            float precision = 1;
+            if (m_finalTemp > TargetMaxTemp)
+            {
+                precision -= (m_finalTemp - TargetMaxTemp) / (MaxTemp - MinTemp);
+            }
+            else if (m_finalTemp < TargetMinTemp)
+            {
+                precision -= (TargetMinTemp - m_finalTemp) / (MaxTemp - MinTemp);
+            }
+
             DragMgr.WaferInstance.SetOxideStateFurnace(precision, m_usedDopant, m_appliedDopant);
+            // Auto wash
+            DragMgr.WaferInstance.SetResistStateWash();
             TransitionCommon();
         }
 
@@ -266,34 +344,105 @@ namespace SpaceFab.ChipFab
 
         private void HandleStartMouseDown()
         {
+            TryStartFurnace();
+        }
+
+        private bool TryStartFurnace()
+        {
             // check if valid combo
             // PREREQ: Oxide STRIPPED & DOPANT or Oxide EMPTY
-            bool dopantMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && m_usedDopant;
+            bool dopantMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped /* && m_usedDopant*/;
             bool emptyMode = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty;
             if (dopantMode || emptyMode)
             {
                 DragMgr.Instance.DragWaferEnabled = false;
                 TransitionToHeating();
+                return true;
             }
             else
             {
                 Debug.Log("Invalid prereqs");
-                Deactivate();
-                return;
+                TryDeactivate();
+                return false;
             }
         }
 
-        private void HandleApplyHeat()
+        private void HandleStartHeat()
         {
-            m_currTemp += ApplyHeatIncrement;
+            if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
+            {
+                var currChunk = FabSequenceMgr.Instance.CurrChunkID();
+                // Check for correct dopant
+                if (currChunk == ChunkID.N && m_appliedDopant != DopingType.N)
+                {
+                    return;
+                }
+                else if (currChunk == ChunkID.P && m_appliedDopant != DopingType.P)
+                {
+                    return;
+                }
+            }
+            else if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.AddStencil_OXIDE)
+            {
+                if (m_appliedDopant != DopingType.NONE)
+                {
+                    return;
+                }
+            }
+
+            m_isHeating = true;
+            ApplyHeatButtonRenderer.sprite = PressedButton;
         }
 
-        private void HandleFinishClicked()
+        private void HandleEndHeat()
         {
-            DragMgr.Instance.DragWaferEnabled = true;
+            if (!m_isHeating) { return; }
+
+            m_isHeating = false;
+            ApplyHeatButtonRenderer.sprite = DefaultButton;
+
+            m_applyHeatRoutine.Replace(ApplyHeatRoutine());
+        }
+
+        private void FinishFurnace()
+        {
+            TryDeactivate();
+
+            Game.Events.Dispatch(GameEvents.StationCompleted);
+        }
+
+        private void HandleEmptyDopeDown()
+        {
             RemoveDopant();
-            Deactivate();
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+        }
+
+        private void HandleNDopeDown()
+        {
+            AssignDopant(DopingType.N);
+        }
+
+        private void HandlePDopeDown()
+        {
+            AssignDopant(DopingType.P);
+        }
+
+        private void TryDeactivate()
+        {
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                DragMgr.Instance.DragWaferEnabled = true;
+                RemoveDopant();
+                Deactivate();
+                ControlsMgr.Instance.BotInstance.TryCancelCurrStation();
+                Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            }
+            else
+            {
+                DragMgr.Instance.DragWaferEnabled = true;
+                RemoveDopant();
+                Deactivate();
+                Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            }
         }
 
         private void HandleNewDopantCreated()
@@ -303,32 +452,53 @@ namespace SpaceFab.ChipFab
 
         #endregion // Handlers
 
-        public void AssignDopant(Dispensable dispensable)
+        #region Routines
+
+        private IEnumerator ApplyHeatRoutine()
         {
-            if (m_usedDopant)
+            var ratio = (m_finalTemp - MinTemp) / (MaxTemp - MinTemp);
+
+            // Align Needle
+            var angles = Gauge.transform.localEulerAngles;
+            angles.z = -180 * ratio;
+
+            yield return Routine.Combine(
+                Gauge.transform.RotateTo(angles, 1, Axis.Z, Space.Self).Ease(Curve.CubeOut),
+                MicrogameGauge.transform.RotateTo(angles, 1, Axis.Z, Space.Self).Ease(Curve.CubeOut)
+                );
+
+            yield return 2;
+
+            angles.z = 0;
+            yield return Routine.Combine(
+                Gauge.transform.RotateTo(angles, 0.01f, Axis.Z, Space.Self).Ease(Curve.CubeOut),
+                MicrogameGauge.transform.RotateTo(angles, 0.01f, Axis.Z, Space.Self).Ease(Curve.CubeOut)
+                );
+
+            HeatingCompleted = true;
+        }
+
+        #endregion // Routines
+
+        public void AssignDopant(DopingType dopantType)
+        {
+            if (dopantType == DopingType.NONE)
             {
-                RemoveDopant();
+                m_usedDopant = false;
+            }
+            else
+            {
+                m_usedDopant = true;
             }
 
-            if (dispensable == null) { return; }
-
-            dispensable.transform.position = DopantSlotPos.transform.position;
-            dispensable.transform.rotation = DopantSlotPos.transform.rotation;
-
-            var dopant = dispensable.GetComponent<Dopant>();
-
-            m_usedDopant = true;
-            m_appliedDopant = dopant.Type;
-            m_dopantObj = dispensable.gameObject;
+            m_appliedDopant = dopantType;
         }
 
         public void RemoveDopant()
         {
-            if (m_dopantObj)
-            {
-                Destroy(m_dopantObj);
-                m_usedDopant = false;
-            }
+            m_usedDopant = false;
+            m_appliedDopant = DopingType.NONE;
+
         }
     }
 }
