@@ -44,6 +44,8 @@ namespace SpaceFab.Research {
         public void PopupElectrical(StringHash32 materialId) {
             MaterialId = materialId;
             gameObject.SetActive(true);
+            ThermalGroup.gameObject.SetActive(false);
+            SpecialGroup.gameObject.SetActive(false);
             ElectricalGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
@@ -53,6 +55,8 @@ namespace SpaceFab.Research {
         public void PopupThermal(StringHash32 materialId) {
             MaterialId = materialId;
             gameObject.SetActive(true);
+            ElectricalGroup.gameObject.SetActive(false);
+            SpecialGroup.gameObject.SetActive(false);
             ThermalGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
@@ -62,6 +66,8 @@ namespace SpaceFab.Research {
         public void PopupSpecial(StringHash32 materialId) {
             MaterialId = materialId;
             gameObject.SetActive(true);
+            ThermalGroup.gameObject.SetActive(false);
+            ElectricalGroup.gameObject.SetActive(false);
             SpecialGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);

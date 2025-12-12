@@ -709,6 +709,7 @@ namespace FieldDay {
             Game.Scenes.Update();
             Game.Assets.Update();
             Game.Rendering.PollScreenSettings();
+            Game.Input.EndFrame();
 
             s_ReadyForRender = true;
         }
@@ -824,8 +825,8 @@ namespace FieldDay {
                 FlushQueue(s_FrameStartQueue);
 
                 FlushQueue(s_OnBootQueue);
-
                 Game.Input.BeginFrame();
+
 
                 // DEBUG UPDATE
                 Game.Components.Lock();

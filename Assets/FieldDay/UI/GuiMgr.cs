@@ -525,12 +525,35 @@ namespace FieldDay.UI {
                     Unsafe.FastCast<GameObject>(cmd.Target).SetActive(cmd.Arg.Bool);
                     break;
                 }
-                case GuiCommandType.SetActive_Behaviour: {
+                case GuiCommandType.SetEnabled_Behaviour: {
                     Unsafe.FastCast<Behaviour>(cmd.Target).enabled = cmd.Arg.Bool;
                     break;
                 }
                 case GuiCommandType.SetActive_ActiveGroup: {
                     Unsafe.FastCast<ActiveGroup>(cmd.Target).SetActive(cmd.Arg.Bool);
+                    break;
+                }
+                case GuiCommandType.SetVisible_Renderer: {
+                    Unsafe.FastCast<Renderer>(cmd.Target).enabled = cmd.Arg.Bool;
+                    break;
+                }
+                case GuiCommandType.SetVisible_Graphic: {
+                    Unsafe.FastCast<Graphic>(cmd.Target).enabled = cmd.Arg.Bool;
+                    break;
+                }
+                case GuiCommandType.SetVisible_Canvas: {
+                    Unsafe.FastCast<Canvas>(cmd.Target).enabled = cmd.Arg.Bool;
+                    break;
+                }
+                case GuiCommandType.SetVisible_GO: {
+                    GameObject go = (GameObject)cmd.Target;
+                    if (go.TryGetComponent(out Renderer renderer)) {
+                        renderer.enabled = cmd.Arg.Bool;
+                    } else if (go.TryGetComponent(out Graphic graphic)) {
+                        graphic.enabled = cmd.Arg.Bool;
+                    } else {
+                        Log.Warn("[GuiMgr] GameObject '{0}' doesn't have any Renderer or Graphic components to set visibility for", go.name);
+                    }
                     break;
                 }
                 case GuiCommandType.TryClick_GO: {

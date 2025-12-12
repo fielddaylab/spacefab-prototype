@@ -21,8 +21,12 @@ namespace FieldDay.UI {
     /// </summary>
     internal enum GuiCommandType : byte {
         SetActive_GO,
-        SetActive_Behaviour,
+        SetEnabled_Behaviour,
         SetActive_ActiveGroup,
+        SetVisible_Renderer,
+        SetVisible_Graphic,
+        SetVisible_Canvas,
+        SetVisible_GO,
         TryClick_GO,
         ForceClick_GO,
         ExecuteAction_Void,
@@ -77,17 +81,17 @@ namespace FieldDay.UI {
             });
         }
 
-        static public void SetActive(Behaviour behaviour, bool state) {
+        static public void SetActive(Component component, bool state) {
             Game.Gui.QueueCommand(new GuiCommandData() {
                 Type = GuiCommandType.SetActive_GO,
                 Arg = new GuiCommandArgument(state),
-                Target = behaviour.gameObject
+                Target = component.gameObject
             });
         }
 
         static public void SetEnabled(Behaviour behaviour, bool state) {
             Game.Gui.QueueCommand(new GuiCommandData() {
-                Type = GuiCommandType.SetActive_Behaviour,
+                Type = GuiCommandType.SetEnabled_Behaviour,
                 Arg = new GuiCommandArgument(state),
                 Target = behaviour
             });
@@ -98,6 +102,46 @@ namespace FieldDay.UI {
                 Type = GuiCommandType.SetActive_ActiveGroup,
                 Arg = new GuiCommandArgument(state),
                 Target = group
+            });
+        }
+
+        static public void SetVisible(Renderer renderer, bool state) {
+            Game.Gui.QueueCommand(new GuiCommandData() {
+                Type = GuiCommandType.SetVisible_Renderer,
+                Arg = new GuiCommandArgument(state),
+                Target = renderer
+            });
+        }
+
+        static public void SetVisible(Graphic graphic, bool state) {
+            Game.Gui.QueueCommand(new GuiCommandData() {
+                Type = GuiCommandType.SetVisible_Graphic,
+                Arg = new GuiCommandArgument(state),
+                Target = graphic
+            });
+        }
+
+        static public void SetVisible(Canvas canvas, bool state) {
+            Game.Gui.QueueCommand(new GuiCommandData() {
+                Type = GuiCommandType.SetVisible_Canvas,
+                Arg = new GuiCommandArgument(state),
+                Target = canvas
+            });
+        }
+
+        static public void SetVisible(GameObject go, bool state) {
+            Game.Gui.QueueCommand(new GuiCommandData() {
+                Type = GuiCommandType.SetVisible_GO,
+                Arg = new GuiCommandArgument(state),
+                Target = go
+            });
+        }
+
+        static public void SetVisible(Component component, bool state) {
+            Game.Gui.QueueCommand(new GuiCommandData() {
+                Type = GuiCommandType.SetVisible_GO,
+                Arg = new GuiCommandArgument(state),
+                Target = component.gameObject
             });
         }
 

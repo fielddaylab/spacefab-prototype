@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
@@ -304,6 +305,12 @@ namespace FieldDay.HID {
             }
         }
 
+        internal void EndFrame() {
+#if DEVELOPMENT
+            DebugUpdate();
+#endif // DEVELOPMENT
+        }
+
         internal void Shutdown() {
             NativeInput.SetEventSystem(null);
             NativeInput.Shutdown();
@@ -431,6 +438,33 @@ namespace FieldDay.HID {
         }
 
         #endregion // Consume
+
+        #region Debug
+
+#if DEVELOPMENT
+
+        private enum DebuggingFlags {
+            DisplayCurrentPointerInfo,
+        }
+
+        [EngineMenuFactory]
+        static private DMInfo CreateDebugMenu() {
+            DMInfo input = new DMInfo("Input");
+            DebugFlags.Menu.AddFlagToggle(input, "Display Pointer Info", DebuggingFlags.DisplayCurrentPointerInfo);
+            return input;
+        }
+
+        private void DebugUpdate() {
+            if (DebugFlags.IsFlagSet(DebuggingFlags.DisplayCurrentPointerInfo)) {
+                using(PooledStringBuilder psb = PooledStringBuilder.CreateLarge()) {
+                    
+                }
+            }
+        }
+
+#endif // DEVELOPMENT
+
+        #endregion // Debug
     }
 
     public enum ModifierKeyCode {

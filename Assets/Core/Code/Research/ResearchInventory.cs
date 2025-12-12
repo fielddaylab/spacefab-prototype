@@ -26,8 +26,10 @@ namespace SpaceFab.Research {
         Special = 0x04,
         Dopant = 0x08,
 
-        All = Electrical | Thermal | Special,
-        AllIncludingDopant = Electrical | Thermal | Special | Dopant
+        DopantMaterialN = 0x10,
+        DopantMaterialP = 0x20,
+
+        AllBasic = Electrical | Thermal | Special,
     }
 
     static public partial class ResearchMaterialUtility {

@@ -448,9 +448,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.9577489, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1053,6 +1053,7 @@ MonoBehaviour:
   ElectricProperty: {fileID: 5835610133432586144}
   ThermalProperty: {fileID: 4160479159775214105}
   SpecialProperty: {fileID: 2127719765526315535}
+  RowHighlight: {fileID: 8284357880430563519}
   SubmitButton: {fileID: 8092203044596220394}
   Guesser: {fileID: 0}
   ValenceDiagram: {fileID: 0}

@@ -20,6 +20,7 @@ namespace SpaceFab.Research {
         public ResearchKnownPropertyRow ElectricProperty;
         public ResearchKnownPropertyRow ThermalProperty;
         public ResearchKnownPropertyRow SpecialProperty;
+        public RectTransform RowHighlight;
         public PointerListener SubmitButton;
         public ResearchGuessDisplay Guesser;
 
@@ -35,19 +36,26 @@ namespace SpaceFab.Research {
 
             Find.State<ResearchSelectionState>().OnUpdated.Register(DisplayCurrent);
             Guesser.OnClose.Register(() => {
+                RowHighlight.gameObject.SetActive(false);
                 DisplayCurrent(Find.State<ResearchSelectionState>().Current);
             });
 
             ElectricProperty.Click.onClick.Register(() => {
                 SubmitButton.gameObject.SetActive(false);
+                RowHighlight.gameObject.SetActive(true);
+                RowHighlight.localPosition = ElectricProperty.transform.localPosition;
                 Guesser.PopupElectrical(RootId);
             });
             ThermalProperty.Click.onClick.Register(() => {
                 SubmitButton.gameObject.SetActive(false);
+                RowHighlight.gameObject.SetActive(true);
+                RowHighlight.localPosition = ThermalProperty.transform.localPosition;
                 Guesser.PopupThermal(RootId);
             });
             SpecialProperty.Click.onClick.Register(() => {
                 SubmitButton.gameObject.SetActive(false);
+                RowHighlight.gameObject.SetActive(true);
+                RowHighlight.localPosition = SpecialProperty.transform.localPosition;
                 Guesser.PopupSpecial(RootId);
             });
 
@@ -61,6 +69,7 @@ namespace SpaceFab.Research {
             ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = false;
             SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = false;
             SubmitButton.gameObject.SetActive(false);
+            RowHighlight.gameObject.SetActive(false);
 
             yield return 1;
 
@@ -88,6 +97,7 @@ namespace SpaceFab.Research {
             ElectricProperty.Click.GetComponent<Graphic>().raycastTarget = false;
             ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = false;
             SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = false;
+            RowHighlight.gameObject.SetActive(false);
             SubmitButton.gameObject.SetActive(false);
         }
 
@@ -104,7 +114,7 @@ namespace SpaceFab.Research {
             ResearchMaterialKnowledge knowledge = ResearchMaterialUtility.GetKnownCategories(rootId);
             ResearchMaterialGuessState guesses = ResearchMaterialUtility.GetGuess(rootId);
 
-            MaterialTitle.SetText(knowledge == ResearchMaterialKnowledge.All ? material.DisplayName : material.UnknownDisplayName);
+            MaterialTitle.SetText(knowledge == ResearchMaterialKnowledge.AllBasic ? material.DisplayName : material.UnknownDisplayName);
 
             ElectricProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Electrical) == 0;
             ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Thermal) == 0;
@@ -143,7 +153,7 @@ namespace SpaceFab.Research {
             UnselectedValenceAppearance.SetActive(false);
             SelectedValenceAppearance.SetActive(true);
 
-            ResearchMaterialUtility.PopulateDiagram(ValenceDiagram, material, knowledge == ResearchMaterialKnowledge.All);
+            ResearchMaterialUtility.PopulateDiagram(ValenceDiagram, material, knowledge == ResearchMaterialKnowledge.AllBasic);
         }
 
         static private void WriteChips(ResearchKnownPropertyRow row, ElectricalTag electrical, DopantType dopant, bool confirmed) {
