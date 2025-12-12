@@ -587,7 +587,8 @@ namespace SpaceFab.ChipDesign
 
         private void EraseCellOneLayer(GridCell cell, Vector2Int gridPos)
         {
-            // TODO: check if eraseable
+            // check if eraseable
+            if (!cell.Eraseable) { return; }
 
             // erase cell
             cell.Erase(out List<EdgeDir> danglingEdges);

@@ -54,6 +54,8 @@ namespace SpaceFab.ChipDesign
 
         public CellType TempTransformation;
 
+        public bool Eraseable = true;
+
         #region Loading
 
         public void LoadCellConfig(GridCellConfig config)
@@ -61,6 +63,8 @@ namespace SpaceFab.ChipDesign
             CellType = config.CellType;
             SubtypeLabel = EvalUtility.GetSubtypeByPlacableID(config.SubtypeLabel);
             Edges = config.Edges;
+            Eraseable = false; // pre-loaded nodes not erasable
+
             if (config.Edges.Length == 0)
             {
                 Edges = new EdgeState[6];
@@ -78,6 +82,8 @@ namespace SpaceFab.ChipDesign
         public void Erase(out List<EdgeDir> danglingEdges)
         {
             danglingEdges = new List<EdgeDir>();
+
+            if (!Eraseable) { return; }
 
             CellType = CellType.NONE;
             SubtypeLabel = default;
