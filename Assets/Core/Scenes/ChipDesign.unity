@@ -1708,7 +1708,7 @@ MonoBehaviour:
   InvertedOverlayBase: {fileID: 21300000, guid: c9cb3f3cb69fc2841933aabc683be7f8, type: 3}
   Via: {fileID: 21300000, guid: 05d2062e5fb10b54aa7bbca4f930ab1a, type: 3}
   ViaHigh: {fileID: 21300000, guid: 4ee84c461b63743429ee62f42a4deace, type: 3}
-  ViaLow: {fileID: 21300000, guid: c7a324dab8093684c890e74d9d8b9e94, type: 3}
+  ViaLow: {fileID: 21300000, guid: 8f9c90e7389830941bfebd083e47f2e0, type: 3}
   ViaUnstable: {fileID: 21300000, guid: 0c5994f82a1a3ea4f9fb9cb66a97f5db, type: 3}
   Gate: {fileID: 21300000, guid: ee3828dae7623154aa8e5c634dcfdeab, type: 3}
   GateHigh: {fileID: 21300000, guid: 78efde9288f7f3a4aaf83cc0749ad714, type: 3}
@@ -1716,9 +1716,12 @@ MonoBehaviour:
   GateUnstable: {fileID: 21300000, guid: 838e634c7fee32e4281defaef0545a9d, type: 3}
   IOInner: {fileID: 21300000, guid: cd4429e1d7ba3ae44887d23cff93dc79, type: 3}
   IOOuter: {fileID: 21300000, guid: 6756769c71e88ce428302abebcef0b2a, type: 3}
-  FlowHi: {fileID: 21300000, guid: 01462aaa8938c7749bddc1df3704e661, type: 3}
-  FlowLo: {fileID: 21300000, guid: 665b82684465aa14db1d17269cdfdd4f, type: 3}
-  FlowUnstable: {fileID: 21300000, guid: 987f1f4e97560bc418b04254742a9797, type: 3}
+  FlowHiAbove: {fileID: 21300000, guid: 0ff109a8e8f1fe246a3cf452803393b2, type: 3}
+  FlowLoAbove: {fileID: 21300000, guid: 326cf987309c6db4489a6de1432ebdfc, type: 3}
+  FlowUnstableAbove: {fileID: 21300000, guid: 045fdc858af2f584da80dff129da07f7, type: 3}
+  FlowHiBelow: {fileID: 21300000, guid: 5470c5cf47724d94cb91b78743f92178, type: 3}
+  FlowLoBelow: {fileID: 21300000, guid: 0000528798af3d742b42798ef503b719, type: 3}
+  FlowUnstableBelow: {fileID: 21300000, guid: 9088e1eb9284d8946938ca2fd83957a5, type: 3}
 --- !u!4 &1806810589
 Transform:
   m_ObjectHideFlags: 0

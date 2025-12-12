@@ -9,7 +9,7 @@ namespace SpaceFab.ChipDesign
     {
         private const int FLOW_SORT_ORDER = 500;
         private const int GATE_SORT_ORDER = 300;
-        private const int SECONDARY_SORT_ORDER = 250;
+        private const int SECONDARY_SORT_ORDER = 275;
         private const int METAL_SORT_ORDER = 200;
         private const int VIA_SORT_ORDER = 100;
         private const int TRANSISTOR_SORT_ORDER = 0;
@@ -36,44 +36,65 @@ namespace SpaceFab.ChipDesign
             switch (flow)
             {
                 case (FlowState.Hi):
-                    UpdateHiFlow(cell);
+                    UpdateHiFlow(cell, layerIndex);
                     break;
                 case (FlowState.Lo):
-                    UpdateLoFlow(cell);
+                    UpdateLoFlow(cell, layerIndex);
                     break;
                 case (FlowState.Unstable):
-                    UpdateUnstableFlow(cell);
+                    UpdateUnstableFlow(cell, layerIndex);
                     break;
                 default:
-                    UpdateDefaultFlow(cell);
+                    UpdateDefaultFlow(cell, layerIndex);
                     break;
             }
 
             // if (EvaluationMgr.Instance.IsUnstable) { m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstable; }
         }
 
-        private void UpdateHiFlow(GridCell cell)
+        private void UpdateHiFlow(GridCell cell, int layerIndex)
         {
-            m_flowIndicator.sprite = SpriteDB.Instance.FlowHi;
+            if (layerIndex == GridStack.METAL_LAYER)
+            {
+                m_flowIndicator.sprite = SpriteDB.Instance.FlowHiAbove;
+            }
+            else if (cell.CellType != CellType.Output && cell.CellType != CellType.Input)
+            {
+                m_flowIndicator.sprite = SpriteDB.Instance.FlowHiBelow;
+            }
 
             SetTransferWithFlow(cell, FlowState.Hi);
         }
 
-        private void UpdateLoFlow(GridCell cell)
+        private void UpdateLoFlow(GridCell cell, int layerIndex)
         {
-            m_flowIndicator.sprite = SpriteDB.Instance.FlowLo;
+            if (layerIndex == GridStack.METAL_LAYER)
+            {
+                m_flowIndicator.sprite = SpriteDB.Instance.FlowLoAbove;
+            }
+            else if (cell.CellType != CellType.Output && cell.CellType != CellType.Input)
+            {
+                m_flowIndicator.sprite = SpriteDB.Instance.FlowLoBelow;
+            }
 
             SetTransferWithFlow(cell, FlowState.Lo);
         }
 
-        private void UpdateUnstableFlow(GridCell cell)
+        private void UpdateUnstableFlow(GridCell cell, int layerIndex)
         {
-            m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstable;
+            if (layerIndex == GridStack.METAL_LAYER)
+            {
+                m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstableAbove;
+            }
+            else if (cell.CellType != CellType.Output && cell.CellType != CellType.Input)
+            {
+                m_flowIndicator.sprite = SpriteDB.Instance.FlowUnstableBelow;
+            }
 
             SetTransferWithFlow(cell, FlowState.Unstable);
         }
 
-        private void UpdateDefaultFlow(GridCell cell)
+        private void UpdateDefaultFlow(GridCell cell, int layerIndex)
         {
             m_flowIndicator.sprite = null;
 

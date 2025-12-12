@@ -385,13 +385,13 @@ namespace SpaceFab.ChipDesign
             switch (flow)
             {
                 case FlowState.Hi:
-                    contents.FlowImg.sprite = SpriteDB.Instance.FlowHi;
+                    contents.FlowImg.sprite = SpriteDB.Instance.FlowHiAbove;
                     break;
                 case FlowState.Lo:
-                    contents.FlowImg.sprite = SpriteDB.Instance.FlowLo;
+                    contents.FlowImg.sprite = SpriteDB.Instance.FlowLoAbove;
                     break;
                 case FlowState.Unstable:
-                    contents.FlowImg.sprite = SpriteDB.Instance.FlowUnstable;
+                    contents.FlowImg.sprite = SpriteDB.Instance.FlowUnstableAbove;
                     break;
                 default:
                     contents.FlowImg.enabled = false;
