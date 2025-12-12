@@ -1,5 +1,6 @@
 using BeauRoutine;
 using BeauUtil;
+using BeauUtil.Debugger;
 using BeauUtil.UI;
 using FieldDay;
 using FieldDay.Audio;
@@ -9,9 +10,17 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace SpaceFab.Research {
     public sealed class CombinerTool : MonoBehaviour {
+        [Serializable]
+        public struct AtomSelector {
+            public CursorHint Cursor;
+            public SpriteRenderer Atom;
+            public GameObject Selected;
+        }
+
         public SpriteRenderer[] AtomSlots;
         public float AtomSizeScale = 100;
 
@@ -19,6 +28,10 @@ namespace SpaceFab.Research {
         public SpriteRenderer Background;
         public Color32 BackgroundDisabledColor = Color.white;
         public GameObject SemiconductorWarning;
+
+        [Header("Selection")]
+        public AtomSelector LeftSelector;
+        public AtomSelector RightSelector;
 
         [Header("Valence")]
         public GameObject ValenceGroup;
@@ -39,6 +52,23 @@ namespace SpaceFab.Research {
 
             m_Tool.Slots[0].OnSlotUpdated.Register(OnFirstSlotUpdated);
             m_Tool.Slots[1].OnSlotUpdated.Register(OnSecondSlotUpdated);
+
+            LeftSelector.Cursor.onClick.Register(OnLeftAtomClicked);
+            RightSelector.Cursor.onClick.Register(OnRightAtomClicked);
+        }
+
+        private void OnLeftAtomClicked() {
+            m_DopingIndex = 0;
+            SetSelectedAtomVisuals(m_DopingIndex);
+            DisplayAtomicView(m_Tool.Slots[0].Item.Material.Atoms, m_DopingIndex);
+            ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
+        }
+
+        private void OnRightAtomClicked() {
+            m_DopingIndex = 1;
+            SetSelectedAtomVisuals(m_DopingIndex);
+            DisplayAtomicView(m_Tool.Slots[0].Item.Material.Atoms, m_DopingIndex);
+            ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
         }
 
         private void OnFirstSlotUpdated(ResearchSlot _, ResearchMaterialItem item) {
@@ -60,12 +90,33 @@ namespace SpaceFab.Research {
                 return;
             }
 
+            Assert.True(item.Material.Atoms.Length <= 2);
+
+            if (item.Material.Atoms.Length > 1) {
+                ResearchSprites sprites = Find.GlobalAsset<ResearchSprites>();
+
+                LeftSelector.Cursor.gameObject.SetActive(true);
+                RightSelector.Cursor.gameObject.SetActive(true);
+
+                LeftSelector.Atom.sprite = sprites.AtomIcons[(int) item.Material.Atoms[0].Appearance];
+                LeftSelector.Atom.transform.SetScale(item.Material.Atoms[0].Size / AtomSizeScale);
+                LeftSelector.Atom.color = item.Material.Atoms[0].Color;
+
+                RightSelector.Atom.sprite = sprites.AtomIcons[(int) item.Material.Atoms[1].Appearance];
+                RightSelector.Atom.transform.SetScale(item.Material.Atoms[1].Size / AtomSizeScale);
+                RightSelector.Atom.color = item.Material.Atoms[1].Color;
+            } else {
+                LeftSelector.Cursor.gameObject.SetActive(false);
+                RightSelector.Cursor.gameObject.SetActive(false);
+            }
+
             m_Tool.Slots[1].Locked = false;
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
             GuiCommands.SetActive(m_Tool.Slots[1].gameObject, true);
             GuiCommands.SetActive(SemiconductorWarning, false);
             Background.color = Color.white;
             m_DopingIndex = 0;
+            SetSelectedAtomVisuals(0);
             DisplayAtomicView(item.Material.Atoms, m_DopingIndex);
             UpdateValencePips(item.Material.Atoms[m_DopingIndex].ValenceElectrons, 0);
         }
@@ -86,9 +137,9 @@ namespace SpaceFab.Research {
             StringHash32 dopantId = dopant.AssetId;
             AtomicStructure dopantAtom = dopant.Atoms[0];
 
-            if (targetMaterial.DopantN == dopantId) {
+            if (targetMaterial.DopantN == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons + 1) {
                 // set correct
-            } else if (targetMaterial.DopantP == dopantId) {
+            } else if (targetMaterial.DopantP == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons - 1) {
                 // set correct
             } else if (dopant.Atoms.Length > 1 || dopantAtom.Size > targetAtom.Size) {
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.TooBig);
@@ -142,6 +193,13 @@ namespace SpaceFab.Research {
             for(int i = 0; i < ValencePips.Length; i++) {
                 ValencePips[i].color = (i < currentValence) ? currentColor : ((i < (targetValence + 1)) ? defaultColor : excessColor);
             }
+        }
+
+        private void SetSelectedAtomVisuals(int index) {
+            LeftSelector.Cursor.GetComponent<Collider2D>().enabled = index != 0;
+            LeftSelector.Selected.SetActive(index == 0);
+            RightSelector.Cursor.GetComponent<Collider2D>().enabled = index != 1;
+            RightSelector.Selected.SetActive(index == 1);
         }
     }
 }
