@@ -33,6 +33,7 @@ namespace SpaceFab.ChipDesign
         public int RowIndex;
         public int ColIndex;
         public bool Success;
+        public FlowState FlowResult;
     }
 
     public class EvaluationMgr : MonoBehaviour
@@ -228,6 +229,9 @@ namespace SpaceFab.ChipDesign
         private Dictionary<Tuple<int, int>, SuiteCellEval> m_evalMap = new Dictionary<Tuple<int, int>, SuiteCellEval>();
         private List<SuiteCellEval> m_allEvals = new List<SuiteCellEval>();
 
+        private Dictionary<Tuple<int, int>, SuiteContents> m_contentsMap = new Dictionary<Tuple<int, int>, SuiteContents>();
+        private List<SuiteContents> m_allSuiteContents = new List<SuiteContents>();
+
         private Routine m_EvaluationRoutine;
 
         #region Unity Callbacks
@@ -247,6 +251,7 @@ namespace SpaceFab.ChipDesign
             // Construct Test Suite Table
             var suite = LevelMgr.Instance.CurrLevelData.GetTestSuite();
             ConstructSuiteTable(suite);
+            ClearSuiteEvals();
 
             UnstableText.gameObject.SetActive(false);
         }
@@ -260,6 +265,7 @@ namespace SpaceFab.ChipDesign
             ClearSuiteEvals();
             m_evalMap.Clear();
             m_allEvals.Clear();
+            m_allSuiteContents.Clear();
 
             var numCols = suite.Headers.Length;
             float tableWidth = 0;
@@ -323,6 +329,9 @@ namespace SpaceFab.ChipDesign
                         currContents.Rect.sizeDelta = size;
                     }
 
+                    m_contentsMap.Add(new Tuple<int, int>(t, i), currContents);
+                    m_allSuiteContents.Add(currContents);
+
                     size.y = RowHeight;
                     currContents.Rect.sizeDelta = size;
                 }
@@ -335,9 +344,14 @@ namespace SpaceFab.ChipDesign
             {
                 eval.Img.enabled = false;
             }
+
+            foreach (var contents in m_allSuiteContents)
+            {
+                contents.FlowImg.enabled = false;
+            }
         }
 
-        private void UpdateSuiteEvalsAtPos(int rowIndex, int colIndex, bool success)
+        private void UpdateSuiteEvalsAtPos(int rowIndex, int colIndex, bool success, FlowState flowResult)
         {
             var key = new Tuple<int, int>(rowIndex, colIndex);
             if (!m_evalMap.ContainsKey(key)) { return; }
@@ -352,6 +366,36 @@ namespace SpaceFab.ChipDesign
             else
             {
                 eval.SetIncorrect();
+            }
+
+            if (m_contentsMap.ContainsKey(key))
+            {
+                UpdateSuiteContentsAtPos(rowIndex, colIndex, flowResult);
+            }
+        }
+
+        private void UpdateSuiteContentsAtPos(int rowIndex, int colIndex, FlowState flow)
+        {
+            var key = new Tuple<int, int>(rowIndex, colIndex);
+            if (!m_contentsMap.ContainsKey(key)) { return; }
+
+            SuiteContents contents = m_contentsMap[key];
+            contents.FlowImg.enabled = true;
+
+            switch (flow)
+            {
+                case FlowState.Hi:
+                    contents.FlowImg.sprite = SpriteDB.Instance.FlowHi;
+                    break;
+                case FlowState.Lo:
+                    contents.FlowImg.sprite = SpriteDB.Instance.FlowLo;
+                    break;
+                case FlowState.Unstable:
+                    contents.FlowImg.sprite = SpriteDB.Instance.FlowUnstable;
+                    break;
+                default:
+                    contents.FlowImg.enabled = false;
+                    break;
             }
         }
 
@@ -467,8 +511,20 @@ namespace SpaceFab.ChipDesign
                 UnstableText.gameObject.SetActive(IsUnstable);
                 evalIndexers.Clear();
                 bool currTestCorrect = true;
-                var currTest = LevelMgr.Instance.CurrLevelData.GetTestSuite().Tests[test];
+                var currSuite = LevelMgr.Instance.CurrLevelData.GetTestSuite();
+                var currTest = currSuite.Tests[test];
+                var numCols = currSuite.Headers.Length;
                 Debug.Log("[EvaluationMgr] Test " + test);
+
+                // update input visuals
+                for (int c = 0; c < numCols; c++)
+                {
+                    // do outputs later
+                    if (currSuite.Headers[c] == Placeable.OUT || currSuite.Headers[c] == Placeable.OUTX || currSuite.Headers[c] == Placeable.OUTY) { continue; }
+                    
+                    string subtype = EvalUtility.GetSubtypeByPlacableID(currSuite.Headers[c]);
+                    UpdateSuiteContentsAtPos(test, c, EvalUtility.GetTestValBySubType(subtype, currTest));
+                }
 
                 ResetTypeTransformations(crucialGraph, ref crucialCoordNodeMap);
                 ResetFlowStates();
@@ -690,7 +746,7 @@ namespace SpaceFab.ChipDesign
 
                 foreach (var result in evalIndexers)
                 {
-                    UpdateSuiteEvalsAtPos(result.RowIndex, result.ColIndex, result.Success);
+                    UpdateSuiteEvalsAtPos(result.RowIndex, result.ColIndex, result.Success, result.FlowResult);
                 }
 
                 yield return timeBetweenTests;
@@ -770,10 +826,12 @@ namespace SpaceFab.ChipDesign
                     evalIndexer.RowIndex = testIndex;
                     evalIndexer.ColIndex = EvalUtility.GetColIndexInHeaders(LevelMgr.Instance.CurrLevelData.GetTestSuite().Headers, cell.SubtypeLabel);
 
+                    evalIndexer.FlowResult = outputCNode.CurrFlowState;
                     if (isUnstable)
                     {
                         thisCorrect = false;
                         allCorrect = false;
+                        evalIndexer.FlowResult = FlowState.Unstable;
                     }
                     else if (EvalUtility.GetTestValBySubType(cell.SubtypeLabel, currTest) != outputCNode.CurrFlowState)
                     {
