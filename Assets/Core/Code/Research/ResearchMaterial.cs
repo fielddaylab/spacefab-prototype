@@ -111,10 +111,10 @@ namespace SpaceFab.Research {
         }
 
         static public bool IsStableAtTemperature(ResearchMaterial material, float temperature) {
-            if ((material.Thermal & ThermalTag.HighTemp) == 0 && temperature >= 0.75f) {
+            if ((material.Thermal & ThermalTag.HighTemp) == 0 && temperature > 0.8f) {
                 return false;
             }
-            if ((material.Thermal & ThermalTag.LowTemp) == 0 && temperature <= 0.25f) {
+            if ((material.Thermal & ThermalTag.LowTemp) == 0 && temperature < 0.2f) {
                 return false;
             }
             return true;
