@@ -1011,7 +1011,7 @@ namespace SpaceFab.ChipDesign
 
             for (int dir = 0; dir < 6; dir++)
             {
-                if (cell.Edges[dir] == EdgeState.Connected)
+                if (cell.Edges[dir].EdgeState == EdgeState.Connected)
                 {
                     GridUtility.GetOffsetOfDir((EdgeDir)dir, out Vector2Int gridOffset, out int layerOffset);
                     var adjLookupCoord = new GraphCoord(layer + layerOffset, col + gridOffset.x, row + gridOffset.y);
@@ -1069,7 +1069,7 @@ namespace SpaceFab.ChipDesign
 
                         for (int dir = 0; dir < 6; dir++)
                         {
-                            if (cell.Edges[dir] == EdgeState.Connected)
+                            if (cell.Edges[dir].EdgeState == EdgeState.Connected)
                             {
                                 GridUtility.GetOffsetOfDir((EdgeDir)dir, out Vector2Int gridOffset, out int layerOffset);
                                 var adjLookupCoord = new GraphCoord(layer + layerOffset, col + gridOffset.x, row + gridOffset.y);

@@ -141,6 +141,9 @@ namespace SpaceFab.ChipDesign
                 DrawBNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.B));
                 DrawNNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.NNODE));
                 DrawPNodesButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.PNODE));
+                DrawLinksButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.METAL));
+                DrawViaButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VIA));
+                DrawGateButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.GATE));
             }
 
             m_titleText.SetText(LevelMgr.Instance.CurrLevelData.GetTitle());
@@ -150,7 +153,10 @@ namespace SpaceFab.ChipDesign
 
         private void HandleReturnMenuClicked()
         {
-            SceneManager.LoadScene(m_menuScene);
+            if (InteractMgr.Instance && InteractMgr.Instance.InteractInputsEnabled)
+            {
+                SceneManager.LoadScene(m_menuScene);
+            }
         }
 
         private void HandleLayerClicked()

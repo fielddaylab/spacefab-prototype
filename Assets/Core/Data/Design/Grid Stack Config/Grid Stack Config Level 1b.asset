@@ -21,12 +21,150 @@ MonoBehaviour:
     ColumnIndex: 1
     CellType: 1
     SubtypeLabel: 2
-    Edges: 
-    TransferType: 0
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    TransferType: 4
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 5
+    CellType: 5
+    SubtypeLabel: 7
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    TransferType: 4
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 1
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    TransferType: 4
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 2
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    TransferType: 1
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 2
+    CellType: 0
+    SubtypeLabel: 11
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    TransferType: 1
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 4
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 1
+    TransferType: 1
   - LayerIndex: 1
     RowIndex: 2
     ColumnIndex: 4
-    CellType: 5
-    SubtypeLabel: 7
-    Edges: 
-    TransferType: 0
+    CellType: 0
+    SubtypeLabel: 11
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    TransferType: 1
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 5
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    TransferType: 4

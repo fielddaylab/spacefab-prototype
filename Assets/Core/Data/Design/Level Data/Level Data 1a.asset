@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level Data 1a
   m_EditorClassIdentifier: 
   m_title: Level 1A
-  m_allowedPlaceables: 
+  m_allowedPlaceables: 0a000000
   m_gridConfig: {fileID: 11400000, guid: 4a841aac5140c024895654cdef13cffa, type: 2}
   m_testSuite: {fileID: 11400000, guid: 89f0b1fe25dbec5439adbe468004a2d0, type: 2}

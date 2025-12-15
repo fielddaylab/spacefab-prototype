@@ -500,8 +500,8 @@ namespace SpaceFab.ChipDesign
 
                 int cellEdgeIndex = (int)EdgeDir.DESCEND;
                 int linkedEdgeIndex = (int)EdgeDir.ASCEND;
-                cell.Edges[cellEdgeIndex] = EdgeState.Connected;
-                linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+                cell.Edges[cellEdgeIndex].EdgeState = EdgeState.Connected;
+                linkedCell.Edges[linkedEdgeIndex].EdgeState = EdgeState.Connected;
             }
         }
 
@@ -519,8 +519,8 @@ namespace SpaceFab.ChipDesign
 
                 int cellEdgeIndex = (int)EdgeDir.ASCEND;
                 int linkedEdgeIndex = (int)EdgeDir.DESCEND;
-                cell.Edges[cellEdgeIndex] = EdgeState.Connected;
-                linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+                cell.Edges[cellEdgeIndex].EdgeState = EdgeState.Connected;
+                linkedCell.Edges[linkedEdgeIndex].EdgeState = EdgeState.Connected;
             }
         }
 
@@ -547,8 +547,8 @@ namespace SpaceFab.ChipDesign
 
             int cellEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.DESCEND : (int)EdgeDir.ASCEND;
             int linkedEdgeIndex = ActiveLayer == GridInteractionLayer.Metal ? (int)EdgeDir.ASCEND : (int)EdgeDir.DESCEND;
-            cell.Edges[cellEdgeIndex] = EdgeState.Connected;
-            linkedCell.Edges[linkedEdgeIndex] = EdgeState.Connected;
+            cell.Edges[cellEdgeIndex].EdgeState = EdgeState.Connected;
+            linkedCell.Edges[linkedEdgeIndex].EdgeState = EdgeState.Connected;
         }
 
         private void DrawGate(ref GridCell cell, Vector2Int gridPos)
@@ -594,11 +594,6 @@ namespace SpaceFab.ChipDesign
 
         private void EraseCellOneLayer(GridCell cell, Vector2Int gridPos, int currLayer)
         {
-            // check if eraseable
-            if (!cell.Eraseable) { 
-                return;
-            }
-
             // erase cell
             cell.Erase(out List<EdgeDir> danglingEdges);
 
@@ -634,8 +629,8 @@ namespace SpaceFab.ChipDesign
                 }
             }
 
-            fromCell.Edges[(int)fromDir] = EdgeState.Connected;
-            toCell.Edges[(int)reverseDir] = EdgeState.Connected;
+            fromCell.Edges[(int)fromDir].EdgeState = EdgeState.Connected;
+            toCell.Edges[(int)reverseDir].EdgeState = EdgeState.Connected;
 
             // set properties
             toCell.CellType = type;

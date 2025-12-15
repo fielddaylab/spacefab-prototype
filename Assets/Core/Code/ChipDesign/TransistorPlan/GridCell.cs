@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,25 @@ namespace SpaceFab.ChipDesign
     {
         Disconnected,
         Connected
+    }
+
+    [Serializable]
+    public struct EdgeStateData
+    {
+        public EdgeState EdgeState;
+        [HideInInspector] public bool Eraseable;
+
+        public EdgeStateData(EdgeState state)
+        {
+            EdgeState = state;
+            Eraseable = true;
+        }
+
+        public void Init()
+        {
+            EdgeState = EdgeState.Disconnected;
+            Eraseable = true;
+        }
     }
 
     public enum EdgeDir
@@ -47,14 +67,15 @@ namespace SpaceFab.ChipDesign
     {
         public CellType CellType;
         public string SubtypeLabel;
-        public EdgeState[] Edges = new EdgeState[6]; // one for each edge dir
+        public EdgeStateData[] Edges = new EdgeStateData[6]; // one for each edge dir
         public TransferType TransferType; // informs how data is transferred between layers when either ASCEND or DESCEND edges are connected
 
         public FlowState FlowState;
 
         public CellType TempTransformation;
 
-        public bool Eraseable = true;
+        public bool NodeEraseable = true;
+        public bool TransferEraseable = true;
 
         #region Loading
 
@@ -63,14 +84,42 @@ namespace SpaceFab.ChipDesign
             CellType = config.CellType;
             SubtypeLabel = EvalUtility.GetSubtypeByPlacableID(config.SubtypeLabel);
             Edges = config.Edges;
-            Eraseable = false; // pre-loaded nodes not erasable
+
+            if (CellType != CellType.NONE)
+            {
+                NodeEraseable = false; // pre-loaded nodes not erasable
+            }
+            if (config.TransferType != TransferType.NONE)
+            {
+                TransferEraseable = false; // pre-loaded nodes not erasable
+            }
+            TransferType = config.TransferType;
 
             if (config.Edges.Length == 0)
             {
-                Edges = new EdgeState[6];
+                Edges = new EdgeStateData[6];
+                for (int i = 0; i < Edges.Length; i++)
+                {
+                    Edges[i].Init();
+                }
             }
             else if (config.Edges.Length != 6) { Debug.LogError("[CellConfig] config does not have 6 edges!"); }
-            TransferType = config.TransferType;
+            else
+            {
+                for (int i = 0; i < Edges.Length; i++)
+                {
+                    // set connected edges to non-eraseable
+                    Edges[i].Eraseable = Edges[i].EdgeState != EdgeState.Connected;
+                }
+            }
+        }
+
+        public void InitEdges()
+        {
+            for (int i = 0; i < Edges.Length; i++)
+            {
+                Edges[i].Eraseable = true;
+            }
         }
 
         #endregion // Loading
@@ -85,24 +134,33 @@ namespace SpaceFab.ChipDesign
 
             for (int i = 0; i < Edges.Length; i++)
             {
-                if (Edges[i] == EdgeState.Connected)
+                if (Edges[i].EdgeState == EdgeState.Connected)
                 {
                     danglingEdges.Add((EdgeDir)i);
                 }
 
-                Edges[i] = EdgeState.Disconnected;
+                if (Edges[i].Eraseable) { 
+                    Edges[i].EdgeState = EdgeState.Disconnected;
+                }
             }
 
-            if (!Eraseable) { return; }
+            if (NodeEraseable)
+            {
+                CellType = CellType.NONE;
+                SubtypeLabel = default;
+            }
 
-            CellType = CellType.NONE;
-            SubtypeLabel = default;
-            TransferType = TransferType.NONE;
+            if (TransferEraseable)
+            {
+                TransferType = TransferType.NONE;
+            }
         }
 
         public void EraseEdge(EdgeDir dir)
         {
-            Edges[(int)dir] = EdgeState.Disconnected;
+            if (!Edges[(int)dir].Eraseable) { return; }
+
+            Edges[(int)dir].EdgeState = EdgeState.Disconnected;
 
             if (dir == EdgeDir.ASCEND || dir == EdgeDir.DESCEND)
             {
@@ -118,7 +176,7 @@ namespace SpaceFab.ChipDesign
         /// </summary>
         /// <param name="toCondense"></param>
         /// <returns></returns>
-        public static EdgeState[] CondenseEdges(EdgeState[] toCondense)
+        public static EdgeState[] CondenseEdges(EdgeStateData[] toCondense)
         {
             if (toCondense.Length != 6) { 
                 Debug.LogError("[EdgeUtility] unable to convert edges of length other than 6!");
@@ -126,10 +184,10 @@ namespace SpaceFab.ChipDesign
             }
 
             EdgeState[] condensed = new EdgeState[4];
-            condensed[0] = toCondense[0]; // North
-            condensed[1] = toCondense[1]; // East
-            condensed[2] = toCondense[3]; // South
-            condensed[3] = toCondense[4]; // West
+            condensed[0] = toCondense[0].EdgeState; // North
+            condensed[1] = toCondense[1].EdgeState; // East
+            condensed[2] = toCondense[3].EdgeState; // South
+            condensed[3] = toCondense[4].EdgeState; // West
 
             return condensed;
         }

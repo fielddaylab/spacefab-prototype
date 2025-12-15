@@ -39,7 +39,9 @@ namespace SpaceFab.ChipDesign
             {
                 for (int col = 0; col < xDim; col++)
                 {
-                    SetCell(col, row, new GridCell());
+                    var newCell = new GridCell();
+                    newCell.InitEdges();
+                    SetCell(col, row, newCell);
                 }
             }
         }
