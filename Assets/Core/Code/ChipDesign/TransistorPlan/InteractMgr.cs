@@ -574,14 +574,16 @@ namespace SpaceFab.ChipDesign
 
         private void EraseCellBothLayers(Vector2Int gridPos)
         {
-            var layer = GridStack.Instance.GridLayers[(int)ActiveLayer];
+            int currLayer = (int)ActiveLayer;
+            var layer = GridStack.Instance.GridLayers[currLayer];
             var cell = layer.GetCell(gridPos);
 
-            EraseCellOneLayer(cell, gridPos);
+            EraseCellOneLayer(cell, gridPos, currLayer);
 
-            var twinLayer = GridStack.Instance.GridLayers[(int)GetOppositeLayer(ActiveLayer)];
+            currLayer = (int)GetOppositeLayer(ActiveLayer);
+            var twinLayer = GridStack.Instance.GridLayers[currLayer];
             var twinCell = twinLayer.GetCell(gridPos);
-            EraseCellOneLayer(twinCell, gridPos);
+            EraseCellOneLayer(twinCell, gridPos, currLayer);
         }
 
         private GridInteractionLayer GetOppositeLayer(GridInteractionLayer layer)
@@ -590,10 +592,12 @@ namespace SpaceFab.ChipDesign
             else { return GridInteractionLayer.Metal; }
         }
 
-        private void EraseCellOneLayer(GridCell cell, Vector2Int gridPos)
+        private void EraseCellOneLayer(GridCell cell, Vector2Int gridPos, int currLayer)
         {
             // check if eraseable
-            if (!cell.Eraseable) { return; }
+            if (!cell.Eraseable) { 
+                return;
+            }
 
             // erase cell
             cell.Erase(out List<EdgeDir> danglingEdges);
@@ -602,7 +606,7 @@ namespace SpaceFab.ChipDesign
             foreach (var dangling in danglingEdges)
             {
                 // get adj cell
-                var adjCell = GetAdjCell(gridPos, dangling);
+                var adjCell = GetAdjCell(gridPos, dangling, currLayer);
 
                 // erase opposite edge
                 adjCell.EraseEdge(GetOppositeDir(dangling));
@@ -650,7 +654,7 @@ namespace SpaceFab.ChipDesign
             layer.SetCell(gridPos, toCell);
         }
 
-        private GridCell GetAdjCell(Vector2Int gridPos, EdgeDir dir)
+        private GridCell GetAdjCell(Vector2Int gridPos, EdgeDir dir, int currLayer)
         {
             int layerOffset = 0;
             Vector2Int gridOffset = Vector2Int.zero;
@@ -658,7 +662,7 @@ namespace SpaceFab.ChipDesign
             GridUtility.GetOffsetOfDir(dir, out gridOffset, out layerOffset);
 
             var adjGridPos = gridPos + gridOffset;
-            var adjLayerIndex = (int)ActiveLayer + layerOffset;
+            var adjLayerIndex = currLayer + layerOffset;
 
             var adjLayer = GridStack.Instance.GridLayers[adjLayerIndex];
 
