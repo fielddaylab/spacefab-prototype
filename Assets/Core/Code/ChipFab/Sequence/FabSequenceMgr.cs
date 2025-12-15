@@ -67,6 +67,7 @@ namespace SpaceFab.ChipFab
             m_currIndex = 0;
             CurrSequence.Clear();
             CurrSequence.Copy(ChipFabConfig.Instance.CurrLevel.FabSequence());
+            UpdateSequenceDisplay(m_currIndex);
         }
 
         public SequenceStepID CurrStepID()

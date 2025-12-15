@@ -71,6 +71,7 @@ namespace SpaceFab.ChipFab
             {
                 Debug.Log("Invalid Prereqs");
                 TryDeactivate();
+                return;
             }
 
             Game.Events.Dispatch(GameEvents.StationStarted);
