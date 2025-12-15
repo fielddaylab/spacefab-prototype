@@ -489,6 +489,7 @@ namespace SpaceFab.ChipDesign
 
         private IEnumerator VisualFeedbackRoutine(EvalResult evalResult, List<CrucialGraphNode> crucialGraph, Dictionary<GraphCoord, CrucialGraphNode> crucialCoordNodeMap, List<CrucialGraphEdge> orderedEdges, List<GraphNode> completeGraph)
         {
+            Game.Events.Dispatch(GameEvents.EvaluationStarted);
             Debug.Log("[EvaluationMgr] Eval Visuals Started...");
 
             float timeBetweenSteps = 0.5f;
@@ -914,8 +915,8 @@ namespace SpaceFab.ChipDesign
 
         private void EvaluationFailure()
         {
-            ResultHeaderText.SetText("Failure");
-            ResultPanel.SetActive(true);
+            ResultHeaderText?.SetText("Failure");
+            ResultPanel?.SetActive(true);
 
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);
         }
@@ -1072,6 +1073,10 @@ namespace SpaceFab.ChipDesign
                             {
                                 GridUtility.GetOffsetOfDir((EdgeDir)dir, out Vector2Int gridOffset, out int layerOffset);
                                 var adjLookupCoord = new GraphCoord(layer + layerOffset, col + gridOffset.x, row + gridOffset.y);
+                                if (!coordNodeMap.ContainsKey(adjLookupCoord))
+                                {
+                                    continue;
+                                }
                                 GraphNode adjNode = coordNodeMap[adjLookupCoord];
 
                                 var newEdge = new GraphEdge();

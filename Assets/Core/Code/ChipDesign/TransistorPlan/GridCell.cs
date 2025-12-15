@@ -83,12 +83,6 @@ namespace SpaceFab.ChipDesign
         {
             danglingEdges = new List<EdgeDir>();
 
-            if (!Eraseable) { return; }
-
-            CellType = CellType.NONE;
-            SubtypeLabel = default;
-            TransferType = TransferType.NONE;
-
             for (int i = 0; i < Edges.Length; i++)
             {
                 if (Edges[i] == EdgeState.Connected)
@@ -98,6 +92,11 @@ namespace SpaceFab.ChipDesign
 
                 Edges[i] = EdgeState.Disconnected;
             }
+
+            if (!Eraseable) { return; }
+
+            CellType = CellType.NONE;
+            SubtypeLabel = default;
             TransferType = TransferType.NONE;
         }
 

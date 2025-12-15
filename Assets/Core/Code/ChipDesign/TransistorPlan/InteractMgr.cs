@@ -37,6 +37,7 @@ namespace SpaceFab.ChipDesign
 
         private void Start()
         {
+            Game.Events.Register(GameEvents.EvaluationStarted, HandleEvalStarted);
             Game.Events.Register(GameEvents.OnResultsDisplayed, HandleResultsDisplayed);
             Game.Events.Register(GameEvents.OnResultsHidden, HandleResultsHidden);
         }
@@ -539,6 +540,8 @@ namespace SpaceFab.ChipDesign
             var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
             var linkedCell = linkedLayer.GetCell(gridPos);
 
+            if (linkedCell.CellType == CellType.Input || linkedCell.CellType == CellType.Output) { return; }
+
             cell.TransferType = TransferType.Via;
             linkedCell.TransferType = TransferType.Via;
 
@@ -555,6 +558,8 @@ namespace SpaceFab.ChipDesign
             GridInteractionLayer linkedLayerType = ActiveLayer == GridInteractionLayer.Metal ? GridInteractionLayer.Transistor : GridInteractionLayer.Metal;
             var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
             var linkedCell = linkedLayer.GetCell(gridPos);
+
+            if (linkedCell.CellType == CellType.Input || linkedCell.CellType == CellType.Output) { return; }
 
             cell.TransferType = ActiveLayer == GridInteractionLayer.Metal ? TransferType.GateAbove : TransferType.GateBelow;
             linkedCell.TransferType = ActiveLayer == GridInteractionLayer.Metal ? TransferType.GateBelow : TransferType.GateAbove;
@@ -692,6 +697,11 @@ namespace SpaceFab.ChipDesign
         #endregion // Layers
 
         #region Handlers
+
+        private void HandleEvalStarted()
+        {
+            InteractInputsEnabled = false;
+        }
 
         private void HandleResultsDisplayed()
         {
