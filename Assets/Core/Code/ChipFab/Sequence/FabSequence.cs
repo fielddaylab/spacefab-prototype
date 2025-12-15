@@ -48,5 +48,13 @@ namespace SpaceFab.ChipFab
                 Steps.Add(step);
             }
         }
+
+        public void Clear()
+        {
+            if (Steps != null)
+            {
+                Steps.Clear();
+            }
+        }
     }
 }

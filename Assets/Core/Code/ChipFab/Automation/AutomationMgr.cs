@@ -42,11 +42,12 @@ namespace SpaceFab.ChipFab
 
         public bool ActivelyChecking = false;
 
-        private bool StationControlReleased = true;
+        public bool StationControlReleased { get; private set; }
 
         private void Awake()
         {
             Instance = this;
+            StationControlReleased = true;
         }
 
         private void Start()
@@ -118,6 +119,7 @@ namespace SpaceFab.ChipFab
         private void HandleNewWaferCreated()
         {
             ResetTriggers();
+            ActivelyChecking = false;
         }
 
         private void ResetTriggers()
