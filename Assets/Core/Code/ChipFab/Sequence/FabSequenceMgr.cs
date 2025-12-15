@@ -23,10 +23,10 @@ namespace SpaceFab.ChipFab
 
         private void Start()
         {
-            m_currIndex = 0;
-            CurrSequence.Copy(ChipFabConfig.Instance.CurrLevel.FabSequence());
+            ResetSequence();
 
             Game.Events.Register(GameEvents.StationCompleted, HandleStationCompleted);
+            Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
 
             if (CurrSequence.Steps.Count > 0)
             {
@@ -60,6 +60,13 @@ namespace SpaceFab.ChipFab
             StepRenderer.sprite = null;
 
             LevelMgr.Instance.Evaluate();
+        }
+
+        private void ResetSequence()
+        {
+            m_currIndex = 0;
+            CurrSequence.Clear();
+            CurrSequence.Copy(ChipFabConfig.Instance.CurrLevel.FabSequence());
         }
 
         public SequenceStepID CurrStepID()
@@ -100,6 +107,11 @@ namespace SpaceFab.ChipFab
             {
                 FinishSequenceDisplay();
             }
+        }
+
+        private void HandleNewWaferCreated()
+        {
+            ResetSequence();
         }
 
         #endregion // Handlers

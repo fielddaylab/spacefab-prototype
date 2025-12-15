@@ -80,6 +80,8 @@ namespace SpaceFab.ChipFab
 
         private IEnumerator BeginSequence()
         {
+            AutomationMgr.Instance.ActivelyChecking = false;
+
             CountdownText.gameObject.SetActive(true);
 
             CountdownText.SetText("3");
@@ -102,6 +104,8 @@ namespace SpaceFab.ChipFab
             Game.Events.Dispatch(GameEvents.TimerBegin);
 
             CountdownText.gameObject.SetActive(false);
+
+            AutomationMgr.Instance.ActivelyChecking = true;
         }
 
         private void HandleNewWaferCreated()

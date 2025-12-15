@@ -22,6 +22,8 @@ namespace SpaceFab.ChipFab
 
         public void Dispense(bool fromDrag)
         {
+            if (!AutomationMgr.Instance.StationControlReleased) { return; }
+
             var newObj = Instantiate(ToDispense);
             if (fromDrag)
             {

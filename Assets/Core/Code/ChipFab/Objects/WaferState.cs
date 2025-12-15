@@ -151,7 +151,12 @@ namespace SpaceFab.ChipFab
                 isEqual = false;
             }
 
-            bool hasPatterns = true;
+            bool hasPatterns = false;
+
+            if (dataA.SemiconductorLayer.DopingPatterns.Count == 0 && dataB.SemiconductorLayer.DopingPatterns.Count == 0)
+            {
+                hasPatterns = true;
+            }
 
             foreach (var pattern in dataA.SemiconductorLayer.DopingPatterns)
             {
