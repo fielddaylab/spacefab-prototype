@@ -2,6 +2,7 @@ using BeauRoutine;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.ChipFab
@@ -72,6 +73,8 @@ namespace SpaceFab.ChipFab
         public ClickBox EmptyDopeBox;
         public ClickBox NDopeBox;
         public ClickBox PDopeBox;
+        public SpriteRenderer[] DopantOutlines;
+        public TMP_Text WrongDopantText;
 
         private Routine m_applyHeatRoutine;
         private bool HeatingCompleted;
@@ -90,6 +93,8 @@ namespace SpaceFab.ChipFab
             PDopeBox.OnMouseDown.AddListener(HandlePDopeDown);
 
             m_appliedDopant = DopingType.NONE;
+            SetDopantOutline(0);
+            WrongDopantText.gameObject.SetActive(false);
 
             ApplyHeatButtonRenderer.sprite = DefaultButton;
 
@@ -232,7 +237,7 @@ namespace SpaceFab.ChipFab
 
         private void ProcessManual()
         {
-            if (Input.GetKeyDown(StokeKey) && !m_AutomationRoutine.Exists() && !HeatingCompleted)
+            if (Input.GetKeyDown(StokeKey) && !m_AutomationRoutine.Exists() && !HeatingCompleted && !m_isHeating)
             {
                 HandleStartHeat();
             }
@@ -375,10 +380,12 @@ namespace SpaceFab.ChipFab
                 // Check for correct dopant
                 if (currChunk == ChunkID.N && m_appliedDopant != DopingType.N)
                 {
+                    WrongDopantText.gameObject.SetActive(true);
                     return;
                 }
                 else if (currChunk == ChunkID.P && m_appliedDopant != DopingType.P)
                 {
+                    WrongDopantText.gameObject.SetActive(true);
                     return;
                 }
             }
@@ -386,10 +393,12 @@ namespace SpaceFab.ChipFab
             {
                 if (m_appliedDopant != DopingType.NONE)
                 {
+                    WrongDopantText.gameObject.SetActive(true);
                     return;
                 }
             }
 
+            WrongDopantText.gameObject.SetActive(false);
             m_isHeating = true;
             ApplyHeatButtonRenderer.sprite = PressedButton;
         }
@@ -414,16 +423,27 @@ namespace SpaceFab.ChipFab
         private void HandleEmptyDopeDown()
         {
             RemoveDopant();
+            SetDopantOutline(0);
         }
 
         private void HandleNDopeDown()
         {
             AssignDopant(DopingType.N);
+            SetDopantOutline(1);
         }
 
         private void HandlePDopeDown()
         {
             AssignDopant(DopingType.P);
+            SetDopantOutline(2);
+        }
+
+        private void SetDopantOutline(int selectedIndex)
+        {
+            for (int i = 0; i < DopantOutlines.Length; i++)
+            {
+                DopantOutlines[i].enabled = i == selectedIndex;
+            }
         }
 
         private void TryDeactivate()
