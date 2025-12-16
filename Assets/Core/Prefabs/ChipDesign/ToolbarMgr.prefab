@@ -3022,8 +3022,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LayerButton: {fileID: 2165333073045357313}
-  LayerBtnTopImg: {fileID: 21300000, guid: fbbcac678ed415446a79d37d3739bcc8, type: 3}
-  LayerBtnBottomImg: {fileID: 21300000, guid: d13fa39e510d2f04a99157ec78448c6a, type: 3}
+  LayerBtnTopImg: {fileID: 21300000, guid: 60a0859bc5d04774c8c51a6ef9470d67, type: 3}
+  LayerBtnBottomImg: {fileID: 21300000, guid: 42a4d3ac676473e4ea4a8ad0414e1dd1, type: 3}
   LayerText: {fileID: 5489434143076761630}
   LayerLabelText: {fileID: 3816922767949412012}
   EraseButton: {fileID: 3485574558643392172}
@@ -3951,7 +3951,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fbbcac678ed415446a79d37d3739bcc8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 60a0859bc5d04774c8c51a6ef9470d67, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3968,7 +3968,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5122224771432660755}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
