@@ -259,7 +259,7 @@ namespace SpaceFab.ChipFab
 
             var validSteps = new List<SequenceStepID>() {
                 SequenceStepID.AddStencil_OXIDE,
-                SequenceStepID.FillStencil_DOPE
+                SequenceStepID.FillStencil_DOPE,
             };
 
             // PREREQ: Oxide not FUll and Metal not FULL
@@ -285,10 +285,12 @@ namespace SpaceFab.ChipFab
                     if (chunk == ChunkID.N)
                     {
                         AssignDopant(DopingType.N);
+                        SetDopantOutline(1);
                     }
                     else if (chunk == ChunkID.P)
                     {
                         AssignDopant(DopingType.P);
+                        SetDopantOutline(2);
                     }
                 }
             }
@@ -422,18 +424,27 @@ namespace SpaceFab.ChipFab
 
         private void HandleEmptyDopeDown()
         {
+            // don't allow inputs during automation
+            if (AutomationMgr.Instance.AutomationIndicator.activeInHierarchy) { return; }
+
             RemoveDopant();
             SetDopantOutline(0);
         }
 
         private void HandleNDopeDown()
         {
+            // don't allow inputs during automation
+            if (AutomationMgr.Instance.AutomationIndicator.activeInHierarchy) { return; }
+
             AssignDopant(DopingType.N);
             SetDopantOutline(1);
         }
 
         private void HandlePDopeDown()
         {
+            // don't allow inputs during automation
+            if (AutomationMgr.Instance.AutomationIndicator.activeInHierarchy) { return; }
+
             AssignDopant(DopingType.P);
             SetDopantOutline(2);
         }

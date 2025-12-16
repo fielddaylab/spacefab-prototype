@@ -158,9 +158,9 @@ namespace SpaceFab.ChipFab
                 hasPatterns = true;
             }
 
+            int allFound = 0;
             foreach (var pattern in dataA.SemiconductorLayer.DopingPatterns)
             {
-                bool anyFound = false;
                 foreach (var currPattern in dataB.SemiconductorLayer.DopingPatterns)
                 {
                     if ((currPattern.Mask.Id == pattern.Mask.Id)
@@ -168,13 +168,13 @@ namespace SpaceFab.ChipFab
                         && (currPattern.DopingType == pattern.DopingType)
                         )
                     {
-                        anyFound = true;
+                        allFound++;
                     }
                 }
 
-                if (!anyFound)
+                if (allFound == dataA.SemiconductorLayer.DopingPatterns.Count)
                 {
-                    hasPatterns = false;
+                    hasPatterns = true;
                     break;
                 }
             }

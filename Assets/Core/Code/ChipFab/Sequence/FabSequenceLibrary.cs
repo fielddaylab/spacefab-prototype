@@ -19,7 +19,8 @@ namespace SpaceFab.ChipFab {
         public Sprite DrawPatternPrefab;
         public Sprite EtchPatternPrefab;
         public Sprite FillStencilSputterPrefab;
-        public Sprite FillstencilDopePrefab;
+        public Sprite FillstencilDopeNPrefab;
+        public Sprite FillstencilDopePPrefab;
 
         private void Awake()
         {
@@ -29,7 +30,7 @@ namespace SpaceFab.ChipFab {
 
     public static class SequenceUtility
     {
-        public static Sprite LookupStep(SequenceStepID id)
+        public static Sprite LookupStep(SequenceStepID id, ChunkID chunkId)
         {
             FabSequenceLibrary library = FabSequenceLibrary.Instance;
             switch (id)
@@ -47,7 +48,9 @@ namespace SpaceFab.ChipFab {
                 case SequenceStepID.FillStencil_SPUTTER:
                     return library.FillStencilSputterPrefab;
                 case SequenceStepID.FillStencil_DOPE:
-                    return library.FillstencilDopePrefab;
+                    if (chunkId == ChunkID.N) { return library.FillstencilDopeNPrefab; }
+                    else if (chunkId == ChunkID.P) { return library.FillstencilDopePPrefab; }
+                    return null;
                 default:
                     return null;
             }

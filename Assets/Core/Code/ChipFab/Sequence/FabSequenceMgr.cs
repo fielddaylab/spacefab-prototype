@@ -43,12 +43,13 @@ namespace SpaceFab.ChipFab
             if (Game.IsShuttingDown) { return; }
 
             Game.Events.Deregister(GameEvents.StationCompleted, HandleStationCompleted);
+            Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
         }
 
         private void UpdateSequenceDisplay(int stepIndex)
         {
             Sprite chunkSprite = SequenceUtility.LookupChunk(CurrSequence.Steps[stepIndex].Chunk);
-            Sprite stepSprite = SequenceUtility.LookupStep(CurrSequence.Steps[stepIndex].Step);
+            Sprite stepSprite = SequenceUtility.LookupStep(CurrSequence.Steps[stepIndex].Step, CurrSequence.Steps[stepIndex].Chunk);
 
             ChunkRenderer.sprite = chunkSprite;
             StepRenderer.sprite = stepSprite;

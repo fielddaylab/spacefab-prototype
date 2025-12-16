@@ -42,6 +42,8 @@ namespace SpaceFab.ChipFab
 
         public bool ActivelyChecking = false;
 
+        public GameObject AutomationIndicator;
+
         public bool StationControlReleased { get; private set; }
 
         private void Awake()
@@ -62,6 +64,7 @@ namespace SpaceFab.ChipFab
             m_allTriggers = ChipFabConfig.Instance.CurrLevel.AutomatedStationTriggers();
 
             StationControlReleased = true;
+            AutomationIndicator.SetActive(false);
 
             ResetTriggers();
         }
@@ -85,6 +88,7 @@ namespace SpaceFab.ChipFab
                     m_activeTriggers.RemoveAt(i);
 
                     Game.Events.Dispatch(GameEvents.AutomationStarted);
+                    AutomationIndicator.SetActive(true);
 
                     // move to target station
                     var stationIndex = GetStationIndex(CurrInstruction.TargetStation);
@@ -104,6 +108,7 @@ namespace SpaceFab.ChipFab
         private void HandleAutomationCompleted()
         {
             CurrInstruction.Valid = false;
+            AutomationIndicator.SetActive(false);
         }
 
         private void HandleStationStarted()
