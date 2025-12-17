@@ -69,6 +69,11 @@ namespace FieldDay.Scenes {
         [NonSerialized] public SceneType SceneType;
 
         /// <summary>
+        /// Request context.
+        /// </summary>
+        [NonSerialized] public SceneRequestContext Context;
+
+        /// <summary>
         /// Whether or not this has been visited.
         /// </summary>
         [NonSerialized] private VisitFlags m_VisitState;

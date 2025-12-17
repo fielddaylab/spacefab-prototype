@@ -1,4 +1,6 @@
 using BeauPools;
+using BeauUtil;
+using System.Text;
 using UnityEngine;
 
 namespace FieldDay.Memory {

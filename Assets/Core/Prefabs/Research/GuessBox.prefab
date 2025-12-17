@@ -73,7 +73,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6686790144833821856
 RectTransform:
   m_ObjectHideFlags: 0
@@ -245,7 +245,9 @@ MonoBehaviour:
   m_AlwaysFireClickEvents: 0
   CursorType:
     m_HashValue: 0
-  Tooltip: 
+  Flags: 0
+  TooltipHeader: 
+  Tooltip: Close
 --- !u!222 &7406955203449086780
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -395,6 +397,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material does not break down in extremely low temperatures.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Low Temperature Resistant
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
       value: LowTemp
@@ -492,6 +502,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material can be used as a P-type dopant for a semiconductor.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: P-Type Dopant
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: ButtonType
       value: 1
@@ -601,6 +619,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material has no special properties.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Nothing
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: ButtonType
       value: 2
@@ -698,6 +724,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material does not break down under extreme current.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Resistant to High Voltages
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
       value: HighVoltage
@@ -789,12 +823,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_text
-      value: Sensitive
+      value: Weak
       objectReference: {fileID: 0}
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material breaks down at extreme temperatures, both high and low.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Weak to Extreme Temperatures
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: ButtonType
       value: 2
@@ -891,6 +933,14 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material glows when conducting electricity.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Emits Light
       objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
@@ -989,6 +1039,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material can be used as an N-type dopant for a semiconductor.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: N-Type Dopant
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: ButtonType
       value: 1
@@ -1094,6 +1152,17 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: 'The material conducts electricity.
+
+        Output voltage increases
+        as temperature increases.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Semiconductor
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: ButtonType
       value: 1
@@ -1207,6 +1276,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material does not conduct electricity.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Insulator
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: ButtonType
       value: 1
@@ -1312,6 +1389,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material does not break down in extremely high temperatures.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: High Temperature Resistant
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
       value: HighTemp
@@ -1405,6 +1490,14 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: This material conducts electricity particuarly well.
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: High Mobility
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
       value: HighMobility
@@ -1714,6 +1807,17 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: Tooltip
+      value: 'The material conducts electricity.
+
+        Output voltage decreases
+        as temperature increases.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: TooltipHeader
+      value: Conductor
+      objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: ButtonType
       value: 1

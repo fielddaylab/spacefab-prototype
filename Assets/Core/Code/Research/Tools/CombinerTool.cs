@@ -10,7 +10,6 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace SpaceFab.Research {
     public sealed class CombinerTool : MonoBehaviour {
@@ -61,6 +60,7 @@ namespace SpaceFab.Research {
             m_DopingIndex = 0;
             SetSelectedAtomVisuals(m_DopingIndex);
             DisplayAtomicView(m_Tool.Slots[0].Item.Material.Atoms, m_DopingIndex);
+            UpdateValencePips(m_Tool.Slots[0].Item.Material.Atoms[0].ValenceElectrons, 0);
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
         }
 
@@ -68,6 +68,7 @@ namespace SpaceFab.Research {
             m_DopingIndex = 1;
             SetSelectedAtomVisuals(m_DopingIndex);
             DisplayAtomicView(m_Tool.Slots[0].Item.Material.Atoms, m_DopingIndex);
+            UpdateValencePips(m_Tool.Slots[0].Item.Material.Atoms[1].ValenceElectrons, 0);
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
         }
 

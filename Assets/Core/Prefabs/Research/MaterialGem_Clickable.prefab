@@ -83,7 +83,9 @@ MonoBehaviour:
   m_AlwaysFireClickEvents: 0
   CursorType:
     m_HashValue: 1981540808
-  Tooltip: 
+  Flags: 0
+  TooltipHeader: Material Sample
+  Tooltip: Click to lift/drop
 --- !u!1001 &9203477450459579635
 PrefabInstance:
   m_ObjectHideFlags: 0

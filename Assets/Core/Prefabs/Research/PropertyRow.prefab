@@ -69,7 +69,9 @@ MonoBehaviour:
   m_AlwaysFireClickEvents: 0
   CursorType:
     m_HashValue: 0
-  Tooltip: 
+  Flags: 0
+  TooltipHeader: 
+  Tooltip: Left-click to edit
 --- !u!222 &4898664064750678945
 CanvasRenderer:
   m_ObjectHideFlags: 0

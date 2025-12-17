@@ -6,22 +6,76 @@ using FieldDay.Assets;
 using UnityEngine;
 using FieldDay.HID;
 using UnityEngine.EventSystems;
+using System.Text;
+using FieldDay.Localization;
+using FieldDay.Data;
 
 namespace FieldDay.UI {
     [DisallowMultipleComponent]
     public class CursorHint : PointerListener {
+        [Flags]
+        public enum BehaviorFlags {
+            HideTooltipWhenLocked = 0x01,
+        }
+
         #region Inspector
 
-        [Header("Tooltip")]
+        [Header("Cursor")]
         [AssetName(typeof(CursorType))] public StringHash32 CursorType;
-        public string Tooltip;
+
+        [Header("Tooltip")]
+        public BehaviorFlags Flags;
+        public string TooltipHeader;
+        [Multiline] public string Tooltip;
 
         #endregion // Inspector
+
+        // TODO: implement dynamic data and localization keys
+
+        [NonSerialized] public long LastUpdatedTimestamp = 0;
 
         /// <summary>
         /// Invoked when hovering starts or ends.
         /// </summary>
         public readonly CastableEvent<CursorHint, bool> OnHover = new CastableEvent<CursorHint, bool>();
+
+        #region Tooltips
+
+        public void MarkDirty() {
+            LastUpdatedTimestamp = Frame.Timestamp();
+        }
+
+        static public bool HasTooltip(CursorHint hint) {
+            if (!hint) {
+                return false;
+            }
+
+            if ((hint.Flags & BehaviorFlags.HideTooltipWhenLocked) != 0 && s_Locked == hint) {
+                return false;
+            }
+
+            return !string.IsNullOrEmpty(hint.Tooltip) || !string.IsNullOrEmpty(hint.TooltipHeader);
+        }
+
+        /// <summary>
+        /// Retrieves the tooltip contents for the given hint.
+        /// </summary>
+        static public void GetTooltipContents(CursorHint hint, out CursorTooltipContents contents) {
+            if (!hint) {
+                contents = default;
+                return;
+            }
+
+            contents.LocHeader = contents.LocContents = default;
+
+            contents.Header = hint.TooltipHeader;
+            contents.Contents = hint.Tooltip;
+
+            contents.DynamicHeader = null;
+            contents.DynamicContents = null;
+        }
+
+        #endregion // Tooltips
 
         #region Unity Events
 
@@ -185,5 +239,16 @@ namespace FieldDay.UI {
         }
 
         #endregion // Locks
+    }
+
+    public struct CursorTooltipContents {
+        public string Header;
+        public string Contents;
+
+        public LocId LocHeader;
+        public LocId LocContents;
+
+        public StringBuilder DynamicHeader;
+        public StringBuilder DynamicContents;
     }
 }

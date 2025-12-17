@@ -162,7 +162,9 @@ MonoBehaviour:
   m_AlwaysFireClickEvents: 0
   CursorType:
     m_HashValue: 0
-  Tooltip: 
+  Flags: 0
+  Tooltip: Increase Voltage
+  TooltipHeader: 
 --- !u!1 &9050766061864413949
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +327,9 @@ MonoBehaviour:
   m_AlwaysFireClickEvents: 0
   CursorType:
     m_HashValue: 0
-  Tooltip: 
+  Flags: 0
+  Tooltip: Decrease Voltage
+  TooltipHeader: 
 --- !u!1001 &8092245987656434943
 PrefabInstance:
   m_ObjectHideFlags: 0

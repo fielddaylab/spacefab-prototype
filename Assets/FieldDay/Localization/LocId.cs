@@ -26,8 +26,12 @@ namespace FieldDay.Localization {
             m_HashValue = new StringHash32(source).HashValue;
         }
 
-        public uint HashValue {
+        public readonly uint HashValue {
             get { return m_HashValue; }
+        }
+
+        public readonly bool IsEmpty {
+            get { return m_HashValue == 0; }
         }
 
         #region Interfaces
