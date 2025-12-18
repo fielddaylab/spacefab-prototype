@@ -187,29 +187,29 @@ namespace SpaceFab.Research {
         static private void WriteChips(ResearchKnownPropertyRow row, ElectricalTag electrical, DopantType dopant, bool confirmed) {
             switch(electrical) {
                 case ElectricalTag.Conductor: {
-                    row.WriteChip("COND", confirmed);
+                    row.WriteChip("CONDUCTOR", confirmed);
                     break;
                 }
                 case ElectricalTag.Semiconductor: {
-                    row.WriteChip("SEMI", confirmed);
+                    row.WriteChip("SEMICONDUCTOR", confirmed);
                     break;
                 }
                 case ElectricalTag.Insulator: {
-                    row.WriteChip("INSL", confirmed);
+                    row.WriteChip("INSULATOR", confirmed);
                     break;
                 }
             }
 
-            switch(dopant) {
-                case DopantType.N: {
-                    row.WriteChip("N.DOPE", confirmed);
-                    break;
-                }
-                case DopantType.P: {
-                    row.WriteChip("P.DOPE", confirmed);
-                    break;
-                }
-            }
+            //switch(dopant) {
+            //    case DopantType.N: {
+            //        row.WriteChip("N.DOPE", confirmed);
+            //        break;
+            //    }
+            //    case DopantType.P: {
+            //        row.WriteChip("P.DOPE", confirmed);
+            //        break;
+            //    }
+            //}
         }
 
         static private void WriteChips(ResearchKnownPropertyRow row, ThermalTag thermal, bool confirmed) {
@@ -217,10 +217,10 @@ namespace SpaceFab.Research {
                 row.WriteChip("WEAK", confirmed);
             } else {
                 if ((thermal & ThermalTag.HighTemp) != 0) {
-                    row.WriteChip("HIGH", confirmed);
+                    row.WriteChip("RESIST HIGH", confirmed);
                 }
                 if ((thermal & ThermalTag.LowTemp) != 0) {
-                    row.WriteChip("LOW", confirmed);
+                    row.WriteChip("RESIST LOW", confirmed);
                 }
             }
         }

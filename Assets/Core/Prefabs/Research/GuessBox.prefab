@@ -243,6 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
   Flags: 0
@@ -493,6 +494,10 @@ PrefabInstance:
     - target: {fileID: 2138864320608372146, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Name
       value: P
+      objectReference: {fileID: 0}
+    - target: {fileID: 2138864320608372146, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_text
@@ -1030,6 +1035,10 @@ PrefabInstance:
     - target: {fileID: 2138864320608372146, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Name
       value: N
+      objectReference: {fileID: 0}
+    - target: {fileID: 2138864320608372146, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_text

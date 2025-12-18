@@ -86,6 +86,10 @@ namespace SpaceFab.Research {
                     continue;
                 }
 
+                if (pair.MaterialId != Objectives[i].MaterialId) {
+                    continue;
+                }
+
                 if ((pair.Knowledge & Objectives[i].Knowledge) == Objectives[i].Knowledge) {
                     Completed.Set(i);
 
