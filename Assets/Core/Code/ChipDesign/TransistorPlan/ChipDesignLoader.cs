@@ -1,3 +1,6 @@
+using BeauUtil;
+using FieldDay;
+using FieldDay.Scenes;
 using SpaceFab.ChipFab;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +27,7 @@ namespace SpaceFab.ChipDesign
         private void HandleLevelClicked(int index)
         {
             ChipDesignConfig.Instance.ConfigLevel = LevelButtons[index].LevelData;
-            SceneManager.LoadScene(m_ChipDesignScene);
+            Game.Scenes.LoadMainScene(SceneReference.FromName(m_ChipDesignScene));
         }
     }
 }

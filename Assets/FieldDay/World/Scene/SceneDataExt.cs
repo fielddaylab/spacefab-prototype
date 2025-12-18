@@ -69,6 +69,11 @@ namespace FieldDay.Scenes {
         [NonSerialized] public SceneType SceneType;
 
         /// <summary>
+        /// Request context.
+        /// </summary>
+        [NonSerialized] public SceneRequestContext Context;
+
+        /// <summary>
         /// Whether or not this has been visited.
         /// </summary>
         [NonSerialized] private VisitFlags m_VisitState;
@@ -197,6 +202,18 @@ namespace FieldDay.Scenes {
         static internal SceneDataExt Get(Scene scene) {
             s_LoadedMap.TryGetValue(scene, out SceneDataExt data);
             return data;
+        }
+
+        /// <summary>
+        /// Gets the first loaded instance for the given scene.
+        /// </summary>
+        static internal SceneDataExt GetByName(string sceneName) {
+            foreach(var current in s_Loaded) {
+                if (current.SceneBinding.Name == sceneName) {
+                    return current;
+                }
+            }
+            return null;
         }
 
         /// <summary>

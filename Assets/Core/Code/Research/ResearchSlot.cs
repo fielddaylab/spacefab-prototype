@@ -40,6 +40,7 @@ namespace SpaceFab.Research {
 
                 ResearchMaterialUtility.ApplyPropertiesToRig(slot.Item.Renderer, material);
                 slot.Item.Material = material;
+                slot.Item.Hint.TooltipHeader = ResearchMaterialUtility.IsNameKnown(material.AssetId) ? material.DisplayName : material.UnknownDisplayName;
 
                 slot.OnSlotUpdated.Invoke(slot, slot.Item);
             }

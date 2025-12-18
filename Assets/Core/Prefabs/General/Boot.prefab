@@ -790,12 +790,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 196804748358964613}
-  - component: {fileID: 1728467876916229730}
   - component: {fileID: 8603940064069857157}
   - component: {fileID: 7121266707455513661}
   - component: {fileID: 7088012390896031353}
   m_Layer: 0
-  m_Name: TooltipBase
+  m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -808,7 +807,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7488741980421891175}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -817,32 +816,13 @@ RectTransform:
   - {fileID: 1080989603040158069}
   - {fileID: 5127177397501807907}
   - {fileID: 2363932803623335040}
-  m_Father: {fileID: 3124008303836072681}
+  m_Father: {fileID: 937516731490298908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 597, y: 433}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 300, y: 95.009995}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1728467876916229730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7488741980421891175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c5810aa1ea17a3479f03482ddc29ac4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Self: {fileID: 196804748358964613}
-  m_Bounds: {fileID: 3124008303836072681}
-  m_CursorOffset: 16
-  m_ScreenEdgeOffset: 16
-  m_Layout: {fileID: 8603940064069857157}
-  m_Text: {fileID: 0}
-  m_Header: {fileID: 0}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &8603940064069857157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -929,7 +909,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 196804748358964613}
+  - {fileID: 937516731490298908}
   - {fileID: 2767804961464375912}
   m_Father: {fileID: 8077139945884778328}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1099,6 +1079,63 @@ MonoBehaviour:
     MaxOffsetX: 1
     MinOffsetY: 0
     MaxOffsetY: 1
+--- !u!1 &8166594022347979325
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 937516731490298908}
+  - component: {fileID: 6553115062715203292}
+  m_Layer: 0
+  m_Name: Tooltip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &937516731490298908
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166594022347979325}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 196804748358964613}
+  m_Father: {fileID: 3124008303836072681}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 36, y: 148}
+  m_SizeDelta: {x: 16, y: 16}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6553115062715203292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8166594022347979325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5810aa1ea17a3479f03482ddc29ac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Position: {fileID: 937516731490298908}
+  m_BoxGroup: {fileID: 196804748358964613}
+  m_CursorOffset: 16
+  m_ScreenEdgeOffset: 16
+  m_Layout: {fileID: 8603940064069857157}
+  m_Text: {fileID: 6816343571046421434}
+  m_Header: {fileID: 6142620227551027164}
+  m_DefaultHoverDelay: 0.35
 --- !u!1 &8533410306739544508
 GameObject:
   m_ObjectHideFlags: 0

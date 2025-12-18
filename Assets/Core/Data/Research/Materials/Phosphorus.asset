@@ -16,6 +16,7 @@ MonoBehaviour:
   UnknownDisplayName: Sample 5
   Material: {fileID: 2100000, guid: e7ce83bbfbaa8e04488a8871c7acc025, type: 2}
   ChemicalSymbol: P
+  SampleNumber: 5
   Atoms:
   - Size: 98
     ValenceElectrons: 5
@@ -35,6 +36,3 @@ MonoBehaviour:
     m_HashValue: 0
   DopantP:
     m_HashValue: 0
-  DiagramColor:
-    serializedVersion: 2
-    rgba: 4294967295

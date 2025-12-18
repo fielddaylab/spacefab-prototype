@@ -1,4 +1,6 @@
+using BeauUtil;
 using FieldDay;
+using FieldDay.Scenes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -155,7 +157,7 @@ namespace SpaceFab.ChipDesign
         {
             if (InteractMgr.Instance && InteractMgr.Instance.InteractInputsEnabled)
             {
-                SceneManager.LoadScene(m_menuScene);
+                Game.Scenes.LoadMainScene(SceneReference.FromName(m_menuScene));
             }
         }
 

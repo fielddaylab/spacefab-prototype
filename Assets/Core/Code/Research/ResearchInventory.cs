@@ -28,11 +28,14 @@ namespace SpaceFab.Research {
 
         DopantMaterialN = 0x10,
         DopantMaterialP = 0x20,
+        Name = 0x40,
 
         AllBasic = Electrical | Thermal | Special,
     }
 
     static public partial class ResearchMaterialUtility {
+        static public readonly StringHash32 Event_KnowledgeUpdated = "Research::MaterialKnowledgeUpdated";
+
         static public StringHash32 GetRootMaterial(StringHash32 materialId) {
             ResearchMaterial mat = Find.NamedAsset<ResearchMaterial>(materialId);
             while(!mat.Parent.IsEmpty) {
@@ -53,6 +56,11 @@ namespace SpaceFab.Research {
             return knowledge;
         }
 
+        static public bool IsNameKnown(StringHash32 materialId) {
+            Find.State<ResearchInventory>().MaterialKnowledge.TryGetValue(materialId, out var knowledge);
+            return (knowledge & ResearchMaterialKnowledge.Name) != 0;
+        }
+
         static public void SetKnownCategories(StringHash32 materialId, ResearchMaterialKnowledge knowledge) {
             Find.State<ResearchInventory>().MaterialKnowledge[materialId] = knowledge;
         }
@@ -66,47 +74,73 @@ namespace SpaceFab.Research {
             Find.State<ResearchInventory>().MaterialGuesses[materialId] = guess;
         }
 
-        static public bool ProcessGuess(StringHash32 materialId) {
+        static public ResearchMaterialGuessResult ProcessGuess(StringHash32 materialId) {
             ResearchInventory inv = Find.State<ResearchInventory>();
             ResearchMaterial mat = Find.NamedAsset<ResearchMaterial>(materialId);
             inv.MaterialGuesses.TryGetValue(materialId, out var guess);
             inv.MaterialKnowledge.TryGetValue(materialId, out var knowledge);
 
-            bool areAllGuessesCorrect = true;
+            ResearchMaterialKnowledge originalKnowledge = knowledge;
+            ResearchMaterialKnowledge submittedKnowledge = default;
 
             if (guess.Electric != ElectricalTag.Unknown) {
-                if (guess.Electric == mat.Electrical && guess.Dopant == mat.DopantType) {
+                submittedKnowledge |= ResearchMaterialKnowledge.Electrical;
+                if (guess.Electric == mat.Electrical) {
                     guess.Electric = default;
-                    guess.Dopant = default;
                     knowledge |= ResearchMaterialKnowledge.Electrical;
-                } else {
-                    areAllGuessesCorrect = false;
+                }
+            }
+
+            if (guess.Dopant != DopantType.None) {
+                submittedKnowledge |= ResearchMaterialKnowledge.Dopant;
+                if (guess.Dopant == mat.DopantType) {
+                    guess.Dopant = default;
+                    knowledge |= ResearchMaterialKnowledge.Dopant;
                 }
             }
 
             if (guess.Thermal.HasValue) {
+                submittedKnowledge |= ResearchMaterialKnowledge.Thermal;
                 if (guess.Thermal == mat.Thermal) {
                     guess.Thermal = default;
                     knowledge |= ResearchMaterialKnowledge.Thermal;
-                } else {
-                    areAllGuessesCorrect = false;
                 }
             }
+
             if (guess.Special.HasValue) {
+                submittedKnowledge |= ResearchMaterialKnowledge.Special;
                 if (guess.Special == mat.SpecialTags) {
                     guess.Special = default;
                     knowledge |= ResearchMaterialKnowledge.Special;
-                } else {
-                    areAllGuessesCorrect = false;
                 }
             }
 
-            if (areAllGuessesCorrect) {
-                inv.MaterialGuesses[materialId] = guess;
-                inv.MaterialKnowledge[materialId] = knowledge;
+            if ((knowledge & ResearchMaterialKnowledge.Name) == 0) {
+                if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
+                    knowledge |= ResearchMaterialKnowledge.Name;
+                }
             }
 
-            return areAllGuessesCorrect;
+            inv.MaterialGuesses[materialId] = guess;
+            inv.MaterialKnowledge[materialId] = knowledge;
+
+            if (knowledge != originalKnowledge) {
+                ResearchMaterialKnowledgePair pair = new ResearchMaterialKnowledgePair() {
+                    MaterialId = materialId,
+                    Knowledge = knowledge
+                };
+                SpaceFabGame.Events.Queue(Event_KnowledgeUpdated, EvtArgs.Create(pair));
+            }
+
+            ResearchMaterialGuessResult result;
+            result.Correct = knowledge ^ originalKnowledge;
+            result.Incorrect = submittedKnowledge ^ result.Correct;
+            return result;
         }
+    }
+
+    public struct ResearchMaterialGuessResult {
+        public ResearchMaterialKnowledge Correct;
+        public ResearchMaterialKnowledge Incorrect;
     }
 }

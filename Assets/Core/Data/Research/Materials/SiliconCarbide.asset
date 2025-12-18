@@ -16,6 +16,7 @@ MonoBehaviour:
   UnknownDisplayName: Sample 70
   Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
   ChemicalSymbol: SiC
+  SampleNumber: 70
   Atoms:
   - Size: 111
     ValenceElectrons: 4
@@ -42,6 +43,3 @@ MonoBehaviour:
     m_HashValue: 541320182
   DopantP:
     m_HashValue: 3317014541
-  DiagramColor:
-    serializedVersion: 2
-    rgba: 4294967295

@@ -4,19 +4,21 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using BeauRoutine;
 using BeauUtil;
+using BeauUtil.Debugger;
+using BeauUtil.Variants;
+using EasyAssetStreaming;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using BeauUtil.Debugger;
-using BeauRoutine;
 using FieldDay.Rendering;
 using FieldDay.Assets;
-using System.Runtime.CompilerServices;
-using EasyAssetStreaming;
 using FieldDay.Debugging;
 using FieldDay.Threading;
-using System.Diagnostics;
-using System.Collections.Generic;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -132,7 +134,6 @@ namespace FieldDay.Scenes {
             public SceneImportFlags Flags;
             public Matrix4x4? Transform;
             public MainSceneTransitionArgs Transition;
-            public RawStateBlock256 CustomData;
         }
 
         private struct UninitializedSceneCallback {
@@ -143,6 +144,17 @@ namespace FieldDay.Scenes {
                 Scene = scene;
                 Action = action;
             }
+        }
+
+        private struct QueuedRequestContext {
+            public StringHash32 PathHash;
+            public SceneRequestContext Data;
+        }
+
+        private struct TaggedRequestContext {
+            public StringHash32 Tag;
+            public bool WasUsed;
+            public SceneRequestContext Data;
         }
 
         #endregion // Types
@@ -158,6 +170,8 @@ namespace FieldDay.Scenes {
         private readonly RingBuffer<SceneDataExt> m_PersistentScenes = new RingBuffer<SceneDataExt>(16, RingBufferMode.Expand);
         private readonly RingBuffer<int> m_MainSceneIndexHistory = new RingBuffer<int>(4, RingBufferMode.Overwrite);
         private readonly HashSet<int> m_TrackedScenes = new HashSet<int>(16, CompareUtils.DefaultEquals<int>());
+        private readonly RingBuffer<QueuedRequestContext> m_QueuedContexts = new RingBuffer<QueuedRequestContext>(4, RingBufferMode.Expand);
+        private readonly RingBuffer<TaggedRequestContext> m_TaggedContexts = new RingBuffer<TaggedRequestContext>(4, RingBufferMode.Fixed);
 
         // queues
         private readonly RingBuffer<LoadProcessArgs> m_LoadProcessQueue = new RingBuffer<LoadProcessArgs>();
@@ -202,14 +216,14 @@ namespace FieldDay.Scenes {
 
         #region Exposed Events
 
-        public readonly CastableEvent<SceneEventArgs> OnPrepareScene = new CastableEvent<SceneEventArgs>();
-        public readonly CastableEvent<SceneEventArgs> OnScenePreload = new CastableEvent<SceneEventArgs>();
-        public readonly CastableEvent<SceneEventArgs> OnSceneReady = new CastableEvent<SceneEventArgs>();
+        public readonly CastableEvent<SceneCallbackArgs> OnPrepareScene = new CastableEvent<SceneCallbackArgs>();
+        public readonly CastableEvent<SceneCallbackArgs> OnScenePreload = new CastableEvent<SceneCallbackArgs>();
+        public readonly CastableEvent<SceneCallbackArgs> OnSceneReady = new CastableEvent<SceneCallbackArgs>();
         public readonly ActionEvent OnMainSceneLateEnable = new ActionEvent();
         public readonly ActionEvent OnMainSceneReady = new ActionEvent();
         public readonly ActionEvent OnMainSceneUnloading = new ActionEvent();
         public readonly ActionEvent OnMainSceneUnloaded = new ActionEvent();
-        public readonly CastableEvent<SceneEventArgs> OnSceneUnload = new CastableEvent<SceneEventArgs>();
+        public readonly CastableEvent<SceneCallbackArgs> OnSceneUnload = new CastableEvent<SceneCallbackArgs>();
         public readonly ActionEvent OnAnySceneUnloaded = new ActionEvent();
         public readonly ActionEvent OnAnySceneEnabled = new ActionEvent();
 
@@ -443,6 +457,10 @@ namespace FieldDay.Scenes {
         #region Aux Load
 
         public void LoadAuxScene(string scenePath, StringHash32 tag, Matrix4x4? transformBy = null, SceneImportFlags flags = 0) {
+            QueueSceneLoadInternal(scenePath, tag, SceneType.Aux, flags, transformBy, SceneLoadPriority.Default);
+        }
+
+        public void LoadAuxScene(string scenePath, StringHash32 tag, SceneRequestContext context, Matrix4x4? transformBy = null, SceneImportFlags flags = 0) {
             QueueSceneLoadInternal(scenePath, tag, SceneType.Aux, flags, transformBy, SceneLoadPriority.Default);
         }
 
@@ -743,6 +761,113 @@ namespace FieldDay.Scenes {
 
         #endregion // Callbacks
 
+        #region Contexts
+
+        /// <summary>
+        /// Sets request context data for the given scene load.
+        /// </summary>
+        public void QueueLoadContext(string path, in SceneRequestContext context) {
+            Assert.True(!string.IsNullOrEmpty(path), "Cannot submit an invalid scene path");
+            QueueLoadContextWithPathHash(StringHash32.Fast(path), context);
+        }
+
+        /// <summary>
+        /// Sets request context data for the given scene load.
+        /// </summary>
+        public void QueueLoadContext(SceneReference sceneReference, in SceneRequestContext context) {
+            Assert.True(sceneReference.IsValid, "Cannot submit an invalid scene path");
+            QueueLoadContextWithPathHash(StringHash32.Fast(sceneReference.Path), context);
+        }
+
+        /// <summary>
+        /// Sets request context data for the given scene load.
+        /// </summary>
+        public void QueueMainLoadContext(in SceneRequestContext context) {
+            QueueLoadContextWithPathHash(null, context);
+        }
+
+        private void QueueLoadContextWithPathHash(StringHash32 pathHash, in SceneRequestContext context) {
+            for (int i = 0; i < m_QueuedContexts.Count; i++) {
+                ref QueuedRequestContext test = ref m_QueuedContexts[i];
+                if (test.PathHash == pathHash) {
+                    test.Data = context;
+                    return;
+                }
+            }
+
+            m_QueuedContexts.PushBack(new QueuedRequestContext() {
+                PathHash = pathHash,
+                Data = context
+            });
+        }
+
+        /// <summary>
+        /// Sets request context data for all scene loads with the given tag.
+        /// </summary>
+        public void SetTaggedLoadContext(StringHash32 tag, in SceneRequestContext context) {
+            Assert.True(!tag.IsEmpty, "Cannot set tagged request context for an empty tag");
+
+            for(int i = 0; i < m_TaggedContexts.Count; i++) {
+                ref TaggedRequestContext test = ref m_TaggedContexts[i];
+                if (test.Tag == tag) {
+                    test.Data = context;
+                    test.WasUsed = false;
+                    return;
+                }
+            }
+
+            Assert.True(!m_TaggedContexts.IsFull(), "Cannot have more than {0} tagged contexts at once", m_TaggedContexts.Capacity);
+            m_TaggedContexts.PushBack(new TaggedRequestContext() {
+                Tag = tag,
+                Data = context
+            });
+        }
+
+        /// <summary>
+        /// Returns the main scene load context.
+        /// </summary>
+        public bool GetLoadContext(out SceneRequestContext context) {
+            if (m_MainScene) {
+                context = m_MainScene.Context;
+                return true;
+            }
+
+            context = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the load context for the given scene.
+        /// </summary>
+        public bool GetLoadContext(Scene scene, out SceneRequestContext context) {
+            SceneDataExt data = SceneDataExt.Get(scene);
+            if (data) {
+                context = data.Context;
+                return true;
+            }
+
+            context = default;
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the load context for the given scene.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool GetLoadContext(GameObject gameObject, out SceneRequestContext context) {
+            return GetLoadContext(gameObject.scene, out context);
+        }
+
+        /// <summary>
+        /// Returns the load context for the given scene.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool GetLoadContext(Component component, out SceneRequestContext context) {
+            return GetLoadContext(component.gameObject.scene, out context);
+        }
+
+        #endregion // Contexts
+
         #endregion // Public API
 
         #region Events
@@ -776,6 +901,26 @@ namespace FieldDay.Scenes {
             for (int i = m_PersistentScenes.Count - 1; i >= 0; i--) {
                 if (!m_PersistentScenes[i]) {
                     m_PersistentScenes.FastRemoveAt(i);
+                }
+            }
+
+            if (m_AssetUnloadLock == 0 && m_LoadProcessQueue.Count == 0 && m_LoadQueue.Count == 0 && m_SubSceneQueue.Count == 0) {
+                if (m_QueuedContexts.Count > 0) {
+#if DEVELOPMENT
+                    for (int i = m_QueuedContexts.Count; i-- > 0;) {
+                        Log.Warn("[SceneMgr] Context for scene '{0}' was unused, discarding", m_QueuedContexts[i].PathHash.ToDebugString());
+                    }
+#else
+                    Log.Warn("[SceneMgr] Contexts for {0} scenes were unused, discarding", m_QueuedContexts.Count);
+#endif // DEVELOPMENT
+                    m_QueuedContexts.Clear();
+                }
+
+                if (m_TaggedContexts.Count > 0) {
+#if DEVELOPMENT
+                    Log.Msg("[SceneMgr] Clearing {0} tagged request contexts", m_TaggedContexts.Count);
+#endif // DEVELOPMENT
+                    m_TaggedContexts.Clear();
                 }
             }
         }
@@ -852,7 +997,7 @@ namespace FieldDay.Scenes {
 #endif // DEVELOPMENT
         }
 
-        #endregion // Events
+#endregion // Events
 
         #region Internal
 
@@ -1009,7 +1154,7 @@ namespace FieldDay.Scenes {
 
         private bool ProcessLoadQueue() {
             if (m_CurrentLoadOperation.Active) {
-                LoadSceneArgs args = m_CurrentLoadOperation.Args;
+                ref LoadSceneArgs args = ref m_CurrentLoadOperation.Args;
                 if (IsDoneLoading(m_CurrentLoadOperation.UnityOp, args, out Scene scene)) {
                     Log.Msg("[SceneMgr] Additive load of '{0}' (build index {1}) complete", args.ScenePath, scene.buildIndex);
                     TrackScene(scene);
@@ -1020,7 +1165,7 @@ namespace FieldDay.Scenes {
                     return false;
                 }
             } else if (m_CurrentLoadOperation.TryFill(m_LoadQueue)) {
-                LoadSceneArgs args = m_CurrentLoadOperation.Args;
+                ref LoadSceneArgs args = ref m_CurrentLoadOperation.Args;
                 Scene currentScene = SafeGetSceneByPath(args.ScenePath);
                 if (!IsLoadingOrLoaded(currentScene)) {
                     Log.Msg("[SceneMgr] Starting additive load of '{0}'", args.ScenePath);
@@ -1051,6 +1196,8 @@ namespace FieldDay.Scenes {
             data.SceneTag = args.Tag;
             data.SceneType = args.Type;
 
+            CheckForQueuedRequestContext(data.SceneBinding.Id, args.Tag, args.Type, out data.Context);
+            
             if (args.Parent != null && args.Type != SceneType.Persistent && (args.Flags & SceneImportFlags.AttachAsChild) != 0) {
                 args.Parent.Children.PushBack(data);
             }
@@ -1121,11 +1268,36 @@ namespace FieldDay.Scenes {
             args.Counter.Decrement();
 
             if (!OnPrepareScene.IsEmpty) {
-                OnPrepareScene.Invoke(new SceneEventArgs() {
+                OnPrepareScene.Invoke(new SceneCallbackArgs() {
                     LoadType = args.Type,
                     Scene = scene
                 });
             }
+        }
+
+        private bool CheckForQueuedRequestContext(StringHash32 pathHash, StringHash32 tag, SceneType type, out SceneRequestContext context) {
+            for (int i = m_QueuedContexts.Count; i-- > 0;) {
+                ref QueuedRequestContext test = ref m_QueuedContexts[i];
+                if ((type == SceneType.Main && test.PathHash.IsEmpty) || test.PathHash == pathHash) {
+                    context = test.Data;
+                    m_QueuedContexts.FastRemoveAt(i);
+                    return true;
+                }
+            }
+
+            if (!tag.IsEmpty) {
+                for (int i = m_TaggedContexts.Count; i-- > 0;) {
+                    ref TaggedRequestContext test = ref m_TaggedContexts[i];
+                    if (test.Tag == tag) {
+                        test.WasUsed = true;
+                        context = test.Data;
+                        return true;
+                    }
+                }
+            }
+
+            context = default;
+            return false;
         }
 
         private bool ProcessUnloadQueue() {
@@ -1169,7 +1341,7 @@ namespace FieldDay.Scenes {
                         }
                         SceneHelper.OnUnload(scene);
                         if (!OnSceneUnload.IsEmpty) {
-                            OnSceneUnload.Invoke(new SceneEventArgs() {
+                            OnSceneUnload.Invoke(new SceneCallbackArgs() {
                                 LoadType = args.Data.SceneType,
                                 Scene = args.Data.Scene
                             });
@@ -1346,7 +1518,7 @@ namespace FieldDay.Scenes {
             }
         }
 
-#endregion // Operations
+        #endregion // Operations
 
         #region Routines
 
@@ -1456,7 +1628,7 @@ namespace FieldDay.Scenes {
                 for (int i = 0; i < manifests.Length; i++) {
                     manifests[i] = linearizedScenes[i].Preload;
                     if (!OnScenePreload.IsEmpty) {
-                        OnScenePreload.Invoke(new SceneEventArgs() {
+                        OnScenePreload.Invoke(new SceneCallbackArgs() {
                             Scene = linearizedScenes[i].Scene,
                             LoadType = linearizedScenes[i].SceneType
                         });
@@ -1561,7 +1733,7 @@ namespace FieldDay.Scenes {
 
                 foreach (var data in linearizedScenes) {
                     data.TryVisit(SceneDataExt.VisitFlags.Readied);
-                    OnSceneReady.Invoke(new SceneEventArgs() {
+                    OnSceneReady.Invoke(new SceneCallbackArgs() {
                         Scene = data.Scene,
                         LoadType = data.SceneType
                     });
@@ -1685,6 +1857,7 @@ namespace FieldDay.Scenes {
 
         #region SceneManager API Override
 
+        // TODO: implement?
         private sealed class UnityAPIOverride : SceneManagerAPI {
 
         }
@@ -1740,9 +1913,9 @@ namespace FieldDay.Scenes {
     }
 
     /// <summary>
-    /// Scene event arguments.
+    /// Scene callback arguments.
     /// </summary>
-    public struct SceneEventArgs {
+    public struct SceneCallbackArgs {
         public Scene Scene;
         public SceneType LoadType;
     }
@@ -1873,6 +2046,77 @@ namespace FieldDay.Scenes {
     public enum SceneTransitionFlags : ushort {
         HintSkipTransition = 0x01,
         HintFastTransition = 0x02,
+    }
+
+    /// <summary>
+    /// Custom context data for a scene load.
+    /// </summary>
+    public struct SceneRequestContext {
+        private const int Capacity = 16;
+
+        [StructLayout(LayoutKind.Explicit)]
+        public struct Identifier {
+            [FieldOffset(0)] public int Index;
+            [FieldOffset(0)] public StringHash32 Name;
+
+            static public implicit operator Identifier(int index) {
+                return new Identifier() { Index = index };
+            }
+
+            static public implicit operator Identifier(StringHash32 name) {
+                return new Identifier() { Name = name };
+            }
+        }
+
+        public Identifier Task;
+        public Identifier Entrance;
+        public ushort Flags;
+
+        private byte m_CustomCount;
+        private unsafe fixed uint m_CustomKeys[Capacity];
+        private unsafe fixed ulong m_CustomValues[Capacity];
+
+        public readonly bool Contains(StringHash32 key) {
+            unsafe {
+                for (int i = 0; i < m_CustomCount; i++) {
+                    if (m_CustomKeys[i] == key.HashValue) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+
+        public readonly Variant Get(StringHash32 key, Variant defaultValue = default) {
+            unsafe {
+                for (int i = 0; i < m_CustomCount; i++) {
+                    if (m_CustomKeys[i] == key.HashValue) {
+                        fixed(ulong* ptr = &m_CustomValues[0]) {
+                            return *(Variant*)(ptr + i);
+                        }
+                    }
+                }
+
+                return defaultValue;
+            }
+        }
+
+        public void Set(StringHash32 key, Variant value) {
+            unsafe {
+                ulong raw = *(ulong*)&value;
+                for (int i = 0; i < m_CustomCount; i++) {
+                    if (m_CustomKeys[i] == key.HashValue) {
+                        m_CustomValues[i] = raw;
+                    }
+                }
+
+                Assert.True(m_CustomCount < Capacity, "Max parameter count {0} reached", Capacity);
+                m_CustomKeys[m_CustomCount] = key.HashValue;
+                m_CustomValues[m_CustomCount] = raw;
+                m_CustomCount++;
+            }
+        }
     }
 
     public struct MainSceneTransitionArgs {

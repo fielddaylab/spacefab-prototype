@@ -16,6 +16,7 @@ MonoBehaviour:
   UnknownDisplayName: Sample 1
   Material: {fileID: 2100000, guid: ec3ed3e944dfb2d4e96fcdc6dc308214, type: 2}
   ChemicalSymbol: B
+  SampleNumber: 1
   Atoms:
   - Size: 87
     ValenceElectrons: 3
@@ -35,6 +36,3 @@ MonoBehaviour:
     m_HashValue: 0
   DopantP:
     m_HashValue: 0
-  DiagramColor:
-    serializedVersion: 2
-    rgba: 4294967295

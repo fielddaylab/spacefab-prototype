@@ -16,6 +16,7 @@ namespace SpaceFab.Research {
         [NonSerialized] public RingBuffer<ResearchMaterialItem> Items = new RingBuffer<ResearchMaterialItem>(8, RingBufferMode.Expand);
 
         void IRegistrationCallbacks.OnDeregister() {
+            Game.Events?.DeregisterAllForContext(this);
         }
 
         void IRegistrationCallbacks.OnRegister() {
@@ -29,6 +30,27 @@ namespace SpaceFab.Research {
                     SelectionHighlight.gameObject.SetActive(false);
                 }
             });
+
+            SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated);
+        }
+
+        private void OnKnowledgeUpdated(ResearchMaterialKnowledgePair pair) {
+            if ((pair.Knowledge & ResearchMaterialKnowledge.Name) != 0) {
+                ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
+                ResearchMaterialUtility.UpdateMaterialDisplayInTray(material);
+
+                foreach(var slot in Find.Components<ResearchSlot>()) {
+                    if (slot.Item != null && slot.Item.Material == material) {
+                        slot.Item.Hint.TooltipHeader = material.DisplayName;
+                        slot.Item.Renderer.Label.SetText(material.ChemicalSymbol);
+                    }
+                }
+
+                ResearchDragState dragState = Find.State<ResearchDragState>();
+                if (dragState.CurrentlyDragging == material) {
+                    dragState.DragRenderer.Label.SetText(material.ChemicalSymbol);
+                }
+            }
         }
     }
 
@@ -44,12 +66,24 @@ namespace SpaceFab.Research {
             
             ResearchMaterialItem item = pools.Items.Alloc(tray.Root);
             ApplyPropertiesToRig(item.Renderer, material);
+            item.Hint.TooltipHeader = material.UnknownDisplayName;
             item.Material = material;
             item.CurrentSlot = null;
 
             tray.Items.PushBack(item);
 
             return item;
+        }
+
+        static public void UpdateMaterialDisplayInTray(ResearchMaterial material) {
+            ResearchMaterialTray tray = Find.State<ResearchMaterialTray>();
+            foreach (var item in tray.Items) {
+                if (item.Material == material) {
+                    item.Hint.TooltipHeader = material.DisplayName;
+                    item.Renderer.Label.SetText(material.ChemicalSymbol);
+                    break;
+                }
+            }
         }
 
         static public void ArrangeTrayItems() {
@@ -59,7 +93,7 @@ namespace SpaceFab.Research {
                 float left = (itemCount - 1) * -0.5f * tray.Spacing;
                 for(int i = 0; i < itemCount; i++) {
                     Transform item = tray.Root.GetChild(i);
-                    item.localPosition = new Vector3(left + tray.Spacing * i, 0, 0);
+                    item.localPosition = new Vector3(0, left + tray.Spacing * i, 0);
                 }
             }
         }

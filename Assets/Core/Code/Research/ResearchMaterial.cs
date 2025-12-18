@@ -15,6 +15,7 @@ namespace SpaceFab.Research {
 
         [Header("Atomic Info")]
         public string ChemicalSymbol;
+        public string SampleNumber;
         public AtomicStructure[] Atoms;
 
         [AssetName(typeof(ResearchMaterial))] public StringHash32 Parent;

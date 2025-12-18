@@ -1,3 +1,6 @@
+using BeauUtil;
+using FieldDay;
+using FieldDay.Scenes;
 using SpaceFab.ChipDesign;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +23,7 @@ namespace SpaceFab.ChipFab
         private void HandleButtonClicked()
         {
             ChipFabConfig.Instance.CurrLevel = Data;
-            SceneManager.LoadScene(ChipFabConfig.Instance.ChipFabScene);
+            Game.Scenes.LoadMainScene(SceneReference.FromName(ChipFabConfig.Instance.ChipFabScene));
         }
     }
 }
