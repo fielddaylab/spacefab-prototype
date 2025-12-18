@@ -21,75 +21,195 @@ MonoBehaviour:
     ColumnIndex: 0
     CellType: 1
     SubtypeLabel: 3
-    Edges: 
+    Edges: []
     TransferType: 0
   - LayerIndex: 1
     RowIndex: 2
     ColumnIndex: 0
     CellType: 1
     SubtypeLabel: 1
-    Edges: 000000000000000001000000000000000000000000000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
     TransferType: 4
   - LayerIndex: 1
     RowIndex: 2
     ColumnIndex: 5
     CellType: 5
     SubtypeLabel: 8
-    Edges: 000000000000000001000000000000000000000000000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
     TransferType: 4
   - LayerIndex: 1
     RowIndex: 2
     ColumnIndex: 2
     CellType: 4
     SubtypeLabel: 6
-    Edges: 000000000100000001000000000000000000000000000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
     TransferType: 1
   - LayerIndex: 1
     RowIndex: 2
     ColumnIndex: 3
     CellType: 4
     SubtypeLabel: 6
-    Edges: 000000000100000000000000000000000100000000000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
     TransferType: 0
   - LayerIndex: 1
     RowIndex: 2
     ColumnIndex: 4
     CellType: 4
     SubtypeLabel: 6
-    Edges: 000000000000000001000000000000000100000000000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
     TransferType: 1
   - LayerIndex: 0
     RowIndex: 2
     ColumnIndex: 0
     CellType: 2
     SubtypeLabel: 6
-    Edges: 000000000100000000000000000000000000000001000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
     TransferType: 4
   - LayerIndex: 0
     RowIndex: 2
     ColumnIndex: 1
     CellType: 2
     SubtypeLabel: 6
-    Edges: 000000000100000000000000000000000100000000000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
     TransferType: 0
   - LayerIndex: 0
     RowIndex: 2
     ColumnIndex: 2
     CellType: 2
     SubtypeLabel: 6
-    Edges: 000000000000000000000000000000000100000001000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
     TransferType: 1
   - LayerIndex: 0
     RowIndex: 2
     ColumnIndex: 4
     CellType: 2
     SubtypeLabel: 6
-    Edges: 000000000100000000000000000000000000000001000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
     TransferType: 1
   - LayerIndex: 0
     RowIndex: 2
     ColumnIndex: 5
     CellType: 2
     SubtypeLabel: 6
-    Edges: 000000000000000000000000000000000100000001000000
+    Edges:
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 0
+      Eraseable: 1
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
     TransferType: 4

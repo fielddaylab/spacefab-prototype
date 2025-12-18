@@ -53,6 +53,7 @@ namespace SpaceFab.ChipDesign
         [SerializeField] private Button DrawViaButton;
         [SerializeField] private Button DrawGateButton;
         [SerializeField] private TMP_Text ActiveToolText;
+        [SerializeField] private Image ActiveIndicator;
 
         [Header("Nodes")]
         [SerializeField] private GameObject DrawNodesGroup;
@@ -99,6 +100,8 @@ namespace SpaceFab.ChipDesign
             DrawLinksButton.onClick.AddListener(HandleDrawLinksClicked);
             DrawViaButton.onClick.AddListener(HandleDrawViaClicked);
             DrawGateButton.onClick.AddListener(HandleDrawGateClicked);
+
+            ActiveIndicator.gameObject.SetActive(false);
 
             ReturnMenuButton.onClick.AddListener(HandleReturnMenuClicked);
 
@@ -209,6 +212,8 @@ namespace SpaceFab.ChipDesign
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawNNodes);
                 InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Transistor);
+
+                SetActiveIndicator(DrawNNodesButton.transform.position.x);
             }
         }
 
@@ -218,6 +223,8 @@ namespace SpaceFab.ChipDesign
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawPNodes);
                 InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Transistor);
+
+                SetActiveIndicator(DrawPNodesButton.transform.position.x);
             }
         }
 
@@ -290,6 +297,8 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.Erase);
+             
+                SetActiveIndicator(EraseButton.transform.position.x);
             }
         }
 
@@ -299,6 +308,8 @@ namespace SpaceFab.ChipDesign
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawLinks);
                 InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Metal);
+
+                SetActiveIndicator(DrawLinksButton.transform.position.x);
             }
         }
 
@@ -307,6 +318,8 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawVia);
+
+                SetActiveIndicator(DrawViaButton.transform.position.x);
             }
         }
 
@@ -315,9 +328,20 @@ namespace SpaceFab.ChipDesign
             if (InteractMgr.Instance != null)
             {
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawGate);
+
+                SetActiveIndicator(DrawGateButton.transform.position.x);
             }
         }
 
         #endregion // Handlers
+
+        private void SetActiveIndicator(float xPos)
+        {
+            var indicatorPos = ActiveIndicator.rectTransform.position;
+            indicatorPos.x = xPos;
+            ActiveIndicator.rectTransform.position = indicatorPos;
+
+            ActiveIndicator.gameObject.SetActive(true);
+        }
     }
 }

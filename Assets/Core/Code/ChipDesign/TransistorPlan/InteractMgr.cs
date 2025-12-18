@@ -42,6 +42,15 @@ namespace SpaceFab.ChipDesign
             Game.Events.Register(GameEvents.OnResultsHidden, HandleResultsHidden);
         }
 
+        private void OnDestroy()
+        {
+            if (Game.IsShuttingDown) { return; }
+
+            Game.Events.Deregister(GameEvents.EvaluationStarted, HandleEvalStarted);
+            Game.Events.Deregister(GameEvents.OnResultsDisplayed, HandleResultsDisplayed);
+            Game.Events.Deregister(GameEvents.OnResultsHidden, HandleResultsHidden);
+        }
+
         private void Update()
         {
             ProcessInputs();
