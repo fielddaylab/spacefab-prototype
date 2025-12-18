@@ -65,6 +65,16 @@ namespace SpaceFab.ChipFab
             Game.Events.Register(GameEvents.AutomationCompleted, HandleAutomationCompleted);
         }
 
+        private void OnDestroy()
+        {
+            if (Game.IsShuttingDown) { return; }
+
+            Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Deregister(GameEvents.TimerBegin, HandleTimerBegin);
+            Game.Events.Deregister(GameEvents.AutomationStarted, HandleAutomationStarted);
+            Game.Events.Deregister(GameEvents.AutomationCompleted, HandleAutomationCompleted);
+        }
+
         private void Update()
         {
             ProcessInputs();
@@ -194,7 +204,10 @@ namespace SpaceFab.ChipFab
             if (ModeMgr.Instance.Mode == GameMode.Timed)
             {
                 InputsEnabled = true;
-                AutomationMgr.Instance.ActivelyChecking = true;
+                if (AutomationMgr.Instance.UsesAutomation)
+                {
+                    AutomationMgr.Instance.ActivelyChecking = true;
+                }
             }
         }
 

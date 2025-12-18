@@ -21,6 +21,14 @@ public class WaferVersionMgr : MonoBehaviour
         UndoButton.OnMouseDown.AddListener(Undo);
     }
 
+    private void OnDestroy()
+    {
+        if (Game.IsShuttingDown) { return; }
+
+        Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+        Game.Events.Deregister(GameEvents.WaferStateUpdated, HandleWaferStateUpdated);
+    }
+
     public void ResetHistory()
     {
         WaferHistory.Clear();

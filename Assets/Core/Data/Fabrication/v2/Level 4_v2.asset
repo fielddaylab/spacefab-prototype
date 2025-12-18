@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6528b2aa790eb2441b6fd12999031423, type: 3}
-  m_Name: Level 3
+  m_Name: Level 4_v2
   m_EditorClassIdentifier: 
-  m_levelId: level0
+  m_levelId: level4
   m_availableStations: 000000000100000002000000030000000400000005000000
   m_automatedStationTriggers:
   - Disable: 1
@@ -43,7 +43,7 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
-  - Disable: 0
+  - Disable: 1
     TriggerState:
       ResistLayer:
         Mask:
@@ -187,7 +187,7 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
-  - Disable: 0
+  - Disable: 1
     TriggerState:
       ResistLayer:
         Mask:
@@ -351,7 +351,7 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
-  - Disable: 0
+  - Disable: 1
     TriggerState:
       ResistLayer:
         Mask:
@@ -459,7 +459,7 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
-  - Disable: 0
+  - Disable: 1
     TriggerState:
       ResistLayer:
         Mask:
