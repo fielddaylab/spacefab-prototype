@@ -33,7 +33,7 @@ namespace SpaceFab.ChipFab
 
         public virtual void Activate(WaferState waferState)
         {
-            CamMgr.Instance.LoadCamPos(CamPos.Pos);
+            // CamMgr.Instance.LoadCamPosImmediate(CamPos.Pos);
 
             if (Container)
             {
