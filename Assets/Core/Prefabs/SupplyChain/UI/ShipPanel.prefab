@@ -401,8 +401,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 86, y: 0}
-  m_SizeDelta: {x: 188, y: 16}
+  m_AnchoredPosition: {x: -8, y: 0}
+  m_SizeDelta: {x: 32, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3512535934842023686
 MonoBehaviour:
@@ -2196,12 +2196,10 @@ MonoBehaviour:
   - {fileID: 7352940962725342343}
   - {fileID: 1752054514560967323}
   - {fileID: 6896565166199664471}
-  - {fileID: 0}
   RouteMaterials:
   - {fileID: 6645341432498553047}
   - {fileID: 6545566255836150446}
   - {fileID: 8049245183623012642}
-  - {fileID: 0}
   TimeAlertGroup: {fileID: 3848995589195543610}
   ReliabilityAlertGroup: {fileID: 5563521984726239034}
 --- !u!114 &7257774085506742027
