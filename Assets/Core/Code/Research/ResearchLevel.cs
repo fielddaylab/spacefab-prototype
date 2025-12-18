@@ -6,6 +6,7 @@ using UnityEngine;
 namespace SpaceFab.Research {
     [CreateAssetMenu(menuName = "Research/Level")]
     public sealed class ResearchLevel : NamedAsset {
+        public string Label;
         public ResearchToolsMask AvailableTools;
         public ResearchMaterialKnowledge AvailableProperties = ResearchMaterialKnowledge.AllBasic;
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] AvailableMaterials;
