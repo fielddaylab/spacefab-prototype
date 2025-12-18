@@ -1,4 +1,5 @@
 using FieldDay;
+using FieldDay.Scenes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -150,7 +151,7 @@ namespace SpaceFab.ChipDesign
 
         private void HandleReturnMenuClicked()
         {
-            SceneManager.LoadScene(m_menuScene);
+            Game.Scenes.LoadMainScene(SceneUtils.GetSceneByName(m_menuScene));
         }
 
         private void HandleLayerClicked()

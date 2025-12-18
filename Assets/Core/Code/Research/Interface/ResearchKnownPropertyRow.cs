@@ -12,11 +12,13 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpaceFab.Research {
 	public sealed class ResearchKnownPropertyRow : MonoBehaviour {
         public ResearchKnownPropertyChipWidget[] Chips;
         public CursorHint Click;
+        public Graphic Flash;
 
         [NonSerialized] public int ChipsWritten;
 

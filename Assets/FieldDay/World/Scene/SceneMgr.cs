@@ -904,7 +904,7 @@ namespace FieldDay.Scenes {
                 }
             }
 
-            if (m_LoadProcessQueue.Count == 0 && m_LoadQueue.Count == 0 && m_SubSceneQueue.Count == 0) {
+            if (m_AssetUnloadLock == 0 && m_LoadProcessQueue.Count == 0 && m_LoadQueue.Count == 0 && m_SubSceneQueue.Count == 0) {
                 if (m_QueuedContexts.Count > 0) {
 #if DEVELOPMENT
                     for (int i = m_QueuedContexts.Count; i-- > 0;) {

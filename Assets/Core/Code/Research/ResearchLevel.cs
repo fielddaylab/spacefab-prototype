@@ -11,6 +11,8 @@ namespace SpaceFab.Research {
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] AvailableMaterials;
         public ResearchMaterialKnowledgePair[] PrePopulate;
         public ResearchMaterialKnowledgePair[] Objectives;
+
+        [AssetName(typeof(ResearchLevel))] public StringHash32 NextLevelId;
     }
 
     [Flags]

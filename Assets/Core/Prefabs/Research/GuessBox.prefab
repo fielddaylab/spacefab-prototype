@@ -403,7 +403,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
-      value: Low Temperature Resistant
+      value: Resistant to Low Temperatures
       objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source
@@ -1395,7 +1395,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
-      value: High Temperature Resistant
+      value: Resistant to High Temperatures
       objectReference: {fileID: 0}
     - target: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_Id.m_Source

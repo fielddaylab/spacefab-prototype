@@ -16,6 +16,7 @@ MonoBehaviour:
   UnknownDisplayName: Sample 8
   Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
   ChemicalSymbol: W
+  SampleNumber: 8
   Atoms:
   - Size: 193
     ValenceElectrons: 6
@@ -35,6 +36,3 @@ MonoBehaviour:
     m_HashValue: 0
   DopantP:
     m_HashValue: 0
-  DiagramColor:
-    serializedVersion: 2
-    rgba: 4294967295

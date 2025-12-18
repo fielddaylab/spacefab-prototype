@@ -3,18 +3,23 @@ using BeauRoutine;
 using BeauUtil;
 using BeauUtil.UI;
 using FieldDay;
+using FieldDay.Audio;
 using FieldDay.Components;
 using FieldDay.HID;
+using FieldDay.Scenes;
 using FieldDay.SharedState;
+using FieldDay.UI.Animation;
 using SpaceFab.Research;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace SpaceFab.Research {
-	public sealed class ResearchKnownPropertyDisplay : MonoBehaviour {
+    [PreloadOrder(101)]
+	public sealed class ResearchKnownPropertyDisplay : MonoBehaviour, IScenePreload {
         [Header("Data Panel")]
         public TMP_Text MaterialTitle;
         public ResearchKnownPropertyRow ElectricProperty;
@@ -22,6 +27,7 @@ namespace SpaceFab.Research {
         public ResearchKnownPropertyRow SpecialProperty;
         public RectTransform RowHighlight;
         public PointerListener SubmitButton;
+        public GameObject SubmitInProgress;
         public ResearchGuessDisplay Guesser;
 
         [Header("Valence Panel")]
@@ -70,16 +76,38 @@ namespace SpaceFab.Research {
             SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = false;
             SubmitButton.gameObject.SetActive(false);
             RowHighlight.gameObject.SetActive(false);
+            SubmitInProgress.SetActive(true);
 
             yield return 1;
 
-            bool areAllCorrect = ResearchMaterialUtility.ProcessGuess(RootId);
-            if (areAllCorrect) {
-                // TODO: play some fanfare or something
+            ResearchMaterialGuessResult result = ResearchMaterialUtility.ProcessGuess(RootId);
+            if (result.Correct != 0) {
+                Sfx.Play("Research.Row.Correct");
+            } else {
+                Sfx.Play("Research.Row.Incorrect");
+            }
+
+            if ((result.Correct & ResearchMaterialKnowledge.Electrical) != 0) {
+                FlashAnim.Play(ElectricProperty.Flash, Color.white, FlashAnim.Default);
+            } else if ((result.Incorrect & ResearchMaterialKnowledge.Electrical) != 0) {
+                FlashAnim.Play(ElectricProperty.Flash, Color.red, FlashAnim.Default);
+            }
+
+            if ((result.Correct & ResearchMaterialKnowledge.Thermal) != 0) {
+                FlashAnim.Play(ThermalProperty.Flash, Color.white, FlashAnim.Default);
+            } else if ((result.Incorrect & ResearchMaterialKnowledge.Thermal) != 0) {
+                FlashAnim.Play(ThermalProperty.Flash, Color.red, FlashAnim.Default);
+            }
+
+            if ((result.Correct & ResearchMaterialKnowledge.Special) != 0) {
+                FlashAnim.Play(SpecialProperty.Flash, Color.white, FlashAnim.Default);
+            } else if ((result.Incorrect & ResearchMaterialKnowledge.Special) != 0) {
+                FlashAnim.Play(SpecialProperty.Flash, Color.red, FlashAnim.Default);
             }
 
             Find.State<ResearchSelectionState>().Locked = false;
 
+            SubmitInProgress.SetActive(false);
             DisplayCurrent(Find.State<ResearchSelectionState>().Current);
         }
 
@@ -114,7 +142,7 @@ namespace SpaceFab.Research {
             ResearchMaterialKnowledge knowledge = ResearchMaterialUtility.GetKnownCategories(rootId);
             ResearchMaterialGuessState guesses = ResearchMaterialUtility.GetGuess(rootId);
 
-            MaterialTitle.SetText(knowledge == ResearchMaterialKnowledge.AllBasic ? material.DisplayName : material.UnknownDisplayName);
+            MaterialTitle.SetText((knowledge & ResearchMaterialKnowledge.Name) != 0 ? material.DisplayName : material.UnknownDisplayName);
 
             ElectricProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Electrical) == 0;
             ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Thermal) == 0;
@@ -153,7 +181,7 @@ namespace SpaceFab.Research {
             UnselectedValenceAppearance.SetActive(false);
             SelectedValenceAppearance.SetActive(true);
 
-            ResearchMaterialUtility.PopulateDiagram(ValenceDiagram, material, knowledge == ResearchMaterialKnowledge.AllBasic);
+            ResearchMaterialUtility.PopulateDiagram(ValenceDiagram, material, (knowledge & ResearchMaterialKnowledge.Name) != 0);
         }
 
         static private void WriteChips(ResearchKnownPropertyRow row, ElectricalTag electrical, DopantType dopant, bool confirmed) {
@@ -211,6 +239,22 @@ namespace SpaceFab.Research {
                     row.WriteChip("H.VOLT", confirmed);
                 }
             }
+        }
+
+        IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
+            if (ResearchGame.CurrentLevel) {
+                ResearchMaterialKnowledge toDisplay = ResearchGame.CurrentLevel.AvailableProperties;
+                if ((toDisplay & ResearchMaterialKnowledge.Electrical) == 0) {
+                    ElectricProperty.gameObject.SetActive(false);
+                }
+                if ((toDisplay & ResearchMaterialKnowledge.Thermal) == 0) {
+                    ThermalProperty.gameObject.SetActive(false);
+                }
+                if ((toDisplay & ResearchMaterialKnowledge.Special) == 0) {
+                    SpecialProperty.gameObject.SetActive(false);
+                }
+            }
+            return null;
         }
     }
 }

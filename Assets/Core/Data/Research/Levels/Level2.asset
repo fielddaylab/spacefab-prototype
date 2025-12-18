@@ -18,7 +18,16 @@ MonoBehaviour:
   - m_HashValue: 3821421172
   - m_HashValue: 3383598718
   - m_HashValue: 1163381446
+  PrePopulate:
+  - MaterialId:
+      m_HashValue: 3821421172
+    Knowledge: 1
+  - MaterialId:
+      m_HashValue: 3383598718
+    Knowledge: 1
   Objectives:
   - MaterialId:
       m_HashValue: 1163381446
     Knowledge: 3
+  NextLevelId:
+    m_HashValue: 660313546

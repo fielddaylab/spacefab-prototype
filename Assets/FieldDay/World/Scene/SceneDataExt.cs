@@ -207,6 +207,18 @@ namespace FieldDay.Scenes {
         /// <summary>
         /// Gets the first loaded instance for the given scene.
         /// </summary>
+        static internal SceneDataExt GetByName(string sceneName) {
+            foreach(var current in s_Loaded) {
+                if (current.SceneBinding.Name == sceneName) {
+                    return current;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the first loaded instance for the given scene.
+        /// </summary>
         static internal SceneDataExt GetByPath(string scenePath) {
             s_LoadedMapByPath.TryGetValue(scenePath, out SceneDataExt data);
             return data;

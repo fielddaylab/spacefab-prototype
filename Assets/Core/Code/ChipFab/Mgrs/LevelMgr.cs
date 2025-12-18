@@ -1,5 +1,8 @@
+using BeauUtil;
 using FieldDay;
+using FieldDay.Editor;
 using FieldDay.Rendering;
+using FieldDay.Scenes;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -86,7 +89,7 @@ namespace SpaceFab.ChipFab
 
         private void HandleReturnClicked()
         {
-            SceneManager.LoadScene("ChipFabLoader");
+            Game.Scenes.LoadMainScene(SceneUtils.GetSceneByName("ChipFabLoader"));
         }
 
         #endregion // Handlers
