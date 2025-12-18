@@ -79,7 +79,6 @@ namespace SpaceFab.SupplyChain {
                 widget.NameDisplay.SetText(ship.DisplayName);
 
                 widget.SpeedStat.SetValue(ship.Speed, false);
-                widget.CostStat.SetValue(ship.Cost, false);
 
                 widget.RouteColorIndicator.color = widget.RouteColor;
 
@@ -118,11 +117,11 @@ namespace SpaceFab.SupplyChain {
 
             unsafe {
                 int materialCount = 0;
-                PopulateMaterialCategory(widget, FabMaterial.Insulator, stats.Materials[(int) FabMaterial.Insulator - 1], ref materialCount, supplySprites);
-                PopulateMaterialCategory(widget, FabMaterial.Semiconductor, stats.Materials[(int) FabMaterial.Semiconductor - 1], ref materialCount, supplySprites);
-                PopulateMaterialCategory(widget, FabMaterial.Conductor, stats.Materials[(int) FabMaterial.Conductor - 1], ref materialCount, supplySprites);
-                PopulateMaterialCategory(widget, FabMaterial.DopantN, stats.Materials[(int) FabMaterial.DopantN - 1], ref materialCount, supplySprites);
-                PopulateMaterialCategory(widget, FabMaterial.DopantP, stats.Materials[(int) FabMaterial.DopantP - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.A, stats.Materials[(int) FabMaterial.A - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.B, stats.Materials[(int) FabMaterial.B - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.D, stats.Materials[(int) FabMaterial.D - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.C, stats.Materials[(int) FabMaterial.C - 1], ref materialCount, supplySprites);
+                PopulateMaterialCategory(widget, FabMaterial.E, stats.Materials[(int) FabMaterial.E - 1], ref materialCount, supplySprites);
 
                 for(int i = materialCount; i < widget.RouteMaterials.Length; i++) {
                     widget.RouteMaterials[i].gameObject.SetActive(false);

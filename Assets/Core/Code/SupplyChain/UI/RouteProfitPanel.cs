@@ -48,11 +48,11 @@ namespace SpaceFab.SupplyChain {
             }
             int profit = SellPrice - cost;
 
-            if (materials.Insulator >= DesiredMaterials.Insulator
-                && materials.Conductor >= DesiredMaterials.Conductor
-                && materials.Semiconductor >= DesiredMaterials.Semiconductor
-                && materials.DopantN >= DesiredMaterials.DopantN
-                && materials.DopantP >= DesiredMaterials.DopantP) {
+            if (materials.A >= DesiredMaterials.A
+                && materials.E >= DesiredMaterials.E
+                && materials.B >= DesiredMaterials.B
+                && materials.C >= DesiredMaterials.C
+                && materials.D >= DesiredMaterials.D) {
                 NotFulfilledGroup.SetActive(false);
                 FulfilledGroup.SetActive(true);
                 using(PooledStringBuilder psb = PooledStringBuilder.Create()) {

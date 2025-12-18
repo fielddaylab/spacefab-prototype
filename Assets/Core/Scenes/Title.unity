@@ -427,14 +427,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2207665595847867684, guid: 67043a83a20504241bf0fca5dd9a32c0, type: 3}
-      propertyPath: m_ResearchScene.m_GUID
-      value: 0752caa8245ff8d4bbe16b7d8d1449ea
-      objectReference: {fileID: 0}
-    - target: {fileID: 2207665595847867684, guid: 67043a83a20504241bf0fca5dd9a32c0, type: 3}
-      propertyPath: m_ResearchScene.m_ScenePath
-      value: Assets/Core/Scenes/ResearchLoader.unity
-      objectReference: {fileID: 0}
     - target: {fileID: 5044273745549716929, guid: 67043a83a20504241bf0fca5dd9a32c0, type: 3}
       propertyPath: m_Camera
       value: 

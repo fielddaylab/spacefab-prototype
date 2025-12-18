@@ -4,21 +4,21 @@ namespace SpaceFab.SupplyChain {
     public enum FabMaterial : byte {
         None = 0,
 
-        Insulator,
-        Semiconductor,
-        DopantN,
-        Conductor,
-        DopantP,
+        A,
+        B,
+        C,
+        D,
+        E,
 
         Any = 255
     }
 
     [Serializable]
     public struct FabMaterialSet {
-        public int Insulator;
-        public int Semiconductor;
-        public int DopantN;
-        public int DopantP;
-        public int Conductor;
+        public int A;
+        public int B;
+        public int C;
+        public int D;
+        public int E;
     }
 }

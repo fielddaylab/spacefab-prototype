@@ -683,8 +683,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 
 --- !u!1 &6805973624127594957
 GameObject:

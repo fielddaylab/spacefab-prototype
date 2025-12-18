@@ -16,7 +16,7 @@ using UnityEngine.UI;
 
 namespace SpaceFab.SupplyChain {
     public sealed class RouteRequestPanel : SharedPanel, IRegistrationCallbacks {
-        public Image[] Resources;
+        public RouteMaterialWidget[] Resources;
         public TMP_Text SellPrice;
 
         [NonSerialized] public FabMaterial[] ResourceMap = new FabMaterial[10];
@@ -27,11 +27,11 @@ namespace SpaceFab.SupplyChain {
 
             ResourceCount = 0;
 
-            PopulateCategory(materials.Insulator, FabMaterial.Insulator, sprites);
-            PopulateCategory(materials.Semiconductor, FabMaterial.Semiconductor, sprites);
-            PopulateCategory(materials.Conductor, FabMaterial.Conductor, sprites);
-            PopulateCategory(materials.DopantN, FabMaterial.DopantN, sprites);
-            PopulateCategory(materials.DopantP, FabMaterial.DopantP, sprites);
+            PopulateCategory(materials.A, FabMaterial.A, sprites);
+            PopulateCategory(materials.B, FabMaterial.B, sprites);
+            PopulateCategory(materials.E, FabMaterial.D, sprites);
+            PopulateCategory(materials.C, FabMaterial.C, sprites);
+            PopulateCategory(materials.D, FabMaterial.E, sprites);
 
             for (int i = ResourceCount; i < Resources.Length; i++) {
                 ResourceMap[i] = FabMaterial.None;
@@ -50,41 +50,41 @@ namespace SpaceFab.SupplyChain {
 
             for(int i = 0; i < ResourceCount; i++) {
                 FabMaterial material = ResourceMap[i];
-                Image icon = Resources[i];
+                Image icon = Resources[i].Icon;
 
                 bool isFilled = false;
                 switch (material) {
-                    case FabMaterial.Insulator: {
-                        if (materials.Insulator > 0) {
-                            materials.Insulator--;
+                    case FabMaterial.A: {
+                        if (materials.A > 0) {
+                            materials.A--;
                             isFilled = true;
                         }
                         break;
                     }
-                    case FabMaterial.Semiconductor: {
-                        if (materials.Semiconductor > 0) {
-                            materials.Semiconductor--;
+                    case FabMaterial.B: {
+                        if (materials.B > 0) {
+                            materials.B--;
                             isFilled = true;
                         }
                         break;
                     }
-                    case FabMaterial.Conductor: {
-                        if (materials.Conductor > 0) {
-                            materials.Conductor--;
+                    case FabMaterial.D: {
+                        if (materials.E > 0) {
+                            materials.E--;
                             isFilled = true;
                         }
                         break;
                     }
-                    case FabMaterial.DopantN: {
-                        if (materials.DopantN > 0) {
-                            materials.DopantN--;
+                    case FabMaterial.C: {
+                        if (materials.C > 0) {
+                            materials.C--;
                             isFilled = true;
                         }
                         break;
                     }
-                    case FabMaterial.DopantP: {
-                        if (materials.DopantP > 0) {
-                            materials.DopantP--;
+                    case FabMaterial.E: {
+                        if (materials.D > 0) {
+                            materials.D--;
                             isFilled = true;
                         }
                         break;
@@ -108,7 +108,7 @@ namespace SpaceFab.SupplyChain {
                 int index = ResourceCount++;
                 ResourceMap[index] = material;
                 Resources[index].gameObject.SetActive(true);
-                Resources[index].sprite = sprites.MaterialSpriteOutline(material);
+                Resources[index].Icon.sprite = sprites.MaterialSpriteOutline(material);
             }
         }
     }

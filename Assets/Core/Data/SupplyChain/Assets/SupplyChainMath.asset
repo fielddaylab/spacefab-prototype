@@ -13,15 +13,14 @@ MonoBehaviour:
   m_Name: SupplyChainMath
   m_EditorClassIdentifier: 
   Reliabilities:
-  - 0.1666667
-  - 0.3333333
-  - 0.5
-  - 0.6666667
-  - 0.8333333
-  - 1
+  - 0.55
+  - 0.6
+  - 0.65
+  - 0.7
+  - 0.8
+  - 0.95
   Speeds:
   - 5
-  - 7
   - 10
   - 15
   Costs:

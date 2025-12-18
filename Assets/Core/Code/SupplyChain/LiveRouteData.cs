@@ -303,7 +303,7 @@ namespace SpaceFab.SupplyChain {
             float totalTime = (distance - timeDialatedDistance) / speed
                 + (timeDialatedDistance) / (speed * dialationFactor);
 
-            float cost = mathSettings.Costs[ship.Cost - 1] * (int) Math.Ceiling(distance / speed);
+            float cost = 0;
             int cycles = (int) Math.Ceiling(totalTime);
 
             int* materials = stackalloc int[SupplyUtility.MaterialTypeCount];

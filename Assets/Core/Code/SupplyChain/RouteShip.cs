@@ -13,8 +13,7 @@ namespace SpaceFab.SupplyChain {
         public Sprite Icon;
 
         [Header("Stats")]
-        [Range(1, 4)] public int Speed;
-        [Range(1, 4)] public int Capacity;
-        [Range(1, 4)] public int Cost;
+        [Range(1, 3)] public int Speed;
+        [Range(1, 3)] public int Capacity;
     }
 }

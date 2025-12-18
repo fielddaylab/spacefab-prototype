@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4be90a9d33d3784caac2e5eb4b5636c, type: 3}
+  m_Name: SupplyChainLevels
+  m_EditorClassIdentifier: 
+  m_GlobalAssets: []
+  m_NamedAssets:
+  - {fileID: 11400000, guid: 7ee2ef2cd3e51cb4e9ada1f95f035307, type: 2}
+  - {fileID: 11400000, guid: c5da643cf55273643822eb1ca995d4f0, type: 2}
+  - {fileID: 11400000, guid: 30af882e6a9077847bd033f436df4254, type: 2}
+  - {fileID: 11400000, guid: 23734cdb9bf61fb4abb3b06b0d6309e1, type: 2}
+  - {fileID: 11400000, guid: 4fb88379257d8f44eb2822d5bfb7a45b, type: 2}
+  - {fileID: 11400000, guid: aaef3682410436c4fa810a3eae960034, type: 2}
+  m_LiteAssets: []

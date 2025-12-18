@@ -135,8 +135,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 
 --- !u!1 &1580137551380091639
 GameObject:
@@ -675,8 +678,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 
 --- !u!1 &5772620982137400901
 GameObject:
@@ -948,12 +954,12 @@ MonoBehaviour:
     m_GUID: 2f520dd4c296f5842bac8eefd3eebb58
   m_SupplyChainButton: {fileID: 7973187833277083546}
   m_SupplyChainScene:
-    m_ScenePath: Assets/Core/Scenes/SupplyChain.unity
-    m_GUID: ebc488a0a774d17489f4d58677fd5f24
+    m_ScenePath: Assets/Core/Scenes/SupplyChainLoader.unity
+    m_GUID: fdd332d26dad180458af6e62a200a052
   m_ResearchButton: {fileID: 4556860401212350192}
   m_ResearchScene:
-    m_ScenePath: Assets/Core/Scenes/Research.unity
-    m_GUID: a2e772f47c25d8a42bd79d389c2ff838
+    m_ScenePath: Assets/Core/Scenes/ResearchLoader.unity
+    m_GUID: 0752caa8245ff8d4bbe16b7d8d1449ea
 --- !u!1 &6595612790926603493
 GameObject:
   m_ObjectHideFlags: 0
@@ -1089,8 +1095,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 
 --- !u!1 &7570673004096121012
 GameObject:
@@ -1495,8 +1504,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 
 --- !u!1 &9081372913326614376
 GameObject:
@@ -1633,6 +1645,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 

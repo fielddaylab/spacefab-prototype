@@ -16,17 +16,33 @@ namespace SpaceFab.SupplyChain {
         [AssetName(typeof(RouteShip))] public StringHash32[] Ships;
         public FabMaterialSet RequiredMaterials;
         public int SellPrice = 10;
+        public SceneReference DefaultScene;
 
         protected override IEnumerator<WorkSlicer.Result?> OnScenePreload() {
+            Game.Scenes.GetLoadContext(out var context);
+            SceneReference toLoad = DefaultScene;
+            StringHash32 levelId = context.Task.Name;
+            if (!levelId.IsEmpty) {
+                SupplyChainLevel level = Find.NamedAsset<SupplyChainLevel>(levelId);
+                Ships = level.Ships;
+                RequiredMaterials = level.RequiredMaterials;
+                SellPrice = level.SellPrice;
+                toLoad = level.Scene;
+            }
+
+            Game.Scenes.LoadAuxScene(toLoad, default);
+            while(Game.Scenes.IsLoading(toLoad)) {
+                yield return null;
+            }
+
             var routePanel = Find.Panel<RouteShipPanel>();
             routePanel.PopulateShips(Ships);
             var requestPanel = Find.Panel<RouteRequestPanel>();
             requestPanel.PopulateResources(RequiredMaterials);
-            requestPanel.SellPrice.SetText("Sell Price: $" + SellPrice.ToStringLookup());
+            //requestPanel.SellPrice.SetText("Sell Price: $" + SellPrice.ToStringLookup());
             var profitPanel = Find.Panel<RouteProfitPanel>();
             profitPanel.DesiredMaterials = RequiredMaterials;
             profitPanel.SellPrice = SellPrice;
-            return null;
         }
     }
 }

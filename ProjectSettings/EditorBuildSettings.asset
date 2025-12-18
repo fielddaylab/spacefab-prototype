@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Core/Scenes/Title.unity
     guid: 94d712eaa68115140a1f241002c4fa22
   - enabled: 1
+    path: Assets/Core/Scenes/ChipDesignLoader.unity
+    guid: 4f5eae4ef44d7bc4589ceab90ffe221a
+  - enabled: 1
     path: Assets/Core/Scenes/ChipDesign.unity
     guid: f80c004d1479711409dc1c126bf4f6a8
   - enabled: 1
@@ -30,9 +33,30 @@ EditorBuildSettings:
     path: Assets/Core/Scenes/Research.unity
     guid: a2e772f47c25d8a42bd79d389c2ff838
   - enabled: 1
+    path: Assets/Core/Scenes/SupplyChainLoader.unity
+    guid: fdd332d26dad180458af6e62a200a052
+  - enabled: 1
     path: Assets/Core/Scenes/SupplyChain.unity
     guid: ebc488a0a774d17489f4d58677fd5f24
   - enabled: 1
-    path: Assets/Core/Scenes/ChipDesignLoader.unity
-    guid: 4f5eae4ef44d7bc4589ceab90ffe221a
+    path: Assets/Core/Data/SupplyChain/Levels/Chapter1.unity
+    guid: 43bfdea286d3d234caea2e0d0709f612
+  - enabled: 1
+    path: Assets/Core/Data/SupplyChain/Levels/Chapter2.unity
+    guid: 58943925058dfca429a09ecdb9cb0999
+  - enabled: 1
+    path: Assets/Core/Data/SupplyChain/Levels/Chapter3.unity
+    guid: b9ece20d6cb827b4484f07a0eacc43e7
+  - enabled: 1
+    path: Assets/Core/Data/SupplyChain/Levels/Chapter4.unity
+    guid: b20bb11b800652d47aecd876af27d316
+  - enabled: 1
+    path: Assets/Core/Data/SupplyChain/Levels/Chapter5.unity
+    guid: cde23b8b53a8f0f45b2b26d0ce3cdeb2
+  - enabled: 1
+    path: Assets/Core/Data/SupplyChain/Levels/Chapter6.unity
+    guid: 532fb5cae5c15b143bdcc15c47ab23a7
+  - enabled: 1
+    path: Assets/Core/Data/SupplyChain/Levels/Sandbox.unity
+    guid: a50d968a1d48fa341a7b26a3ef83fb93
   m_configObjects: {}

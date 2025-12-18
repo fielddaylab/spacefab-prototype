@@ -25,11 +25,11 @@ namespace SpaceFab.SupplyChain {
         }
 
         static public unsafe void AccumulateMaterials(ref FabMaterialSet materials, in SupplyRouteStats stats) {
-            materials.Insulator += stats.Materials[(int) FabMaterial.Insulator - 1];
-            materials.Semiconductor += stats.Materials[(int) FabMaterial.Semiconductor - 1];
-            materials.DopantN += stats.Materials[(int) FabMaterial.DopantN - 1];
-            materials.DopantP += stats.Materials[(int) FabMaterial.DopantP - 1];
-            materials.Conductor += stats.Materials[(int) FabMaterial.Conductor - 1];
+            materials.A += stats.Materials[(int) FabMaterial.A - 1];
+            materials.B += stats.Materials[(int) FabMaterial.B - 1];
+            materials.C += stats.Materials[(int) FabMaterial.C - 1];
+            materials.D += stats.Materials[(int) FabMaterial.E - 1];
+            materials.E += stats.Materials[(int) FabMaterial.D - 1];
         }
     }
 }

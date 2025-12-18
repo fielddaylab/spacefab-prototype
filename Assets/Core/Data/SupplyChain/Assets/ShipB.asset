@@ -10,11 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ccb77eb8566ad04690634f207adcc41, type: 3}
-  m_Name: ShipA
+  m_Name: ShipB
   m_EditorClassIdentifier: 
-  DisplayName: The Scar
-  Icon: {fileID: -7408593085392513125, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
-  Speed: 4
-  Capacity: 1
-  Defense: 1
-  Cost: 2
+  DisplayName: IT904
+  Icon: {fileID: -8407637396049678052, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
+  Speed: 3
+  Capacity: 2
