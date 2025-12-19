@@ -152,6 +152,15 @@ namespace SpaceFab.ChipFab
 
         public void SetAtIndex(int index)
         {
+            if (ControlsMgr.Instance.CurrDropZone)
+            {
+                var prevStation = ControlsMgr.Instance.CurrDropZone.GetComponent<StationMicrogame>();
+                if (prevStation && prevStation.ActivateGroup)
+                {
+                    prevStation.ActivateGroup.SetActive(false);
+                }
+            }
+
             m_currNodeIndex = index;
             m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];
 
@@ -174,11 +183,25 @@ namespace SpaceFab.ChipFab
             if (station)
             {
                 CamMgr.Instance.LoadCamPosImmediate(station.CamPos.Pos);
+
+                if (station.ActivateGroup)
+                {
+                    station.ActivateGroup.SetActive(true);
+                }
             }
         }
 
         public IEnumerator SetAtIndexRoutine(int index)
         {
+            if (ControlsMgr.Instance.CurrDropZone)
+            {
+                var prevStation = ControlsMgr.Instance.CurrDropZone.GetComponent<StationMicrogame>();
+                if (prevStation && prevStation.ActivateGroup)
+                {
+                    prevStation.ActivateGroup.SetActive(false);
+                }
+            }
+
             m_currNodeIndex = index;
             m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];
 
@@ -203,6 +226,11 @@ namespace SpaceFab.ChipFab
                     CamMgr.Instance.LoadCamPosRoutine(station.CamPos.Pos, 0.1f),
                     MoveBotRoutine(0.1f)
                     );
+
+                if (station.ActivateGroup)
+                {
+                    station.ActivateGroup.SetActive(true);
+                }
             }
             else
             {

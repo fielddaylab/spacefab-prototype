@@ -111,6 +111,11 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        public bool IsRunning()
+        {
+            return m_state == TimeState.Running;
+        }
+
         private void HandleNewWaferCreated()
         {
             if (ModeMgr.Instance.Mode == GameMode.Timed)

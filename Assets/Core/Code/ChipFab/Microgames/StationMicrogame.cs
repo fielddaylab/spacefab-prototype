@@ -3,6 +3,7 @@ using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpaceFab.ChipFab
 {
@@ -19,6 +20,8 @@ namespace SpaceFab.ChipFab
     public abstract class StationMicrogame : MonoBehaviour, IStationMicrogame
     {
         public GameObject Container;
+        public ClickBox ActivateButton;
+        public GameObject ActivateGroup;
         public CamPositioner CamPos;
 
         protected Routine m_AutomationRoutine;
@@ -29,6 +32,19 @@ namespace SpaceFab.ChipFab
             {
                 Container.SetActive(false);
             }
+
+            if (ActivateGroup)
+            {
+                ActivateGroup.SetActive(false);
+                ActivateButton.OnMouseDown.AddListener(HandleActivateClicked);
+            }
+        }
+
+        protected void OnDestroy()
+        {
+            if (Game.IsShuttingDown) { return; }
+
+            ActivateButton.OnMouseDown.RemoveListener(HandleActivateClicked);
         }
 
         public virtual void Activate(WaferState waferState)
@@ -38,6 +54,11 @@ namespace SpaceFab.ChipFab
             if (Container)
             {
                 Container.SetActive(true);
+            }
+
+            if (ActivateButton)
+            {
+                ActivateButton.gameObject.SetActive(false);
             }
         }
 
@@ -52,8 +73,30 @@ namespace SpaceFab.ChipFab
             {
                 Game.Events.Dispatch(GameEvents.AutomationCompleted);
             }
+
+            if (ActivateButton)
+            {
+                ActivateButton.gameObject.SetActive(true);
+            }
         }
 
         public abstract bool TryCancel();
+
+
+
+        #region Handlers
+
+        private void HandleActivateClicked()
+        {
+            if (TimeMgr.Instance.IsRunning())
+            {
+                if (ControlsMgr.Instance && ControlsMgr.Instance.BotInstance)
+                {
+                    ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                }
+            }
+        }
+
+        #endregion Handlers
     }
 }
