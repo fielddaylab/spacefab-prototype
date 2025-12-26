@@ -1,3 +1,4 @@
+using BeauRoutine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace SpaceFab.ChipFab
 
         private void Start()
         {
-            SetCamPos(DefaultPos.Pos);
+            SetCamPosImmediate(DefaultPos.Pos);
         }
 
         public void ToggleAlwaysZoomed()
@@ -37,20 +38,45 @@ namespace SpaceFab.ChipFab
             AlwaysZoomed = !AlwaysZoomed;
         }
 
-        public void LoadCamPos(CamPos pos)
+        public void LoadCamPosImmediate(CamPos pos)
         {
-            SetCamPos(pos);
+            SetCamPosImmediate(pos);
         }
 
-        public void UnloadCamPos(CamPos pos)
+        public IEnumerator LoadCamPosRoutine(CamPos pos, float time)
+        {
+            yield return SetCamPosRoutine(pos, time);
+        }
+
+        public void UnloadCamPosImmediate(CamPos pos)
         {
             if (CurrPos.Pos == pos.Pos && CurrPos.ViewSize == pos.ViewSize)
             {
-                SetCamPos(DefaultPos.Pos);
+                SetCamPosImmediate(DefaultPos.Pos);
             }
         }
 
-        private void SetCamPos(CamPos pos)
+        public IEnumerator UnloadCamPosRoutine(CamPos pos, float time)
+        {
+            if (CurrPos.Pos == pos.Pos && CurrPos.ViewSize == pos.ViewSize)
+            {
+                yield return SetCamPosRoutine(DefaultPos.Pos, time);
+            }
+        }
+
+        private IEnumerator SetCamPosRoutine(CamPos pos, float time)
+        {
+            yield return Routine.Combine(
+                Camera.transform.MoveTo(pos.Pos.position, time)
+                );
+
+            Camera.orthographicSize = pos.ViewSize;
+            CurrPos = pos;
+
+            yield return null;
+        }
+
+        private void SetCamPosImmediate(CamPos pos)
         {
             Camera.transform.position = pos.Pos.position;
             Camera.orthographicSize = pos.ViewSize;

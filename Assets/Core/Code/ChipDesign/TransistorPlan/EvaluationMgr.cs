@@ -899,16 +899,18 @@ namespace SpaceFab.ChipDesign
 
         private void EvaluationSuccess()
         {
-            ResultHeaderText.SetText("Success");
-            ResultPanel.SetActive(true);
+            ResultHeaderText?.SetText("Success");
+            ResultSubText?.gameObject.SetActive(true);
+            ResultPanel?.SetActive(true);
 
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);
         }
 
         private void EvaluationInvalid()
         {
-            ResultHeaderText.SetText("Invalid");
-            ResultPanel.SetActive(true);
+            ResultHeaderText?.SetText("Invalid");
+            ResultSubText?.gameObject.SetActive(false);
+            ResultPanel?.SetActive(true);
 
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);
         }
@@ -916,6 +918,7 @@ namespace SpaceFab.ChipDesign
         private void EvaluationFailure()
         {
             ResultHeaderText?.SetText("Failure");
+            ResultSubText?.gameObject.SetActive(false);
             ResultPanel?.SetActive(true);
 
             Game.Events.Dispatch(GameEvents.OnResultsDisplayed);

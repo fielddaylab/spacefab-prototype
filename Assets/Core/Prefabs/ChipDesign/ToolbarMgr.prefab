@@ -443,6 +443,81 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &822974361358870426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7972840399260558232}
+  - component: {fileID: 4406588656068204864}
+  - component: {fileID: 6563027992406570038}
+  m_Layer: 5
+  m_Name: Active Indicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7972840399260558232
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822974361358870426}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1968609368621486282}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 321, y: 72}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4406588656068204864
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822974361358870426}
+  m_CullTransparentMesh: 1
+--- !u!114 &6563027992406570038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822974361358870426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.27450982, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 93d090b86777aa94094100e0ee1f3d82, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &865812749258355125
 GameObject:
   m_ObjectHideFlags: 0
@@ -1165,6 +1240,7 @@ GameObject:
   - component: {fileID: 8027137538604072787}
   - component: {fileID: 3602579198222328402}
   - component: {fileID: 6197245634900209638}
+  - component: {fileID: 7241061561063511764}
   m_Layer: 5
   m_Name: Via Button
   m_TagString: Untagged
@@ -1275,6 +1351,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7241061561063511764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512331733519417785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Draw Contact Tool
+  Tooltip: Sets the active tool to draw Contacts where clicked. Contacts connect
+    layers, allowing current to flow from one layer to another
 --- !u!1 &1526943530657866724
 GameObject:
   m_ObjectHideFlags: 0
@@ -2291,6 +2387,7 @@ RectTransform:
   - {fileID: 4848412395855581558}
   - {fileID: 2013452209623419307}
   - {fileID: 1128987766361011265}
+  - {fileID: 7972840399260558232}
   m_Father: {fileID: 806789719812572486}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -2610,6 +2707,7 @@ GameObject:
   - component: {fileID: 702392259035710733}
   - component: {fileID: 4083246802560172724}
   - component: {fileID: 5666904956245948028}
+  - component: {fileID: 3097566403372764249}
   m_Layer: 5
   m_Name: Draw Links Button
   m_TagString: Untagged
@@ -2720,6 +2818,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3097566403372764249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3375799234645030445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Draw Metal Tool
+  Tooltip: Sets the active tool to draw Metal where clicked. Metal conducts current
 --- !u!1 &3377512682068341551
 GameObject:
   m_ObjectHideFlags: 0
@@ -2732,6 +2849,7 @@ GameObject:
   - component: {fileID: 1138054317531570818}
   - component: {fileID: 4987885690964430040}
   - component: {fileID: 3485574558643392172}
+  - component: {fileID: 2520079290799916482}
   m_Layer: 5
   m_Name: Erase Button
   m_TagString: Untagged
@@ -2842,6 +2960,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2520079290799916482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3377512682068341551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Erase Tool
+  Tooltip: Erases components you have drawn
 --- !u!1 &3430171400788001363
 GameObject:
   m_ObjectHideFlags: 0
@@ -3030,6 +3167,7 @@ MonoBehaviour:
   DrawViaButton: {fileID: 6197245634900209638}
   DrawGateButton: {fileID: 8097278277740827154}
   ActiveToolText: {fileID: 8705986514028623675}
+  ActiveIndicator: {fileID: 6563027992406570038}
   DrawNodesGroup: {fileID: 1890883954614894040}
   DrawNNodesButton: {fileID: 5746411971394008764}
   DrawPNodesButton: {fileID: 7051387361211768207}
@@ -3431,6 +3569,7 @@ GameObject:
   - component: {fileID: 3805661087361087415}
   - component: {fileID: 3619070695411310611}
   - component: {fileID: 5046131683151311871}
+  - component: {fileID: 4218356471915375892}
   m_Layer: 5
   m_Name: Return Button
   m_TagString: Untagged
@@ -3540,6 +3679,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4218356471915375892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4398178399340366300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Return to Level Select
+  Tooltip: 
 --- !u!1 &4501492000686499899
 GameObject:
   m_ObjectHideFlags: 0
@@ -3895,6 +4053,7 @@ GameObject:
   - component: {fileID: 5804210923378181552}
   - component: {fileID: 66267727600145550}
   - component: {fileID: 2165333073045357313}
+  - component: {fileID: 4370685199830307060}
   m_Layer: 5
   m_Name: Layer Button
   m_TagString: Untagged
@@ -4005,6 +4164,25 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4370685199830307060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5122224771432660755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Layer
+  Tooltip: Indicates which layer (Metal or Transistor) you are modifying
 --- !u!1 &5250286717373573832
 GameObject:
   m_ObjectHideFlags: 0
@@ -4998,6 +5176,7 @@ GameObject:
   - component: {fileID: 8389835806996756014}
   - component: {fileID: 8267352553919431096}
   - component: {fileID: 8097278277740827154}
+  - component: {fileID: 1616418376559674973}
   m_Layer: 5
   m_Name: Gate Button
   m_TagString: Untagged
@@ -5108,6 +5287,27 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1616418376559674973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7421677471337606698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Draw Gate Tool
+  Tooltip: Sets the active tool to draw Gates where clicked. Gates modify the underlying
+    Transistor depending on the type of current flowing into the Gate. Current does
+    NOT flow from the Gate to the underlying layer
 --- !u!1 &7428643551882353285
 GameObject:
   m_ObjectHideFlags: 0
@@ -5597,6 +5797,7 @@ GameObject:
   - component: {fileID: 717606135482265331}
   - component: {fileID: 8998070850495928154}
   - component: {fileID: 7051387361211768207}
+  - component: {fileID: 6655269671917495381}
   m_Layer: 5
   m_Name: Draw P Nodes Button
   m_TagString: Untagged
@@ -5707,6 +5908,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6655269671917495381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741988639449468131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Draw P-Type Transistor Tool
+  Tooltip: Sets the active tool to draw P-Type Transistors where clicked. Transistors
+    conduct current by default, but behave differently when adjacent to other types.
 --- !u!1 &7954801720970377969
 GameObject:
   m_ObjectHideFlags: 0
@@ -5869,6 +6090,7 @@ GameObject:
   - component: {fileID: 383094640229963296}
   - component: {fileID: 8708144378852898978}
   - component: {fileID: 5746411971394008764}
+  - component: {fileID: 8994982284746148030}
   m_Layer: 5
   m_Name: Draw N Nodes Button
   m_TagString: Untagged
@@ -5979,6 +6201,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8994982284746148030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8231347352553819628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 0
+  Flags: 0
+  TooltipHeader: Draw N-Type Transistor Tool
+  Tooltip: Sets the active tool to draw N-Type Transistors where clicked. Transistors
+    conduct current by default, but behave differently when adjacent to other types.
 --- !u!1 &8531254839410012930
 GameObject:
   m_ObjectHideFlags: 0
@@ -6483,6 +6725,10 @@ PrefabInstance:
     - target: {fileID: 43143451156070200, guid: 5005d4fd82b7838458f8e2d27ae2c086, type: 3}
       propertyPath: m_Name
       value: Wiki Group
+      objectReference: {fileID: 0}
+    - target: {fileID: 43143451156070200, guid: 5005d4fd82b7838458f8e2d27ae2c086, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 555151640874382029, guid: 5005d4fd82b7838458f8e2d27ae2c086, type: 3}
       propertyPath: m_IsActive

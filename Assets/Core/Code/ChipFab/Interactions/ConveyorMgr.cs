@@ -119,7 +119,7 @@ namespace SpaceFab.ChipFab
         public void TryReturnToConveyor()
         {
             State = ConveyorState.Full;
-            CamMgr.Instance.UnloadCamPos(m_currNode.GetComponent<StationMicrogame>().CamPos.Pos);
+            CamMgr.Instance.UnloadCamPosImmediate(m_currNode.GetComponent<StationMicrogame>().CamPos.Pos);
             SetAtIndex(m_currNodeIndex);
         }
 

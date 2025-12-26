@@ -50,6 +50,7 @@ namespace SpaceFab.ChipFab
         private bool m_usedDopant;
 
         private bool m_isHeating = false;
+        private bool m_isApplyingHeat = false;
 
         private static KeyCode StokeKey = KeyCode.Space;
 
@@ -237,7 +238,7 @@ namespace SpaceFab.ChipFab
 
         private void ProcessManual()
         {
-            if (Input.GetKeyDown(StokeKey) && !m_AutomationRoutine.Exists() && !HeatingCompleted && !m_isHeating)
+            if (Input.GetKeyDown(StokeKey) && !m_AutomationRoutine.Exists() && !HeatingCompleted && !m_isHeating && !m_isApplyingHeat)
             {
                 HandleStartHeat();
             }
@@ -255,6 +256,7 @@ namespace SpaceFab.ChipFab
             m_isHeating = false;
             m_finalTemp = 0;
             m_currTemp = 0;
+            m_isApplyingHeat = false;
             HeatingCompleted = false;
 
             var validSteps = new List<SequenceStepID>() {
@@ -433,8 +435,9 @@ namespace SpaceFab.ChipFab
 
         private void HandleNDopeDown()
         {
-            // don't allow inputs during automation
+            // don't allow inputs during automation or if heating has started
             if (AutomationMgr.Instance.AutomationIndicator.activeInHierarchy) { return; }
+            if (m_isHeating || m_isApplyingHeat) { return; }
 
             AssignDopant(DopingType.N);
             SetDopantOutline(1);
@@ -442,8 +445,9 @@ namespace SpaceFab.ChipFab
 
         private void HandlePDopeDown()
         {
-            // don't allow inputs during automation
+            // don't allow inputs during automation or if heating has started
             if (AutomationMgr.Instance.AutomationIndicator.activeInHierarchy) { return; }
+            if (m_isHeating || m_isApplyingHeat) { return; }
 
             AssignDopant(DopingType.P);
             SetDopantOutline(2);
@@ -487,6 +491,8 @@ namespace SpaceFab.ChipFab
 
         private IEnumerator ApplyHeatRoutine()
         {
+            m_isApplyingHeat = true;
+
             var ratio = (m_finalTemp - MinTemp) / (MaxTemp - MinTemp);
 
             // Align Needle
@@ -506,6 +512,7 @@ namespace SpaceFab.ChipFab
                 MicrogameGauge.transform.RotateTo(angles, 0.01f, Axis.Z, Space.Self).Ease(Curve.CubeOut)
                 );
 
+            m_isApplyingHeat = false;
             HeatingCompleted = true;
         }
 

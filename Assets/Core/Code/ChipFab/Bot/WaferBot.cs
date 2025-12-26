@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,8 +18,14 @@ namespace SpaceFab.ChipFab
 
         public float WaferOffset = 1.5f;
 
+        public GameObject StartBotPrompt;
+
         private ControlNavNode m_currNode;
         private int m_currNodeIndex;
+
+        private bool m_inMotion;
+
+        private Routine m_moveRoutine;
 
         private void Start()
         {
@@ -28,6 +35,8 @@ namespace SpaceFab.ChipFab
             SetAtIndex(m_currNodeIndex);
 
             State = ConveyorState.Uninitialized;
+
+            StartBotPrompt.SetActive(true);
 
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
         }
@@ -49,30 +58,42 @@ namespace SpaceFab.ChipFab
             {
                 if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
-                    TryShift(-1);
+                    if (!m_inMotion)
+                    {
+                        TryShift(-1);
+                    }
                 }
             }
             else if (Input.GetKeyDown(NavRightKey))
             {
                 if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
-                    TryShift(1);
+                    if (!m_inMotion)
+                    {
+                        TryShift(1);
+                    }
                 }
             }
             else if (Input.GetKeyDown(NavUpKey))
             {
                 if (State == ConveyorState.Full)
                 {
-                    // try activate
-                    TryActivateCurrStation();
+                    if (!m_inMotion)
+                    {
+                        // try activate
+                        TryActivateCurrStation();
+                    }
                 }
             }
             else if (Input.GetKeyDown(NavDownKey))
             {
                 if (State == ConveyorState.Empty && DragMgr.WaferInstance != null)
                 {
-                    // try cancel
-                    TryCancelCurrStation();
+                    if (!m_inMotion)
+                    {
+                        // try cancel
+                        TryCancelCurrStation();
+                    }
                 }
             }
         }
@@ -84,7 +105,16 @@ namespace SpaceFab.ChipFab
                 return;
             }
 
-            SetAtIndex(m_currNodeIndex + amt);
+            m_moveRoutine.Replace(MoveToIndex(m_currNodeIndex + amt));
+        }
+
+        private IEnumerator MoveToIndex(int index)
+        {
+            m_inMotion = true;
+
+            yield return SetAtIndexRoutine(index);
+
+            m_inMotion = false;
         }
 
         public void TryActivateCurrStation()
@@ -116,12 +146,21 @@ namespace SpaceFab.ChipFab
         public void TryReturnToConveyor()
         {
             State = ConveyorState.Full;
-            CamMgr.Instance.UnloadCamPos(m_currNode.GetComponent<StationMicrogame>().CamPos.Pos);
+            CamMgr.Instance.UnloadCamPosImmediate(m_currNode.GetComponent<StationMicrogame>().CamPos.Pos);
             SetAtIndex(m_currNodeIndex);
         }
 
         public void SetAtIndex(int index)
         {
+            if (ControlsMgr.Instance.CurrDropZone)
+            {
+                var prevStation = ControlsMgr.Instance.CurrDropZone.GetComponent<StationMicrogame>();
+                if (prevStation && prevStation.ActivateGroup)
+                {
+                    prevStation.ActivateGroup.SetActive(false);
+                }
+            }
+
             m_currNodeIndex = index;
             m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];
 
@@ -143,14 +182,75 @@ namespace SpaceFab.ChipFab
             var station = ControlsMgr.Instance.CurrDropZone.GetComponent<StationMicrogame>();
             if (station)
             {
-                CamMgr.Instance.LoadCamPos(station.CamPos.Pos);
+                CamMgr.Instance.LoadCamPosImmediate(station.CamPos.Pos);
+
+                if (station.ActivateGroup)
+                {
+                    station.ActivateGroup.SetActive(true);
+                }
             }
+        }
+
+        public IEnumerator SetAtIndexRoutine(int index)
+        {
+            if (ControlsMgr.Instance.CurrDropZone)
+            {
+                var prevStation = ControlsMgr.Instance.CurrDropZone.GetComponent<StationMicrogame>();
+                if (prevStation && prevStation.ActivateGroup)
+                {
+                    prevStation.ActivateGroup.SetActive(false);
+                }
+            }
+
+            m_currNodeIndex = index;
+            m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];
+
+            var pos = this.transform.position;
+            pos.x = m_currNode.transform.position.x;
+
+            if (DragMgr.WaferInstance)
+            {
+                DragMgr.WaferInstance.transform.parent = this.transform;
+                pos.x = 0;
+                pos.y = WaferOffset;
+                DragMgr.WaferInstance.transform.localPosition = pos;
+                DragMgr.WaferInstance.transform.rotation = default;
+            }
+
+            ControlsMgr.Instance.CurrDropZone = m_currNode.GetComponent<DropZone>();
+
+            var station = ControlsMgr.Instance.CurrDropZone.GetComponent<StationMicrogame>();
+            if (station)
+            {
+                yield return Routine.Combine(
+                    CamMgr.Instance.LoadCamPosRoutine(station.CamPos.Pos, 0.1f),
+                    MoveBotRoutine(0.1f)
+                    );
+
+                if (station.ActivateGroup)
+                {
+                    station.ActivateGroup.SetActive(true);
+                }
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+
+        private IEnumerator MoveBotRoutine(float time)
+        {
+            var pos = this.transform.position;
+            pos.x = m_currNode.transform.position.x;
+            yield return this.transform.MoveTo(pos, time, Axis.X);
         }
 
         private void HandleNewWaferCreated()
         {
             State = ConveyorState.Full;
             SetAtIndex(m_currNodeIndex);
+
+            StartBotPrompt.SetActive(false);
         }
     }
 }

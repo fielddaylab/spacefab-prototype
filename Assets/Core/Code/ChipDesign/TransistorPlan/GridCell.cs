@@ -95,7 +95,7 @@ namespace SpaceFab.ChipDesign
             }
             TransferType = config.TransferType;
 
-            if (config.Edges.Length == 0)
+            if (config.Edges == null || config.Edges.Length == 0)
             {
                 Edges = new EdgeStateData[6];
                 for (int i = 0; i < Edges.Length; i++)

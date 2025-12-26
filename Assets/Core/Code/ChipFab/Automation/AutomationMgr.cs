@@ -41,6 +41,7 @@ namespace SpaceFab.ChipFab
         [HideInInspector] public AutomationInstruction CurrInstruction = default;
 
         public bool ActivelyChecking = false;
+        public bool UsesAutomation = false;
 
         public GameObject AutomationIndicator;
 
@@ -67,6 +68,16 @@ namespace SpaceFab.ChipFab
             AutomationIndicator.SetActive(false);
 
             ResetTriggers();
+        }
+
+        private void OnDestroy()
+        {
+            if (Game.IsShuttingDown) { return; }
+
+            Game.Events.Deregister(GameEvents.StationStarted, HandleStationStarted);
+            Game.Events.Deregister(GameEvents.StationCompleted, HandleStationCompleted);
+            Game.Events.Deregister(GameEvents.AutomationCompleted, HandleAutomationCompleted);
+            Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
         }
 
         private void Update()

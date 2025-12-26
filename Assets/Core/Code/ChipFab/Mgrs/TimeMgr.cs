@@ -105,7 +105,15 @@ namespace SpaceFab.ChipFab
 
             CountdownText.gameObject.SetActive(false);
 
-            AutomationMgr.Instance.ActivelyChecking = true;
+            if (AutomationMgr.Instance.UsesAutomation)
+            {
+                AutomationMgr.Instance.ActivelyChecking = true;
+            }
+        }
+
+        public bool IsRunning()
+        {
+            return m_state == TimeState.Running;
         }
 
         private void HandleNewWaferCreated()
