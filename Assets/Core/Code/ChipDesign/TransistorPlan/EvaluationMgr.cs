@@ -1180,11 +1180,11 @@ namespace SpaceFab.ChipDesign
                                         {
                                             if (postponedNodes[p].DependencyCoord == belowCoord)
                                             {
-                                                var postponedNode = crucialCoordNodeMap[postponedNodes[i].NodeCoord];
-                                                var updateNode = crucialCoordNodeMap[postponedNodes[i].NodeCoord];
+                                                var postponedNode = crucialCoordNodeMap[postponedNodes[p].NodeCoord];
+                                                var updateNode = crucialCoordNodeMap[postponedNodes[p].NodeCoord];
                                                 updateNode.EvalDepth = currDepth + 1;
-                                                crucialCoordNodeMap[postponedNodes[i].NodeCoord] = updateNode;
-                                                nodeWorkList.Add(crucialCoordNodeMap[postponedNodes[i].NodeCoord]);
+                                                crucialCoordNodeMap[postponedNodes[p].NodeCoord] = updateNode;
+                                                nodeWorkList.Add(crucialCoordNodeMap[postponedNodes[p].NodeCoord]);
                                                 var belowGraphNode = coordNodeMap[belowCoord];
                                                 belowGraphNode.Visited = false;
                                                 coordNodeMap[belowCoord] = belowGraphNode;
