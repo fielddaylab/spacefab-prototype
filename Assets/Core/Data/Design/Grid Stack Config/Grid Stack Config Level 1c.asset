@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Grid Stack Config Level 1c
   m_EditorClassIdentifier: 
   LayerDims:
-    X: 8
+    X: 6
     Y: 6
   Cells:
   - LayerIndex: 1
@@ -21,26 +21,26 @@ MonoBehaviour:
     ColumnIndex: 0
     CellType: 1
     SubtypeLabel: 3
-    Edges: 
+    Edges: []
     TransferType: 0
   - LayerIndex: 1
     RowIndex: 1
     ColumnIndex: 0
     CellType: 1
     SubtypeLabel: 4
-    Edges: 
+    Edges: []
     TransferType: 0
   - LayerIndex: 1
     RowIndex: 4
-    ColumnIndex: 7
+    ColumnIndex: 5
     CellType: 5
     SubtypeLabel: 9
-    Edges: 
+    Edges: []
     TransferType: 0
   - LayerIndex: 1
     RowIndex: 1
-    ColumnIndex: 7
+    ColumnIndex: 5
     CellType: 5
     SubtypeLabel: 8
-    Edges: 
+    Edges: []
     TransferType: 0

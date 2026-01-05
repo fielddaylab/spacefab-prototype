@@ -83,7 +83,14 @@ namespace SpaceFab.ChipDesign
         {
             CellType = config.CellType;
             SubtypeLabel = EvalUtility.GetSubtypeByPlacableID(config.SubtypeLabel);
-            Edges = config.Edges;
+            Edges = new EdgeStateData[6];
+            if (config.Edges != null)
+            {
+                for (int e = 0; e < config.Edges.Length; e++)
+                {
+                    Edges[e] = config.Edges[e];
+                }
+            }
 
             if (CellType != CellType.NONE)
             {
@@ -97,7 +104,6 @@ namespace SpaceFab.ChipDesign
 
             if (config.Edges == null || config.Edges.Length == 0)
             {
-                Edges = new EdgeStateData[6];
                 for (int i = 0; i < Edges.Length; i++)
                 {
                     Edges[i].Init();

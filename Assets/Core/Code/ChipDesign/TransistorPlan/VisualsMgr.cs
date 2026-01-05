@@ -47,13 +47,13 @@ namespace SpaceFab.ChipDesign
         {
             // Move Camera to Grid
             Camera.main.transform.position = new Vector3(
-                GridData.LayerDims.X / 4f,
-                GridData.LayerDims.Y / 2f,
+                GridData.LayerDims.X / 10.714f,
+                GridData.LayerDims.Y / 2f - 0.3f,
                 Camera.main.transform.position.z
                 );
 
             // Adjust zoom
-            Camera.main.orthographicSize = GridData.LayerDims.X / 1.55f; // / 1.81f;
+            Camera.main.orthographicSize = GridData.LayerDims.X / 1.41f; // / 1.81f;
         }
 
         public void RefreshVisuals()

@@ -40,6 +40,8 @@ namespace SpaceFab.ChipDesign
             Game.Events.Register(GameEvents.EvaluationStarted, HandleEvalStarted);
             Game.Events.Register(GameEvents.OnResultsDisplayed, HandleResultsDisplayed);
             Game.Events.Register(GameEvents.OnResultsHidden, HandleResultsHidden);
+
+            m_LastTerminatedDragCoord = -Vector2Int.one;
         }
 
         private void OnDestroy()
