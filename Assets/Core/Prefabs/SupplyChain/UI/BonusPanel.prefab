@@ -146,6 +146,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: BonusPanel
       objectReference: {fileID: 0}
+    - target: {fileID: 1507378361853245657, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.b
+      value: 0.16470589
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507378361853245657, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.g
+      value: 0.16470589
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507378361853245657, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.r
+      value: 0.16470589
+      objectReference: {fileID: 0}
     - target: {fileID: 3551310130443270829, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_Color.b
       value: 0.14582591

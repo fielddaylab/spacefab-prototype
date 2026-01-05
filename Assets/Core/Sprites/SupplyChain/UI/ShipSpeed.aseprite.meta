@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6c65dc8c6b6737c42909a527363c3d85
+guid: 9962c8f81cc848a4abb57dfc6642b2fc
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638962230849511198
+  platformSettingsDirtyTick: 639016656352183754
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,38 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ShipIcons_0
+  - name: ShipSpeed_0
     originalName: 
-    pivot: {x: 0.52136755, y: 0.4883721}
-    alignment: 9
-    border: {x: 0, y: 0, z: 0, w: 0}
-    rect:
-      serializedVersion: 2
-      x: 2
-      y: 52
-      width: 117
-      height: 43
-    spriteID: 27fec6f82d830bb4fbf52bfed0fc030b
-    spriteBone: []
-    spriteOutline: []
-    vertices: []
-    spritePhysicsOutline: []
-    indices: 
-    edges: []
-    tessellationDetail: 0
-    uvTransform: {x: 2, y: 52}
-  - name: ShipIcons_1
-    originalName: 
-    pivot: {x: 0.5083334, y: 0.47826087}
+    pivot: {x: 0.48888892, y: 0.5}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
       y: 2
-      width: 120
-      height: 46
-    spriteID: 7ad45a78bf681664ab74a3235a2002c7
+      width: 90
+      height: 50
+    spriteID: 9e368d98003fa524fa2aba55642dad74
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -161,11 +141,51 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 2, y: 2}
+  - name: ShipSpeed_1
+    originalName: 
+    pivot: {x: 0.48888892, y: 0.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 56
+      width: 90
+      height: 50
+    spriteID: 5bbbf652ae31b2f42aa63f6d66b36153
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 56}
+  - name: ShipSpeed_2
+    originalName: 
+    pivot: {x: 0.48888892, y: 0.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 2
+      y: 110
+      width: 90
+      height: 50
+    spriteID: 41cecdbe7c75eb04bbdec1e25c1c7649
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 2, y: 110}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1387482354
-    name: ShipIcons
+    guid: -1722244239
+    name: ShipSpeed
     layerFlags: 0
     layerType: 0
     blendMode: 0
@@ -174,20 +194,29 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 3
-        y: 11
-        width: 117
-        height: 43
-      spriteId: 27fec6f82d830bb4fbf52bfed0fc030b
+        x: 4
+        y: 7
+        width: 90
+        height: 50
+      spriteId: 9e368d98003fa524fa2aba55642dad74
     - name: Frame_1
       frameIndex: 1
       additiveSortOrder: 0
       cellRect:
-        x: 3
-        y: 10
-        width: 120
-        height: 46
-      spriteId: 7ad45a78bf681664ab74a3235a2002c7
+        x: 4
+        y: 7
+        width: 90
+        height: 50
+      spriteId: 5bbbf652ae31b2f42aa63f6d66b36153
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 4
+        y: 7
+        width: 90
+        height: 50
+      spriteId: 41cecdbe7c75eb04bbdec1e25c1c7649
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -209,7 +238,7 @@ ScriptedImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
     crunchedCompression: 0
@@ -254,4 +283,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 128, y: 64}
+  canvasSize: {x: 96, y: 64}
