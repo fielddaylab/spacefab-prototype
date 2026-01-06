@@ -1,5 +1,6 @@
 using ChipFab.ChipDesign;
 using FieldDay;
+using FieldDay.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace SpaceFab.ChipDesign
     {
         public static InteractMgr Instance;
 
+        public CursorHint WaitCursor;
 
         #region Toolbar
 
@@ -711,16 +713,19 @@ namespace SpaceFab.ChipDesign
         private void HandleEvalStarted()
         {
             InteractInputsEnabled = false;
+            CursorHint.TryLock(WaitCursor);
         }
 
         private void HandleResultsDisplayed()
         {
-            InteractInputsEnabled = false;
+            InteractInputsEnabled = true;
+            CursorHint.Unlock(WaitCursor);
         }
 
         private void HandleResultsHidden()
         {
             InteractInputsEnabled = true;
+            CursorHint.Unlock(WaitCursor);
         }
 
         #endregion // Handlers

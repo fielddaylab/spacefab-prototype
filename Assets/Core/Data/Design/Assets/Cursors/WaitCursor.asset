@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ccb77eb8566ad04690634f207adcc41, type: 3}
-  m_Name: ShipD
+  m_Script: {fileID: 11500000, guid: 8a222e6677b9e1743a0259a94d81681e, type: 3}
+  m_Name: WaitCursor
   m_EditorClassIdentifier: 
-  DisplayName: Helper
-  Icon: {fileID: 125457502999409166, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
-  Speed: 1
-  Capacity: 3
+  DefaultImage: {fileID: 21300000, guid: 561e619eefa93f64084fb5093997dc8a, type: 3}
+  HeldImage: {fileID: 0}
+  DefaultScale: 1
+  HeldScaleOverride: 0

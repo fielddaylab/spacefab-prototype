@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ccb77eb8566ad04690634f207adcc41, type: 3}
-  m_Name: ShipD
+  m_Script: {fileID: 11500000, guid: b4be90a9d33d3784caac2e5eb4b5636c, type: 3}
+  m_Name: DesignAssets
   m_EditorClassIdentifier: 
-  DisplayName: Helper
-  Icon: {fileID: 125457502999409166, guid: 6c65dc8c6b6737c42909a527363c3d85, type: 3}
-  Speed: 1
-  Capacity: 3
+  m_GlobalAssets: []
+  m_NamedAssets:
+  - {fileID: 11400000, guid: 5c4a268c0e6443043bdc7f338f926a78, type: 2}
+  m_LiteAssets: []
