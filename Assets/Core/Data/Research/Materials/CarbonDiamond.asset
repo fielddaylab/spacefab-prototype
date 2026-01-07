@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Carbon
   UnknownDisplayName: Sample 2
-  Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
+  Material: {fileID: 2100000, guid: 42dfcd1336adbf347a75e6cb0a3fea06, type: 2}
   ChemicalSymbol: C
   SampleNumber: 2
   Atoms:

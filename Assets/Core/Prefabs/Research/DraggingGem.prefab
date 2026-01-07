@@ -24,6 +24,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4852069638948720738, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 4852069638948720738, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6466765261630097642, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.5
@@ -36,6 +44,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: -5
       objectReference: {fileID: 0}
+    - target: {fileID: 8641799775696115083, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 8810920219596877881, guid: 5ccda0dec6913c34f89b963784d05657, type: 2}
     - target: {fileID: 9006521967290568994, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.4249799
@@ -102,6 +114,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 1981540808
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 

@@ -19,6 +19,7 @@ namespace SpaceFab.Research {
         public ResearchKnownPropertyChipWidget[] Chips;
         public CursorHint Click;
         public Graphic Flash;
+        public CanvasGroup Group;
 
         [NonSerialized] public int ChipsWritten;
 

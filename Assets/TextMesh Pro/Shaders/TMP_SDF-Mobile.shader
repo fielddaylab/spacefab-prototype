@@ -201,7 +201,7 @@ SubShader {
 			half4 c = input.faceColor * saturate(d - input.param.w);
 
 			#ifdef OUTLINE_ON
-			c = lerp(input.outlineColor, input.faceColor, saturate(d - input.param.z));
+			c = lerp(input.outlineColor * input.faceColor, input.faceColor, saturate(d - input.param.z));
 			c *= saturate(d - input.param.y);
 			#endif
 

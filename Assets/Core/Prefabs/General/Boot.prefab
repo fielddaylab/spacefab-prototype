@@ -890,6 +890,7 @@ GameObject:
   - component: {fileID: 7538211166517392152}
   - component: {fileID: 8892762807763460669}
   - component: {fileID: 8278494076434415283}
+  - component: {fileID: 3638429514978586938}
   m_Layer: 0
   m_Name: CursorCanvas
   m_TagString: Untagged
@@ -978,6 +979,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_UniqueID: 67b7aa75-3024-4720-a0d2-17e2a9ccbccf
   m_WakeUpChildren: 0
+--- !u!114 &3638429514978586938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7598986032514851014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f53650c91bab247b93fe8e38a15e52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DefaultScale: 1
+  m_HighScale: 2
+  m_ExtraHighScale: 3
 --- !u!1 &7965760234044469043
 GameObject:
   m_ObjectHideFlags: 0

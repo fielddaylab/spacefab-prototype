@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 471500352961760857}
   - component: {fileID: 1163269394629142950}
-  - component: {fileID: 8117157471109704180}
+  - component: {fileID: 8070260901076200693}
   m_Layer: 0
   m_Name: Unknown
   m_TagString: Untagged
@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 1455467017889461371}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 5, y: 0}
-  m_Pivot: {x: 0, y: 0.5}
+  m_SizeDelta: {x: -8, y: -8}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1163269394629142950
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -45,7 +45,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 390864059781104262}
   m_CullTransparentMesh: 1
---- !u!114 &8117157471109704180
+--- !u!114 &8070260901076200693
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,19 +54,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 390864059781104262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a3ee03a5fada3942b82c53c377b7113, type: 3}
+  m_Script: {fileID: 11500000, guid: c3c09f886aa56c04fad0d0b585980acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.97598076, a: 1}
+  m_Color: {r: 0.23137255, g: 0.0627451, b: 1, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Outline: 0
-  m_Thickness: 1
+  m_Texture: {fileID: -8328923581568760697, guid: 988c3fe36d1095b44a1d1dfbec2c7b77, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 10
+    height: 1.3333334
+  m_UnitsPerTile: {x: 6, y: 12}
+  m_Offset: {x: 0, y: 0}
 --- !u!1 &2053123574095542292
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,8 +218,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 
 --- !u!1 &8978510734279958943
 GameObject:

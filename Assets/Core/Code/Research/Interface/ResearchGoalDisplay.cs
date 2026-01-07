@@ -49,6 +49,9 @@ namespace SpaceFab.Research {
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
                         psb.Builder.Append(" <b>Thermal</b>,");
                     }
+                    if ((objective.Knowledge & ResearchMaterialKnowledge.Dopant) != 0) {
+                        psb.Builder.Append(" <b>Dopant</b>,");
+                    }
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Special) != 0) {
                         psb.Builder.Append(" <b>Special</b>,");
                     }

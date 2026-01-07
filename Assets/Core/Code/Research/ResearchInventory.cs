@@ -13,8 +13,8 @@ namespace SpaceFab.Research {
 
     public struct ResearchMaterialGuessState {
         public ElectricalTag Electric;
-        public DopantType Dopant;
 
+        public DopantType? Dopant;
         public ThermalTag? Thermal;
         public SpecialTag? Special;
     }
@@ -91,7 +91,7 @@ namespace SpaceFab.Research {
                 }
             }
 
-            if (guess.Dopant != DopantType.None) {
+            if (guess.Dopant.HasValue) {
                 submittedKnowledge |= ResearchMaterialKnowledge.Dopant;
                 if (guess.Dopant == mat.DopantType) {
                     guess.Dopant = default;
