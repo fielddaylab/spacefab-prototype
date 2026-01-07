@@ -8,6 +8,7 @@ namespace SpaceFab.Research {
     public sealed class ResearchGuessDisplay : MonoBehaviour {
         public ResearchGuessGroup ElectricalGroup;
         public ResearchGuessGroup ThermalGroup;
+        public ResearchGuessGroup DopantGroup;
         public ResearchGuessGroup SpecialGroup;
         public CursorHint CloseButton;
 
@@ -17,6 +18,7 @@ namespace SpaceFab.Research {
 
         private void Awake() {
             ElectricalGroup.OnSelectionUpdated.Register(UpdateElectricGuess);
+            DopantGroup.OnSelectionUpdated.Register(UpdateDopantGuess);
             ThermalGroup.OnSelectionUpdated.Register(UpdateThermalGuess);
             SpecialGroup.OnSelectionUpdated.Register(UpdateSpecialGuess);
             CloseButton.onClick.Register(() => {
@@ -38,6 +40,7 @@ namespace SpaceFab.Research {
             ElectricalGroup.gameObject.SetActive(false);
             ThermalGroup.gameObject.SetActive(false);
             SpecialGroup.gameObject.SetActive(false);
+            DopantGroup.gameObject.SetActive(false);
             MaterialId = default;
         }
 
@@ -46,6 +49,7 @@ namespace SpaceFab.Research {
             gameObject.SetActive(true);
             ThermalGroup.gameObject.SetActive(false);
             SpecialGroup.gameObject.SetActive(false);
+            DopantGroup.gameObject.SetActive(false);
             ElectricalGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
@@ -57,10 +61,23 @@ namespace SpaceFab.Research {
             gameObject.SetActive(true);
             ElectricalGroup.gameObject.SetActive(false);
             SpecialGroup.gameObject.SetActive(false);
+            DopantGroup.gameObject.SetActive(false);
             ThermalGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
             ThermalGroup.PopulateInitialSelection(ResearchGuessGroup.GetThermalGuessList(guess));
+        }
+
+        public void PopupDopant(StringHash32 materialId) {
+            MaterialId = materialId;
+            gameObject.SetActive(true);
+            ElectricalGroup.gameObject.SetActive(false);
+            SpecialGroup.gameObject.SetActive(false);
+            ThermalGroup.gameObject.SetActive(false);
+            DopantGroup.gameObject.SetActive(true);
+
+            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            DopantGroup.PopulateInitialSelection(ResearchGuessGroup.GetDopantGuessList(guess));
         }
 
         public void PopupSpecial(StringHash32 materialId) {
@@ -68,6 +85,7 @@ namespace SpaceFab.Research {
             gameObject.SetActive(true);
             ThermalGroup.gameObject.SetActive(false);
             ElectricalGroup.gameObject.SetActive(false);
+            DopantGroup.gameObject.SetActive(false);
             SpecialGroup.gameObject.SetActive(true);
 
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
@@ -77,6 +95,12 @@ namespace SpaceFab.Research {
         private void UpdateElectricGuess(ResearchSelectionList list) {
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
             ResearchGuessGroup.PopulateElectricalGuess(ref guess, list);
+            ResearchMaterialUtility.SetGuess(MaterialId, guess);
+        }
+
+        private void UpdateDopantGuess(ResearchSelectionList list) {
+            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            ResearchGuessGroup.PopulateDopantGuess(ref guess, list);
             ResearchMaterialUtility.SetGuess(MaterialId, guess);
         }
 

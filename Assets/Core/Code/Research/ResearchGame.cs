@@ -2,6 +2,7 @@ using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay;
 using FieldDay.Assets;
+using FieldDay.Debugging;
 using FieldDay.Scenes;
 using FieldDay.Scripting;
 using FieldDay.SharedState;
@@ -14,6 +15,9 @@ namespace SpaceFab.Research {
     public sealed class ResearchGame : SceneController {
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] Materials;
         public ResearchToolsMask Unlocks;
+        
+        [Header("-- DEBUG -- ")]
+        [SerializeField, AssetName(typeof(ResearchLevel))] private StringHash32 m_DEBUGLevel;
 
         static public ResearchLevel CurrentLevel { get; private set; }
 
@@ -22,6 +26,10 @@ namespace SpaceFab.Research {
             
             Game.Scenes.GetLoadContext(out SceneRequestContext context);
             StringHash32 levelName = context.Task.Name;
+            if (DebugFlags.LaunchedFromThisScene) {
+                levelName = StringHash32.First(levelName, m_DEBUGLevel);
+            }
+
             if (!levelName.IsEmpty) {
                 CurrentLevel = Find.NamedAsset<ResearchLevel>(levelName);
                 Materials = CurrentLevel.AvailableMaterials;

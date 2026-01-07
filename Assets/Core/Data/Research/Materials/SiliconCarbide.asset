@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Silicon Carbide
   UnknownDisplayName: Sample 70
-  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  Material: {fileID: 2100000, guid: b085f94002d6111459dc1d1254d88fca, type: 2}
   ChemicalSymbol: SiC
   SampleNumber: 70
   Atoms:

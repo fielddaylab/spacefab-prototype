@@ -13,6 +13,7 @@ namespace SpaceFab.Research {
 	public sealed class ResearchDragSystem : SharedStateSystemBehaviour<ResearchDragState> { 
         public override void ProcessWork(float deltaTime) {
             bool cancelQueued = false;
+            bool cursorOnCanvas = Game.Input.IsPointerOverCanvas();
 
             bool cursorOnWorld = MouseControls.TryGetWorldPosition2D(out Vector2 worldPos);
 
@@ -21,7 +22,7 @@ namespace SpaceFab.Research {
             }
             
             if (Game.Input.IsMousePressed(0)) {
-                if (!cursorOnWorld || !CursorUtility.IsCursorWithinVirtualViewport()) {
+                if (!cursorOnWorld || !CursorUtility.IsCursorWithinVirtualViewport() || cursorOnCanvas) {
                     cancelQueued = true;
                 } else {
                     Collider2D overlappingSlot = Physics2D.OverlapCircle(worldPos, 0.01f, LayerMasks.ResearchSlot_Mask);

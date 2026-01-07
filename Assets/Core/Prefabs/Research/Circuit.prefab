@@ -308,6 +308,7 @@ MonoBehaviour:
   - {fileID: 1564608538292007147, guid: 5e4fc4527cd008b429e293ce85ca630e, type: 3}
   - {fileID: 3740826115096849182, guid: 5e4fc4527cd008b429e293ce85ca630e, type: 3}
   - {fileID: -1484974630440746749, guid: 5e4fc4527cd008b429e293ce85ca630e, type: 3}
+  - {fileID: -3813807012547726159, guid: 5e4fc4527cd008b429e293ce85ca630e, type: 3}
   Bulb: {fileID: 7229688764187934744}
   BulbOffSprite: {fileID: -928199606015216653, guid: 93683f8213600be419c4b34010eeab88, type: 3}
   BulbOnSprite: {fileID: 2574863000967551387, guid: 93683f8213600be419c4b34010eeab88, type: 3}

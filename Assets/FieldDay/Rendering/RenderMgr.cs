@@ -179,6 +179,7 @@ namespace FieldDay.Rendering {
 
         private bool m_LastKnownFullscreen;
         private Resolution m_LastKnownResolution;
+        private ScreenDpiType m_LastKnownDpi = (ScreenDpiType) (-1);
 
         private Camera m_PrimaryCamera;
         private Camera m_FallbackCamera;
@@ -216,6 +217,7 @@ namespace FieldDay.Rendering {
 
         public readonly CastableEvent<bool> OnFullscreenChanged = new CastableEvent<bool>(2);
         public readonly CastableEvent<Resolution> OnResolutionChanged = new CastableEvent<Resolution>(2);
+        public readonly CastableEvent<ScreenDpiType> OnScreenDpiChanged = new CastableEvent<ScreenDpiType>(2);
         public readonly CastableEvent<CameraChangeData> OnPrimaryCameraChanged = new CastableEvent<CameraChangeData>(2);
 
         #endregion // Callbacks
@@ -274,7 +276,15 @@ namespace FieldDay.Rendering {
 #endif // UNITY_2022_2_OR_NEWER
                 ) {
                 m_LastKnownResolution = resolution;
+
+                ScreenDpiType dpi = GetDpi(resolution);
+                bool dpiChanged = dpi != m_LastKnownDpi;
+                m_LastKnownDpi = dpi;
+
                 OnResolutionChanged.Invoke(resolution);
+                if (dpiChanged) {
+                    OnScreenDpiChanged.Invoke(dpi);
+                }
             }
         }
 
@@ -293,12 +303,33 @@ namespace FieldDay.Rendering {
 
             OnResolutionChanged.Clear();
             OnFullscreenChanged.Clear();
+            OnScreenDpiChanged.Clear();
+            OnPrimaryCameraChanged.Clear();
 
             LightProbes.needsRetetrahedralization -= OnLightProbesDirty;
             LightProbes.tetrahedralizationCompleted -= OnLightProbesFinishedCompute;
         }
 
         #endregion // Events
+
+        #region Dpi
+
+        public ScreenDpiType CurrentDpiType {
+            get { return m_LastKnownDpi; }
+        }
+
+        static private ScreenDpiType GetDpi(Resolution resolution) {
+            // TODO: improve logic? fewer hardcoded values
+            if (resolution.height > 2000) {
+                return ScreenDpiType.ExtraHigh;
+            }
+            if (resolution.height > 1200) {
+                return ScreenDpiType.High;
+            }
+            return ScreenDpiType.Normal;
+        }
+
+        #endregion // Dpi
 
         #region World Camera
 
@@ -712,9 +743,20 @@ namespace FieldDay.Rendering {
                     GL.Clear(true, true, Color.magenta, 1);
                     GL.PopMatrix();
 
-                    string debugText = string.Format("Screen Dimensions: {0} ({1})", m_LastKnownResolution, m_LastKnownFullscreen ? "FULLSCREEN" : "NOT FULLSCREEN");
+                    using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                        psb.Builder.Append("Screen Dimensions: ").AppendNoAlloc(m_LastKnownResolution.width)
+                            .Append('x').AppendNoAlloc(m_LastKnownResolution.height);
 
-                    DebugDraw.AddViewportText(new Vector2(0.5f, 1), new Vector2(0, -8), debugText, Color.white, 0, TextAnchor.UpperCenter, DebugTextStyle.BackgroundDarkOpaque);
+                        if (m_LastKnownFullscreen) {
+                            psb.Builder.Append(" (FULLSCREEN)");
+                        }
+                        if (m_LastKnownDpi == ScreenDpiType.ExtraHigh) {
+                            psb.Builder.Append(" (X-HIGH DPI)");
+                        } else if (m_LastKnownDpi == ScreenDpiType.High) {
+                            psb.Builder.Append(" (HIGH DPI)");
+                        }
+                        DebugDraw.AddViewportText(new Vector2(0.5f, 1), new Vector2(0, -8), psb, Color.white, 0, TextAnchor.UpperCenter, DebugTextStyle.BackgroundDarkOpaque);
+                    }
                 }
 
                 if (switchedRenderTargets) {
@@ -1039,6 +1081,15 @@ namespace FieldDay.Rendering {
         }
 
         #endregion // Manual Rendering
+    }
+
+    /// <summary>
+    /// Type of screen dpi.
+    /// </summary>
+    public enum ScreenDpiType {
+        Normal,
+        High,
+        ExtraHigh
     }
 
     /// <summary>

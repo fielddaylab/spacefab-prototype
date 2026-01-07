@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Gallium Nitride
   UnknownDisplayName: Sample 71
-  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  Material: {fileID: 2100000, guid: 4fb7b43d540119f449d3d959cd9a170e, type: 2}
   ChemicalSymbol: GaN
   SampleNumber: 71
   Atoms:

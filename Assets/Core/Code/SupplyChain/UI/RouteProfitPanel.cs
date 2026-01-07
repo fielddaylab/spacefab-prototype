@@ -19,10 +19,11 @@ using UnityEngine.UI;
 namespace SpaceFab.SupplyChain {
     public sealed class RouteProfitPanel : SharedPanel, IRegistrationCallbacks {
         public GameObject NotFulfilledGroup;
-
         public GameObject FulfilledGroup;
+
         public TMP_Text ProfitLabel;
-        public GuiCounter TimeLabel;
+        public TMP_Text TimeLabel;
+        public Image DefenseDisplay;
 
         [NonSerialized] public FabMaterialSet DesiredMaterials;
         [NonSerialized] public int SellPrice;
@@ -30,6 +31,7 @@ namespace SpaceFab.SupplyChain {
         private unsafe void OnRouteStatsUpdated() {
             LiveRoutesState routesState = Find.State<LiveRoutesState>();
             var sprites = Find.GlobalAsset<SupplyChainSprites>();
+            var math = Find.GlobalAsset<SupplyChainMath>();
 
             FabMaterialSet materials = default;
             int cost = 0;
@@ -46,26 +48,36 @@ namespace SpaceFab.SupplyChain {
                 probability *= stats.Reliability / (double) SupplyUtility.MaxReliability;
                 SupplyUtility.AccumulateMaterials(ref materials, stats);
             }
+
             int profit = SellPrice - cost;
 
-            if (materials.A >= DesiredMaterials.A
+            bool materialsFulfilled = (materials.A >= DesiredMaterials.A
                 && materials.E >= DesiredMaterials.E
                 && materials.B >= DesiredMaterials.B
                 && materials.C >= DesiredMaterials.C
-                && materials.D >= DesiredMaterials.D) {
-                NotFulfilledGroup.SetActive(false);
-                FulfilledGroup.SetActive(true);
-                using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
-                    if (profit < 0) {
-                        psb.Builder.Append('-');
-                    }
-                    psb.Builder.Append('$').AppendNoAlloc(Math.Abs(profit));
-                    ProfitLabel.SetText(psb);
-                    TimeLabel.SetValue(time, false);
+                && materials.D >= DesiredMaterials.D);
+                
+            using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                if (profit < 0) {
+                    psb.Builder.Append('-');
                 }
-            } else {
-                FulfilledGroup.SetActive(false);
-                NotFulfilledGroup.SetActive(true);
+                psb.Builder.Append('$').AppendNoAlloc(Math.Abs(profit));
+                ProfitLabel.SetText(psb);
+                TimeLabel.SetText(time.ToStringLookup());
+            }
+
+            for(int i = sprites.DefenseSprites.Length; i-- > 0;) {
+                if (i == 0 || probability > math.Reliabilities[i]) {
+                    DefenseDisplay.sprite = sprites.DefenseSprites[i];
+                    break;
+                }
+            }
+
+            if (NotFulfilledGroup) {
+                NotFulfilledGroup.SetActive(!materialsFulfilled);
+            }
+            if (FulfilledGroup) {
+                FulfilledGroup.SetActive(materialsFulfilled);
             }
         }
 
@@ -75,6 +87,8 @@ namespace SpaceFab.SupplyChain {
 
         void IRegistrationCallbacks.OnRegister() {
             Game.Events.Register(SupplyChainGame.Events.RouteStatsUpdated, OnRouteStatsUpdated);
+
+            Game.Scenes.QueueOnLoad(OnRouteStatsUpdated);
         }
     }
 }

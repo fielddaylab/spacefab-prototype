@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Tungsten
   UnknownDisplayName: Sample 8
-  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  Material: {fileID: 2100000, guid: 587447a5989075f4b8bfc2ee0bbcf3a7, type: 2}
   ChemicalSymbol: W
   SampleNumber: 8
   Atoms:

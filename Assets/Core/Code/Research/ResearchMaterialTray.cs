@@ -42,13 +42,7 @@ namespace SpaceFab.Research {
                 foreach(var slot in Find.Components<ResearchSlot>()) {
                     if (slot.Item != null && slot.Item.Material == material) {
                         slot.Item.Hint.TooltipHeader = material.DisplayName;
-                        slot.Item.Renderer.Label.SetText(material.ChemicalSymbol);
                     }
-                }
-
-                ResearchDragState dragState = Find.State<ResearchDragState>();
-                if (dragState.CurrentlyDragging == material) {
-                    dragState.DragRenderer.Label.SetText(material.ChemicalSymbol);
                 }
             }
         }
@@ -80,7 +74,6 @@ namespace SpaceFab.Research {
             foreach (var item in tray.Items) {
                 if (item.Material == material) {
                     item.Hint.TooltipHeader = material.DisplayName;
-                    item.Renderer.Label.SetText(material.ChemicalSymbol);
                     break;
                 }
             }

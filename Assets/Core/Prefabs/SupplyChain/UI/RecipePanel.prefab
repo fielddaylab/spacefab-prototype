@@ -892,6 +892,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: RecipePanel
       objectReference: {fileID: 0}
+    - target: {fileID: 1507378361853245657, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.b
+      value: 0.16299999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507378361853245657, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.g
+      value: 0.16299999
+      objectReference: {fileID: 0}
+    - target: {fileID: 1507378361853245657, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.r
+      value: 0.16299999
+      objectReference: {fileID: 0}
     - target: {fileID: 3551310130443270829, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_Color.b
       value: 0.3018868
@@ -981,12 +993,40 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.b
+      value: 0.53900003
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.g
+      value: 0.53900003
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Color.r
+      value: 0.53900003
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: -8328923581568760697, guid: b751f0890b67aa24188dd57c2411bf7a, type: 3}
+    - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_UVRect.x
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_UVRect.width
-      value: 3.8961039
+      value: 37.5
       objectReference: {fileID: 0}
     - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_UVRect.height
-      value: 1.8181819
+      value: 17.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_UnitsPerTile.x
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
+      propertyPath: m_UnitsPerTile.y
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

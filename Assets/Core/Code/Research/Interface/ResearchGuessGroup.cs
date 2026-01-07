@@ -108,14 +108,24 @@ namespace SpaceFab.Research {
                 }
             }
 
-            switch(guessState.Dopant) {
-                case DopantType.N: {
+            return list;
+        }
+
+        static public ResearchSelectionList GetDopantGuessList(ResearchMaterialGuessState guessState) {
+            if (!guessState.Dopant.HasValue) {
+                return default;
+            }
+
+            ResearchSelectionList list = ResearchSelectionList.Alloc(3);
+            DopantType dopantGuess = guessState.Dopant.Value;
+            if (dopantGuess == DopantType.None) {
+                list.Add("NotADopant");
+            } else {
+                if ((dopantGuess & DopantType.N) != 0) {
                     list.Add("DopantN");
-                    break;
                 }
-                case DopantType.P: {
+                if ((dopantGuess & DopantType.P) != 0) {
                     list.Add("DopantP");
-                    break;
                 }
             }
 
@@ -177,13 +187,23 @@ namespace SpaceFab.Research {
             } else {
                 guessState.Electric = ElectricalTag.Unknown;
             }
+        }
 
-            if (list.Contains("DopantN")) {
-                guessState.Dopant = DopantType.N;
-            } else if (list.Contains("DopantP")) {
-                guessState.Dopant = DopantType.P;
+        static public void PopulateDopantGuess(ref ResearchMaterialGuessState guessState, ResearchSelectionList list) {
+            DopantType dopantType = default;
+            if (list.Length == 0) {
+                guessState.Dopant = null;
             } else {
-                guessState.Dopant = DopantType.None;
+                if (list.Contains("DopantN")) {
+                    dopantType |= DopantType.N;
+                }
+                if (list.Contains("DopantP")) {
+                    dopantType |= DopantType.P;
+                }
+                if (list.Contains("NotADopant")) {
+                    dopantType = DopantType.None;
+                }
+                guessState.Dopant = dopantType;
             }
         }
 

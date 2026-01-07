@@ -104,7 +104,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 162, y: -16}
-  m_SizeDelta: {x: 260, y: 140}
+  m_SizeDelta: {x: 300, y: 140}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5876457913893736781
 GameObject:
@@ -211,7 +211,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0.44155845
     y: 0
-    width: 3.3766234
+    width: 3.8961039
     height: 1.8181819
   m_UnitsPerTile: {x: 77, y: 77}
   m_Offset: {x: 34, y: 0}

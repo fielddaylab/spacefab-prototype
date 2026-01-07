@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Gallium Arsenide
   UnknownDisplayName: Sample 72
-  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  Material: {fileID: 2100000, guid: c9aad19546748a842985a054f5b3dcd5, type: 2}
   ChemicalSymbol: GaAs
   SampleNumber: 72
   Atoms:
