@@ -11,6 +11,7 @@ namespace SpaceFab.Research {
         public Transform Root;
         public GameObject EmptyContents;
         public bool AllowSwap;
+        public ParticleSystem HoverVfx;
 
         [NonSerialized] public bool Locked;
         [NonSerialized] public ResearchMaterialItem Item;

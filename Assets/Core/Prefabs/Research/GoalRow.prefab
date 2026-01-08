@@ -150,8 +150,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Identify the Electric properties of Sample 2
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
-  m_sharedMaterial: {fileID: -1957087528660685660, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
+  m_sharedMaterial: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

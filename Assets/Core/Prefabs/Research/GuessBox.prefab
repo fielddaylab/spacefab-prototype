@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3396258372230867789
 RectTransform:
   m_ObjectHideFlags: 0
@@ -714,7 +714,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: This material has no special properties.
@@ -819,7 +819,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: This material does not break down under extreme current.
@@ -1291,7 +1291,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: 'The material conducts electricity.
@@ -1427,7 +1427,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: This material does not conduct electricity.
@@ -1657,7 +1657,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: This material conducts electricity particuarly well.
@@ -1986,7 +1986,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: 'The material conducts electricity.

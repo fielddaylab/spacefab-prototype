@@ -13,6 +13,5 @@ MonoBehaviour:
   m_Name: DesignAssets
   m_EditorClassIdentifier: 
   m_GlobalAssets: []
-  m_NamedAssets:
-  - {fileID: 11400000, guid: 5c4a268c0e6443043bdc7f338f926a78, type: 2}
+  m_NamedAssets: []
   m_LiteAssets: []

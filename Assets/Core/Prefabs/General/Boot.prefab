@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 64.975, y: -17.375}
-  m_SizeDelta: {x: 113.95, y: 18.75}
+  m_AnchoredPosition: {x: 75.38, y: -17.205}
+  m_SizeDelta: {x: 134.76, y: 18.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8253077614730736404
 CanvasRenderer:
@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: This is a header
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 23cb01eb9efb4ec4399865f13305e917, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6af123f4060ee784fa5d7bdb82c65c36, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: c0582384513250d42862cbca511e7bee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -260,8 +260,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 150, y: -58.879997}
-  m_SizeDelta: {x: 284, y: 56.26}
+  m_AnchoredPosition: {x: 150, y: -58.010002}
+  m_SizeDelta: {x: 284, y: 55.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7565037754091297057
 CanvasRenderer:
@@ -294,8 +294,8 @@ MonoBehaviour:
   m_text: This is some text that we cannot write or read It should wrap around to
     another line at some point.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 9ee4e8df9513c4340be1041391b92f32, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: b61ab28c972aac44288e37ab01f6cfa1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 21909a73b7857374581718a6d9aaf53c, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: b5d914185d31bb041b5f6490f9a5eb31, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -821,7 +821,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 300, y: 95.009995}
+  m_SizeDelta: {x: 300, y: 93.61}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &8603940064069857157
 MonoBehaviour:

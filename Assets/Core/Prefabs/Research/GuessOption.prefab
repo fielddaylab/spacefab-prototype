@@ -360,8 +360,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Conductor
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
-  m_sharedMaterial: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
+  m_sharedMaterial: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -391,7 +391,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535

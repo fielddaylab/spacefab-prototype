@@ -10,53 +10,75 @@ using UnityEngine;
 
 namespace SpaceFab.Research {
     [SysUpdate(GameLoopPhase.LateUpdate, 1000)]
-	public sealed class ResearchDragSystem : SharedStateSystemBehaviour<ResearchDragState> { 
+    public sealed class ResearchDragSystem : SharedStateSystemBehaviour<ResearchDragState> {
         public override void ProcessWork(float deltaTime) {
             bool cancelQueued = false;
             bool cursorOnCanvas = Game.Input.IsPointerOverCanvas();
 
             bool cursorOnWorld = MouseControls.TryGetWorldPosition2D(out Vector2 worldPos);
+            bool cursorValid = cursorOnWorld && CursorUtility.IsCursorWithinVirtualViewport() && !cursorOnCanvas;
 
             if (Game.Input.IsMousePressed(1)) {
                 cancelQueued = true;
-            }
-            
-            if (Game.Input.IsMousePressed(0)) {
-                if (!cursorOnWorld || !CursorUtility.IsCursorWithinVirtualViewport() || cursorOnCanvas) {
-                    cancelQueued = true;
-                } else {
-                    Collider2D overlappingSlot = Physics2D.OverlapCircle(worldPos, 0.01f, LayerMasks.ResearchSlot_Mask);
-                    Collider2D overlappingGem = Physics2D.OverlapCircle(worldPos, 0.01f, LayerMasks.ResearchGem_Mask);
-                    ResearchSlot slot = overlappingSlot.ResolveComponent<ResearchSlot>();
-                    ResearchMaterialItem gem = overlappingGem.ResolveComponent<ResearchMaterialItem>();
+            } else {
+                OverlapResults results = default;
+                bool leftClicked = Game.Input.IsMousePressed(0);
 
-                    if (m_State.CurrentlyDragging) {
-                        if (slot) {
-                            ResearchSlotUtility.DepositCurrentDrag(slot);
-                        } else if (gem) {
-                            if (gem.Material == m_State.CurrentlyDragging) {
+                if (m_State.CurrentlyDragging) {
+                    if (cursorValid) {
+                        GetPositionOverlap(worldPos, out results);
+                    }
+
+                    if (leftClicked) {
+                        if (results.Slot) {
+                            ResearchSlotUtility.DepositCurrentDrag(results.Slot);
+                        } else if (results.Gem) {
+                            if (results.Gem.Material == m_State.CurrentlyDragging) {
                                 cancelQueued = true;
                             } else {
-                                ResearchSlotUtility.LiftItem(gem);
+                                ResearchSlotUtility.LiftItem(results.Gem);
                             }
                         } else {
                             cancelQueued = true;
                         }
                     } else {
-                        if (gem != null) {
-                            ResearchSlotUtility.LiftItem(gem);
+                        if (results.Slot != m_State.SlotHoveredOver) {
+                            if (m_State.SlotHoveredOver) {
+                                m_State.SlotHoveredOver.HoverVfx.Stop(true, UnityEngine.ParticleSystemStopBehavior.StopEmitting);
+                            }
+                            m_State.SlotHoveredOver = results.Slot;
+                            if (m_State.SlotHoveredOver) {
+                                m_State.SlotHoveredOver.HoverVfx.Play();
+                            }
                         }
                     }
+                } else if (cursorValid && leftClicked) {
+                    GetPositionOverlap(worldPos, out results);
+                    if (results.Gem != null) {
+                        ResearchSlotUtility.LiftItem(results.Gem);
+                    }
                 }
-            }
-
-            if (cursorOnWorld) {
-                m_State.DragRenderer.transform.position = worldPos;
             }
 
             if (cancelQueued) {
                 ResearchSlotUtility.CancelCurrentDrag();
             }
+
+            if (cursorOnWorld && m_State.CurrentlyDragging) {
+                m_State.DragRenderer.transform.position = worldPos;
+            }
+        }
+
+        static private void GetPositionOverlap(Vector2 worldPos, out OverlapResults results) {
+            Collider2D overlappingSlot = Physics2D.OverlapCircle(worldPos, 0.01f, LayerMasks.ResearchSlot_Mask);
+            Collider2D overlappingGem = Physics2D.OverlapCircle(worldPos, 0.01f, LayerMasks.ResearchGem_Mask);
+            results.Slot = overlappingSlot.ResolveComponent<ResearchSlot>();
+            results.Gem = overlappingGem.ResolveComponent<ResearchMaterialItem>();
+        }
+
+        private struct OverlapResults {
+            public ResearchSlot Slot;
+            public ResearchMaterialItem Gem;
         }
     }
 }

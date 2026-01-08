@@ -16,6 +16,7 @@ namespace SpaceFab.Research {
 		public Physics2DRaycaster Raycaster;
 		
 		[NonSerialized] public ResearchMaterial CurrentlyDragging;
+		[NonSerialized] public ResearchSlot SlotHoveredOver;
 
         private void Awake() {
 			DragRenderer.gameObject.SetActive(false);
@@ -26,6 +27,10 @@ namespace SpaceFab.Research {
 		static public bool CancelCurrentDrag() {
 			ResearchDragState dragState = Find.State<ResearchDragState>();
 			if (dragState.CurrentlyDragging) {
+				if (dragState.SlotHoveredOver) {
+					dragState.SlotHoveredOver.HoverVfx.Stop(true, UnityEngine.ParticleSystemStopBehavior.StopEmitting);
+					dragState.SlotHoveredOver = null;
+				}
 				dragState.CurrentlyDragging = null;
 				dragState.DragRenderer.gameObject.SetActive(false);
                 CursorHint.Unlock(dragState.DragCursor);
@@ -65,6 +70,11 @@ namespace SpaceFab.Research {
                     dragState.DragRenderer.gameObject.SetActive(false);
                     CursorHint.Unlock(dragState.DragCursor);
                     dragState.Raycaster.eventMask |= LayerMasks.UI_Mask;
+
+                    if (dragState.SlotHoveredOver) {
+                        dragState.SlotHoveredOver.HoverVfx.Stop(true, UnityEngine.ParticleSystemStopBehavior.StopEmitting);
+                        dragState.SlotHoveredOver = null;
+                    }
                 }
                 return true;
             }

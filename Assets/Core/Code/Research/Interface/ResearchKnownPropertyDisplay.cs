@@ -28,7 +28,7 @@ namespace SpaceFab.Research {
         public ResearchKnownPropertyRow SpecialProperty;
         public RectTransform RowHighlight;
         public PointerListener SubmitButton;
-        public GameObject SubmitInProgress;
+        public ActiveGroup SubmitInProgress;
         public ResearchGuessDisplay Guesser;
 
         [Header("Valence Panel")]

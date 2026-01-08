@@ -208,8 +208,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Level 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
-  m_sharedMaterial: {fileID: 2821296471360535536, guid: b9e678ba8ded1974e93b3eebbf242562, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 21909a73b7857374581718a6d9aaf53c, type: 2}
+  m_sharedMaterial: {fileID: -4088287524288810203, guid: 21909a73b7857374581718a6d9aaf53c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -406,6 +406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
   Flags: 0
