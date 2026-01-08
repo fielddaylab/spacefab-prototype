@@ -361,7 +361,19 @@ namespace FieldDay.Debugging {
             }
 #endif // UNITY_EDITOR
 
-            GUI.matrix = Matrix4x4.identity;
+            float renderScale = 1;
+            int screenHeight = Screen.height;
+            if (screenHeight > 2000) {
+                renderScale = 3;
+            } else if (screenHeight > 1200) {
+                renderScale = 2;
+            }
+
+            if (renderScale > 1) {
+                GUI.matrix = Matrix4x4.Scale(new Vector3(renderScale, renderScale, 1));
+            } else {
+                GUI.matrix = Matrix4x4.identity;
+            }
             float deltaTime = Math.Min(Time.unscaledDeltaTime, 0.1f);
 
             EnsureGUIResources();
@@ -371,9 +383,9 @@ namespace FieldDay.Debugging {
                 mainCam = Camera.main;
             }
             if (mainCam) {
-                RenderText(deltaTime, s_ActiveTexts, mainCam, s_CategoryMask, !s_PauseAll);
-                RenderGroupedText(deltaTime, s_ActiveLogTexts, m_LogGroup, !s_PauseAll);
-                RenderImages(deltaTime, s_ActiveImages, mainCam, s_CategoryMask, !s_PauseAll);
+                RenderText(deltaTime, s_ActiveTexts, mainCam, renderScale, s_CategoryMask, !s_PauseAll);
+                RenderGroupedText(deltaTime, s_ActiveLogTexts, renderScale, m_LogGroup, !s_PauseAll);
+                RenderImages(deltaTime, s_ActiveImages, mainCam, renderScale, s_CategoryMask, !s_PauseAll);
             } else {
                 DecayText(deltaTime); 
             }
@@ -395,9 +407,9 @@ namespace FieldDay.Debugging {
             Handles.BeginGUI();
 
             EnsureGUIResources();
-            RenderText(0, s_ActiveTexts, view.camera, s_CategoryMask, !s_PauseAll);
-            RenderGroupedText(0, s_ActiveLogTexts, m_LogGroup, !s_PauseAll);
-            RenderImages(0, s_ActiveImages, view.camera, s_CategoryMask, !s_PauseAll);
+            RenderText(0, s_ActiveTexts, view.camera, 1, s_CategoryMask, !s_PauseAll);
+            RenderGroupedText(0, s_ActiveLogTexts, 1, m_LogGroup, !s_PauseAll);
+            RenderImages(0, s_ActiveImages, view.camera, 1, s_CategoryMask, !s_PauseAll);
 
             Handles.EndGUI();
         }
@@ -545,12 +557,12 @@ namespace FieldDay.Debugging {
             }
         }
 
-        private void RenderText(float deltaTime, RingBuffer<TextRenderState> buffer, Camera camera, BitSet64 mask, bool allowRendering) {
+        private void RenderText(float deltaTime, RingBuffer<TextRenderState> buffer, Camera camera, float renderScale, BitSet64 mask, bool allowRendering) {
             if (!allowRendering && deltaTime <= 0) {
                 return;
             }
 
-            int screenW = Screen.width, screenH = Screen.height;
+            float screenW = Screen.width / renderScale, screenH = Screen.height / renderScale;
             for (int i = buffer.Count - 1; i >= 0; i--) {
                 ref TextRenderState state = ref buffer[i];
 
@@ -646,7 +658,7 @@ namespace FieldDay.Debugging {
             }
         }
 
-        private void RenderGroupedText(float deltaTime, RingBuffer<GroupedTextRenderState> buffer, in TextGroupSettings settings, bool allowRendering) {
+        private void RenderGroupedText(float deltaTime, RingBuffer<GroupedTextRenderState> buffer, float renderScale, in TextGroupSettings settings, bool allowRendering) {
             if (!allowRendering && deltaTime <= 0) {
                 return;
             }
@@ -654,7 +666,7 @@ namespace FieldDay.Debugging {
             StringBuilder sb = s_GroupedTextBuilder;
             sb.Clear();
 
-            int screenW = Screen.width, screenH = Screen.height;
+            float screenW = Screen.width / renderScale, screenH = Screen.height / renderScale;
             for (int i = 0, len = buffer.Count; i < len; i++) {
                 ref GroupedTextRenderState state = ref buffer[i];
 
@@ -766,12 +778,12 @@ namespace FieldDay.Debugging {
             }
         }
 
-        private void RenderImages(float deltaTime, RingBuffer<ImageRenderState> buffer, Camera camera, BitSet64 mask, bool allowRendering) {
+        private void RenderImages(float deltaTime, RingBuffer<ImageRenderState> buffer, Camera camera, float renderScale, BitSet64 mask, bool allowRendering) {
             if (!allowRendering && deltaTime <= 0) {
                 return;
             }
 
-            int screenW = Screen.width, screenH = Screen.height;
+            float screenW = Screen.width / renderScale, screenH = Screen.height / renderScale;
             for (int i = buffer.Count - 1; i >= 0; i--) {
                 ref ImageRenderState state = ref buffer[i];
 
