@@ -12,7 +12,7 @@ namespace ChipFab.ChipDesign
         public static string OUT_SUBTYPE = "Out";
         public static string X_SUBTYPE = "X";
         public static string Y_SUBTYPE = "Y";
-        public static string VPLUS_SUBTYPE = "V+";
-        public static string VMINUS_SUBTYPE = "V-";
+        public static string VPLUS_SUBTYPE = "HI";
+        public static string VMINUS_SUBTYPE = "LO";
     }
 }
