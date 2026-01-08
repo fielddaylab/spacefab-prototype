@@ -368,7 +368,7 @@ PrefabInstance:
     - target: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: LevelData
       value: 
-      objectReference: {fileID: 11400000, guid: 2031c744906e6154483ffb06494cb686, type: 2}
+      objectReference: {fileID: 11400000, guid: fcb2a6b4b9a2fb7478f7aea15e4bb688, type: 2}
     - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Name
       value: Level Load Button (1)
@@ -543,7 +543,7 @@ PrefabInstance:
     - target: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: LevelData
       value: 
-      objectReference: {fileID: 11400000, guid: b15e610493f32c64cb7ed0c5c2b134bc, type: 2}
+      objectReference: {fileID: 11400000, guid: 2031c744906e6154483ffb06494cb686, type: 2}
     - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Name
       value: Level Load Button (2)
@@ -1220,7 +1220,7 @@ PrefabInstance:
     - target: {fileID: 3895669016182356200, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: LevelData
       value: 
-      objectReference: {fileID: 11400000, guid: fcb2a6b4b9a2fb7478f7aea15e4bb688, type: 2}
+      objectReference: {fileID: 11400000, guid: b15e610493f32c64cb7ed0c5c2b134bc, type: 2}
     - target: {fileID: 5886971414331684334, guid: d2d7556043d0b8f44b2046db80750fb3, type: 3}
       propertyPath: m_Name
       value: Level Load Button (3)

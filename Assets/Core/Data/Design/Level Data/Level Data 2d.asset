@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
   m_Name: Level Data 2d
   m_EditorClassIdentifier: 
-  m_title: '2D: New Type of Diode'
+  m_title: '2D: Make a Diode'
   m_allowedPlaceables: 0500000006000000
-  m_gridConfig: {fileID: 11400000, guid: d89d2f5078ccf6f46a4461abc86e9248, type: 2}
+  m_gridConfig: {fileID: 11400000, guid: f934f9e426dfa964f8ba5f128319cfa7, type: 2}
   m_testSuite: {fileID: 11400000, guid: 5830dd5ec43443047951683e783396f8, type: 2}
