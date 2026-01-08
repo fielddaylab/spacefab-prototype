@@ -177,8 +177,6 @@ namespace SpaceFab.Research {
             int targetValence = atoms[offset].ValenceElectrons;
             ValenceMinusOne.transform.localPosition = ValencePips[targetValence - 1 - 1].transform.localPosition;
             ValencePlusOne.transform.localPosition = ValencePips[targetValence - 1 + 1].transform.localPosition;
-            ValenceMinusOne.SetText((targetValence - 1).ToStringLookup());
-            ValencePlusOne.SetText((targetValence + 1).ToStringLookup());
         }
 
         private void UpdateValencePips(int targetValence, int currentValence) {

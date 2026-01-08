@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55426b3fefba51d4a9e042406bdc47d5, type: 3}
   m_Name: Level2
   m_EditorClassIdentifier: 
+  Label: 
   AvailableTools: 3
   AvailableProperties: 3
   AvailableMaterials:
@@ -28,6 +29,9 @@ MonoBehaviour:
   Objectives:
   - MaterialId:
       m_HashValue: 1163381446
-    Knowledge: 3
+    Knowledge: 1
+  - MaterialId:
+      m_HashValue: 1163381446
+    Knowledge: 2
   NextLevelId:
     m_HashValue: 660313546

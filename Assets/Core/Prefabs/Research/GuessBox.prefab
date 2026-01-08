@@ -456,7 +456,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: This material can be used as a P-type dopant for a semiconductor.
@@ -928,7 +928,7 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
       value: This material can be used as an N-type dopant for a semiconductor.
@@ -1177,7 +1177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_text
-      value: Light-Emitting
+      value: Emits Light
       objectReference: {fileID: 0}
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_hasFontAssetChanged
@@ -2130,10 +2130,14 @@ PrefabInstance:
     - target: {fileID: 3426195245978626385, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
+      objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material is not known as a dopant for any other materials.
+      value: 'This material is not known as a dopant for any other materials.
+
+
+        <i>(A
+        "Nopant", perhaps?)</i>'
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader

@@ -365,7 +365,7 @@ Transform:
   m_GameObject: {fileID: 3852222914406597319}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 4}
+  m_LocalPosition: {x: 0, y: -5.56, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -609,7 +609,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
+  - {fileID: -1099636628033530288, guid: c034c599fdc924743a3d51f9e96462a1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -653,8 +653,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Circuit Tool
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
-  m_sharedMaterial: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c034c599fdc924743a3d51f9e96462a1, type: 2}
+  m_sharedMaterial: {fileID: -1099636628033530288, guid: c034c599fdc924743a3d51f9e96462a1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
