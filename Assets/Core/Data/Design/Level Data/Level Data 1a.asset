@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
   m_Name: Level Data 1a
   m_EditorClassIdentifier: 
-  m_title: Level 1A
+  m_title: '1A: Making Connections'
   m_allowedPlaceables: 0a000000
   m_gridConfig: {fileID: 11400000, guid: 4a841aac5140c024895654cdef13cffa, type: 2}
   m_testSuite: {fileID: 11400000, guid: 89f0b1fe25dbec5439adbe468004a2d0, type: 2}

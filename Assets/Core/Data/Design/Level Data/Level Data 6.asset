@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
   m_Name: Level Data 6
   m_EditorClassIdentifier: 
-  m_title: Level 6
+  m_title: '6: Inverter'
   m_allowedPlaceables: 05000000060000000a0000000b0000000c000000
   m_gridConfig: {fileID: 11400000, guid: 2adf32aa11230a8428a504ceb1bd345d, type: 2}
   m_testSuite: {fileID: 11400000, guid: f753fdc1a64b1c84581c3b6a2064f13c, type: 2}
