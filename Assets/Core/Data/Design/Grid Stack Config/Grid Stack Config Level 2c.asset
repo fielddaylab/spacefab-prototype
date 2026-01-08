@@ -1,0 +1,196 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00da532df5ce69d42a281dfbb93a0f0d, type: 3}
+  m_Name: Grid Stack Config Level 2c
+  m_EditorClassIdentifier: 
+  LayerDims:
+    X: 6
+    Y: 6
+  Cells:
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 0
+    CellType: 1
+    SubtypeLabel: 3
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    TransferType: 4
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 5
+    CellType: 5
+    SubtypeLabel: 8
+    Edges: []
+    TransferType: 0
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 0
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    TransferType: 4
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 1
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    TransferType: 1
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 1
+    CellType: 3
+    SubtypeLabel: 5
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    TransferType: 1
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 2
+    CellType: 3
+    SubtypeLabel: 5
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    TransferType: 0
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 3
+    CellType: 3
+    SubtypeLabel: 5
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    TransferType: 0
+  - LayerIndex: 1
+    RowIndex: 2
+    ColumnIndex: 4
+    CellType: 3
+    SubtypeLabel: 5
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    TransferType: 1
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 4
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    TransferType: 1
+  - LayerIndex: 0
+    RowIndex: 2
+    ColumnIndex: 5
+    CellType: 2
+    SubtypeLabel: 10
+    Edges:
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 0
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    - EdgeState: 1
+      Eraseable: 0
+    TransferType: 4

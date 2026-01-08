@@ -456,7 +456,16 @@ namespace SpaceFab.ChipDesign
                     }
                     else
                     {
-                        DragDrawNodeOfType(CellType.NTransistor, gridPos);
+                        if (cell.CellType == CellType.PTransistor)
+                        {
+                            // draw connection, preserve type
+                            DragDrawNodeOfType(CellType.PTransistor, gridPos);
+                        }
+                        else
+                        {
+                            // override
+                            DragDrawNodeOfType(CellType.NTransistor, gridPos);
+                        }
                     }
                     break;
                 case ToolType.DrawPNodes:
@@ -468,7 +477,16 @@ namespace SpaceFab.ChipDesign
                     }
                     else
                     {
-                        DragDrawNodeOfType(CellType.PTransistor, gridPos);
+                        if (cell.CellType == CellType.NTransistor)
+                        {
+                            // draw connection, preserve type
+                            DragDrawNodeOfType(CellType.NTransistor, gridPos);
+                        }
+                        else
+                        {
+                            // override
+                            DragDrawNodeOfType(CellType.PTransistor, gridPos);
+                        }
                     }
                     break;
                 default:

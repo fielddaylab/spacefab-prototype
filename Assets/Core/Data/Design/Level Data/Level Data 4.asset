@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
   m_Name: Level Data 4
   m_EditorClassIdentifier: 
-  m_title: Level 4
+  m_title: '4: Depletion'
   m_allowedPlaceables: 0a0000000c000000
   m_gridConfig: {fileID: 11400000, guid: af6681b412aa1874f82180128f19d674, type: 2}
   m_testSuite: {fileID: 11400000, guid: c8b5d0265224a7041b30af02297cc8a0, type: 2}

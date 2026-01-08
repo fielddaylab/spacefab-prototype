@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a0ab3840140474088c3b4386290ac9, type: 3}
   m_Name: Level Data 1c
   m_EditorClassIdentifier: 
-  m_title: Level 1C
-  m_allowedPlaceables: 050000000a0000000b0000000c000000
+  m_title: '1C: Crossing Signals'
+  m_allowedPlaceables: 050000000a0000000b000000
   m_gridConfig: {fileID: 11400000, guid: 892200ce19becfc4092034f460a45232, type: 2}
   m_testSuite: {fileID: 11400000, guid: 1f718f5054b8fee44b3edffcd91b16d4, type: 2}

@@ -31,7 +31,9 @@ namespace FieldDay.UI {
 
         #endregion // Inspector
 
-        // TODO: implement dynamic data and localization keys
+        // TODO: implement localization keys
+        [NonSerialized] public StringBuilder DynamicHeader;
+        [NonSerialized] public StringBuilder DynamicContent;
 
         [NonSerialized] public long LastUpdatedTimestamp = 0;
 
@@ -46,6 +48,9 @@ namespace FieldDay.UI {
             LastUpdatedTimestamp = Frame.Timestamp();
         }
 
+        /// <summary>
+        /// Returns if the hint has any tooltip contents.
+        /// </summary>
         static public bool HasTooltip(CursorHint hint) {
             if (!hint) {
                 return false;
@@ -55,7 +60,9 @@ namespace FieldDay.UI {
                 return false;
             }
 
-            return !string.IsNullOrEmpty(hint.Tooltip) || !string.IsNullOrEmpty(hint.TooltipHeader);
+            return !string.IsNullOrEmpty(hint.Tooltip) || !string.IsNullOrEmpty(hint.TooltipHeader)
+                || (hint.DynamicHeader != null && hint.DynamicHeader.Length > 0)
+                || (hint.DynamicContent != null && hint.DynamicContent.Length > 0);
         }
 
         /// <summary>
@@ -72,8 +79,8 @@ namespace FieldDay.UI {
             contents.Header = hint.TooltipHeader;
             contents.Contents = hint.Tooltip;
 
-            contents.DynamicHeader = null;
-            contents.DynamicContents = null;
+            contents.DynamicHeader = hint.DynamicHeader;
+            contents.DynamicContents = hint.DynamicContent;
         }
 
         #endregion // Tooltips

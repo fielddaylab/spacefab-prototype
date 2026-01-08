@@ -180,14 +180,14 @@ namespace SpaceFab.ChipDesign
                 case GridInteractionLayer.Transistor:
                     //LayerText.SetText("+");
                     LayerButton.image.sprite = LayerBtnBottomImg;
-                    //LayerLabelText.SetText("Nodes");
+                    LayerLabelText.SetText("Below");
                     //DrawNodesGroup.SetActive(true);
                     //if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(false); }
                     break;
                 case GridInteractionLayer.Metal:
                     //LayerText.SetText("-");
                     LayerButton.image.sprite = LayerBtnTopImg;
-                    //LayerLabelText.SetText("Links");
+                    LayerLabelText.SetText("Above");
                     //DrawNodesGroup.SetActive(false);
                     //if (InteractMgr.Instance != null) { DrawLinksGroup.SetActive(true); }
                     break;
@@ -317,6 +317,7 @@ namespace SpaceFab.ChipDesign
         {
             if (InteractMgr.Instance != null)
             {
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Metal);
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawVia);
 
                 SetActiveIndicator(DrawViaButton.transform.position.x);
@@ -327,6 +328,7 @@ namespace SpaceFab.ChipDesign
         {
             if (InteractMgr.Instance != null)
             {
+                InteractMgr.Instance.SetActiveLayer(GridInteractionLayer.Metal);
                 InteractMgr.Instance.SetActiveTool(ToolType.DrawGate);
 
                 SetActiveIndicator(DrawGateButton.transform.position.x);
