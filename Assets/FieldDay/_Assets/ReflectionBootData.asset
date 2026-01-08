@@ -108,7 +108,7 @@ MonoBehaviour:
     LookupInherit: 0
     Assemblies:
     - AssemblyName: FieldDay.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      TypeCount: 10
+      TypeCount: 11
     Types:
     - TypeName: FieldDay.Scenes.SceneMgr
       Self: 0
@@ -127,6 +127,10 @@ MonoBehaviour:
       MemberCount: 1
       OverloadCount: 0
     - TypeName: FieldDay.Rendering.RenderMgr
+      Self: 0
+      MemberCount: 1
+      OverloadCount: 0
+    - TypeName: FieldDay.HID.InputMgr
       Self: 0
       MemberCount: 1
       OverloadCount: 0
@@ -160,6 +164,8 @@ MonoBehaviour:
     - MemberName: CreateFileDebugMenu
       Type: 8
     - MemberName: CreateRenderDebugMenu
+      Type: 8
+    - MemberName: CreateDebugMenu
       Type: 8
     - MemberName: CreateSystemsDebugMenu
       Type: 8

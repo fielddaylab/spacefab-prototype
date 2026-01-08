@@ -16,6 +16,7 @@ namespace FieldDay.UI {
         [Flags]
         public enum BehaviorFlags {
             HideTooltipWhenLocked = 0x01,
+            ExtendedTooltipDelay = 0x02,
         }
 
         #region Inspector

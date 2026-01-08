@@ -171,7 +171,7 @@ namespace SpaceFab.Research {
             } else if (guesses.Electric != ElectricalTag.Unknown) {
                 WriteChips(ElectricProperty, guesses.Electric, false);
             }
-            ElectricProperty.FinishWrite();
+            ElectricProperty.FinishWrite((knowledge & ResearchMaterialKnowledge.Electrical) != 0);
 
             DopantProperty.PrepareWrite();
             if ((knowledge & ResearchMaterialKnowledge.Dopant) != 0) {
@@ -179,7 +179,7 @@ namespace SpaceFab.Research {
             } else if (guesses.Dopant.HasValue) {
                 WriteChips(DopantProperty, guesses.Dopant.Value, false);
             }
-            DopantProperty.FinishWrite();
+            DopantProperty.FinishWrite((knowledge & ResearchMaterialKnowledge.Dopant) != 0);
 
             ThermalProperty.PrepareWrite();
             if ((knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
@@ -187,7 +187,7 @@ namespace SpaceFab.Research {
             } else if (guesses.Thermal.HasValue) {
                 WriteChips(ThermalProperty, guesses.Thermal.Value, false);
             }
-            ThermalProperty.FinishWrite();
+            ThermalProperty.FinishWrite((knowledge & ResearchMaterialKnowledge.Thermal) != 0);
 
             SpecialProperty.PrepareWrite();
             if ((knowledge & ResearchMaterialKnowledge.Special) != 0) {
@@ -195,7 +195,7 @@ namespace SpaceFab.Research {
             } else if (guesses.Special.HasValue) {
                 WriteChips(SpecialProperty, guesses.Special.Value, false);
             }
-            SpecialProperty.FinishWrite();
+            SpecialProperty.FinishWrite((knowledge & ResearchMaterialKnowledge.Special) != 0);
 
             if (guesses.Special.HasValue || guesses.Electric != ElectricalTag.Unknown || guesses.Dopant.HasValue || guesses.Thermal.HasValue) {
                 SubmitButton.gameObject.SetActive(true);

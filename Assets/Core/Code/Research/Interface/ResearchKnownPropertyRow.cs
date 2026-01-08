@@ -25,7 +25,7 @@ namespace SpaceFab.Research {
 
         public void WriteEmptyRow() {
             PrepareWrite();
-            FinishWrite();
+            FinishWrite(false);
         }
 
         public void PrepareWrite() {
@@ -36,9 +36,13 @@ namespace SpaceFab.Research {
             Chips[ChipsWritten++].SetLabel(label, confirmed);
         }
 
-        public void FinishWrite() {
-            for(int i = ChipsWritten; i < Chips.Length; i++) {
-                Chips[i].SetEmpty();
+        public void FinishWrite(bool confirmed) {
+            if (!confirmed && ChipsWritten == 0) {
+                Chips[ChipsWritten++].SetEmpty();
+            }
+
+            for (int i = ChipsWritten; i < Chips.Length; i++) {
+                Chips[i].SetHidden();
             }
         }
     }

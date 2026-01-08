@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a222e6677b9e1743a0259a94d81681e, type: 3}
   m_Name: HelpCursor
   m_EditorClassIdentifier: 
-  DefaultImage: {fileID: 21300000, guid: d6ee7a4864ac7f245836cb02dfddc8eb, type: 3}
+  DefaultImage: {fileID: 21300000, guid: 15b7653e5a184e04faefa5e5f9a79613, type: 3}
   HeldImage: {fileID: 0}
   DefaultScale: 1
   HeldScaleOverride: 0

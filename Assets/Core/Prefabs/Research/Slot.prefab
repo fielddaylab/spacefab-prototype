@@ -5111,6 +5111,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9026207889587142071}
   - component: {fileID: 5318650472370803103}
+  - component: {fileID: 5438942495391680282}
   m_Layer: 27
   m_Name: Collider
   m_TagString: Untagged
@@ -5178,6 +5179,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.8, y: 2.8}
   m_EdgeRadius: 0
+--- !u!114 &5438942495391680282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7850141801720352778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 0
+  CursorType:
+    m_HashValue: 2354262440
+  Flags: 0
+  TooltipHeader: Material Slot
+  Tooltip: Place a material into this slot to activate the tool.
 --- !u!1 &8106881169534903343
 GameObject:
   m_ObjectHideFlags: 0

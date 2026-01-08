@@ -1,5 +1,6 @@
 using BeauUtil;
 using BeauUtil.Debugger;
+using FieldDay.HID;
 using FieldDay.Localization;
 using FieldDay.Rendering;
 using FieldDay.UI.Animation;
@@ -185,7 +186,11 @@ namespace FieldDay.UI {
                     m_Cooldown = 0;
                 } else {
                     if (!m_Visible) {
-                        m_Cooldown = Math.Max(m_Cooldown, m_DefaultHoverDelay);
+                        float cooldown = m_DefaultHoverDelay;
+                        if ((currentHint.Flags & CursorHint.BehaviorFlags.ExtendedTooltipDelay) != 0) {
+                            cooldown *= 2;
+                        }
+                        m_Cooldown = Math.Max(m_Cooldown, cooldown);
                     } else {
                         m_LastVersionKey = currentHint.LastUpdatedTimestamp;
                         CursorHint.GetTooltipContents(currentHint, out tooltipContents);

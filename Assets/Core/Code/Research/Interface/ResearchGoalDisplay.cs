@@ -44,16 +44,16 @@ namespace SpaceFab.Research {
                     psb.Builder.Append("Identify the");
                     int bitCount = Bits.Count(objective.Knowledge);
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Electrical) != 0) {
-                        psb.Builder.Append(" <b>Electrical</b>,");
+                        psb.Builder.Append(" <sprite name=\"ElectricalPropertyIcon\"><b>Electrical</b>,");
                     }
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
-                        psb.Builder.Append(" <b>Thermal</b>,");
+                        psb.Builder.Append(" <sprite name=\"ThermalPropertyIcon\"><b>Thermal</b>,");
                     }
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Dopant) != 0) {
-                        psb.Builder.Append(" <b>Dopant</b>,");
+                        psb.Builder.Append(" <sprite name=\"DopantPropertyIcon\"><b>Dopant</b>,");
                     }
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Special) != 0) {
-                        psb.Builder.Append(" <b>Special</b>,");
+                        psb.Builder.Append(" <sprite name=\"SpecialPropertyIcon\"><b>Special</b>,");
                     }
                     psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
                     psb.Builder.Append(" properties of <b>").Append(material.UnknownDisplayName).Append("<b>");
