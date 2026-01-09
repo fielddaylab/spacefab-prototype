@@ -5100,6 +5100,7 @@ MonoBehaviour:
   Root: {fileID: 455049054091451661}
   EmptyContents: {fileID: 8106881169534903343}
   AllowSwap: 0
+  Hint: {fileID: 5438942495391680282}
   HoverVfx: {fileID: 1628902159840003373}
 --- !u!1 &7850141801720352778
 GameObject:

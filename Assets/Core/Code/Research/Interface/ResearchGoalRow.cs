@@ -20,5 +20,9 @@ namespace SpaceFab.Research {
         public Graphic Checkbox;
         public Graphic CrossOff;
         public Graphic Flash;
+
+        public CursorHint Hint;
+
+        [NonSerialized] public ResearchMaterialKnowledgePair Goal;
     }
 }

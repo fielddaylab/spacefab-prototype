@@ -32,8 +32,8 @@ namespace SpaceFab.Research {
         static private IEnumerator ShiftToX(ResearchCamera camera, float x) {
             yield return Routine.Combine(
                 camera.CameraPosition.MoveTo(x, 0.15f, Axis.X, Space.World).Ease(Curve.CubeOut),
-                camera.FollowingObject.MoveTo(x, 0.24f, Axis.X, Space.World).Ease(Curve.CubeOut).DelayBy(0.07f),
-                Routine.Delay(ReactivateRaycaster, 0.08f)
+                camera.FollowingObject.MoveTo(x, 0.15f, Axis.X, Space.World).Ease(Curve.CubeOut),
+                Routine.Delay(ReactivateRaycaster, 0.1f)
             );
         }
 

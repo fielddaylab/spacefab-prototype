@@ -95,6 +95,7 @@ namespace FieldDay.Assets {
             }
 
             if (isChanged) {
+                Log.Msg("[AssetPack] Contents of pack '{0}' updated", pack.name);
                 EditorUtility.SetDirty(pack);
             }
         }

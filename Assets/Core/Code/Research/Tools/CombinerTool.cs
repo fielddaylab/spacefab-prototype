@@ -183,9 +183,9 @@ namespace SpaceFab.Research {
             Color32 currentColor = IncorrectValencePipColor;
             Color32 defaultColor = BlankValencePipColor;
             Color32 excessColor = ExcessValencePipColor;
-            if (currentValence == targetValence - 1) {
+            if (currentValence == targetValence + 1) {
                 currentColor = CorrectNTypeValencePipColor;
-            } else if (currentValence == targetValence + 1) {
+            } else if (currentValence == targetValence - 1) {
                 currentColor = CorrectPTypeValencePipColor;
             }
 

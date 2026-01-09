@@ -24,11 +24,11 @@ MonoBehaviour:
     m_Scale: 1
     m_UnitsPerEM: 0
     m_LineHeight: 0
-    m_AscentLine: 0
+    m_AscentLine: 16
     m_CapLine: 0
     m_MeanLine: 0
     m_Baseline: -16
-    m_DescentLine: 0
+    m_DescentLine: 16
     m_SuperscriptOffset: 0
     m_SuperscriptSize: 0
     m_SubscriptOffset: 0
@@ -40,6 +40,12 @@ MonoBehaviour:
     m_TabWidth: 0
   spriteSheet: {fileID: -8328923581568760697, guid: 305b55ac59945e74fade89d938be5da6, type: 3}
   m_SpriteCharacterTable:
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 3
+    m_Scale: 1
+    m_Name: ElectricalPropertyIcon
+    m_HashCode: 1141440738
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 0
@@ -58,12 +64,6 @@ MonoBehaviour:
     m_Scale: 1
     m_Name: SpecialPropertyIcon
     m_HashCode: 1047595469
-  - m_ElementType: 2
-    m_Unicode: 65534
-    m_GlyphIndex: 3
-    m_Scale: 1
-    m_Name: ElectricalPropertyIcon
-    m_HashCode: 1141440738
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:

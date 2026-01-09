@@ -73,7 +73,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6686790144833821856
 RectTransform:
   m_ObjectHideFlags: 0
@@ -459,7 +459,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material can be used as a P-type dopant for a semiconductor.
+      value: The material can be used as a P-type dopant for a semiconductor.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -592,7 +592,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material does not break down in extremely low temperatures.
+      value: The material does not break down in extremely low temperatures.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -725,7 +725,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material has no special properties.
+      value: The material has no special properties.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -830,7 +830,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material does not break down under extreme current.
+      value: The material does not break down under extreme current.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -939,7 +939,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material can be used as an N-type dopant for a semiconductor.
+      value: The material can be used as an N-type dopant for a semiconductor.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -1092,7 +1092,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material breaks down at extreme temperatures, both high and low.
+      value: The material breaks down at extreme temperatures, both high and low.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -1201,7 +1201,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material glows when conducting electricity.
+      value: The material glows when conducting electricity.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -1362,14 +1362,17 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2138864320608372146, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7142085386566727890}
   m_SourcePrefab: {fileID: 100100000, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
 --- !u!114 &245671032503790109 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7418379933904667958, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
   m_PrefabInstance: {fileID: 7321636652902510379}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8661944331682540185}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b70b6d236b1d6ef478f6509a6463e6e6, type: 3}
@@ -1380,6 +1383,23 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1576883626119154141, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
   m_PrefabInstance: {fileID: 7321636652902510379}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8661944331682540185 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2138864320608372146, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
+  m_PrefabInstance: {fileID: 7321636652902510379}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &7142085386566727890
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8661944331682540185}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &7732983133713439572
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1462,7 +1482,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material does not conduct electricity.
+      value: The material does not conduct electricity.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -1587,7 +1607,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material does not break down in extremely high temperatures.
+      value: The material does not break down in extremely high temperatures.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -1692,7 +1712,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: This material conducts electricity particuarly well.
+      value: The material conducts electricity particuarly well.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -2181,11 +2201,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: 'This material is not known as a dopant for any other materials.
-
-
-        <i>(A
-        "Nopant", perhaps?)</i>'
+      value: The material is not known as a dopant for any other materials.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader

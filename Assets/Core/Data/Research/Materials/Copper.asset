@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Copper
   m_EditorClassIdentifier: 
   DisplayName: Copper
-  UnknownDisplayName: Sample 3
+  UnknownDisplayName: Sample 11
   Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
   ChemicalSymbol: Cu
-  SampleNumber: 3
+  SampleNumber: 11
   Atoms:
   - Size: 145
     ValenceElectrons: 1

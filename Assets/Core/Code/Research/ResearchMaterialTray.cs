@@ -1,9 +1,11 @@
+using BeauRoutine;
 using BeauUtil;
 using FieldDay;
 using FieldDay.Components;
 using FieldDay.Rendering;
 using FieldDay.SharedState;
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -31,7 +33,8 @@ namespace SpaceFab.Research {
                 }
             });
 
-            SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated);
+            SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated)
+                .Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_GoalHintRequested, OnGoalHintRequested);
         }
 
         private void OnKnowledgeUpdated(ResearchMaterialKnowledgePair pair) {
@@ -45,6 +48,21 @@ namespace SpaceFab.Research {
                     }
                 }
             }
+        }
+
+        private void OnGoalHintRequested(ResearchMaterialKnowledgePair pair) {
+            ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
+            ResearchMaterialItem item = ResearchMaterialUtility.FindTrayItemForMaterial(material);
+            if (item != null) {
+                item.FlashRoutine.Replace(item, ItemFlashRoutine(item));
+            }
+        }
+
+        static private IEnumerator ItemFlashRoutine(ResearchMaterialItem item) {
+            item.Flash.SetAlpha(0);
+            item.Flash.Visible = true;
+            yield return Tween.ZeroToOne(item.Flash.SetAlpha, 0.12f).YoyoLoop(2);
+            item.Flash.Visible = false;
         }
     }
 

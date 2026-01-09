@@ -1,6 +1,7 @@
 using BeauPools;
 using BeauRoutine;
 using BeauRoutine.Extensions;
+using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay;
 using FieldDay.Audio;
@@ -16,15 +17,18 @@ namespace SpaceFab.Research {
         public ResearchMaterialRig Renderer;
         public Collider2D Clickable;
         public CursorHint Hint;
+        public ColorGroup Flash;
 
         [NonSerialized] public ResearchMaterial Material;
         [NonSerialized] public ResearchSlot CurrentSlot;
 
         public Routine ExplosionRoutine;
+        public Routine FlashRoutine;
 
         protected override void OnDisable() {
             base.OnDisable();
             ExplosionRoutine.Stop();
+            FlashRoutine.Stop();
         }
     }
 

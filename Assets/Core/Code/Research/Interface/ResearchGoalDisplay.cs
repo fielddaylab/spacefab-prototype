@@ -9,6 +9,7 @@ using FieldDay.Components;
 using FieldDay.HID;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
+using FieldDay.UI;
 using FieldDay.UI.Animation;
 using SpaceFab.Research;
 using System;
@@ -43,21 +44,47 @@ namespace SpaceFab.Research {
                     ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(objective.MaterialId);
                     psb.Builder.Append("Identify the");
                     int bitCount = Bits.Count(objective.Knowledge);
+                    int remainingCount = bitCount;
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Electrical) != 0) {
                         psb.Builder.Append(" <sprite name=\"ElectricalPropertyIcon\"><b>Electrical</b>,");
+                        remainingCount--;
                     }
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
+                        if (bitCount > 1 && remainingCount == 1) {
+                            if (bitCount == 2) {
+                                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
+                            }
+                            psb.Builder.Append(" and");
+                        }
                         psb.Builder.Append(" <sprite name=\"ThermalPropertyIcon\"><b>Thermal</b>,");
+                        remainingCount--;
                     }
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Dopant) != 0) {
+                        if (bitCount > 1 && remainingCount == 1) {
+                            if (bitCount == 2) {
+                                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
+                            }
+                            psb.Builder.Append(" and");
+                        }
                         psb.Builder.Append(" <sprite name=\"DopantPropertyIcon\"><b>Dopant</b>,");
+                        remainingCount--;
                     }
                     if ((objective.Knowledge & ResearchMaterialKnowledge.Special) != 0) {
+                        if (bitCount > 1 && remainingCount == 1) {
+                            if (bitCount == 2) {
+                                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
+                            }
+                            psb.Builder.Append(" and");
+                        }
                         psb.Builder.Append(" <sprite name=\"SpecialPropertyIcon\"><b>Special</b>,");
+                        remainingCount--;
                     }
                     psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
                     psb.Builder.Append(" properties of <b>").Append(material.UnknownDisplayName).Append("<b>");
                     row.Text.SetText(psb.Builder);
+                    row.Goal = objective;
+                    row.Hint.UserData = row;
+                    row.Hint.onClick.Register(OnGoalHintClicked);
                     row.gameObject.SetActive(true);
                 }
             }
@@ -98,6 +125,7 @@ namespace SpaceFab.Research {
 
                     Rows[i].Checkbox.SetAlpha(0.5f);
                     Rows[i].CrossOff.enabled = true;
+                    Rows[i].Hint.gameObject.SetActive(false);
                     FlashAnim.Play(Rows[i].Flash, Color.white, FlashAnim.Default);
                 }
             }
@@ -114,6 +142,11 @@ namespace SpaceFab.Research {
             }
             Game.Scenes.QueueOnEnable(this, OnLateEnable);
             return null;
+        }
+
+        private void OnGoalHintClicked(CursorHint.EventData evtData) {
+            ResearchGoalRow row = (ResearchGoalRow)evtData.Source.UserData;
+            SpaceFabGame.Events.Dispatch(ResearchMaterialUtility.Event_GoalHintRequested, EvtArgs.Create(row.Goal));
         }
     }
 }

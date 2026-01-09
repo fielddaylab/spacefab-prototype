@@ -1,3 +1,4 @@
+using BeauRoutine;
 using FieldDay;
 using FieldDay.Components;
 using FieldDay.HID;
@@ -65,7 +66,7 @@ namespace SpaceFab.Research {
             }
 
             if (cursorOnWorld && m_State.CurrentlyDragging) {
-                m_State.DragRenderer.transform.position = worldPos;
+                m_State.DragRenderer.transform.SetPosition(worldPos, Axis.XY, Space.World);
             }
         }
 

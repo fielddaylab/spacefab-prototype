@@ -30,7 +30,7 @@ MonoBehaviour:
   Electrical: 2
   Thermal: 0
   SpecialTags: 0
-  DopantType: 1
+  DopantType: 2
   ConductionMultiplier: 1
   DopantN:
     m_HashValue: 0

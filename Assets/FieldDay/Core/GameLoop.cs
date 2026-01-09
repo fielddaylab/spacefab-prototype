@@ -379,6 +379,9 @@ namespace FieldDay {
                 SetCurrentPhase(GameLoopPhase.Booted);
 
                 foreach(var pack in m_GlobalAssetPacks) {
+#if UNITY_EDITOR
+                    AssetPack.ReadFromEditorDirectory(pack);
+#endif // UNITY_EDITOR
                     Game.Assets.LoadPackage(pack);
                 }
 

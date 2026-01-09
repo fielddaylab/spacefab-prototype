@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Label: 
   AvailableTools: 7
-  AvailableProperties: -1
+  AvailableProperties: 4294967295
   AvailableMaterials:
   - m_HashValue: 3821421172
   - m_HashValue: 3383598718
@@ -38,9 +38,9 @@ MonoBehaviour:
   Objectives:
   - MaterialId:
       m_HashValue: 3774176290
-    Knowledge: 15
+    Knowledge: 5
   - MaterialId:
       m_HashValue: 3317014541
-    Knowledge: 15
+    Knowledge: 8
   NextLevelId:
     m_HashValue: 0

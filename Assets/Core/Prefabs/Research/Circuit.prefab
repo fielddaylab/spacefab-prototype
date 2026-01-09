@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 7229688764187934744}
   - component: {fileID: 770656089804736619}
   - component: {fileID: 7911795975470241878}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Lightbulb
   m_TagString: Untagged
   m_Icon: {fileID: 0}

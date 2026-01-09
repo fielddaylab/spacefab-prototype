@@ -92,6 +92,11 @@ namespace FieldDay.UI {
             onPointerExit.AddListener(OnExit);
         }
 
+        protected override void OnDestroy() {
+            OnHover.Clear();
+            base.OnDestroy();
+        }
+
         protected override void OnDisable() {
             if (ReferenceEquals(this, s_Pointer)) {
                 s_Pointer = null;

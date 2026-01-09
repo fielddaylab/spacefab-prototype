@@ -2,6 +2,7 @@ using BeauPools;
 using BeauUtil;
 using FieldDay;
 using FieldDay.Components;
+using FieldDay.UI;
 using System;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace SpaceFab.Research {
         public Transform Root;
         public GameObject EmptyContents;
         public bool AllowSwap;
+        public CursorHint Hint;
         public ParticleSystem HoverVfx;
 
         [NonSerialized] public bool Locked;
@@ -25,6 +27,7 @@ namespace SpaceFab.Research {
                 if (slot.Item) {
                     Pool.TryFree(slot.Item);
                     slot.Item = null;
+                    slot.Hint.enabled = true;
                     slot.OnSlotUpdated.Invoke(slot, null);
                     if (slot.EmptyContents) {
                         slot.EmptyContents.SetActive(true);
@@ -43,20 +46,8 @@ namespace SpaceFab.Research {
                 slot.Item.Material = material;
                 slot.Item.Hint.TooltipHeader = ResearchMaterialUtility.IsNameKnown(material.AssetId) ? material.DisplayName : material.UnknownDisplayName;
 
+                slot.Hint.enabled = false;
                 slot.OnSlotUpdated.Invoke(slot, slot.Item);
-            }
-        }
-
-        static public bool TryRemoveFromSlot(ResearchSlot slot, out ResearchMaterial material) {
-            if (slot.Item) {
-                material = slot.Item.Material;
-                Pool.TryFree(slot.Item);
-                slot.Item = null;
-                slot.OnSlotUpdated.Invoke(slot, null);
-                return true;
-            } else {
-                material = null;
-                return false;
             }
         }
     }

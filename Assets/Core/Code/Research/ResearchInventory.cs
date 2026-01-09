@@ -20,7 +20,7 @@ namespace SpaceFab.Research {
     }
 
     [Flags]
-    public enum ResearchMaterialKnowledge {
+    public enum ResearchMaterialKnowledge : uint {
         Electrical = 0x01,
         Thermal = 0x02,
         Special = 0x04,
@@ -35,6 +35,7 @@ namespace SpaceFab.Research {
 
     static public partial class ResearchMaterialUtility {
         static public readonly StringHash32 Event_KnowledgeUpdated = "Research::MaterialKnowledgeUpdated";
+        static public readonly StringHash32 Event_GoalHintRequested = "Research::GoalHintRequested";
 
         static public StringHash32 GetRootMaterial(StringHash32 materialId) {
             ResearchMaterial mat = Find.NamedAsset<ResearchMaterial>(materialId);

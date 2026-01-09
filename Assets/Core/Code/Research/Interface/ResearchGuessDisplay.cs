@@ -1,11 +1,15 @@
 using BeauUtil;
 using FieldDay;
+using FieldDay.Scenes;
 using FieldDay.UI;
 using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.Research {
-    public sealed class ResearchGuessDisplay : MonoBehaviour {
+    [PreloadOrder(150)]
+    public sealed class ResearchGuessDisplay : MonoBehaviour, IScenePreload {
         public ResearchGuessGroup ElectricalGroup;
         public ResearchGuessGroup ThermalGroup;
         public ResearchGuessGroup DopantGroup;
@@ -114,6 +118,21 @@ namespace SpaceFab.Research {
             var guess = ResearchMaterialUtility.GetGuess(MaterialId);
             ResearchGuessGroup.PopulateSpecialGuess(ref guess, list);
             ResearchMaterialUtility.SetGuess(MaterialId, guess);
+        }
+
+        IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
+            ResearchToolsMask unlocks = Find.State<ResearchToolState>().CurrentUnlocks;
+            if ((unlocks & ResearchToolsMask.Thermal) == 0) {
+                ResearchGuessButtonWidget semiButton = ElectricalGroup.Buttons[1];
+                CanvasGroup group = semiButton.EnsureComponent<CanvasGroup>();
+                group.alpha = 0.25f;
+                group.blocksRaycasts = false;
+                semiButton.GetComponentInChildren<TMP_Text>().SetText("???");
+
+                ResearchGuessButtonWidget condButton = ElectricalGroup.Buttons[0];
+                condButton.Collider.GetComponent<CursorHint>().Tooltip = "The material conducts electricity.";
+            }
+            return null;
         }
     }
 }
