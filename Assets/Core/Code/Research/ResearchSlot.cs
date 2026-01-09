@@ -46,7 +46,7 @@ namespace SpaceFab.Research {
                 slot.Item.Material = material;
                 slot.Item.Hint.TooltipHeader = ResearchMaterialUtility.IsNameKnown(material.AssetId) ? material.DisplayName : material.UnknownDisplayName;
 
-                slot.Hint.enabled = false;
+                //slot.Hint.enabled = false;
                 slot.OnSlotUpdated.Invoke(slot, slot.Item);
             }
         }

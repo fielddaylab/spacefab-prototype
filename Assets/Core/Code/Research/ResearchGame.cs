@@ -36,7 +36,11 @@ namespace SpaceFab.Research {
                 Unlocks = CurrentLevel.AvailableTools;
 
                 foreach(var prepopulate in CurrentLevel.PrePopulate) {
-                    inventory.MaterialKnowledge.Add(prepopulate.MaterialId, prepopulate.Knowledge);
+                    ResearchMaterialKnowledge knowledge = prepopulate.Knowledge;
+                    if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
+                        knowledge |= ResearchMaterialKnowledge.Name;
+                    }
+                    inventory.MaterialKnowledge.Add(prepopulate.MaterialId, knowledge);
                 }
             }
 

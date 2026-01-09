@@ -41,7 +41,6 @@ namespace SpaceFab.Research {
         public Color32 IncorrectValencePipColor;
         public Color32 CorrectNTypeValencePipColor;
         public Color32 CorrectPTypeValencePipColor;
-        public Color32 ExcessValencePipColor;
 
         [NonSerialized] private ResearchTool m_Tool;
         [NonSerialized] private int m_DopingIndex;
@@ -85,6 +84,8 @@ namespace SpaceFab.Research {
                 m_Tool.Slots[1].Locked = true;
                 GuiCommands.SetActive(m_Tool.Slots[1].gameObject, false);
                 GuiCommands.SetActive(SemiconductorWarning, hasMaterial);
+                LeftSelector.Cursor.gameObject.SetActive(false);
+                RightSelector.Cursor.gameObject.SetActive(false);
                 ClearAtomicView();
                 Background.color = BackgroundDisabledColor;
                 m_DopingIndex = 0;
@@ -182,7 +183,7 @@ namespace SpaceFab.Research {
         private void UpdateValencePips(int targetValence, int currentValence) {
             Color32 currentColor = IncorrectValencePipColor;
             Color32 defaultColor = BlankValencePipColor;
-            Color32 excessColor = ExcessValencePipColor;
+            Color32 excessColor = default(Color32);
             if (currentValence == targetValence + 1) {
                 currentColor = CorrectNTypeValencePipColor;
             } else if (currentValence == targetValence - 1) {
@@ -190,7 +191,7 @@ namespace SpaceFab.Research {
             }
 
             for(int i = 0; i < ValencePips.Length; i++) {
-                ValencePips[i].color = (i < currentValence) ? currentColor : ((i < (targetValence + 1)) ? defaultColor : excessColor);
+                ValencePips[i].color = (i < currentValence) ? currentColor : ((i < (targetValence)) ? defaultColor : excessColor);
             }
         }
 

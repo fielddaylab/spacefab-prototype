@@ -620,7 +620,7 @@ Transform:
   m_GameObject: {fileID: 206279608}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.35, y: 0, z: 0}
+  m_LocalPosition: {x: 1.88, y: 1.81, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -801,13 +801,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 811371644634132491, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 06cc3534f40a7324ebd4b9579a2a747d, type: 2}
     - target: {fileID: 1092320057855451943, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438942495391680282, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: Tooltip
-      value: Place a material into this slot to see if the material is a valid <b>Dopant</b>
+      value: Place a material into this slot to see if it is a valid <sprite name="DopantPropertyIcon"><b>Dopant</b>
         for the <b>Semiconductor</b>.
       objectReference: {fileID: 0}
     - target: {fileID: 5438942495391680282, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
@@ -820,6 +824,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6947052114439633309, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383210359297941833, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383210359297941833, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383210359297941833, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8106881169534903343, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
@@ -2243,6 +2259,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5438942495391680282, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: Tooltip
+      value: Place a material into this slot to test its <sprite name="ThermalPropertyIcon"><b>Thermal
+        Properties</b>.
+      objectReference: {fileID: 0}
     - target: {fileID: 6947052114439633309, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -2820,7 +2841,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &586166260
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3224,7 +3245,7 @@ Transform:
   m_GameObject: {fileID: 640234894}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.41, y: 0, z: 0}
+  m_LocalPosition: {x: -1.91, y: 1.59, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3925,7 +3946,7 @@ Transform:
   m_GameObject: {fileID: 730729424}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.04, y: 0, z: 0}
+  m_LocalPosition: {x: 0.01, y: 1.87, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4125,8 +4146,8 @@ MonoBehaviour:
 
     semiconductor'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6b43b5f7de2d445468e93e56ef390c75, type: 2}
-  m_sharedMaterial: {fileID: -3085720824566351440, guid: 6b43b5f7de2d445468e93e56ef390c75, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8ef899a3d9817224797bf6f01f14ec7a, type: 2}
+  m_sharedMaterial: {fileID: -5462160455972917339, guid: 8ef899a3d9817224797bf6f01f14ec7a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4215,7 +4236,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3085720824566351440, guid: 6b43b5f7de2d445468e93e56ef390c75, type: 2}
+  - {fileID: -5462160455972917339, guid: 8ef899a3d9817224797bf6f01f14ec7a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4506,19 +4527,16 @@ MonoBehaviour:
   ValencePlusOne: {fileID: 1654549632}
   BlankValencePipColor:
     serializedVersion: 2
-    rgba: 4291940817
+    rgba: 4278190080
   IncorrectValencePipColor:
     serializedVersion: 2
-    rgba: 4289060863
+    rgba: 4291449343
   CorrectNTypeValencePipColor:
     serializedVersion: 2
     rgba: 4294932992
   CorrectPTypeValencePipColor:
     serializedVersion: 2
     rgba: 4283518910
-  ExcessValencePipColor:
-    serializedVersion: 2
-    rgba: 4279900698
 --- !u!1 &802595689
 GameObject:
   m_ObjectHideFlags: 0
@@ -4544,7 +4562,7 @@ Transform:
   m_GameObject: {fileID: 802595689}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.65, z: 0}
+  m_LocalPosition: {x: 0.18, y: 1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4883,7 +4901,7 @@ Transform:
   m_GameObject: {fileID: 865345081}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.71, y: 0, z: 0}
+  m_LocalPosition: {x: 1.84, y: -1.84, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5218,7 +5236,7 @@ Transform:
   m_GameObject: {fileID: 903840420}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.72, y: 0, z: 0}
+  m_LocalPosition: {x: 2.1, y: -0.03, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5476,7 +5494,7 @@ Transform:
   m_GameObject: {fileID: 974906475}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.89, y: 0, z: 0}
+  m_LocalPosition: {x: 0.07, y: -1.79, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7330,7 +7348,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1533501497}
   - component: {fileID: 1533501498}
-  m_Layer: 0
+  - component: {fileID: 1533501500}
+  - component: {fileID: 1533501499}
+  m_Layer: 5
   m_Name: ThermalCoil
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7404,6 +7424,73 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1533501499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533501496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 0
+  CursorType:
+    m_HashValue: 2354262440
+  Flags: 0
+  TooltipHeader: thermal coil
+  Tooltip: 'Heats/cools the material in the slot.
+
+    Some materials may break down
+    at extreme temperatues.'
+--- !u!61 &1533501500
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533501496}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.029999971, y: -0.99}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.48235294, y: 3.1052632}
+    oldSize: {x: 1.7, y: 0.38}
+    newSize: {x: 2.44, y: 2.38}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.7, y: 0.38000005}
+  m_EdgeRadius: 0
 --- !u!1 &1545222076
 GameObject:
   m_ObjectHideFlags: 0
@@ -8465,7 +8552,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1654549631
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9307,7 +9394,7 @@ Transform:
   m_GameObject: {fileID: 1788706003}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.7, y: 0, z: 0}
+  m_LocalPosition: {x: -1.84, y: -0.17, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9659,6 +9746,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5438942495391680282, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
+      propertyPath: Tooltip
+      value: Place a material into this slot to test its <sprite name="ElectricalPropertyIcon"><b>Electrical
+        Properties</b>.
+      objectReference: {fileID: 0}
     - target: {fileID: 6947052114439633309, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: m_Name
       value: Slot
@@ -9887,8 +9979,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5438942495391680282, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: Tooltip
-      value: Place a <b>known semiconductor</b> into this slot to activate the <b>Doping
-        Chamber</b>.
+      value: Place a <b>Known Semiconductor</b> into this slot to begin the <sprite
+        name="DopantPropertyIcon"><b>doping</b> process.
       objectReference: {fileID: 0}
     - target: {fileID: 5438942495391680282, guid: 57cdb4faa0dd69d419986eec568f077b, type: 3}
       propertyPath: TooltipHeader
@@ -11180,7 +11272,7 @@ Transform:
   m_GameObject: {fileID: 2129935673}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.45, y: 0, z: 0}
+  m_LocalPosition: {x: -1.9, y: -1.92, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12570,7 +12662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 329034755431953033, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 12.222222
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 428892204456192597, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12734,7 +12826,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1692947247395112802, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 40
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 1734441253073199303, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12758,7 +12850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1845675204720465371, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 19.166666
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 2092329319899078954, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12802,7 +12894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2354018419555191455, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 19.166666
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 2391967441011417138, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13090,7 +13182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5118397759044464031, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 19.166666
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 5199942256558486732, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13178,7 +13270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6249028286576054199, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 12.222222
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 6440680788242344208, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13206,7 +13298,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6486840602311477965, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 12.222222
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 6586144217416307217, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
@@ -13510,7 +13602,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9096764589848949467, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_UVRect.width
-      value: 19.166666
+      value: -1.3333334
       objectReference: {fileID: 0}
     - target: {fileID: 9138113809948689237, guid: d224f2d980d653840bc998fe5bc4b438, type: 3}
       propertyPath: m_AnchorMax.y
