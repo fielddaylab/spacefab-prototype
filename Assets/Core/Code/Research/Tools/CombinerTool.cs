@@ -41,6 +41,7 @@ namespace SpaceFab.Research {
         public Color32 IncorrectValencePipColor;
         public Color32 CorrectNTypeValencePipColor;
         public Color32 CorrectPTypeValencePipColor;
+        public TMP_Text FeedbackText;
 
         [NonSerialized] private ResearchTool m_Tool;
         [NonSerialized] private int m_DopingIndex;
@@ -60,6 +61,7 @@ namespace SpaceFab.Research {
             SetSelectedAtomVisuals(m_DopingIndex);
             DisplayAtomicView(m_Tool.Slots[0].Item.Material.Atoms, m_DopingIndex);
             UpdateValencePips(m_Tool.Slots[0].Item.Material.Atoms[0].ValenceElectrons, 0);
+            HideFeedback();
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
         }
 
@@ -68,10 +70,13 @@ namespace SpaceFab.Research {
             SetSelectedAtomVisuals(m_DopingIndex);
             DisplayAtomicView(m_Tool.Slots[0].Item.Material.Atoms, m_DopingIndex);
             UpdateValencePips(m_Tool.Slots[0].Item.Material.Atoms[1].ValenceElectrons, 0);
+            HideFeedback();
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
         }
 
         private void OnFirstSlotUpdated(ResearchSlot _, ResearchMaterialItem item) {
+            HideFeedback();
+
             bool hasMaterial = item != null;
             bool validMaterial = hasMaterial;
             if (validMaterial) {
@@ -140,14 +145,31 @@ namespace SpaceFab.Research {
             AtomicStructure dopantAtom = dopant.Atoms[0];
 
             if (targetMaterial.DopantN == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons + 1) {
-                // set correct
+                ShowFeedback("N-Type Dopant", CorrectNTypeValencePipColor);
+                if (ResearchMaterialUtility.AddKnowledgeFlag(targetMaterial.AssetId, ResearchMaterialKnowledge.DopantMaterialN)) {
+                    Sfx.Play("Research.Row.Correct");
+                }
             } else if (targetMaterial.DopantP == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons - 1) {
-                // set correct
-            } else if (dopant.Atoms.Length > 1 || dopantAtom.Size > targetAtom.Size) {
+                ShowFeedback("P-Type Dopant", CorrectPTypeValencePipColor);
+                if (ResearchMaterialUtility.AddKnowledgeFlag(targetMaterial.AssetId, ResearchMaterialKnowledge.DopantMaterialP)) {
+                    Sfx.Play("Research.Row.Correct");
+                }
+            } else if (dopant.Atoms.Length > 1) {
+                ShowFeedback("Not Atomic", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.TooBig);
-            } else if (dopantAtom.ValenceElectrons < targetAtom.ValenceElectrons - 1 || dopantAtom.ValenceElectrons > targetAtom.ValenceElectrons + 1) {
+            } else if (dopantAtom.Size > targetAtom.Size) {
+                ShowFeedback("Atomic Size Too Big", IncorrectValencePipColor);
+                ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.TooBig);
+            } else if (dopantAtom.ValenceElectrons < targetAtom.ValenceElectrons - 1) {
+                ShowFeedback("Too Few Electrons", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.InvalidCombo);
+            } else if (dopantAtom.ValenceElectrons > targetAtom.ValenceElectrons + 1) {
+                ShowFeedback("Too Many Electrons", IncorrectValencePipColor);
+                ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.InvalidCombo);
+            } else if (targetMaterial == dopant) {
+                ShowFeedback("Identical Material", IncorrectValencePipColor);
             } else {
+                ShowFeedback("Unknown Error", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.InvalidCombo);
             }
 
@@ -162,11 +184,21 @@ namespace SpaceFab.Research {
             ValenceGroup.SetActive(false);
         }
 
+        private void HideFeedback() {
+            FeedbackText.enabled = false;
+        }
+
+        private void ShowFeedback(string text, Color color) {
+            FeedbackText.enabled = true;
+            FeedbackText.SetText(text);
+            FeedbackText.color = color;
+        }
+
         private void DisplayAtomicView(AtomicStructure[] atoms, int offset) {
             ResearchSprites sprites = Find.GlobalAsset<ResearchSprites>();
 
             for (int i = 0; i < AtomSlots.Length; i++) {
-                AtomicStructure atomData = atoms[(offset + i) % atoms.Length];
+                AtomicStructure atomData = atoms[(offset + i + 1) % atoms.Length];
                 SpriteRenderer renderer = AtomSlots[i];
                 renderer.sprite = sprites.AtomIcons[(int) atomData.Appearance];
                 renderer.transform.SetScale(atomData.Size / AtomSizeScale);
@@ -176,8 +208,8 @@ namespace SpaceFab.Research {
 
             ValenceGroup.SetActive(true);
             int targetValence = atoms[offset].ValenceElectrons;
-            ValenceMinusOne.transform.localPosition = ValencePips[targetValence - 1 - 1].transform.localPosition;
-            ValencePlusOne.transform.localPosition = ValencePips[targetValence - 1 + 1].transform.localPosition;
+            //ValenceMinusOne.transform.localPosition = ValencePips[targetValence - 1 - 1].transform.localPosition;
+            //ValencePlusOne.transform.localPosition = ValencePips[targetValence - 1 + 1].transform.localPosition;
         }
 
         private void UpdateValencePips(int targetValence, int currentValence) {

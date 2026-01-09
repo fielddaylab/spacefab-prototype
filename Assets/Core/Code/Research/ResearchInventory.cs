@@ -75,6 +75,31 @@ namespace SpaceFab.Research {
             Find.State<ResearchInventory>().MaterialGuesses[materialId] = guess;
         }
 
+        static public bool AddKnowledgeFlag(StringHash32 materialId, ResearchMaterialKnowledge knowledge) {
+            ResearchInventory inv = Find.State<ResearchInventory>();
+            inv.MaterialKnowledge.TryGetValue(materialId, out var alreadyKnown);
+            if ((alreadyKnown & knowledge) == knowledge) {
+                return false;
+            }
+
+            knowledge |= alreadyKnown;
+
+            if ((knowledge & ResearchMaterialKnowledge.Name) == 0) {
+                if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
+                    knowledge |= ResearchMaterialKnowledge.Name;
+                }
+            }
+
+            inv.MaterialKnowledge[materialId] = knowledge;
+
+            ResearchMaterialKnowledgePair pair = new ResearchMaterialKnowledgePair() {
+                MaterialId = materialId,
+                Knowledge = knowledge
+            };
+            SpaceFabGame.Events.Queue(Event_KnowledgeUpdated, EvtArgs.Create(pair));
+            return true;
+        }
+
         static public ResearchMaterialGuessResult ProcessGuess(StringHash32 materialId) {
             ResearchInventory inv = Find.State<ResearchInventory>();
             ResearchMaterial mat = Find.NamedAsset<ResearchMaterial>(materialId);

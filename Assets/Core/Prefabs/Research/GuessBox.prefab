@@ -73,7 +73,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6686790144833821856
 RectTransform:
   m_ObjectHideFlags: 0
@@ -459,7 +459,8 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: The material can be used as a P-type dopant for a semiconductor.
+      value: The material can be used as a P-type dopant for a semiconductor. P-type
+        dopants have one fewer valence electron than the doped material.</i>
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -830,7 +831,7 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: The material does not break down under extreme current.
+      value: The material does not break down under extremely strong current.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -939,7 +940,8 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: The material can be used as an N-type dopant for a semiconductor.
+      value: The material can be used as an N-type dopant for a semiconductor. N-type
+        dopants have one more valence electron than the doped material.</i>
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -1318,10 +1320,8 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: 'The material conducts electricity.
-
-        Output voltage increases
-        as temperature increases.'
+      value: The material conducts electricity. Output voltage increases as temperature
+        increases.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader
@@ -2049,10 +2049,8 @@ PrefabInstance:
       objectReference: {fileID: 8363627074042727519, guid: bea029e1c124b97488eaec752dae9fcd, type: 2}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: Tooltip
-      value: 'The material conducts electricity.
-
-        Output voltage decreases
-        as temperature increases.'
+      value: The material conducts electricity. Output voltage decreases as temperature
+        increases.
       objectReference: {fileID: 0}
     - target: {fileID: 5713013502762620531, guid: 69096e7805e36074887f16dc90cca6f5, type: 3}
       propertyPath: TooltipHeader

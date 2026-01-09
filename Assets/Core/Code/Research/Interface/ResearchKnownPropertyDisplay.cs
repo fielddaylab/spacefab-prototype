@@ -26,6 +26,8 @@ namespace SpaceFab.Research {
         public ResearchKnownPropertyRow DopantProperty;
         public ResearchKnownPropertyRow ThermalProperty;
         public ResearchKnownPropertyRow SpecialProperty;
+        public GameObject NTypeGroup;
+        public GameObject PTypeGroup;
         public RectTransform RowHighlight;
         public PointerListener SubmitButton;
         public ActiveGroup SubmitInProgress;
@@ -73,6 +75,11 @@ namespace SpaceFab.Research {
             });
 
             SubmitButton.onClick.Register(() => Routine.Start(this, OnClickSubmit()).TryManuallyUpdate(0));
+            SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated);
+        }
+
+        private void OnDestroy() {
+            Game.Events?.DeregisterAllForContext(this);
         }
 
         private IEnumerator OnClickSubmit() {
@@ -125,6 +132,15 @@ namespace SpaceFab.Research {
             DisplayCurrent(Find.State<ResearchSelectionState>().Current);
         }
 
+        private void OnKnowledgeUpdated(ResearchMaterialKnowledgePair pair) {
+            if (pair.MaterialId != RootId) {
+                return;
+            }
+
+            NTypeGroup.SetActive((pair.Knowledge & ResearchMaterialKnowledge.DopantMaterialN) != 0);
+            PTypeGroup.SetActive((pair.Knowledge & ResearchMaterialKnowledge.DopantMaterialP) != 0);
+        }
+
         private void DisplayNull() {
             RootId = default;
             MaterialTitle.SetText("???");
@@ -143,6 +159,9 @@ namespace SpaceFab.Research {
             SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = false;
             RowHighlight.gameObject.SetActive(false);
             SubmitButton.gameObject.SetActive(false);
+
+            NTypeGroup.SetActive(false);
+            PTypeGroup.SetActive(false);
         }
 
         private void DisplayCurrent(ResearchMaterial material) {
@@ -164,6 +183,9 @@ namespace SpaceFab.Research {
             DopantProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Dopant) == 0;
             ThermalProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Thermal) == 0;
             SpecialProperty.Click.GetComponent<Graphic>().raycastTarget = (knowledge & ResearchMaterialKnowledge.Special) == 0;
+
+            NTypeGroup.SetActive((knowledge & ResearchMaterialKnowledge.DopantMaterialN) != 0);
+            PTypeGroup.SetActive((knowledge & ResearchMaterialKnowledge.DopantMaterialP) != 0);
 
             ElectricProperty.PrepareWrite();
             if ((knowledge & ResearchMaterialKnowledge.Electrical) != 0) {

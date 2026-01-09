@@ -876,7 +876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SerializedLayoutComponent: {fileID: 8603940064069857157}
-  m_MaxWidth: 300
+  m_MaxWidth: 350
   m_MaxHeight: -1
 --- !u!1 &7598986032514851014
 GameObject:
@@ -1146,8 +1146,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Position: {fileID: 937516731490298908}
   m_BoxGroup: {fileID: 196804748358964613}
-  m_CursorOffset: 16
-  m_ScreenEdgeOffset: 16
+  m_CursorOffset: 32
+  m_ScreenEdgeOffset: 24
   m_Layout: {fileID: 8603940064069857157}
   m_Text: {fileID: 6816343571046421434}
   m_Header: {fileID: 6142620227551027164}

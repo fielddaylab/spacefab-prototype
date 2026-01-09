@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2070c5171818f8047ae80c3d3cef05f0
+guid: 3bc02329295d566408f609364347514c
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -74,10 +74,10 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 1
-    defaultPivotAlignment: 0
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 2
     customPivotPosition: {x: 0.5, y: 0.5}
-    mosaicPadding: 2
+    mosaicPadding: 4
     spritePadding: 0
     generateModelPrefab: 0
     generateAnimationClips: 0
@@ -87,17 +87,17 @@ ScriptedImporter:
     fileImportMode: 1
     importHiddenLayers: 0
     layerImportMode: 1
-    defaultPivotSpace: 1
-    defaultPivotAlignment: 0
+    defaultPivotSpace: 0
+    defaultPivotAlignment: 2
     customPivotPosition: {x: 0.5, y: 0.5}
-    mosaicPadding: 2
+    mosaicPadding: 4
     spritePadding: 0
     generateModelPrefab: 0
     generateAnimationClips: 0
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638992367269451186
+  platformSettingsDirtyTick: 639035696143176536
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,18 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ThermalToolIcon
+  - name: Banner
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
+    pivot: {x: 0.4915254, y: 1}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 2
-      y: 2
-      width: 249
-      height: 59
-    spriteID: fc0da83cdbda1474b9363162f696271e
+      x: 4
+      y: 4
+      width: 59
+      height: 96
+    spriteID: dbab95bb066ea5944ae835d82f7ca72a
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -140,25 +140,83 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 2, y: 2}
+    uvTransform: {x: 4, y: 4}
+  - name: Banner_N
+    originalName: 
+    pivot: {x: 0.4915254, y: 1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 71
+      y: 4
+      width: 59
+      height: 96
+    spriteID: 82f3b71046cb0cf4b96c675d6c3c8157
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 71, y: 4}
+  - name: Banner_P
+    originalName: 
+    pivot: {x: 0.4915254, y: 1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 138
+      y: 4
+      width: 59
+      height: 96
+    spriteID: e786f4c4dd8770d46ab619cfbaff823e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 138, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 897197418
-    name: ThermalToolIcon
+    guid: -22229036
+    name: Banner
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: ThermalToolIcon
+    - name: Frame_0
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 5
-        y: 2
-        width: 249
-        height: 59
-      spriteId: fc0da83cdbda1474b9363162f696271e
+        x: 3
+        y: 0
+        width: 59
+        height: 96
+      spriteId: dbab95bb066ea5944ae835d82f7ca72a
+    - name: Frame_1
+      frameIndex: 1
+      additiveSortOrder: 0
+      cellRect:
+        x: 3
+        y: 0
+        width: 59
+        height: 96
+      spriteId: 82f3b71046cb0cf4b96c675d6c3c8157
+    - name: Frame_2
+      frameIndex: 2
+      additiveSortOrder: 0
+      cellRect:
+        x: 3
+        y: 0
+        width: 59
+        height: 96
+      spriteId: e786f4c4dd8770d46ab619cfbaff823e
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -213,4 +271,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 256, y: 64}
+  canvasSize: {x: 64, y: 96}

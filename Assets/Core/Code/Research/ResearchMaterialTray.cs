@@ -78,7 +78,7 @@ namespace SpaceFab.Research {
             
             ResearchMaterialItem item = pools.Items.Alloc(tray.Root);
             ApplyPropertiesToRig(item.Renderer, material);
-            item.Hint.TooltipHeader = material.UnknownDisplayName;
+            item.Hint.TooltipHeader = IsNameKnown(material.AssetId) ? material.DisplayName : material.UnknownDisplayName;
             item.Material = material;
             item.CurrentSlot = null;
 
