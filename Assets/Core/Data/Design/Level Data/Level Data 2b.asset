@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level Data 2b
   m_EditorClassIdentifier: 
   m_title: '2B: Diode Example 2'
-  m_allowedPlaceables: 0a00000005000000060000000b000000
+  m_allowedPlaceables: 
   m_gridConfig: {fileID: 11400000, guid: 4620bdd2e600883419ae7db417b55bb7, type: 2}
   m_testSuite: {fileID: 11400000, guid: 6325af2d20cfb734ab2ccd56c16d970e, type: 2}

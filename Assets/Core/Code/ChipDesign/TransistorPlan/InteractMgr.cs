@@ -565,7 +565,7 @@ namespace SpaceFab.ChipDesign
 
         private void DrawVia(ref GridCell cell, Vector2Int gridPos)
         {
-            if (cell.CellType == CellType.Input || cell.CellType == CellType.Output) { return; }
+            if (cell.CellType == CellType.Input || cell.CellType == CellType.Output || !cell.TransferEraseable) { return; }
 
             GridInteractionLayer linkedLayerType = ActiveLayer == GridInteractionLayer.Metal ? GridInteractionLayer.Transistor : GridInteractionLayer.Metal;
             var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
@@ -584,7 +584,7 @@ namespace SpaceFab.ChipDesign
 
         private void DrawGate(ref GridCell cell, Vector2Int gridPos)
         {
-            if (cell.CellType == CellType.Input || cell.CellType == CellType.Output) { return; }
+            if (cell.CellType == CellType.Input || cell.CellType == CellType.Output || !cell.TransferEraseable) { return; }
 
             GridInteractionLayer linkedLayerType = ActiveLayer == GridInteractionLayer.Metal ? GridInteractionLayer.Transistor : GridInteractionLayer.Metal;
             var linkedLayer = GridStack.Instance.GridLayers[(int)linkedLayerType];
