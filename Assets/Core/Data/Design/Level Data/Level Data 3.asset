@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level Data 3
   m_EditorClassIdentifier: 
   m_title: '3: Double Diode'
-  m_allowedPlaceables: 05000000060000000a0000000b000000
+  m_allowedPlaceables: 05000000060000000a0000000b0000000d000000
   m_gridConfig: {fileID: 11400000, guid: 6057edfa11c606e438a3d8918c47b8e7, type: 2}
   m_testSuite: {fileID: 11400000, guid: 64a318a3df1b6b44ab10c5b148f620a4, type: 2}

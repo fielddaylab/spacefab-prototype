@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level Data 4
   m_EditorClassIdentifier: 
   m_title: '4: Depletion'
-  m_allowedPlaceables: 0a0000000c000000
+  m_allowedPlaceables: 0a0000000c0000000d000000
   m_gridConfig: {fileID: 11400000, guid: af6681b412aa1874f82180128f19d674, type: 2}
   m_testSuite: {fileID: 11400000, guid: c8b5d0265224a7041b30af02297cc8a0, type: 2}

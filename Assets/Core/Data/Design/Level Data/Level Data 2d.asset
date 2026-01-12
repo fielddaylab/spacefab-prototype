@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level Data 2d
   m_EditorClassIdentifier: 
   m_title: '2D: Make a Diode'
-  m_allowedPlaceables: 0500000006000000
+  m_allowedPlaceables: 05000000060000000a0000000b0000000d000000
   m_gridConfig: {fileID: 11400000, guid: f934f9e426dfa964f8ba5f128319cfa7, type: 2}
   m_testSuite: {fileID: 11400000, guid: 5830dd5ec43443047951683e783396f8, type: 2}

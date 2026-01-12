@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level Data 1b
   m_EditorClassIdentifier: 
   m_title: '1B: Using Silicon'
-  m_allowedPlaceables: 05000000
+  m_allowedPlaceables: 050000000d000000
   m_gridConfig: {fileID: 11400000, guid: 1438e908c3d01ce429c2866aba2e2b99, type: 2}
   m_testSuite: {fileID: 11400000, guid: b047bf622ebbc404fbad1f24ee6b0558, type: 2}

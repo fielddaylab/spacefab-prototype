@@ -149,6 +149,7 @@ namespace SpaceFab.ChipDesign
                 DrawLinksButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.METAL));
                 DrawViaButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.VIA));
                 DrawGateButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.GATE));
+                EraseButton.gameObject.SetActive(LevelMgr.Instance.CurrLevelData.GetPlaceables().Contains(Placeable.ERASER));
             }
 
             m_titleText.SetText(LevelMgr.Instance.CurrLevelData.GetTitle());

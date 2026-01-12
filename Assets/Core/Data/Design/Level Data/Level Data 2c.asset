@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level Data 2c
   m_EditorClassIdentifier: 
   m_title: '2C: Missing Partner'
-  m_allowedPlaceables: 0500000006000000
+  m_allowedPlaceables: 05000000060000000d000000
   m_gridConfig: {fileID: 11400000, guid: 651498e8735822249a1b99484d2a0862, type: 2}
   m_testSuite: {fileID: 11400000, guid: 5830dd5ec43443047951683e783396f8, type: 2}
