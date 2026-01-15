@@ -22,6 +22,8 @@ namespace SpaceFab.ChipFab
         public static StringHash32 WaferSubmitted = "wafer-submitted";
         public static StringHash32 AutomationStarted = "automation-started";
         public static StringHash32 AutomationCompleted = "automation-completed";
+
+        public static StringHash32 IncorrectStationAttempted = "incorrect-station-attempted";
     }
 
     public static class GameConsts

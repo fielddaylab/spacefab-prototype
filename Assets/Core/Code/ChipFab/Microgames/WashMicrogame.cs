@@ -79,6 +79,7 @@ namespace SpaceFab.ChipFab
             if (DragMgr.WaferInstance.Data.ResistLayer.State != ResistState.Stripped)
             {
                 Debug.Log("Invalid prereqs");
+                Game.Events.Dispatch(GameEvents.IncorrectStationAttempted);
                 Deactivate();
                 return;
             }

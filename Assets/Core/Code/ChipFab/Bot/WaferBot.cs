@@ -19,6 +19,20 @@ namespace SpaceFab.ChipFab
         public float WaferOffset = 1.5f;
 
         public GameObject StartBotPrompt;
+        public GameObject StunDialogue;
+
+        public bool IsStunned = false;
+        public const float StunTime = 4;
+
+        public Transform BodyTransform;
+
+        [Space(5)]
+        [Header("Faces")]
+        public SpriteRenderer FaceRenderer;
+        public Sprite DefaultFace;
+        public Sprite StunnedFace;
+
+        private float StunTimer = 0;
 
         private ControlNavNode m_currNode;
         private int m_currNodeIndex;
@@ -26,9 +40,12 @@ namespace SpaceFab.ChipFab
         private bool m_inMotion;
 
         private Routine m_moveRoutine;
+        private Routine m_stunRoutine;
 
         private void Start()
         {
+            IsStunned = false;
+            StunDialogue.SetActive(false);
             m_currNodeIndex = 0;
             m_currNode = NavNodesMgr.Instance.Nodes[0];
 
@@ -39,12 +56,14 @@ namespace SpaceFab.ChipFab
             StartBotPrompt.SetActive(true);
 
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Register(GameEvents.IncorrectStationAttempted, HandleIncorrectStationAttempted);
         }
 
         private void OnDestroy()
         {
             if (Game.IsShuttingDown) { return; }
             Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Deregister(GameEvents.IncorrectStationAttempted, HandleIncorrectStationAttempted);
         }
 
         public void SetCurrNode(int index)
@@ -54,6 +73,8 @@ namespace SpaceFab.ChipFab
 
         public void ProcessInputs()
         {
+            if (IsStunned) { return; }
+
             if (Input.GetKeyDown(NavLeftKey))
             {
                 if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
@@ -250,7 +271,55 @@ namespace SpaceFab.ChipFab
             State = ConveyorState.Full;
             SetAtIndex(m_currNodeIndex);
 
+            CancelStun();
+
             StartBotPrompt.SetActive(false);
+        }
+
+        private void HandleIncorrectStationAttempted()
+        {
+            if (!IsStunned)
+            {
+                StartStun();
+            }
+        }
+
+        private void StartStun()
+        {
+            StunTimer = StunTime;
+            IsStunned = true;
+            FaceRenderer.sprite = StunnedFace;
+            StunDialogue.SetActive(true);
+            m_stunRoutine.Replace(BeginStunRoutine());
+        }
+
+        private void EndStun()
+        {
+            IsStunned = false;
+            FaceRenderer.sprite = DefaultFace;
+            StunDialogue.SetActive(false);
+        }
+
+        private void CancelStun()
+        {
+            IsStunned = false;
+            FaceRenderer.sprite = DefaultFace;
+            StunDialogue.SetActive(false);
+        }
+
+        public void ProgressStunTimer()
+        {
+            StunTimer -= Time.deltaTime;
+            if (StunTimer < 0)
+            {
+                EndStun();
+            }
+        }
+
+        private IEnumerator BeginStunRoutine()
+        {
+            var targetVector = BodyTransform.position + Vector3.one * 0.3f;
+            yield return BodyTransform.MoveTo(targetVector, 0.25f, Axis.X, Space.Self).Wave(Wave.Function.CosFade, 3);
         }
     }
 }

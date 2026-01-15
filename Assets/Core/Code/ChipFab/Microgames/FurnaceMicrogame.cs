@@ -272,6 +272,7 @@ namespace SpaceFab.ChipFab
                 )
             {
                 Debug.Log("Invalid prereqs");
+                Game.Events.Dispatch(GameEvents.IncorrectStationAttempted);
                 TryDeactivate();
                 return;
             }
@@ -371,6 +372,7 @@ namespace SpaceFab.ChipFab
             else
             {
                 Debug.Log("Invalid prereqs");
+                Game.Events.Dispatch(GameEvents.IncorrectStationAttempted);
                 TryDeactivate();
                 return false;
             }
@@ -378,6 +380,8 @@ namespace SpaceFab.ChipFab
 
         private void HandleStartHeat()
         {
+            if (!(!m_AutomationRoutine.Exists() && !HeatingCompleted && !m_isHeating && !m_isApplyingHeat)) { return; }
+
             if (FabSequenceMgr.Instance.CurrStepID() == SequenceStepID.FillStencil_DOPE)
             {
                 var currChunk = FabSequenceMgr.Instance.CurrChunkID();

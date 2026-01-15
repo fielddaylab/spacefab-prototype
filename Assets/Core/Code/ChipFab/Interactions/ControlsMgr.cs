@@ -101,6 +101,11 @@ namespace SpaceFab.ChipFab
                     BotInstance.ProcessInputs();
                 }
             }
+
+            if (BotEnabled && BotInstance.IsStunned)
+            {
+                BotInstance.ProgressStunTimer();
+            }
         }
 
         private void ProcessNavNodeInputs()
