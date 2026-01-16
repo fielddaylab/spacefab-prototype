@@ -15,6 +15,7 @@ namespace  SpaceFab.ChipFab
 
     public class ClickBox : MonoBehaviour
     {
+        public int Priority;
         public ClickBoxType BoxType;
 
         private bool isHovering;
@@ -36,9 +37,24 @@ namespace  SpaceFab.ChipFab
             var screenPos = Input.mousePosition;
             screenPos.z = -Camera.main.transform.position.z;
             Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(screenPos);
-            Collider2D hit = Physics2D.OverlapPoint(mouseWorldPos, DragMgr.Instance.clickBoxLayer);
+            Collider2D[] hits = Physics2D.OverlapPointAll(mouseWorldPos, DragMgr.Instance.clickBoxLayer);
+            Collider2D highestPriorityHit = null;
 
-            if (hit != null && hit.gameObject == this.gameObject)
+            int highestPriority = int.MinValue;
+            foreach (var hit in hits)
+            {
+                if (hit != null)
+                {
+                    var box = hit.GetComponent<ClickBox>();
+                    if (box.Priority > highestPriority)
+                    {
+                        highestPriorityHit = hit;
+                        highestPriority = box.Priority;
+                    }
+                }
+            }
+
+            if (highestPriorityHit != null && highestPriorityHit.gameObject == this.gameObject)
             {
                 if (!isHovering)
                 {
@@ -52,7 +68,8 @@ namespace  SpaceFab.ChipFab
 
                 if (Input.GetMouseButtonDown(0)) // Left mouse button pressed
                 {
-                    if (Time.frameCount != m_lastMouseDownFrame) {
+                    if (Time.frameCount != m_lastMouseDownFrame)
+                    {
                         OnMouseDown?.Invoke();
                         m_lastMouseDownFrame = Time.frameCount;
                     }

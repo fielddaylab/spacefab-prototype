@@ -82,14 +82,28 @@ namespace SpaceFab.ChipFab
 
         private void Update()
         {
+            /*
             if (ActivelyChecking && !CurrInstruction.Valid && StationControlReleased)
             {
                 CheckForAutomation();
             }
+            */
         }
 
-        private void CheckForAutomation()
+        public bool TryTriggerAutomation()
         {
+            if (!CurrInstruction.Valid) 
+            {
+                Debug.Log("[AutomationMgr] Automation did not trigger: existing automation instruction already in progress");
+                return false;
+            }
+
+            if (StationControlReleased)
+            {
+                Debug.Log("[AutomationMgr] Automation did not trigger: Station control not released");
+                return false;
+            }
+
             for (int i = 0; i < m_activeTriggers.Count; i++)
             {
                 if (ConditionsMet(m_activeTriggers[i]))
@@ -104,9 +118,12 @@ namespace SpaceFab.ChipFab
                     // move to target station
                     var stationIndex = GetStationIndex(CurrInstruction.TargetStation);
                     SetWaferAtIndex(stationIndex);
-                    break;
+                    return true;
                 }
             }
+
+            Debug.Log("[AutomationMgr] Automation did not trigger: No matching trigger found");
+            return false;
         }
 
         private bool ConditionsMet(AutomationTrigger trigger)

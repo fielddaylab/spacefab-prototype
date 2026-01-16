@@ -60,6 +60,12 @@ namespace SpaceFab.ChipFab
 
             m_state = TimeState.Stopped;
             CountdownText.gameObject.SetActive(false);
+
+            if (ControlsMgr.Instance.BotEnabled)
+            {
+                // restore automation charges
+                ControlsMgr.Instance.BotInstance.ResetAutomationCharges();
+            }
         }
 
         public void Pause()
@@ -107,7 +113,7 @@ namespace SpaceFab.ChipFab
 
             if (AutomationMgr.Instance.UsesAutomation)
             {
-                AutomationMgr.Instance.ActivelyChecking = true;
+                // AutomationMgr.Instance.ActivelyChecking = true;
             }
         }
 

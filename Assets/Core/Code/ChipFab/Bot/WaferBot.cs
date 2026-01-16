@@ -1,8 +1,11 @@
 using BeauRoutine;
+using BeauUtil;
 using FieldDay;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace SpaceFab.ChipFab
 {
@@ -32,6 +35,14 @@ namespace SpaceFab.ChipFab
         public Sprite DefaultFace;
         public Sprite StunnedFace;
 
+        [Space(5)]
+        [Header("AutomationCharges")]
+        public ClickBox AutomationChargeBtn;
+        public TMP_Text NumChargesText;
+
+        private int MaxAutomationCharges;
+        private int NumAutomationCharges;
+
         private float StunTimer = 0;
 
         private ControlNavNode m_currNode;
@@ -48,6 +59,11 @@ namespace SpaceFab.ChipFab
             StunDialogue.SetActive(false);
             m_currNodeIndex = 0;
             m_currNode = NavNodesMgr.Instance.Nodes[0];
+
+            MaxAutomationCharges = ChipFabConfig.Instance.CurrLevel.MaxAutomationCharges();
+            ResetAutomationCharges();
+
+            AutomationChargeBtn.OnMouseDown.AddListener(HandleAutomationChargeClicked);
 
             SetAtIndex(m_currNodeIndex);
 
@@ -321,5 +337,32 @@ namespace SpaceFab.ChipFab
             var targetVector = BodyTransform.position + Vector3.one * 0.3f;
             yield return BodyTransform.MoveTo(targetVector, 0.25f, Axis.X, Space.Self).Wave(Wave.Function.CosFade, 3);
         }
+
+        #region Automation Charges
+
+        private void UpdateAutomationChargeVisuals()
+        {
+            NumChargesText.SetText(NumAutomationCharges.ToStringLookup());
+        }
+
+        public void ResetAutomationCharges()
+        {
+            NumAutomationCharges = MaxAutomationCharges;
+            UpdateAutomationChargeVisuals();
+        }
+
+        private void HandleAutomationChargeClicked()
+        {
+            if (!ControlsMgr.Instance.InputsEnabled) { return; }
+            if (NumAutomationCharges <= 0) { return; }
+
+            if (AutomationMgr.Instance.TryTriggerAutomation())
+            {
+                NumAutomationCharges--;
+                UpdateAutomationChargeVisuals();
+            }
+        }
+
+        #endregion // Automation Charges
     }
 }
