@@ -544,4 +544,4 @@ MonoBehaviour:
     Precision:
       Values: []
   m_fabSequence: {fileID: 11400000, guid: 92034c6dcde59a74c8fd8af03b2a18b8, type: 2}
-  m_maxAutomationCharges: 16
+  m_maxAutomationCharges: 3
