@@ -1,6 +1,6 @@
 ﻿// Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Sprites/Opaque"
+Shader "FieldDay/Sprites/Opaque"
 {
     Properties
     {
@@ -30,12 +30,13 @@ Shader "Sprites/Opaque"
         Pass
         {
         CGPROGRAM
-            #pragma vertex SpriteVert
-            #pragma fragment SpriteFrag
+            #pragma vertex DefaultSpriteVert
+            #pragma fragment DefaultSpriteFrag_NonPremultiplied
             #pragma target 2.0
             #pragma multi_compile_instancing
             #pragma multi_compile_local _ PIXELSNAP_ON
-            #include "UnitySprites.cginc"
+
+            #include "../CGIncludes/Sprites.cginc"
         ENDCG
         }
     }

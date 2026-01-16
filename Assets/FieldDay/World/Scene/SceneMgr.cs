@@ -240,7 +240,10 @@ namespace FieldDay.Scenes {
             SceneHelper.IgnoreSceneByName("*_PERSISTENT");
             SceneHelper.IgnoreSceneByName("*_LAYER");
             SceneHelper.IgnoreSceneByName("*_AUX");
+            SceneHelper.IgnoreSceneByName("*_LAYOUT");
+            SceneHelper.IgnoreSceneByName("*_ASSETS");
             SceneHelper.IgnoreSceneByName("Boot");
+            SceneHelper.IgnoreSceneByName("_ResourceDump");
         }
 
         #region Public API

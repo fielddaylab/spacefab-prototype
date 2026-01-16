@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 namespace FieldDay.UI {
-    static public class TMPUtility {
+    static public class TMP_Extensions {
         static public bool SetTextAndActive(this TMP_Text tmp, string text) {
             if (string.IsNullOrEmpty(text)) {
                 tmp.gameObject.SetActive(false);

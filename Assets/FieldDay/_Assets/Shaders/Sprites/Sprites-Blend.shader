@@ -1,6 +1,6 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Sprites/Blend"
+Shader "FieldDay/Sprites/Blend"
 {
     Properties
     {
@@ -9,8 +9,6 @@ Shader "Sprites/Blend"
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
         [HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)
         [HideInInspector] _Flip ("Flip", Vector) = (1,1,1,1)
-        [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
-        [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
 
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Source Blend Mode", Int) = 5
         [Enum(UnityEngine.Rendering.BlendMode)] _DestBlend("Destination Blend Mode", Int) = 10
@@ -37,13 +35,12 @@ Shader "Sprites/Blend"
         Pass
         {
         CGPROGRAM
-            #pragma vertex SpriteVert
-            #pragma fragment SpriteFrag
+            #pragma vertex DefaultSpriteVert
+            #pragma fragment DefaultSpriteFrag_NonPremultiplied
             #pragma target 2.0
             #pragma multi_compile_instancing
             #pragma multi_compile_local _ PIXELSNAP_ON
-            #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
-            #include "UnitySprites.cginc"
+            #include "../CGIncludes/Sprites.cginc"
         ENDCG
         }
     }

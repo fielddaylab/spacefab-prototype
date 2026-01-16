@@ -1,6 +1,6 @@
 ﻿// Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Sprites/Overlay"
+Shader "FieldDay/Sprites/Overlay"
 {
     Properties
     {
@@ -31,12 +31,13 @@ Shader "Sprites/Overlay"
         Pass
         {
         CGPROGRAM
-            #pragma vertex SpriteVert
-            #pragma fragment SpriteFrag
+            #pragma vertex DefaultSpriteVert
+            #pragma fragment DefaultSpriteFrag
             #pragma target 2.0
             #pragma multi_compile_instancing
             #pragma multi_compile_local _ PIXELSNAP_ON
-            #include "UnitySprites.cginc"
+
+            #include "../CGIncludes/Sprites.cginc"
         ENDCG
         }
     }

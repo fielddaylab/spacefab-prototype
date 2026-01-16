@@ -33,7 +33,6 @@ namespace SpaceFab.SupplyChain {
         }
 
         public void UpdateShipSelectionVisuals(RouteShipWidget widget, bool selected) {
-            widget.StatsGroup.gameObject.SetActive(selected);
             widget.Positioner.Offset0 = selected ? ShipWidgetSelectedOffset : default;
         }
 

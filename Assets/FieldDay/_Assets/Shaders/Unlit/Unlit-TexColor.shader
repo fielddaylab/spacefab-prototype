@@ -19,13 +19,13 @@ SubShader {
 
             #include "UnityCG.cginc"
 
-            struct appdata_t {
+            struct Attributes {
                 float4 vertex : POSITION;
                 float2 texcoord : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
-            struct v2f {
+            struct Varyings {
                 float4 vertex : SV_POSITION;
                 float2 texcoord : TEXCOORD0;
                 UNITY_FOG_COORDS(1)
@@ -36,9 +36,9 @@ SubShader {
             float4 _MainTex_ST;
             fixed4 _Color;
 
-            v2f vert (appdata_t v)
+            Varyings vert (Attributes v)
             {
-                v2f o;
+                Varyings o;
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 o.vertex = UnityObjectToClipPos(v.vertex);
@@ -47,7 +47,7 @@ SubShader {
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag (Varyings i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.texcoord) * _Color;
                 UNITY_APPLY_FOG(i.fogCoord, col);
