@@ -529,7 +529,7 @@ namespace SpaceFab.ChipFab
         
         private IEnumerator BasicAutomationRoutine()
         {
-            yield return 3;
+            yield return AUTOMATION_TIME;
 
             m_finalTemp = TargetMaxTemp;
             HeatingCompleted = true;

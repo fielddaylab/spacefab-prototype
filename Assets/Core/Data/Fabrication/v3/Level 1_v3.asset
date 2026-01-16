@@ -43,6 +43,34 @@ MonoBehaviour:
       Temperature: 70
       MaskToApply: 0
       Rotation: 0
+  - Disable: 0
+    TriggerState:
+      ResistLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      MetallizationLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 0
+      OxideLayer:
+        Mask:
+          Id: 0
+          Rotation: 0
+        State: 1
+      SemiconductorLayer:
+        DopingPatterns: []
+      Precision:
+        Values: []
+    Instruction:
+      Valid: 0
+      TargetStation: 2
+      DopantToApply: 0
+      Temperature: 70
+      MaskToApply: 0
+      Rotation: 0
   m_initialWafer:
     ResistLayer:
       Mask:

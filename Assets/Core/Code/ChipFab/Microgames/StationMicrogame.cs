@@ -28,6 +28,8 @@ namespace SpaceFab.ChipFab
 
         protected Routine m_AutomationRoutine;
 
+        protected const float AUTOMATION_TIME = 3f;
+
         protected virtual void Start()
         {
             if (Container)
