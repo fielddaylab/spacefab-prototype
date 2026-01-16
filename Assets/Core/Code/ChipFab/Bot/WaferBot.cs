@@ -118,7 +118,7 @@ namespace SpaceFab.ChipFab
                     if (!m_inMotion)
                     {
                         // try activate
-                        TryActivateCurrStation();
+                        TryActivateCurrStation(false);
                     }
                 }
             }
@@ -154,13 +154,13 @@ namespace SpaceFab.ChipFab
             m_inMotion = false;
         }
 
-        public void TryActivateCurrStation()
+        public void TryActivateCurrStation(bool isAutomated)
         {
             if (m_currNode.GetComponent<IStationMicrogame>() != null)
             {
                 State = ConveyorState.Empty;
-                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
-                m_currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
+                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform, isAutomated);
+                m_currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance, isAutomated);
             }
         }
 

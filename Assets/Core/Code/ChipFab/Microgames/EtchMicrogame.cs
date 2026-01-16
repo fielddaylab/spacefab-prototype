@@ -36,9 +36,9 @@ namespace SpaceFab.ChipFab
 
         #region IStationMicrogame
 
-        public override void Activate(WaferState waferState)
+        public override void Activate(WaferState waferState, bool isAutomated)
         {
-            base.Activate(waferState);
+            base.Activate(waferState, isAutomated);
 
             DragMgr.Instance.DragWaferEnabled = false;
 

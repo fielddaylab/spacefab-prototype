@@ -38,9 +38,9 @@ namespace SpaceFab.ChipFab
 
         private Routine m_startupRoutine;
 
-        public override void Activate(WaferState waferState)
+        public override void Activate(WaferState waferState, bool isAutomated)
         {
-            base.Activate(waferState);
+            base.Activate(waferState, isAutomated);
 
             m_autoRoutineStarted = false;
             m_currSelectedMask = CurrMaskData.MaskId;

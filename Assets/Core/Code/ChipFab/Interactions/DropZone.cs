@@ -98,7 +98,7 @@ namespace SpaceFab.ChipFab
                 {
                     if (ControlsMgr.Instance.BotInstance.IsAtStation(this.GetComponent<IStationMicrogame>()))
                     {
-                        ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                        ControlsMgr.Instance.BotInstance.TryActivateCurrStation(false);
                     }
                 }
                 else if (ControlsMgr.Instance.BotInstance.State == ConveyorState.Empty)
@@ -120,7 +120,7 @@ namespace SpaceFab.ChipFab
             }
         }
 
-        public void AssignToDropZone(Transform toAssign)
+        public void AssignToDropZone(Transform toAssign, bool isAutomated)
         {
             if (!InUse || (InUse && toAssign == UsingTransform))
             {
@@ -130,7 +130,7 @@ namespace SpaceFab.ChipFab
                 toAssign.transform.position = SlotPos.transform.position;
                 toAssign.transform.rotation = SlotPos.transform.rotation;
 
-                Microgame.Activate(DragMgr.WaferInstance);
+                Microgame.Activate(DragMgr.WaferInstance, isAutomated);
             }
         }
 

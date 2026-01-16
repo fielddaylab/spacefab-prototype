@@ -24,6 +24,8 @@ namespace SpaceFab.ChipFab
         public GameObject ActivateGroup;
         public CamPositioner CamPos;
 
+        public bool IsCurrentSessionAutomated;
+
         protected Routine m_AutomationRoutine;
 
         protected virtual void Start()
@@ -47,11 +49,12 @@ namespace SpaceFab.ChipFab
             ActivateButton.OnMouseDown.RemoveListener(HandleActivateClicked);
         }
 
-        public virtual void Activate(WaferState waferState)
+        public virtual void Activate(WaferState waferState, bool isAutomated)
         {
             // CamMgr.Instance.LoadCamPosImmediate(CamPos.Pos);
+            IsCurrentSessionAutomated = isAutomated;
 
-            if (Container)
+            if (Container && !isAutomated)
             {
                 Container.SetActive(true);
             }
@@ -92,7 +95,7 @@ namespace SpaceFab.ChipFab
             {
                 if (ControlsMgr.Instance && ControlsMgr.Instance.BotInstance)
                 {
-                    ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                    ControlsMgr.Instance.BotInstance.TryActivateCurrStation(false);
                 }
             }
         }
