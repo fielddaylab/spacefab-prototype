@@ -121,6 +121,7 @@ namespace SpaceFab.ChipDesign
             public int EvalDepth;
             public bool AwaitingDependency;
             public bool EvaluatedForDependency;
+            public bool DisallowAdditionalDependency;
             public List<GraphCoord> NoReturnList; // Prevent directed edges toward these nodes
 
             public FlowState CurrFlowState;
@@ -660,6 +661,9 @@ namespace SpaceFab.ChipDesign
                         }
                     }
 
+                    // flag unstable if potential cycle
+                    stable &= !currEdge.CycleDetected;
+
                     if (flowThrough)
                     {
                         if (!stable)
@@ -1195,6 +1199,10 @@ namespace SpaceFab.ChipDesign
                                         // nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
                                         belowNode.AwaitingDependency = false;
                                     }
+                                    else if (belowNode.DisallowAdditionalDependency)
+                                    {
+                                        newCrucialEdge.CycleDetected = true;
+                                    }
                                 }
                             }
                             else
@@ -1232,6 +1240,11 @@ namespace SpaceFab.ChipDesign
                         var belowGraphNode = coordNodeMap[postponedNodes[pNode].DependencyCoord];
                         belowGraphNode.Visited = false;
                         coordNodeMap[postponedNodes[pNode].DependencyCoord] = belowGraphNode;
+
+                        var belowGraphCrucialNode = crucialCoordNodeMap[postponedNodes[pNode].DependencyCoord];
+                        belowGraphCrucialNode.AwaitingDependency = false;
+                        belowGraphCrucialNode.DisallowAdditionalDependency = true;
+                        crucialCoordNodeMap[postponedNodes[pNode].DependencyCoord] = belowGraphCrucialNode;
 
                         var aboveCoord = postponedNodes[pNode].DependencyCoord;
                         aboveCoord.Layer = GridStack.METAL_LAYER;
