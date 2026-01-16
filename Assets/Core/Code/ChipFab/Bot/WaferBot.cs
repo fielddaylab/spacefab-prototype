@@ -142,14 +142,24 @@ namespace SpaceFab.ChipFab
                 return;
             }
 
-            m_moveRoutine.Replace(MoveToIndex(m_currNodeIndex + amt));
+            m_moveRoutine.Replace(MoveToIndex(m_currNodeIndex + amt, false, false));
         }
 
-        private IEnumerator MoveToIndex(int index)
+        public void MoveToIndexSmooth(int index, bool isAutomated, bool tryActivateOnArrival)
+        {
+            m_moveRoutine.Replace(MoveToIndex(index, isAutomated, tryActivateOnArrival));
+        }
+
+        private IEnumerator MoveToIndex(int index, bool isAutomated, bool tryActivateOnArrival)
         {
             m_inMotion = true;
 
             yield return SetAtIndexRoutine(index);
+
+            if (tryActivateOnArrival)
+            {
+                ControlsMgr.Instance.BotInstance.TryActivateCurrStation(isAutomated);
+            }
 
             m_inMotion = false;
         }
@@ -239,6 +249,7 @@ namespace SpaceFab.ChipFab
                 }
             }
 
+            var dist = Mathf.Abs(m_currNodeIndex - index);
             m_currNodeIndex = index;
             m_currNode = NavNodesMgr.Instance.Nodes[m_currNodeIndex];
 
@@ -260,8 +271,8 @@ namespace SpaceFab.ChipFab
             if (station)
             {
                 yield return Routine.Combine(
-                    CamMgr.Instance.LoadCamPosRoutine(station.CamPos.Pos, 0.1f),
-                    MoveBotRoutine(0.1f)
+                    CamMgr.Instance.LoadCamPosRoutine(station.CamPos.Pos, 0.1f * dist),
+                    MoveBotRoutine(0.1f * dist)
                     );
 
                 if (station.ActivateGroup)

@@ -88,7 +88,7 @@ namespace SpaceFab.ChipFab
 
         private void Update()
         {
-            if (!Container.activeInHierarchy) { return; }
+            if (!Container.activeInHierarchy && !IsCurrentSessionAutomated) { return; }
             
             switch (m_state)
             {
@@ -247,7 +247,6 @@ namespace SpaceFab.ChipFab
                 DragMgr.WaferInstance.SetMetallizationStateEtch(precision);
                 // auto wash
                 DragMgr.WaferInstance.SetResistStateWash();
-
             }
             else if (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Full)
             {

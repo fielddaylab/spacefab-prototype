@@ -183,8 +183,9 @@ namespace SpaceFab.ChipFab
         {
             if (ControlsMgr.Instance.BotEnabled)
             {
-                ControlsMgr.Instance.BotInstance.SetAtIndex(index);
-                ControlsMgr.Instance.BotInstance.TryActivateCurrStation(isAutomated);
+                ControlsMgr.Instance.BotInstance.MoveToIndexSmooth(index, isAutomated, true);
+                // ControlsMgr.Instance.BotInstance.SetAtIndex(index);
+                // ControlsMgr.Instance.BotInstance.TryActivateCurrStation(isAutomated);
                 return;
             }
 
