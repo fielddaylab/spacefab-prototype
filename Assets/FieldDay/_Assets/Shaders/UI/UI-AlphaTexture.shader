@@ -71,7 +71,7 @@ Shader "FieldDay/UI/Alpha Texture"
                 half4 color = IN.color + _TextureSampleAdd;
                 color.a *= alpha;
 
-                UIRectClip(f.mask, color);
+                UIRectClip(IN.mask, color);
                 UIAlphaClip(color);
     
                 PremultiplyAlpha(color);
