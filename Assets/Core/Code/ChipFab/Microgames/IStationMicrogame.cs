@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SpaceFab.ChipFab {
     public interface IStationMicrogame
     {
-        public void Activate(WaferState waferState);
+        public void Activate(WaferState waferState, bool isAutomated);
 
         public void Deactivate();
 

@@ -134,7 +134,7 @@ namespace SpaceFab.ChipFab
                                 if (ControlsMgr.Instance.CurrDropZone != null)
                                 {
                                     // only allow one at a time
-                                    ControlsMgr.Instance.CurrDropZone.AssignToDropZone(CurrDrag);
+                                    ControlsMgr.Instance.CurrDropZone.AssignToDropZone(CurrDrag, false);
                                 }
                             }
                         }

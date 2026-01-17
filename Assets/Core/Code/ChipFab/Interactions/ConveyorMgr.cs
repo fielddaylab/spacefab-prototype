@@ -100,8 +100,8 @@ namespace SpaceFab.ChipFab
             if (m_currNode.GetComponent<IStationMicrogame>() != null)
             {
                 State = ConveyorState.Empty;
-                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
-                m_currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
+                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform, false);
+                m_currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance, false);
             }
         }
 

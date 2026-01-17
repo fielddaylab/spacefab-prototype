@@ -14,6 +14,7 @@ namespace SpaceFab.ChipFab
         [SerializeField] private WaferData m_initialWafer;
         [SerializeField] private WaferData m_targetWafer;
         [SerializeField] private FabSequence m_fabSequence;
+        [SerializeField] private int m_maxAutomationCharges;
 
         public string LevelId() { return m_levelId; }
         public List<StationId> AvailableStations() { return m_availableStations; }
@@ -21,5 +22,6 @@ namespace SpaceFab.ChipFab
         public WaferData InitialWafer() { return m_initialWafer; }
         public WaferData TargetWafer() { return m_targetWafer; }
         public FabSequence FabSequence() { return m_fabSequence; }
+        public int MaxAutomationCharges() { return m_maxAutomationCharges; }
     }
 }

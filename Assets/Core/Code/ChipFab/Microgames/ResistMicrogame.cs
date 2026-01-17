@@ -42,9 +42,9 @@ namespace SpaceFab.ChipFab
 
         #region IStationMicrogame
 
-        public override void Activate(WaferState waferState)
+        public override void Activate(WaferState waferState, bool isAutomated)
         {
-            base.Activate(waferState);
+            base.Activate(waferState, isAutomated);
 
             TransitionToActivated();
         }
@@ -109,70 +109,85 @@ namespace SpaceFab.ChipFab
 
         private void ProcessMicrogame()
         {
-            // apply friction
-            m_currSpeed -= Friction * Time.deltaTime;
-            if (m_currSpeed < 0) { m_currSpeed = 0; }
-
-            if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Resist)
+            if (IsCurrentSessionAutomated)
             {
-                // add initial impulse
-                if (InputsEnabled)
-                {
-                    var pos = DropperVisual.localPosition;
-                    pos.x = 0;
-                    DropperVisual.localPosition = pos;
-                    UseDropper();
-                }
+                ProcessAutomation();
             }
             else
             {
-                // Move dropper back and forth until input
-                if (!UsedDropper)
-                {
-                    var dropperPos = DropperVisual.localPosition;
-                    if (DropperMovingRight)
-                    {
-                        dropperPos.x = dropperPos.x + DropperSpeed * Time.deltaTime;
-                        if (dropperPos.x >= DropperXExtents)
-                        {
-                            dropperPos.x = DropperXExtents;
-                            DropperMovingRight = false;
-                        }
-                    }
-                    else
-                    {
-                        dropperPos.x = dropperPos.x - DropperSpeed * Time.deltaTime;
-                        if (dropperPos.x <= -DropperXExtents)
-                        {
-                            dropperPos.x = -DropperXExtents;
-                            DropperMovingRight = true;
-                        }
-                    }
-                    DropperVisual.localPosition = dropperPos;
+                // apply friction
+                m_currSpeed -= Friction * Time.deltaTime;
+                if (m_currSpeed < 0) { m_currSpeed = 0; }
 
+                if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Resist)
+                {
+                    // add initial impulse
                     if (InputsEnabled)
                     {
-                        if (Input.GetKeyDown(DropperKey))
+                        var pos = DropperVisual.localPosition;
+                        pos.x = 0;
+                        DropperVisual.localPosition = pos;
+                        UseDropper();
+                    }
+                }
+                else
+                {
+                    // Move dropper back and forth until input
+                    if (!UsedDropper)
+                    {
+                        var dropperPos = DropperVisual.localPosition;
+                        if (DropperMovingRight)
                         {
-                            // apply impulse
-                            UseDropper();
+                            dropperPos.x = dropperPos.x + DropperSpeed * Time.deltaTime;
+                            if (dropperPos.x >= DropperXExtents)
+                            {
+                                dropperPos.x = DropperXExtents;
+                                DropperMovingRight = false;
+                            }
                         }
+                        else
+                        {
+                            dropperPos.x = dropperPos.x - DropperSpeed * Time.deltaTime;
+                            if (dropperPos.x <= -DropperXExtents)
+                            {
+                                dropperPos.x = -DropperXExtents;
+                                DropperMovingRight = true;
+                            }
+                        }
+                        DropperVisual.localPosition = dropperPos;
+
+                        if (InputsEnabled)
+                        {
+                            if (Input.GetKeyDown(DropperKey))
+                            {
+                                // apply impulse
+                                UseDropper();
+                            }
+                        }
+                    }
+                }
+
+                var scale = FluidVisual.localScale.x;
+                scale += m_currSpeed * Time.deltaTime;
+                FluidVisual.localScale = Vector3.one * scale;
+
+                if (FluidVisual.localScale.x >= TargetFluidScale)
+                {
+                    InputsEnabled = false;
+
+                    if (m_currSpeed == 0)
+                    {
+                        TransitionToFinished();
                     }
                 }
             }
+        }
 
-            var scale = FluidVisual.localScale.x;
-            scale += m_currSpeed * Time.deltaTime;
-            FluidVisual.localScale = Vector3.one * scale;
-
-            if (FluidVisual.localScale.x >= TargetFluidScale)
+       private void ProcessAutomation()
+        {
+            if (!m_AutomationRoutine.Exists())
             {
-                InputsEnabled = false;
-
-                if (m_currSpeed == 0)
-                {
-                    TransitionToFinished();
-                }
+                m_AutomationRoutine.Replace(BasicAutomationRoutine());
             }
         }
 
@@ -248,18 +263,41 @@ namespace SpaceFab.ChipFab
         {
             m_state = ResistMicrogameState.Finished;
             float precision = 1 - ((FluidVisual.transform.localScale.x - TargetFluidScale) / (TargetFluidScale - StartFluidScale));
-            DragMgr.WaferInstance.SetResistState(precision);
+            SetWaferState(precision);
             TransitionCommon();
 
-            TryDeactivate();
-
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
-            Game.Events.Dispatch(GameEvents.StationCompleted);
+            Cleanup();
         }
 
         private void TransitionCommon()
         {
 
+        }
+
+        private IEnumerator BasicAutomationRoutine()
+        {
+            yield return AUTOMATION_TIME;
+
+            m_state = ResistMicrogameState.Finished;
+            float precision = 1;
+            SetWaferState(precision);
+
+            TransitionCommon();
+
+            Cleanup();
+        }
+
+        private void SetWaferState(float precision)
+        {
+            DragMgr.WaferInstance.SetResistState(precision);
+        }
+
+        private void Cleanup()
+        {
+            TryDeactivate();
+
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
     }
 }

@@ -36,9 +36,9 @@ namespace SpaceFab.ChipFab
 
         #region IStationMicrogame
 
-        public override void Activate(WaferState waferState)
+        public override void Activate(WaferState waferState, bool isAutomated)
         {
-            base.Activate(waferState);
+            base.Activate(waferState, isAutomated);
 
             DragMgr.Instance.DragWaferEnabled = false;
 
@@ -88,7 +88,7 @@ namespace SpaceFab.ChipFab
 
         private void Update()
         {
-            if (!Container.activeInHierarchy) { return; }
+            if (!Container.activeInHierarchy && !IsCurrentSessionAutomated) { return; }
             
             switch (m_state)
             {
@@ -112,10 +112,7 @@ namespace SpaceFab.ChipFab
         {
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Etch)
             {
-                if (!m_AutomationRoutine.Exists())
-                {
-                    m_AutomationRoutine.Replace(AutomationRoutine());
-                }
+                ProcessAutomation();
             }
             else
             {
@@ -157,6 +154,15 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        private void ProcessAutomation()
+        {
+            if (!m_AutomationRoutine.Exists())
+            {
+                m_AutomationRoutine.Replace(BasicAutomationRoutine());
+                // m_AutomationRoutine.Replace(AutomationRoutine());
+            }
+        }
+
         private IEnumerator AutomationRoutine()
         {
             var stencilPos = StencilVisual.localPosition;
@@ -166,6 +172,17 @@ namespace SpaceFab.ChipFab
             yield return 0.5f;
 
             PlaceStencil();
+        }
+
+        private IEnumerator BasicAutomationRoutine()
+        {
+            yield return AUTOMATION_TIME;
+
+            PlacedStencil = true;
+
+            var precision = 1;
+            SetWaferState(precision);
+            Cleanup();
         }
 
         private void PlaceStencil()
@@ -216,19 +233,29 @@ namespace SpaceFab.ChipFab
         private void HandleFinishClicked()
         {
             var precision = EvaluatePrecision();
+
+            SetWaferState(precision);
+
+            Cleanup();
+        }
+
+        private void SetWaferState(float precision)
+        {
             DragMgr.Instance.DragWaferEnabled = true;
             if (DragMgr.WaferInstance.Data.MetallizationLayer.State == MetallizationState.Full)
             {
                 DragMgr.WaferInstance.SetMetallizationStateEtch(precision);
                 // auto wash
                 DragMgr.WaferInstance.SetResistStateWash();
-
             }
             else if (DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Full)
             {
                 DragMgr.WaferInstance.SetOxideStateEtch(precision);
             }
+        }
 
+        private void Cleanup()
+        {
             TryDeactivate();
 
             Game.Events.Dispatch(GameEvents.WaferStateUpdated);

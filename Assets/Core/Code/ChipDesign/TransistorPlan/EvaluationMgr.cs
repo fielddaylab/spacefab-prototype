@@ -121,6 +121,7 @@ namespace SpaceFab.ChipDesign
             public int EvalDepth;
             public bool AwaitingDependency;
             public bool EvaluatedForDependency;
+            public bool DisallowAdditionalDependency;
             public List<GraphCoord> NoReturnList; // Prevent directed edges toward these nodes
 
             public FlowState CurrFlowState;
@@ -660,6 +661,9 @@ namespace SpaceFab.ChipDesign
                         }
                     }
 
+                    // flag unstable if potential cycle
+                    stable &= !currEdge.CycleDetected;
+
                     if (flowThrough)
                     {
                         if (!stable)
@@ -964,7 +968,7 @@ namespace SpaceFab.ChipDesign
                     for (int col = 0; col < dims.X; col++)
                     {
                         var cell = GridStack.Instance.GridLayers[layer].GetCell(col, row);
-                        if (cell.CellType == CellType.NONE) { continue; }
+                        if (cell.CellType == CellType.NONE && cell.TransferType != TransferType.GateAbove) { continue; }
 
                         // Inputs, Outputs, Gates, and P-N transitions are crucial nodes -- gather them
                         bool isCrucial = false;
@@ -1195,6 +1199,10 @@ namespace SpaceFab.ChipDesign
                                         // nodeWorkList.Add(crucialCoordNodeMap[belowCoord]);
                                         belowNode.AwaitingDependency = false;
                                     }
+                                    else if (belowNode.DisallowAdditionalDependency)
+                                    {
+                                        newCrucialEdge.CycleDetected = true;
+                                    }
                                 }
                             }
                             else
@@ -1218,6 +1226,37 @@ namespace SpaceFab.ChipDesign
                 }
 
                 nodeWorkList.RemoveAt(0);
+
+                if (nodeWorkList.Count == 0 && postponedNodes.Count != 0)
+                {
+                    // There were nodes whose dependencies are never resolved. Safe to progress past them.
+                    for (int pNode = 0; pNode <  postponedNodes.Count; pNode++)
+                    {
+                        // var postponedNode = crucialCoordNodeMap[postponedNodes[pNode].NodeCoord];
+                        var updateNode = crucialCoordNodeMap[postponedNodes[pNode].NodeCoord];
+                        updateNode.EvalDepth = currDepth + 1;
+                        crucialCoordNodeMap[postponedNodes[pNode].NodeCoord] = updateNode;
+                        nodeWorkList.Add(crucialCoordNodeMap[postponedNodes[pNode].NodeCoord]);
+                        var belowGraphNode = coordNodeMap[postponedNodes[pNode].DependencyCoord];
+                        belowGraphNode.Visited = false;
+                        coordNodeMap[postponedNodes[pNode].DependencyCoord] = belowGraphNode;
+
+                        var belowGraphCrucialNode = crucialCoordNodeMap[postponedNodes[pNode].DependencyCoord];
+                        belowGraphCrucialNode.AwaitingDependency = false;
+                        belowGraphCrucialNode.DisallowAdditionalDependency = true;
+                        crucialCoordNodeMap[postponedNodes[pNode].DependencyCoord] = belowGraphCrucialNode;
+
+                        var aboveCoord = postponedNodes[pNode].DependencyCoord;
+                        aboveCoord.Layer = GridStack.METAL_LAYER;
+                        if (crucialCoordNodeMap.ContainsKey(aboveCoord))
+                        {
+                            var aboveGraphCrucialNode = crucialCoordNodeMap[aboveCoord];
+                            aboveGraphCrucialNode.EvaluatedForDependency = true;
+                            crucialCoordNodeMap[aboveCoord] = aboveGraphCrucialNode;
+                        }
+                    }
+                    postponedNodes.Clear();
+                }
             }
         }
 

@@ -82,9 +82,9 @@ namespace SpaceFab.ChipFab
 
         #region IStationMicrogame
 
-        public override void Activate(WaferState waferState)
+        public override void Activate(WaferState waferState, bool isAutomated)
         {
-            base.Activate(waferState);
+            base.Activate(waferState, isAutomated);
 
             ApplyHeatButton.OnMouseDown.AddListener(HandleStartHeat);
             ApplyHeatButton.OnMouseUp.AddListener(HandleEndHeat);
@@ -221,8 +221,14 @@ namespace SpaceFab.ChipFab
 
         private void ProcessAutomation()
         {
-            var instruction = AutomationMgr.Instance.CurrInstruction;
+            if (!m_AutomationRoutine.Exists())
+            {
+                m_AutomationRoutine.Replace(BasicAutomationRoutine());
+            }
+            
+            // var instruction = AutomationMgr.Instance.CurrInstruction;
 
+            /*
             if (AutoTimer == AutoTime)
             {
                 HandleStartHeat();
@@ -234,6 +240,7 @@ namespace SpaceFab.ChipFab
             {
                 HandleEndHeat();
             }
+            */
         }
 
         private void ProcessManual()
@@ -517,6 +524,14 @@ namespace SpaceFab.ChipFab
                 );
 
             m_isApplyingHeat = false;
+            HeatingCompleted = true;
+        }
+        
+        private IEnumerator BasicAutomationRoutine()
+        {
+            yield return AUTOMATION_TIME;
+
+            m_finalTemp = TargetMaxTemp;
             HeatingCompleted = true;
         }
 

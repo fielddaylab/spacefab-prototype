@@ -43,9 +43,9 @@ namespace SpaceFab.ChipFab
 
         #region IStationMicrogame
 
-        public override void Activate(WaferState waferState)
+        public override void Activate(WaferState waferState, bool isAutomated)
         {
-            base.Activate(waferState);
+            base.Activate(waferState, isAutomated);
 
             DragMgr.Instance.DragWaferEnabled = false;
             SprayerBox.OnMouseDown.AddListener(HandleSprayMouseDown);
@@ -97,7 +97,7 @@ namespace SpaceFab.ChipFab
 
         private void Update()
         {
-            if (!Container.activeInHierarchy) { return; }
+            if (!Container.activeInHierarchy && !IsCurrentSessionAutomated) { return; }
 
             switch (m_state)
             {
@@ -121,10 +121,7 @@ namespace SpaceFab.ChipFab
         {
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Sputter)
             {
-                if (!m_AutomationRoutine.Exists())
-                {
-                    m_AutomationRoutine.Replace(AutomationRoutine());
-                }
+                ProcessAutomation();
             }
             else
             {
@@ -170,6 +167,14 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        private void ProcessAutomation()
+        {
+            if (!m_AutomationRoutine.Exists())
+            {
+                m_AutomationRoutine.Replace(BasicAutomationRoutine());
+            }
+        }
+
         private IEnumerator AutomationRoutine()
         {
 
@@ -184,6 +189,16 @@ namespace SpaceFab.ChipFab
             yield return 0.5f;
 
             HandleFinishClicked();
+        }
+
+        private IEnumerator BasicAutomationRoutine()
+        {
+            yield return AUTOMATION_TIME;
+
+            var precision = 1;
+            SetWaferState(precision);
+
+            Cleanup();
         }
 
         private void TransitionToActivated()
@@ -239,20 +254,9 @@ namespace SpaceFab.ChipFab
         private void HandleFinishClicked()
         {
             var precision = EvaluatePrecision();
-            DragMgr.Instance.DragWaferEnabled = true;
-            bool fillStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Stripped;
-            bool createStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Empty;
-            if (fillStencil)
-            {
-                DragMgr.WaferInstance.SetMetallizationStateFillStencil(precision);
-            }
-            else if (createStencil)
-            {
-                DragMgr.WaferInstance.SetMetallizationStateCreateStencil(precision);
-            }
-            TryDeactivate();
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
-            Game.Events.Dispatch(GameEvents.StationCompleted);
+            SetWaferState(precision);
+
+            Cleanup();
         }
 
         private void HandleSprayMouseDown()
@@ -297,6 +301,28 @@ namespace SpaceFab.ChipFab
             yield return 1.5f;
 
             HandleFinishClicked();
+        }
+
+        private void SetWaferState(float precision)
+        {
+            DragMgr.Instance.DragWaferEnabled = true;
+            bool fillStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Stripped && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Stripped;
+            bool createStencil = DragMgr.WaferInstance.Data.OxideLayer.State == OxideState.Empty && DragMgr.WaferInstance.Data.ResistLayer.State == ResistState.Empty;
+            if (fillStencil)
+            {
+                DragMgr.WaferInstance.SetMetallizationStateFillStencil(precision);
+            }
+            else if (createStencil)
+            {
+                DragMgr.WaferInstance.SetMetallizationStateCreateStencil(precision);
+            }
+        }
+
+        private void Cleanup()
+        {
+            TryDeactivate();
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
     }
 }

@@ -82,14 +82,28 @@ namespace SpaceFab.ChipFab
 
         private void Update()
         {
+            /*
             if (ActivelyChecking && !CurrInstruction.Valid && StationControlReleased)
             {
                 CheckForAutomation();
             }
+            */
         }
 
-        private void CheckForAutomation()
+        public bool TryTriggerAutomation()
         {
+            if (CurrInstruction.Valid) 
+            {
+                Debug.Log("[AutomationMgr] Automation did not trigger: existing automation instruction already in progress");
+                return false;
+            }
+
+            if (!StationControlReleased)
+            {
+                Debug.Log("[AutomationMgr] Automation did not trigger: Station control not released");
+                return false;
+            }
+
             for (int i = 0; i < m_activeTriggers.Count; i++)
             {
                 if (ConditionsMet(m_activeTriggers[i]))
@@ -103,10 +117,13 @@ namespace SpaceFab.ChipFab
 
                     // move to target station
                     var stationIndex = GetStationIndex(CurrInstruction.TargetStation);
-                    SetWaferAtIndex(stationIndex);
-                    break;
+                    SetWaferAtIndex(stationIndex, true);
+                    return true;
                 }
             }
+
+            Debug.Log("[AutomationMgr] Automation did not trigger: No matching trigger found");
+            return false;
         }
 
         private bool ConditionsMet(AutomationTrigger trigger)
@@ -162,12 +179,13 @@ namespace SpaceFab.ChipFab
             return -1;
         }
 
-        private void SetWaferAtIndex(int index)
+        private void SetWaferAtIndex(int index, bool isAutomated)
         {
             if (ControlsMgr.Instance.BotEnabled)
             {
-                ControlsMgr.Instance.BotInstance.SetAtIndex(index);
-                ControlsMgr.Instance.BotInstance.TryActivateCurrStation();
+                ControlsMgr.Instance.BotInstance.MoveToIndexSmooth(index, isAutomated, true);
+                // ControlsMgr.Instance.BotInstance.SetAtIndex(index);
+                // ControlsMgr.Instance.BotInstance.TryActivateCurrStation(isAutomated);
                 return;
             }
 
@@ -191,8 +209,8 @@ namespace SpaceFab.ChipFab
             } 
             else
             {
-                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform);
-                currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance);
+                ControlsMgr.Instance.CurrDropZone.AssignToDropZone(DragMgr.WaferInstance.transform, isAutomated);
+                currNode.GetComponent<IStationMicrogame>().Activate(DragMgr.WaferInstance, isAutomated);
             }
         }
     }

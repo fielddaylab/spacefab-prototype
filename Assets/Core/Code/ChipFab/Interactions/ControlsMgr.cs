@@ -211,7 +211,7 @@ namespace SpaceFab.ChipFab
                 InputsEnabled = true;
                 if (AutomationMgr.Instance.UsesAutomation)
                 {
-                    AutomationMgr.Instance.ActivelyChecking = true;
+                    // AutomationMgr.Instance.ActivelyChecking = true;
                 }
             }
         }

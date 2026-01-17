@@ -38,9 +38,9 @@ namespace SpaceFab.ChipFab
 
         private Routine m_startupRoutine;
 
-        public override void Activate(WaferState waferState)
+        public override void Activate(WaferState waferState, bool isAutomated)
         {
-            base.Activate(waferState);
+            base.Activate(waferState, isAutomated);
 
             m_autoRoutineStarted = false;
             m_currSelectedMask = CurrMaskData.MaskId;
@@ -139,6 +139,18 @@ namespace SpaceFab.ChipFab
         }
 
         private void ProcessMicrogame()
+        {
+            if (IsCurrentSessionAutomated)
+            {
+                ProcessAutomation();
+            }
+            else
+            {
+                ProcessManual();
+            }
+        }
+
+        private void ProcessManual()
         {
             // Handle inputs
             ProcessInputs();
@@ -253,6 +265,14 @@ namespace SpaceFab.ChipFab
             }
         }
 
+        private void ProcessAutomation()
+        {
+            if (!m_AutomationRoutine.Exists())
+            {
+                m_AutomationRoutine.Replace(BasicAutomationRoutine());
+            }
+        }
+
         private IEnumerator StartupRoutine()
         {
             if (AutomationMgr.Instance.CurrInstruction.Valid && AutomationMgr.Instance.CurrInstruction.TargetStation == StationId.Photolithograph)
@@ -269,6 +289,29 @@ namespace SpaceFab.ChipFab
             yield return 1;
 
             Activated = true;
+        }
+
+        private IEnumerator BasicAutomationRoutine()
+        {
+            yield return AUTOMATION_TIME;
+
+            var precision = 1;
+            SetWaferState(precision);
+
+            Cleanup();
+        }
+
+        private void SetWaferState(float precision)
+        {
+            DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, 0, precision);
+        }
+
+        private void Cleanup()
+        {
+            TryDeactivate();
+
+            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
+            Game.Events.Dispatch(GameEvents.StationCompleted);
         }
 
         #region Handlers
@@ -291,11 +334,9 @@ namespace SpaceFab.ChipFab
         {
             // TODO: normalize diff values
             var precision = 1 - (TotalDif / NumSamples);
-            DragMgr.WaferInstance.SetPhotoState(m_currSelectedMask, 0, precision);
-            TryDeactivate();
+            SetWaferState(precision);
 
-            Game.Events.Dispatch(GameEvents.WaferStateUpdated);
-            Game.Events.Dispatch(GameEvents.StationCompleted);
+            Cleanup();
         }
 
         #endregion // Handlers
