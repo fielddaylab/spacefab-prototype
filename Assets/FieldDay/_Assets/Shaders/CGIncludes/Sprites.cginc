@@ -52,6 +52,7 @@ CBUFFER_END
 /// Uniforms
 
 fixed4 _Color;
+half _AlphaCutoff;
 
 sampler2D _MainTex;
 
@@ -89,6 +90,12 @@ inline fixed4 SampleMainWithExternalAlpha(float2 uv)
     #define SampleSpriteTexture    SampleMainNoExternalAlpha
 #endif // ETC1_EXTERNAL_ALPHA
 
+#ifdef FD_SPRITE_ALPHACLIP
+    #define SpriteAlphaClip(color) clip((color).a - _AlphaCutoff)
+#else
+    #define SpriteAlphaClip(color)
+#endif // UNITY_UI_ALPHACLIP
+
 /// Programs
 
 Varyings_Sprite DefaultSpriteVert(Attributes_Sprite v)
@@ -96,7 +103,7 @@ Varyings_Sprite DefaultSpriteVert(Attributes_Sprite v)
     Varyings_Sprite output;
 
     UNITY_SETUP_INSTANCE_ID(v);
-    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(v);
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
     output.vertex = UnityObjectToClipPos(UnityFlipSprite(v.vertex, _Flip));
     output.texcoord = v.texcoord;
@@ -110,13 +117,9 @@ Varyings_Sprite DefaultSpriteVert(Attributes_Sprite v)
 fixed4 DefaultSpriteFrag(Varyings_Sprite v) : SV_Target
 {
     fixed4 color = SampleSpriteTexture(v.texcoord) * v.color;
+    SpriteAlphaClip(color);
     PremultiplyAlpha(color);
     return color;
-}
-
-fixed4 DefaultSpriteFrag_NonPremultiplied(Varyings_Sprite v) : SV_Target
-{
-    return SampleSpriteTexture(v.texcoord) * v.color;
 }
 
 #endif // FD_SPRITES_INCLUDED

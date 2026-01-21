@@ -1,6 +1,6 @@
 // Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "FieldDay/Sprites/Blend"
+Shader "FieldDay/Sprites/Configurable"
 {
     Properties
     {
@@ -10,9 +10,20 @@ Shader "FieldDay/Sprites/Blend"
         [HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)
         [HideInInspector] _Flip ("Flip", Vector) = (1,1,1,1)
 
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Source Blend Mode", Int) = 5
+		[Header(Blending)] [Space]
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Source Blend Mode", Int) = 1
         [Enum(UnityEngine.Rendering.BlendMode)] _DestBlend("Destination Blend Mode", Int) = 10
         [Enum(UnityEngine.Rendering.BlendOp)] _BlendOp("Blend Operation", Int) = 0
+		[Toggle(FD_PREMULTIPLY_ALPHA)] _PremultiplyAlpha("Premultiply Alpha", Float) = 1
+
+		[Header(Culling and Clipping)] [Space]
+		[Enum(UnityEngine.Rendering.CullMode)] _CullMode ("Cull Mode", Int) = 2
+		[Toggle(FD_SPRITE_ALPHACLIP)] _EnableAlphaClip("Use Alpha Clip", Int) = 0
+		_AlphaCutoff("Alpha Cutoff", Range(0, 1)) = 0
+
+		[Header(Depth)] [Space]
+		[Toggle] _ZWriteMode("ZWrite", Int) = 0
+		[Enum(UnityEngine.Rendering.CompareFunction)] _ZTestMode("ZTest Mode", Int) = 4
     }
 
     SubShader
@@ -26,9 +37,10 @@ Shader "FieldDay/Sprites/Blend"
             "CanUseSpriteAtlas"="True"
         }
 
-        Cull Off
+        Cull [_CullMode]
         Lighting Off
-        ZWrite Off
+        ZWrite [_ZWriteMode]
+		ZTest [_ZTestMode]
         Blend [_SrcBlend] [_DestBlend]
         BlendOp [_BlendOp]
 
@@ -36,10 +48,13 @@ Shader "FieldDay/Sprites/Blend"
         {
         CGPROGRAM
             #pragma vertex DefaultSpriteVert
-            #pragma fragment DefaultSpriteFrag_NonPremultiplied
+            #pragma fragment DefaultSpriteFrag
             #pragma target 2.0
             #pragma multi_compile_instancing
             #pragma multi_compile_local _ PIXELSNAP_ON
+			#pragma multi_compile_local _ FD_SPRITE_ALPHACLIP
+			#pragma multi_compile_local _ FD_PREMULTIPLY_ALPHA
+
             #include "../CGIncludes/Sprites.cginc"
         ENDCG
         }

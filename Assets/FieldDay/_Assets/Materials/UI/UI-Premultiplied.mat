@@ -21,10 +21,11 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UI-Premultiplied
-  m_Shader: {fileID: 4800000, guid: 58114d9d26e2c904c960942d903bd81d, type: 3}
+  m_Shader: {fileID: 4800000, guid: 10e4639b824e2a24a92ec09ca5421fb1, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - FD_PREMULTIPLY_ALPHA
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -44,7 +45,9 @@ Material:
     m_Floats:
     - _BlendOp: 0
     - _ColorMask: 15
+    - _CullMode: 0
     - _DestBlend: 10
+    - _PremultiplyAlpha: 1
     - _SrcBlend: 1
     - _Stencil: 0
     - _StencilComp: 8

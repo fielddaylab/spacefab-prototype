@@ -1,10 +1,11 @@
-// Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
+// Portions from Unity built-in shader source, under MIT license.
 
 Shader "FieldDay/UI/Alpha Texture"
 {
     Properties
     {
         [PerRendererData] _MainTex ("Alpha Texture", 2D) = "white" {}
+        [Toggle(FD_SAMPLE_A)] _SampleR ("Sample Alpha Channel", Float) = 1
         _Color ("Tint", Color) = (1,1,1,1)
 
         [HideInInspector] _StencilComp ("Stencil Comparison", Float) = 8
@@ -12,15 +13,17 @@ Shader "FieldDay/UI/Alpha Texture"
         [HideInInspector] _StencilOp ("Stencil Operation", Float) = 0
         [HideInInspector] _StencilWriteMask ("Stencil Write Mask", Float) = 255
         [HideInInspector] _StencilReadMask ("Stencil Read Mask", Float) = 255
-
+        [HideInInspector] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
         [HideInInspector] _ColorMask ("Color Mask", Float) = 15
 
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Source Blend Mode", Int) = 5
+		[Header(Blending)] [Space] 
+		[Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Source Blend Mode", Int) = 1
         [Enum(UnityEngine.Rendering.BlendMode)] _DestBlend("Destination Blend Mode", Int) = 10
         [Enum(UnityEngine.Rendering.BlendOp)] _BlendOp("Blend Operation", Int) = 0
+		[Toggle(FD_PREMULTIPLY_ALPHA)] _PremultiplyAlpha("Premultiply Alpha", Float) = 1
 
-        [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
-        [Toggle(FD_SAMPLE_A)] _SampleR ("Sample Alpha Channel", Float) = 1
+		[Header(Culling)] [Space]
+		[Enum(UnityEngine.Rendering.CullMode)] _CullMode ("Cull Mode", Int) = 0
     }
 
     SubShader
@@ -43,7 +46,7 @@ Shader "FieldDay/UI/Alpha Texture"
             WriteMask [_StencilWriteMask]
         }
 
-        Cull Off
+        Cull [_CullMode]
         Lighting Off
         ZWrite Off
         ZTest [unity_GUIZTestMode]
@@ -62,14 +65,14 @@ Shader "FieldDay/UI/Alpha Texture"
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
             #pragma multi_compile_local _ FD_SAMPLE_A
+			#pragma multi_compile_local _ FD_PREMULTIPLY_ALPHA
 
             #include "../CGIncludes/UI.cginc"
+			#include "../CGIncludes/Layers.cginc"
 
             fixed4 CustomFrag(Varyings_UI IN) : SV_Target
             {
-                float alpha = SampleSingle(_MainTex, IN.texcoord);
-                half4 color = IN.color + _TextureSampleAdd;
-                color.a *= alpha;
+				half4 color = LayerAlphaTexture(_MainTex, IN.texcoord, IN.color + _TextureSampleAdd);
 
                 UIRectClip(IN.mask, color);
                 UIAlphaClip(color);

@@ -74,7 +74,7 @@ namespace SpaceFab.SupplyChain {
                 widget.ShipId = ship.AssetId;
 
                 widget.IconDisplay.sprite = ship.Icon;
-                //widget.NameDisplay.SetText(ship.DisplayName);
+                widget.CursorHint.TooltipHeader = ship.DisplayName;
 
                 widget.SpeedStat.SetValue(ship.Speed - 1, false);
 

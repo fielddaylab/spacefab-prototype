@@ -294,6 +294,13 @@ namespace FieldDay.Scenes {
         }
 
         /// <summary>
+        /// Returns if any auxillary scene is currently loading.
+        /// </summary>
+        public bool IsAuxLoading() {
+            return m_AdditionalSceneLoadProcess || IsLoadQueued(SceneType.Aux);
+        }
+
+        /// <summary>
         /// Returns if the given scene is loading.
         /// </summary>
         public bool IsLoading(SceneReference scene) {
@@ -311,6 +318,12 @@ namespace FieldDay.Scenes {
 
             for (int i = 0; i < m_LoadProcessQueue.Count; i++) {
                 if (m_LoadProcessQueue[i].Path == scenePath) {
+                    return true;
+                }
+            }
+
+            for(int i = 0; i < m_LoadQueue.Count; i++) {
+                if (m_LoadQueue[i].ScenePath == scenePath) {
                     return true;
                 }
             }
@@ -1648,6 +1661,17 @@ namespace FieldDay.Scenes {
                     yield return null;
                 }
 
+                // child scenes
+
+                if (args.Type == SceneType.Main) {
+                    if (m_AdditionalSceneLoadProcess || m_LoadProcessQueue.Count > 0) {
+                        Log.Trace("[SceneMgr] Main load waiting for additional loads to complete...");
+                        do {
+                            yield return null;
+                        } while (m_AdditionalSceneLoadProcess || m_LoadProcessQueue.Count > 0);
+                    }
+                }
+
                 // dependencies
 
                 Log.Trace("[SceneMgr] Waiting for dependencies and streaming load...");
@@ -1732,7 +1756,7 @@ namespace FieldDay.Scenes {
 
                 // broadcast ready
 
-                Log.Msg("[SceneMgr] Scene is ready");
+                Log.Msg("[SceneMgr] Scene '{0}' is ready", args.Path);
 
                 foreach (var data in linearizedScenes) {
                     data.TryVisit(SceneDataExt.VisitFlags.Readied);

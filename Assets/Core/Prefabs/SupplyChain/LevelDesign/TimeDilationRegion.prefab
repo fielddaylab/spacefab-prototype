@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 398403935994420015}
   - component: {fileID: 6499459014919217273}
   - component: {fileID: 7391502620579648102}
+  - component: {fileID: 1513029005495488596}
   m_Layer: 30
   m_Name: Main
   m_TagString: Untagged
@@ -250,6 +251,25 @@ PolygonCollider2D:
       - {x: 1.115, y: -0.91999996}
       - {x: 1.155, y: -0.79999995}
   m_UseDelaunayMesh: 1
+--- !u!114 &1513029005495488596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5208726819140600994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 0
+  CursorType:
+    m_HashValue: 2354262440
+  Flags: 0
+  TooltipHeader: Slow Region
+  Tooltip: Increases the duration of all routes that pass through.
 --- !u!1 &5876897341867719043
 GameObject:
   m_ObjectHideFlags: 0

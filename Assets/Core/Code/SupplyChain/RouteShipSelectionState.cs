@@ -20,6 +20,7 @@ namespace SpaceFab.SupplyChain {
             RouteShipPanel panel = Find.Panel<RouteShipPanel>();
             LiveRoutesState routes = Find.State<LiveRoutesState>();
             RouteDrawerState drawer = Find.State<RouteDrawerState>();
+            RouteDrawerUI drawInterface = Find.Panel<RouteDrawerUI>();
 
             if (state.SelectedWidget != shipWidget) {
                 if (state.SelectedWidget) {
@@ -35,9 +36,12 @@ namespace SpaceFab.SupplyChain {
                     LiveRouteLineUtility.UpdateColor(state.SelectedRoute.Line, shipWidget.RouteColor);
                     panel.UpdateShipSelectionVisuals(state.SelectedWidget, true);
                     SelectCurrentRoute();
+                    drawInterface.Background.color = shipWidget.RouteColor;
+                    drawInterface.Show();
                 } else {
                     state.SelectedShip = null;
                     state.SelectedRoute = null;
+                    drawInterface.Hide();
                 }
             }
         }
@@ -49,16 +53,8 @@ namespace SpaceFab.SupplyChain {
             LiveRouteData route = state.SelectedRoute;
             Assert.NotNull(route);
 
-            if (route.NodeCount == 0) {
-                drawer.DrawState = RouteDrawState.NotStarted;
-                CursorHint.DefaultCursor = null;
-            } else if (route.NodeCount == 1) {
-                drawer.DrawState = RouteDrawState.Started;
-                CursorHint.DefaultCursor = "DrawCursor";
-            } else {
-                drawer.DrawState = RouteDrawState.Selected;
-                CursorHint.DefaultCursor = null;
-            }
+            drawer.DrawState = RouteDrawState.Started;
+            CursorHint.DefaultCursor = "DrawCursor";
 
             for (int i = 0; i < route.NodeCount; i++) {
                 LiveRouteUtility.SetNodeOwner(route.Nodes[i], route);
@@ -70,6 +66,10 @@ namespace SpaceFab.SupplyChain {
 
             for(int i = 0; i < route.HazardCount; i++) {
                 LiveRouteUtility.SetHazardOwner(route.IntersectingHazards[i], route);
+            }
+
+            if (route.NodeCount == 0) {
+                LiveRouteUtility.TryAddNode(route, drawer.StartingNode);
             }
         }
 
@@ -143,8 +143,7 @@ namespace SpaceFab.SupplyChain {
                 LiveRouteUtility.PopNode(route);
             }
 
-            drawer.DrawState = route.NodeCount > 0 ? RouteDrawState.Selected : RouteDrawState.NotStarted;
-            CursorHint.DefaultCursor = null;
+            SelectShipFromWidget(null);
         }
     }
 }

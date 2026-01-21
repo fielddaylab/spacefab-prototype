@@ -94,7 +94,7 @@ Varyings_UI DefaultUIVert(Attributes_UI v)
 {
     Varyings_UI output;
     UNITY_SETUP_INSTANCE_ID(v);
-    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
+    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
     
     float4 vPosition = UnityObjectToClipPos(v.vertex);
     output.worldPosition = v.vertex;
@@ -111,24 +111,13 @@ Varyings_UI DefaultUIVert(Attributes_UI v)
 
 fixed4 DefaultUIFrag(Varyings_UI f) : SV_Target
 {
-    f.color.a *= Quantize8(f.color.a);
+    f.color.a = Quantize8(f.color.a);
     half4 color = f.color * (tex2D(_MainTex, f.texcoord) + _TextureSampleAdd);
     
     UIRectClip(f.mask, color);
     UIAlphaClip(color);
     
     PremultiplyAlpha(color);
-    return color;
-}
-
-fixed4 DefaultUIFrag_NonPremultiplied(Varyings_UI f) : SV_Target
-{
-    f.color.a *= Quantize8(f.color.a);
-    half4 color = f.color * (tex2D(_MainTex, f.texcoord) + _TextureSampleAdd);
-    
-    UIRectClip(f.mask, color);
-    UIAlphaClip(color);
-    
     return color;
 }
 

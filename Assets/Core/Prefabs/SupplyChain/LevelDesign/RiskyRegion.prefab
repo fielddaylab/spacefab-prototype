@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 974772003243720962}
   - component: {fileID: 8726689758486000059}
   - component: {fileID: 6486592373747996086}
+  - component: {fileID: 3259500857820649567}
   m_Layer: 30
   m_Name: Main
   m_TagString: Untagged
@@ -580,3 +581,22 @@ PolygonCollider2D:
       - {x: 0.065, y: -0.96}
       - {x: 0.185, y: -0.93}
   m_UseDelaunayMesh: 1
+--- !u!114 &3259500857820649567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8709364618209338756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 2354262440
+  Flags: 0
+  TooltipHeader: Risky Region
+  Tooltip: Reduces the reliability of all routes that pass through.

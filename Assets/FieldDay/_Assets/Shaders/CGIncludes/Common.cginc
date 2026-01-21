@@ -20,7 +20,11 @@ inline half Quantize8(half value)
 
 /// Fragment Operations
 
-#define PremultiplyAlpha(color) ((color).rgb *= (color).a)
+#if FD_PREMULTIPLY_ALPHA
+    #define PremultiplyAlpha(color) ((color).rgb *= (color).a)
+#else
+    #define PremultiplyAlpha(color)
+#endif // FD_PREMULTIPLY_ALPHA
 
 #if PIXELSNAP_ON
     #define PixelSnapApply(position) (position) = UnityPixelSnap((position))

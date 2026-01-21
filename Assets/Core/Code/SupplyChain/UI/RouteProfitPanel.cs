@@ -20,6 +20,7 @@ namespace SpaceFab.SupplyChain {
     public sealed class RouteProfitPanel : SharedPanel, IRegistrationCallbacks {
         public GameObject NotFulfilledGroup;
         public GameObject FulfilledGroup;
+        public PointerListener FinalizeButton;
 
         public TMP_Text ProfitLabel;
         public TMP_Text TimeLabel;
@@ -87,6 +88,10 @@ namespace SpaceFab.SupplyChain {
 
         void IRegistrationCallbacks.OnRegister() {
             Game.Events.Register(SupplyChainGame.Events.RouteStatsUpdated, OnRouteStatsUpdated);
+
+            FinalizeButton.onClick.AddListener(() => {
+                Game.Scenes.LoadMainScene(SceneReference.FromName("SupplyChainLoader"));
+            });
 
             Game.Scenes.QueueOnLoad(OnRouteStatsUpdated);
         }

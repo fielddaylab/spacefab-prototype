@@ -27,7 +27,7 @@ Material:
     - _InkTex:
         m_Texture: {fileID: 2800000, guid: 186488c2036865e4bad5d06c3b89961d, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0.49867612, y: 0.30823478}
+        m_Offset: {x: 0.049387477, y: 0.5758419}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 1bf19b4ce6ea3864f92987f37849906d, type: 3}
         m_Scale: {x: 2, y: 1}
@@ -35,11 +35,11 @@ Material:
     - _MaskTex0:
         m_Texture: {fileID: 2800000, guid: 5c8d173b95eb1264d9340bb460cb6002, type: 3}
         m_Scale: {x: 1.178, y: 0.85}
-        m_Offset: {x: 0.3650458, y: 0.24273871}
+        m_Offset: {x: 0.15770155, y: 0.058665585}
     - _MaskTex1:
         m_Texture: {fileID: 2800000, guid: cf2ea0a6705df1d468309739f6eb7c92, type: 3}
         m_Scale: {x: 0.94, y: 1.237}
-        m_Offset: {x: 0.47226316, y: 0.33792168}
+        m_Offset: {x: 0.70865303, y: 0.39364082}
     m_Ints: []
     m_Floats:
     - _Cutoff: 0
