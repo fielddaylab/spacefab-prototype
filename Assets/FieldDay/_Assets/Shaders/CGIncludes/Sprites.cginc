@@ -4,6 +4,7 @@
 #define FD_SPRITES_INCLUDED
 
 #include "./Common.cginc"
+#include "./Effects.cginc"
 
 /// Configuration Defines
 
@@ -18,7 +19,7 @@ struct Attributes_Sprite
     float4 vertex   : POSITION;
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
-    UNITY_VERTEX_INPUT_INSTANCE_ID
+    AttributesInstancing
 };
 
 struct Varyings_Sprite
@@ -26,7 +27,8 @@ struct Varyings_Sprite
     float4 vertex   : SV_POSITION;
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
-    UNITY_VERTEX_OUTPUT_STEREO
+    VaryingsFog(1)
+    VaryingsStereo
 };
 
 /// Instancing
@@ -110,13 +112,14 @@ inline fixed4 SampleMainWithExternalAlpha(float2 uv)
 Varyings_Sprite DefaultSpriteVert(Attributes_Sprite v)
 {
     Varyings_Sprite output;
-
-    UNITY_SETUP_INSTANCE_ID(v);
-    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+    InstancingInitialize(v);
+    StereoInitialize(output);
 
     output.vertex = UnityObjectToClipPos(UnityFlipSprite(v.vertex, _Flip));
     output.texcoord = v.texcoord;
     output.color = v.color * _Color * _RendererColor;
+    
+    FogTransfer(output, output.vertex);
 
     PixelSnapApply(output.vertex);
 
@@ -127,6 +130,7 @@ fixed4 DefaultSpriteFrag(Varyings_Sprite v) : SV_Target
 {
     fixed4 color = SampleSpriteTexture(v.texcoord) * v.color;
     SpriteAlphaClip(color);
+    FogApply(color, v);
     PremultiplyAlpha(color);
     return color;
 }

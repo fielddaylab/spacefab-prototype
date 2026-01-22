@@ -19,7 +19,7 @@ struct Attributes_UI
     float4 vertex   : POSITION;
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
-    UNITY_VERTEX_INPUT_INSTANCE_ID
+    AttributesInstancing
 };
 
 struct Varyings_UI
@@ -29,9 +29,9 @@ struct Varyings_UI
     float2 texcoord         : TEXCOORD0;
     float4 worldPosition    : TEXCOORD1;
 #if UNITY_UI_CLIP_RECT
-    float4 mask             : TEXCOORD2;
+    half4  mask             : TEXCOORD2;
 #endif // UNITY_UI_CLIP_RECT
-    UNITY_VERTEX_OUTPUT_STEREO
+    VaryingsStereo
 };
 
 /// Uniforms
@@ -98,8 +98,8 @@ inline float UIPerformRectClip(half4 mask)
 Varyings_UI DefaultUIVert(Attributes_UI v)
 {
     Varyings_UI output;
-    UNITY_SETUP_INSTANCE_ID(v);
-    UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+    InstancingInitialize(v);
+    StereoInitialize(output);
     
     float4 vPosition = UnityObjectToClipPos(v.vertex);
     output.worldPosition = v.vertex;

@@ -25,6 +25,9 @@ Shader "FieldDay/Sprites/Alpha Texture"
 		[Header(Depth)] [Space]
 		[Toggle] _ZWriteMode("ZWrite", Int) = 0
 		[Enum(UnityEngine.Rendering.CompareFunction)] _ZTestMode("ZTest Mode", Int) = 4
+
+        [Header(Effects)] [Space]
+        [Toggle(FD_ENABLE_FOG)] _EnableFog("Enable Fog", Int) = 0
     }
 
     SubShader
@@ -52,10 +55,12 @@ Shader "FieldDay/Sprites/Alpha Texture"
             #pragma fragment SpriteFragAlpha
             #pragma target 2.0
             #pragma multi_compile_instancing
+            #pragma multi_compile_fog
             #pragma multi_compile_local _ PIXELSNAP_ON
 			#pragma multi_compile_local _ FD_SPRITE_ALPHACLIP
 			#pragma multi_compile_local _ FD_PREMULTIPLY_ALPHA
             #pragma multi_compile_local _ FD_SAMPLE_A
+            #pragma multi_compile_local _ FD_ENABLE_FOG
 
             #include "../CGIncludes/Sprites.cginc"
 			#include "../CGIncludes/Layers.cginc"
@@ -64,6 +69,7 @@ Shader "FieldDay/Sprites/Alpha Texture"
             {
 				half4 color = LayerAlphaTexture(_MainTex, v.texcoord, v.color);
                 SpriteAlphaClip(color);
+                FogApply(color, v);
 				PremultiplyAlpha(color);
                 return color;
             }

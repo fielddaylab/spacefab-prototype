@@ -7,11 +7,11 @@
 
 /// Configuration Defines
 
-// FD_USE_FOG           Enables fog effects
+// FD_ENABLE_FOG        Enables fog effects
 
 /// Types
 
-#if FD_USE_FOG
+#if FD_ENABLE_FOG
     #define VaryingsFog(channel)    UNITY_FOG_COORDS(channel)
 #else
     #define VaryingsFog(channel)
@@ -23,12 +23,13 @@
 
 /// Helpers
 
-#if FD_USE_FOG
+#if FD_ENABLE_FOG
     #define     FogTransfer(output, clipPosition)   UNITY_TRANSFER_FOG(output, clipPosition)
-    #define     FogApply()
+    #define     FogApply(color, input)  UNITY_APPLY_FOG(input.fogCoord, color)
 #else
     #define     FogTransfer(output, clipPosition)
-#endif // FD_USE_FOG
+    #define     FogApply(color, input)
+#endif // FD_ENABLE_FOG
 
 /// Programs
 

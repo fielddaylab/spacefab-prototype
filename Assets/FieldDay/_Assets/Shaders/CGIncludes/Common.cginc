@@ -5,22 +5,22 @@
 
 /// Configuration Defines
 
-// FD_PREMULTIPLY_ALPHA     Premultiplies color
+// FD_PREMULTIPLY_ALPHA     Premultiplies color by alpha
 // PIXELSNAP_ON             Applies pixelsnap
 // FD_SAMPLE_R              Single-channel samples will read the Red channel
 // FD_SAMPLE_G              Single-channel samples will read the Green channel
 // FD_SAMPLE_B              Single-channel samples will read the Blue channel
 // FD_SAMPLE_A              Single-channel samples will read the Alpha channel
 
-
-/// Types
-
-#define     AttributesInstancing    UNITY_VERTEX_INPUT_INSTANCE_ID
-#define     VaryingsStereo          UNITY_VERTEX_OUTPUT_STEREO
-
 /// Instancing
 
-#define     InstancingCreateId(input)   UNITY_SETUP_INSTANCE_ID(input)
+#define     AttributesInstancing    UNITY_VERTEX_INPUT_INSTANCE_ID
+#define     InstancingInitialize(input)     UNITY_SETUP_INSTANCE_ID(input)
+
+/// Stereo
+
+#define     VaryingsStereo          UNITY_VERTEX_OUTPUT_STEREO
+#define     StereoInitialize(output)         UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output)
 
 /// Quantization
 

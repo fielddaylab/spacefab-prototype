@@ -24,6 +24,9 @@ Shader "FieldDay/Sprites/Configurable"
 		[Header(Depth)] [Space]
 		[Toggle] _ZWriteMode("ZWrite", Int) = 0
 		[Enum(UnityEngine.Rendering.CompareFunction)] _ZTestMode("ZTest Mode", Int) = 4
+
+        [Header(Effects)] [Space]
+        [Toggle(FD_ENABLE_FOG)] _EnableFog("Enable Fog", Int) = 0
     }
 
     SubShader
@@ -51,9 +54,11 @@ Shader "FieldDay/Sprites/Configurable"
             #pragma fragment DefaultSpriteFrag
             #pragma target 2.0
             #pragma multi_compile_instancing
+            #pragma multi_compile_fog
             #pragma multi_compile_local _ PIXELSNAP_ON
 			#pragma multi_compile_local _ FD_SPRITE_ALPHACLIP
 			#pragma multi_compile_local _ FD_PREMULTIPLY_ALPHA
+            #pragma multi_compile_local _ FD_ENABLE_FOG
 
             #include "../CGIncludes/Sprites.cginc"
         ENDCG
