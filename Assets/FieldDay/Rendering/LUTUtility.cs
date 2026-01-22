@@ -6,7 +6,7 @@ namespace FieldDay.Rendering {
     /// LUT (Look-up table) texture generation utilities.
     /// </summary>
     static public class LUTUtility {
-        static public void WriteLUT(Gradient gradient, Texture2D dst, int x, int y, int width, int height) {
+        static public void WriteGradientLUT(Gradient gradient, Texture2D dst, int x, int y, int width, int height) {
             Assert.NotNull(gradient);
             Assert.NotNull(dst);
             Assert.True(dst.format == TextureFormat.RGBA32);
@@ -30,9 +30,9 @@ namespace FieldDay.Rendering {
             dst.Apply();
         }
 
-        static public void WriteLUT(Gradient gradient, Texture2D dst) {
+        static public void WriteGradientLUT(Gradient gradient, Texture2D dst) {
             Assert.NotNull(dst);
-            WriteLUT(gradient, dst, 0, 0, dst.width, dst.height);
+            WriteGradientLUT(gradient, dst, 0, 0, dst.width, dst.height);
         }
 
         static public Texture2D CreateLUT(int width, int height, FilterMode filter = FilterMode.Bilinear, TextureWrapMode wrap = TextureWrapMode.Clamp) {

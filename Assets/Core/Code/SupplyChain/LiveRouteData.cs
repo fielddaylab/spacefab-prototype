@@ -46,6 +46,15 @@ namespace SpaceFab.SupplyChain {
             return false;
         }
 
+        static public int IndexOfNodeInPath(LiveRouteData liveRoute, PathNode node) {
+            for (int i = 0; i < liveRoute.NodeCount; i++) {
+                if (ReferenceEquals(liveRoute.Nodes[i], node)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
         static public bool TryAddNode(LiveRouteData liveRoute, PathNode node) {
             if (liveRoute.NodeCount >= LiveRouteData.MaxNodes) {
                 return false;
@@ -74,6 +83,31 @@ namespace SpaceFab.SupplyChain {
                 TryAddPort(liveRoute, node.Port);
             }
 
+            UpdateStats(liveRoute);
+            return true;
+        }
+
+        static public bool TryRemoveNode(LiveRouteData liveRoute, PathNode node) {
+            int index = IndexOfNodeInPath(liveRoute, node);
+            if (index < 0) {
+                return false;
+            }
+
+            liveRoute.NodeCount--;
+            for(int i = index; i < liveRoute.NodeCount; i++) {
+                liveRoute.Nodes[i] = liveRoute.Nodes[i + 1];
+            }
+            liveRoute.Nodes[liveRoute.NodeCount] = null;
+            SetNodeOwner(node, null);
+
+            LiveRouteLineUtility.ClearSolids(liveRoute.Line);
+            for(int i = 0; i < liveRoute.NodeCount; i++) {
+                LiveRouteLineUtility.AddSolid(liveRoute.Line, liveRoute.Nodes[i].transform.position);
+            }
+
+            LiveRouteLineUtility.UpdateTail(liveRoute.Line);
+            LiveRouteLineUtility.RegenerateColliders(liveRoute.Line);
+            RemovePortsForNodeImpl(liveRoute, node, null);
             UpdateStats(liveRoute);
             return true;
         }

@@ -62,6 +62,12 @@ namespace SpaceFab.SupplyChain {
             renderer.enabled = renderer.positionCount > 1;
         }
 
+        static public void ClearSolids(RouteLineRenderer line) {
+            LineRenderer renderer = line.Solid;
+            renderer.positionCount = 0;
+            renderer.enabled = false;
+        }
+
         #endregion // Solid Line
 
         #region Dotted Line

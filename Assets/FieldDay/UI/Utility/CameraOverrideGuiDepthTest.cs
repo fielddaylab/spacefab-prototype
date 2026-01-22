@@ -22,7 +22,7 @@ namespace FieldDay.UI {
                 m_Camera = GetComponent<Camera>();
                 Assert.NotNullOrDestroyed(m_Camera);
                 CameraHelper.AddOnPreRender(m_Camera, this, -1000);
-                CameraHelper.AddOnPostRender(m_Camera, this, -1000); 
+                CameraHelper.AddOnPostRender(m_Camera, this, -1000);
             }
         }
 

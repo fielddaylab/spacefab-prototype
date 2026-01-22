@@ -66,6 +66,8 @@ namespace SpaceFab.SupplyChain {
                         if (nodeToAdd) {
                             if ((nodeToAdd.Flags & PathNodeFlags.IsDestination) != 0) {
                                 RouteShipUtility.AttemptFinishRoute();
+                            } else if (LiveRouteUtility.TryRemoveNode(route, nodeToAdd)) {
+                                // remove feedback
                             } else {
                                 if (!LiveRouteUtility.TryAddNode(route, nodeToAdd)) {
                                     Pool.TryFree(nodeToAdd);
