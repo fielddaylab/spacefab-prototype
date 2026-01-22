@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Label: Chapter 4
   Scene:
-    m_ScenePath: Assets/Core/Data/SupplyChain/Levels/Chapter4.unity
+    m_ScenePath: Assets/Core/Data/SupplyChain/Levels/SC_Chapter4_LAYOUT.unity
     m_GUID: b20bb11b800652d47aecd876af27d316
   Ships:
   - m_HashValue: 4036650106

@@ -12,6 +12,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
@@ -1035,9 +1036,9 @@ namespace FieldDay.Rendering {
 
             info.AddSubmenu(qualitySettings);
 
-            DMInfo shaderAudit = new DMInfo("Shaders");
+            DMInfo auditMenu = new DMInfo("Audit GPU Support");
 
-            shaderAudit.AddButton("Find Unsupported Shaders", () => {
+            auditMenu.AddButton("Find Unsupported Shaders", () => {
                 var allShaders = Resources.FindObjectsOfTypeAll<Shader>();
                 using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
                     int totalUnsupported = 0;
@@ -1059,8 +1060,40 @@ namespace FieldDay.Rendering {
                     }
                 }
             });
+            auditMenu.AddButton("Print Texture Format Support", () => {
+                using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                    var allFormatFields = typeof(TextureFormat).GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly);
+                    int totalUnsupported = 0;
+                    int totalFormats = 0;
+                    foreach (var field in allFormatFields) {
+                        if (field.IsDefined(typeof(HiddenAttribute)) || field.IsDefined(typeof(ObsoleteAttribute))) {
+                            continue;
+                        }
 
-            info.AddSubmenu(shaderAudit);
+                        totalFormats++;
+                        TextureFormat format = (TextureFormat)field.GetValue(null);
+
+                        if (!SystemInfo.SupportsTextureFormat(format)) {
+                            totalUnsupported++;
+                            psb.Builder.Append("\nFormat '").Append(field.Name).Append("' unsupported!");
+                        } else {
+                            psb.Builder.Append("\n<color=#FFFFFF>Format '").Append(field.Name).Append("' is supported!</color>");
+                        }
+                    }
+
+                    if (totalUnsupported == 0) {
+                        psb.Builder.Append("No unsupported texture formats found!");
+                        DebugDraw.AddLogText(psb, Color.white, 4);
+                        Log.Msg(psb.Builder.ToString());
+                    } else {
+                        psb.Builder.Insert(0, string.Format("{0}/{1} texture formats unsupported!", totalUnsupported, totalFormats));
+                        DebugDraw.AddLogText(psb, Color.red, 8);
+                        Log.Warn(psb.Builder.ToString());
+                    }
+                }
+            });
+
+            info.AddSubmenu(auditMenu);
 
             return info;
         }

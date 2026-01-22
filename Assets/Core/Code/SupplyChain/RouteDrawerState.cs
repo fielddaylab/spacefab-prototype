@@ -11,6 +11,7 @@ namespace SpaceFab.SupplyChain {
 
         public PathNodePool TempPathNodePool;
         public bool AllowTemporaryNodes;
+        public PathNode StartingNode;
 
         [NonSerialized] public RouteDrawState DrawState;
     }

@@ -71,6 +71,8 @@ namespace SpaceFab.SupplyChain {
                                     Pool.TryFree(nodeToAdd);
                                 }
                             }
+                        } else if (!Game.Input.IsPointerOverCanvas()) {
+                            RouteShipUtility.AttemptFinishRoute();
                         }
                     } else if (Game.Input.IsMousePressed(MouseButton.Right) || Game.Input.IsKeyPressed(KeyCode.Backspace)) {
                         if (route.NodeCount > 0) {
@@ -83,10 +85,10 @@ namespace SpaceFab.SupplyChain {
                             } else if (route.NodeCount == 0) {
                                 m_StateA.DrawState = RouteDrawState.NotStarted;
                                 CursorHint.DefaultCursor = null;
-                                LiveRouteLineUtility.HideDottedLine(route.Line);
+                                RouteShipUtility.SelectShipFromWidget(null);
                             }
                         }
-                    } else if (Game.Input.IsKeyPressed(KeyCode.E)) {
+                    } else if (Game.Input.IsKeyPressed(KeyCode.Space)) {
                         RouteShipUtility.AttemptFinishRoute();
                     }
                     break;

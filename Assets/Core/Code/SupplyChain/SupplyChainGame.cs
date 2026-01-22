@@ -31,10 +31,10 @@ namespace SpaceFab.SupplyChain {
             }
 
             Game.Scenes.LoadAuxScene(toLoad, default);
-            while(Game.Scenes.IsLoading(toLoad)) {
-                yield return null;
-            }
+            return null;
+        }
 
+        protected override void OnSceneEnable() {
             var routePanel = Find.Panel<RouteShipPanel>();
             routePanel.PopulateShips(Ships);
             var requestPanel = Find.Panel<RouteRequestPanel>();
@@ -43,6 +43,14 @@ namespace SpaceFab.SupplyChain {
             var profitPanel = Find.Panel<RouteProfitPanel>();
             profitPanel.DesiredMaterials = RequiredMaterials;
             profitPanel.SellPrice = SellPrice;
+
+            var lineDrawerSystem = Find.State<RouteDrawerState>();
+            foreach (var node in Find.Components<PathNode>()) {
+                if ((node.Flags & PathNodeFlags.IsDestination) != 0) {
+                    lineDrawerSystem.StartingNode = node;
+                    break;
+                }
+            }
         }
     }
 }

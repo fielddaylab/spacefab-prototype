@@ -32,9 +32,7 @@ namespace SpaceFab.SupplyChain {
         public Image IconDisplay;
 
         [Header("Stats")]
-        public CanvasGroup StatsGroup;
         public GuiCounter SpeedStat;
-        public GuiCounter CostStat;
 
         [Header("Route")]
         public CanvasGroup RouteGroup;
@@ -76,9 +74,9 @@ namespace SpaceFab.SupplyChain {
                 widget.ShipId = ship.AssetId;
 
                 widget.IconDisplay.sprite = ship.Icon;
-                widget.NameDisplay.SetText(ship.DisplayName);
+                widget.CursorHint.TooltipHeader = ship.DisplayName;
 
-                widget.SpeedStat.SetValue(ship.Speed, false);
+                widget.SpeedStat.SetValue(ship.Speed - 1, false);
 
                 widget.RouteColorIndicator.color = widget.RouteColor;
 

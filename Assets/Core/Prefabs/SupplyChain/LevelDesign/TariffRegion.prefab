@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 5198237081032694656}
   - component: {fileID: 2360520940193886784}
   - component: {fileID: 800852936916419320}
+  - component: {fileID: 4858542509091040026}
   m_Layer: 30
   m_Name: Main
   m_TagString: Untagged
@@ -563,3 +564,22 @@ PolygonCollider2D:
       - {x: 0.48499998, y: -0.885}
       - {x: 0.79499996, y: -0.705}
   m_UseDelaunayMesh: 1
+--- !u!114 &4858542509091040026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8170664555813023849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 0
+  CursorType:
+    m_HashValue: 2354262440
+  Flags: 0
+  TooltipHeader: Tariff Region
+  Tooltip: Increases the cost of all routes that pass through.

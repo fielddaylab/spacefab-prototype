@@ -27,15 +27,7 @@ Material:
     - _InkTex:
         m_Texture: {fileID: 2800000, guid: 186488c2036865e4bad5d06c3b89961d, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0.32447955, y: 0.16616617}
-    - _InkTexture:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainMask:
-        m_Texture: {fileID: 2800000, guid: cf2ea0a6705df1d468309739f6eb7c92, type: 3}
-        m_Scale: {x: 2.14, y: 1}
-        m_Offset: {x: -0.23, y: 0}
+        m_Offset: {x: 0.24901561, y: 0.5261117}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 1bf19b4ce6ea3864f92987f37849906d, type: 3}
         m_Scale: {x: 2, y: 1}
@@ -43,21 +35,16 @@ Material:
     - _MaskTex0:
         m_Texture: {fileID: 2800000, guid: 5c8d173b95eb1264d9340bb460cb6002, type: 3}
         m_Scale: {x: 1.178, y: 0.85}
-        m_Offset: {x: 0.5625813, y: 0.38655552}
+        m_Offset: {x: 0.8271263, y: 0.10702729}
     - _MaskTex1:
         m_Texture: {fileID: 2800000, guid: cf2ea0a6705df1d468309739f6eb7c92, type: 3}
         m_Scale: {x: 0.94, y: 1.237}
-        m_Offset: {x: 0.43635872, y: 0.2581221}
-    - _SecondaryMask:
-        m_Texture: {fileID: 2800000, guid: 5c8d173b95eb1264d9340bb460cb6002, type: 3}
-        m_Scale: {x: 2.793, y: 3.24}
-        m_Offset: {x: 0.85, y: 0.56}
+        m_Offset: {x: 0.4570447, y: 0.33160987}
     m_Ints: []
     m_Floats:
     - _Cutoff: 0
     - _MaskRot0: 0
     - _MaskRot1: 3.79
-    - _SecondaryRotation: 0.56
     m_Colors:
     - _InkColor: {r: 0.085172996, g: 0.08536434, b: 0.088999994, a: 1}
   m_BuildTextureStacks: []

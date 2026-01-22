@@ -33,7 +33,6 @@ namespace SpaceFab.SupplyChain {
         }
 
         public void UpdateShipSelectionVisuals(RouteShipWidget widget, bool selected) {
-            widget.StatsGroup.gameObject.SetActive(selected);
             widget.Positioner.Offset0 = selected ? ShipWidgetSelectedOffset : default;
         }
 
@@ -80,7 +79,12 @@ namespace SpaceFab.SupplyChain {
 
         private void OnShipClicked(PointerListener.EventData evt) {
             var widget = evt.Source.GetComponentInParent<RouteShipWidget>();
-            RouteShipUtility.SelectShipFromWidget(widget);
+            var selectionState = Find.State<RouteShipSelectionState>();
+            if (selectionState.SelectedWidget == widget) {
+                RouteShipUtility.SelectShipFromWidget(null);
+            } else {
+                RouteShipUtility.SelectShipFromWidget(widget);
+            }
         }
     }
 }

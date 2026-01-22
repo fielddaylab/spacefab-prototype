@@ -165,8 +165,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
   CursorType:
     m_HashValue: 0
+  Flags: 0
+  TooltipHeader: 
   Tooltip: 
 --- !u!1 &7375237603758174508
 GameObject:
@@ -179,6 +182,7 @@ GameObject:
   - component: {fileID: 8235571216970684727}
   - component: {fileID: 8883558234928427505}
   - component: {fileID: 6992217643158983761}
+  - component: {fileID: 4027097655243323369}
   m_Layer: 31
   m_Name: Planet
   m_TagString: Untagged
@@ -220,7 +224,7 @@ MonoBehaviour:
   Flags: 0
   Collider: {fileID: 5029889830077837955}
   Highlight: {fileID: 6992217643158983761}
-  RouteNodes: []
+  Port: {fileID: 0}
 --- !u!114 &6992217643158983761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +239,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PathHighlight: {fileID: 8587589776075123157}
   HoverHighlight: {fileID: 5752034432483157982}
+--- !u!114 &4027097655243323369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7375237603758174508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e26361b9dd91424395e4af05928abf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Node: {fileID: 8883558234928427505}
+  Highlight: {fileID: 6992217643158983761}
 --- !u!1 &7396055218447633415
 GameObject:
   m_ObjectHideFlags: 0
