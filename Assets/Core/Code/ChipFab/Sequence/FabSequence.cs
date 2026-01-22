@@ -28,6 +28,7 @@ namespace SpaceFab.ChipFab
     {
         public ChunkID Chunk;
         public SequenceStepID Step;
+        public bool IsHidden;
     }
 
     [CreateAssetMenu(menuName = "ChipFab/Fab Sequence")]

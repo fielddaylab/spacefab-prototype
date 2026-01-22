@@ -15,6 +15,7 @@ namespace SpaceFab.ChipFab
         [Header("Display")]
         public SpriteRenderer ChunkRenderer;
         public SpriteRenderer StepRenderer;
+        public SpriteRenderer HiddenRenderer;
 
         private void Awake()
         {
@@ -53,6 +54,15 @@ namespace SpaceFab.ChipFab
 
             ChunkRenderer.sprite = chunkSprite;
             StepRenderer.sprite = stepSprite;
+
+            if (CurrSequence.Steps[stepIndex].IsHidden)
+            {
+                HiddenRenderer.enabled = true;
+            }
+            else
+            {
+                HiddenRenderer.enabled = false;
+            }
         }
 
         private void FinishSequenceDisplay()
