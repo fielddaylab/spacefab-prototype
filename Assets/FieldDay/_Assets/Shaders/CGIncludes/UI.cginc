@@ -7,6 +7,11 @@
 #include "./Common.cginc"
 #include "UnityUI.cginc"
 
+/// Configuration Defines
+
+// UNITY_UI_CLIP_RECT       (Unity) Applies rect clipping
+// UNITY_UI_ALPHACLIP       (Unity) Applies basic alpha clipping
+
 /// Types
 
 struct Attributes_UI

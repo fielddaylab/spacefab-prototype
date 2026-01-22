@@ -5,6 +5,12 @@
 
 #include "./Common.cginc"
 
+/// Configuration Defines
+
+// UNITY_INSTANCING_ENABLED     (Unity) Enables instanced rendering
+// ETC1_EXTERNAL_ALPHA          (Unity) Reads sprite alpha from separate alpha texture
+// FD_SPRITE_ALPHACLIP          Enables alpha clipping using the _AlphaCutoff uniform
+
 /// Types
 
 struct Attributes_Sprite
@@ -52,7 +58,10 @@ CBUFFER_END
 /// Uniforms
 
 fixed4 _Color;
+
+#if FD_SPRITE_ALPHACLIP
 half _AlphaCutoff;
+#endif // FD_SPRITE_ALPHACLIP
 
 sampler2D _MainTex;
 

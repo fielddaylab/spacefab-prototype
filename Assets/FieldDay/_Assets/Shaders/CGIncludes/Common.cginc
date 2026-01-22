@@ -3,6 +3,25 @@
 
 #include "UnityCG.cginc"
 
+/// Configuration Defines
+
+// FD_PREMULTIPLY_ALPHA     Premultiplies color
+// PIXELSNAP_ON             Applies pixelsnap
+// FD_SAMPLE_R              Single-channel samples will read the Red channel
+// FD_SAMPLE_G              Single-channel samples will read the Green channel
+// FD_SAMPLE_B              Single-channel samples will read the Blue channel
+// FD_SAMPLE_A              Single-channel samples will read the Alpha channel
+
+
+/// Types
+
+#define     AttributesInstancing    UNITY_VERTEX_INPUT_INSTANCE_ID
+#define     VaryingsStereo          UNITY_VERTEX_OUTPUT_STEREO
+
+/// Instancing
+
+#define     InstancingCreateId(input)   UNITY_SETUP_INSTANCE_ID(input)
+
 /// Quantization
 
 #define QUANTIZE_PRECISION_8 half(0xff)
@@ -31,6 +50,8 @@ inline half Quantize8(half value)
 #else
     #define PixelSnapApply(position)
 #endif // PIXELSNAP_ON
+
+#define ColorMakeOpaque(color)  color.a = 1
 
 /// Samplers
 
