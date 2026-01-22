@@ -1,8 +1,8 @@
-Shader "FieldDay/Sprites/Alpha Texture"
+Shader "FieldDay/Sprites/Intensity  Texture"
 {
     Properties
     {
-        [PerRendererData] _MainTex ("Alpha Texture", 2D) = "white" {}
+        [PerRendererData] _MainTex ("Intensity Texture", 2D) = "white" {}
         [Toggle(FD_SAMPLE_A)] _SampleAlpha ("Sample Alpha Channel", Float) = 1
         _Color ("Tint", Color) = (1,1,1,1)
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
@@ -17,8 +17,6 @@ Shader "FieldDay/Sprites/Alpha Texture"
 
 		[Header(Culling and Clipping)] [Space]
 		[Enum(UnityEngine.Rendering.CullMode)] _CullMode ("Cull Mode", Int) = 2
-		[Toggle(FD_SPRITE_ALPHACLIP)] _EnableAlphaClip("Use Alpha Clip", Int) = 0
-		_AlphaCutoff("Alpha Cutoff", Range(0, 1)) = 0
 
 		[Header(Depth)] [Space]
 		[Toggle] _ZWriteMode("ZWrite", Int) = 0
@@ -55,7 +53,6 @@ Shader "FieldDay/Sprites/Alpha Texture"
             #pragma multi_compile_instancing
             #pragma multi_compile_fog
             #pragma multi_compile_local _ PIXELSNAP_ON
-			#pragma multi_compile_local _ FD_SPRITE_ALPHACLIP
 			#pragma multi_compile_local _ FD_PREMULTIPLY_ALPHA
             #pragma multi_compile_local _ FD_SAMPLE_A
             #pragma multi_compile_local _ FD_ENABLE_FOG
@@ -65,8 +62,7 @@ Shader "FieldDay/Sprites/Alpha Texture"
 
             fixed4 SpriteFragAlpha(Varyings_Sprite v) : SV_Target
             {
-				half4 color = LayerAlphaTexture(_MainTex, v.texcoord, v.color);
-                SpriteAlphaClip(color);
+				half4 color = LayerIntensityTexture(_MainTex, v.texcoord, v.color);
                 FogApply(color, v);
 				PremultiplyAlpha(color);
                 return color;

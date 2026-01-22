@@ -109,7 +109,7 @@ namespace SpaceFab.SupplyChain {
 
                 float percentage = (float) stats.Reliability / SupplyUtility.MaxReliability;
 
-                int defenseIndex = supplyMath.GetReliabilityIndex(percentage);
+                int defenseIndex = supplySprites.GetDefenseIndex(percentage);
                 widget.RouteReliability.sprite = supplySprites.DefenseSprite(defenseIndex);
             }
 

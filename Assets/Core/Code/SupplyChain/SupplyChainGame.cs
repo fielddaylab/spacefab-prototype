@@ -4,6 +4,7 @@ using FieldDay;
 using FieldDay.Assets;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
+using FieldDay.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,6 +54,10 @@ namespace SpaceFab.SupplyChain {
                 }
             }
             Assert.True(nodeIndex <= 64, "Overflowed limit of 64 nodes in one level");
+        }
+
+        protected override void OnSceneUnload() {
+            CursorHint.DefaultCursor = null;
         }
     }
 }

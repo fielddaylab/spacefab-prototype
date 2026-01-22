@@ -8,6 +8,7 @@ using FieldDay.Components;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
 using FieldDay.UI;
+using FieldDay.UI.Animation;
 using FieldDay.UI.Widgets;
 using System;
 using System.Collections.Generic;
@@ -25,14 +26,18 @@ namespace SpaceFab.SupplyChain {
         public TMP_Text ProfitLabel;
         public TMP_Text TimeLabel;
         public Image DefenseDisplay;
+        public Graphic DefenseFlash;
 
         [NonSerialized] public FabMaterialSet DesiredMaterials;
         [NonSerialized] public int SellPrice;
+        [NonSerialized] public int LastDefenseIconIndex = -1;
+        [NonSerialized] public int LastCost = -1;
+        [NonSerialized] public int LastTime = -1;
 
         private unsafe void OnRouteStatsUpdated() {
             LiveRoutesState routesState = Find.State<LiveRoutesState>();
             var sprites = Find.GlobalAsset<SupplyChainSprites>();
-            var math = Find.GlobalAsset<SupplyChainMath>();
+            var supplyMath = Find.GlobalAsset<SupplyChainMath>();
 
             FabMaterialSet materials = default;
             int cost = 0;
@@ -50,8 +55,6 @@ namespace SpaceFab.SupplyChain {
                 SupplyUtility.AccumulateMaterials(ref materials, stats);
             }
 
-            int profit = SellPrice - cost;
-
             bool materialsFulfilled = (materials.A >= DesiredMaterials.A
                 && materials.E >= DesiredMaterials.E
                 && materials.B >= DesiredMaterials.B
@@ -59,20 +62,24 @@ namespace SpaceFab.SupplyChain {
                 && materials.D >= DesiredMaterials.D);
                 
             using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
-                if (profit < 0) {
-                    psb.Builder.Append('-');
+                if (cost > 0) {
+                    psb.Builder.Append('$').AppendNoAlloc(Math.Abs(cost));
+                    ProfitLabel.SetText(psb);
+                } else {
+                    ProfitLabel.SetText("-");
                 }
-                psb.Builder.Append('$').AppendNoAlloc(Math.Abs(profit));
-                ProfitLabel.SetText(psb);
+
                 TimeLabel.SetText(time.ToStringLookup());
             }
 
-            for(int i = sprites.DefenseSprites.Length; i-- > 0;) {
-                if (i == 0 || probability > math.Reliabilities[i]) {
-                    DefenseDisplay.sprite = sprites.DefenseSprites[i];
-                    break;
-                }
+            int defenseIndex = sprites.GetDefenseIndex((float)probability);
+            DefenseDisplay.sprite = sprites.DefenseSprites[defenseIndex];
+
+            if (LastDefenseIconIndex >= 0 && LastDefenseIconIndex != defenseIndex) {
+                bool isNegative = LastDefenseIconIndex > defenseIndex;
+                FlashAnim.Play(DefenseFlash, Color.white, FlashAnim.Default);
             }
+            LastDefenseIconIndex = defenseIndex;
 
             if (NotFulfilledGroup) {
                 NotFulfilledGroup.SetActive(!materialsFulfilled);

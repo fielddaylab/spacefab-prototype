@@ -248,7 +248,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 246
+      x: 252
       y: 4
       width: 112
       height: 112
@@ -260,7 +260,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 246, y: 4}
+    uvTransform: {x: 252, y: 4}
   - name: SupplyMaterialC_Outline
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -268,7 +268,7 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 366
+      x: 372
       y: 4
       width: 112
       height: 112
@@ -280,7 +280,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 366, y: 4}
+    uvTransform: {x: 372, y: 4}
   - name: SupplyMaterialE
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -290,7 +290,7 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 113
+      width: 116
       height: 112
     spriteID: 68fe403f814cc2649919984fb350b0b8
     spriteBone: []
@@ -308,9 +308,9 @@ ScriptedImporter:
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
-      x: 125
+      x: 128
       y: 4
-      width: 113
+      width: 116
       height: 112
     spriteID: 1a34f55189fc2d54bb7a3cd29c22331b
     spriteBone: []
@@ -320,7 +320,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 125, y: 4}
+    uvTransform: {x: 128, y: 4}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -406,18 +406,18 @@ ScriptedImporter:
       frameIndex: 8
       additiveSortOrder: 0
       cellRect:
-        x: 9
+        x: 8
         y: 11
-        width: 113
+        width: 116
         height: 112
       spriteId: 68fe403f814cc2649919984fb350b0b8
     - name: Frame_9
       frameIndex: 9
       additiveSortOrder: 0
       cellRect:
-        x: 9
+        x: 8
         y: 11
-        width: 113
+        width: 116
         height: 112
       spriteId: 1a34f55189fc2d54bb7a3cd29c22331b
     linkedCells: []

@@ -6,7 +6,7 @@
 /// Configuration Defines
 
 // FD_PREMULTIPLY_ALPHA     Premultiplies color by alpha
-// PIXELSNAP_ON             Applies pixelsnap
+// PIXELSNAP_ON             (Unity) Applies pixelsnap
 // FD_SAMPLE_R              Single-channel samples will read the Red channel
 // FD_SAMPLE_G              Single-channel samples will read the Green channel
 // FD_SAMPLE_B              Single-channel samples will read the Blue channel

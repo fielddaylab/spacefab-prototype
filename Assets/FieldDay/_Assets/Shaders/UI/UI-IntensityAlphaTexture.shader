@@ -1,8 +1,8 @@
-Shader "FieldDay/UI/Alpha Texture"
+Shader "FieldDay/UI/Intensity+Alpha Texture"
 {
     Properties
     {
-        [PerRendererData] _MainTex ("Alpha Texture", 2D) = "white" {}
+        [PerRendererData] _MainTex ("Intensity+Alpha Texture", 2D) = "white" {}
         [Toggle(FD_SAMPLE_A)] _SampleAlpha ("Sample Alpha Channel", Float) = 1
         _Color ("Tint", Color) = (1,1,1,1)
 
@@ -70,7 +70,7 @@ Shader "FieldDay/UI/Alpha Texture"
 
             fixed4 CustomFrag(Varyings_UI IN) : SV_Target
             {
-				half4 color = LayerAlphaTexture(_MainTex, IN.texcoord, IN.color + _TextureSampleAdd);
+				half4 color = LayerIntensityAlphaTexture(_MainTex, IN.texcoord, IN.color + _TextureSampleAdd);
 
                 UIRectClip(IN.mask, color);
                 UIAlphaClip(color);

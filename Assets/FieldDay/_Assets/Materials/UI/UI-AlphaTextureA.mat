@@ -34,9 +34,10 @@ Material:
     m_Floats:
     - _BlendOp: 0
     - _ColorMask: 15
+    - _CullMode: 0
     - _DestBlend: 10
     - _PremultiplyAlpha: 1
-    - _SampleR: 1
+    - _SampleAlpha: 1
     - _SrcBlend: 1
     - _Stencil: 0
     - _StencilComp: 8

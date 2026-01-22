@@ -16,7 +16,7 @@ namespace SpaceFab.SupplyChain {
     }
 
     static public partial class SupplyUtility {
-        public const byte MaxReliability = 128;
+        public const byte MaxReliability = 200;
         public const int MaxDefense = 5;
         public const int MaterialTypeCount = 5;
 

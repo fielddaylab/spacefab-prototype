@@ -1,5 +1,3 @@
-//// Portions from Unity built-in shader source, under MIT license.
-
 Shader "FieldDay/UI/Configurable"
 {
     Properties

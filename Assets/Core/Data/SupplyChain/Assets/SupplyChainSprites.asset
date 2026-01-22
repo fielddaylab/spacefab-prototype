@@ -30,6 +30,13 @@ MonoBehaviour:
   - {fileID: -4367773378879019555, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
   - {fileID: 4394838783352990769, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
   - {fileID: 3069610640207118565, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
+  DefenseThresholds:
+  - 0
+  - 0.3
+  - 0.5
+  - 0.65
+  - 0.8
+  - 0.9
   DefenseSprites:
   - {fileID: 7933574025687213536, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}
   - {fileID: -1810142065578039886, guid: 978dcae305381d6408fa1bd212776bbb, type: 3}

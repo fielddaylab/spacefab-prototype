@@ -51,7 +51,7 @@ Material:
     - _EnableAlphaClip: 0
     - _EnableFog: 0
     - _PremultiplyAlpha: 1
-    - _SampleR: 0
+    - _SampleAlpha: 0
     - _SrcBlend: 1
     - _ZTestMode: 4
     - _ZWriteMode: 0

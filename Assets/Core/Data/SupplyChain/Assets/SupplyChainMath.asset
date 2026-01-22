@@ -13,21 +13,16 @@ MonoBehaviour:
   m_Name: SupplyChainMath
   m_EditorClassIdentifier: 
   Reliabilities:
-  - 0.55
   - 0.6
-  - 0.65
-  - 0.7
-  - 0.8
-  - 0.95
+  - 0.68
+  - 0.76
+  - 0.84
+  - 0.92
+  - 0.96
   Speeds:
   - 5
   - 10
   - 15
-  Costs:
-  - 1
-  - 1.5
-  - 2
-  - 3
   TimeDialationSpeedFactor: 0.55
   RiskyMultiplierPerUnit: 0.12
   RiskyMultiplierUnitDist: 5

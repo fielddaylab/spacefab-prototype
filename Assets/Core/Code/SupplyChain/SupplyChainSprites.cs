@@ -7,6 +7,8 @@ namespace SpaceFab.SupplyChain {
         public Sprite[] MaterialSprites;
         public Sprite[] MaterialSpriteOutlines;
         public Sprite[] MaterialSpriteIcons;
+
+        public float[] DefenseThresholds = new float[6];
         public Sprite[] DefenseSprites;
 
         public Sprite MaterialSprite(FabMaterial mat) {
@@ -32,6 +34,15 @@ namespace SpaceFab.SupplyChain {
 
         public Sprite DefenseSprite(int defense) {
             return DefenseSprites[defense];
+        }
+
+        public int GetDefenseIndex(float percent) {
+            for (int i = DefenseThresholds.Length; i-- > 0;) {
+                if (DefenseThresholds[i] <= percent) {
+                    return i;
+                }
+            }
+            return 0;
         }
     }
 }

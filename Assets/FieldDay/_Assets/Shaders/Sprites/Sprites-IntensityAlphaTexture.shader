@@ -1,8 +1,8 @@
-Shader "FieldDay/Sprites/Alpha Texture"
+Shader "FieldDay/Sprites/Intensity+Alpha Texture"
 {
     Properties
     {
-        [PerRendererData] _MainTex ("Alpha Texture", 2D) = "white" {}
+        [PerRendererData] _MainTex ("Intensity+Alpha Texture", 2D) = "white" {}
         [Toggle(FD_SAMPLE_A)] _SampleAlpha ("Sample Alpha Channel", Float) = 1
         _Color ("Tint", Color) = (1,1,1,1)
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
@@ -65,10 +65,12 @@ Shader "FieldDay/Sprites/Alpha Texture"
 
             fixed4 SpriteFragAlpha(Varyings_Sprite v) : SV_Target
             {
-				half4 color = LayerAlphaTexture(_MainTex, v.texcoord, v.color);
+				half4 color = LayerIntensityAlphaTexture(_MainTex, v.texcoord, v.color);
                 SpriteAlphaClip(color);
                 FogApply(color, v);
+
 				PremultiplyAlpha(color);
+
                 return color;
             }
         ENDCG

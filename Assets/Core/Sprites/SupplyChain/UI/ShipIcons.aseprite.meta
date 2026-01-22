@@ -123,15 +123,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: ShipIcons_0
     originalName: 
-    pivot: {x: 0.52136755, y: 0.4883721}
+    pivot: {x: 0.49999997, y: 0.47727275}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 2
       y: 52
-      width: 117
-      height: 43
+      width: 122
+      height: 44
     spriteID: 27fec6f82d830bb4fbf52bfed0fc030b
     spriteBone: []
     spriteOutline: []
@@ -176,8 +176,8 @@ ScriptedImporter:
       cellRect:
         x: 3
         y: 11
-        width: 117
-        height: 43
+        width: 122
+        height: 44
       spriteId: 27fec6f82d830bb4fbf52bfed0fc030b
     - name: Frame_1
       frameIndex: 1
