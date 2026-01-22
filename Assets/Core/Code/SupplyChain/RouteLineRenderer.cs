@@ -13,6 +13,8 @@ namespace SpaceFab.SupplyChain {
         public EdgeCollider2D Collider;
         public float LineWidth = 0.25f;
 
+        [NonSerialized] public StringHash32 ShipId;
+
         private void Awake() {
             Solid.widthMultiplier = LineWidth;
             Drawing.widthMultiplier = LineWidth;

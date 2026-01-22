@@ -46,9 +46,10 @@ Material:
     - PixelSnap: 0
     - _AlphaCutoff: 0
     - _BlendOp: 0
-    - _CullMode: 2
+    - _CullMode: 0
     - _DestBlend: 10
     - _EnableAlphaClip: 0
+    - _EnableFog: 0
     - _PremultiplyAlpha: 1
     - _SampleR: 0
     - _SrcBlend: 1

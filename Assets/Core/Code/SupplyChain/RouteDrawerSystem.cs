@@ -19,33 +19,27 @@ namespace SpaceFab.SupplyChain {
             LiveRouteData route = m_StateC.SelectedRoute;
 
             if (route == null) {
+                if (!Game.Input.IsMousePressed(MouseButton.Left)) {
+                    return;
+                }
+
+                if (m_StateB.Node) {
+                    if ((m_StateB.Node.Flags & PathNodeFlags.IsDestination) == 0) {
+                        LiveRoutesState routes = Find.State<LiveRoutesState>();
+                        for(int i = 0; i < routes.RouteCount; i++) {
+                            if (LiveRouteUtility.IsNodeInPath(routes.Routes[i], m_StateB.Node)) {
+                                RouteShipUtility.SelectShipFromId(routes.Routes[i].ShipId);
+                                break;
+                            }
+                        }
+                    }
+                } else if (m_StateB.RouteLine) {
+                    RouteShipUtility.SelectShipFromId(m_StateB.RouteLine.ShipId);
+                }
                 return;
             }
 
             switch(m_StateA.DrawState) {
-                case RouteDrawState.NotStarted: {
-                    if (m_StateB.Node && Game.Input.IsMousePressed(MouseButton.Left)) {
-                        if ((m_StateB.Node.Flags & PathNodeFlags.IsDestination) != 0) {
-                            bool added = LiveRouteUtility.TryAddNode(route, m_StateB.Node);
-                            Assert.True(added);
-                            m_StateA.DrawState = RouteDrawState.Started;
-                            CursorHint.DefaultCursor = "DrawCursor";
-                        }
-                    }
-                    break;
-                }
-                case RouteDrawState.Selected: {
-                    if (m_StateB.Node && Game.Input.IsMousePressed(MouseButton.Left)) {
-                        if (LiveRouteUtility.IsNodeInPath(route, m_StateB.Node)) {
-                            m_StateA.DrawState = RouteDrawState.InProgress;
-                            CursorHint.DefaultCursor = "DrawCursor";
-                        }
-                    } else if (Game.Input.IsKeyPressed(KeyCode.E)) {
-                        m_StateA.DrawState = RouteDrawState.InProgress;
-                        CursorHint.DefaultCursor = "DrawCursor";
-                    }
-                    break;
-                }
                 case RouteDrawState.Started:
                 case RouteDrawState.InProgress: {
                     if (m_StateB.MousePosition.HasValue) {

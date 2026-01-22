@@ -23,6 +23,7 @@ namespace SpaceFab.SupplyChain {
         public int NodeCount;
         public int PortCount;
         public int HazardCount;
+        public BitSet64 NodeMask;
 
         public RouteLineRenderer Line;
         public readonly PathNode[] Nodes = new PathNode[MaxNodes];
@@ -38,12 +39,7 @@ namespace SpaceFab.SupplyChain {
         }
 
         static public bool IsNodeInPath(LiveRouteData liveRoute, PathNode node) {
-            for(int i = 0; i < liveRoute.NodeCount; i++) {
-                if (ReferenceEquals(liveRoute.Nodes[i], node)) {
-                    return true;
-                }
-            }
-            return false;
+            return liveRoute.NodeMask.IsSet(node.NodeBitIndex);
         }
 
         static public int IndexOfNodeInPath(LiveRouteData liveRoute, PathNode node) {
@@ -75,6 +71,7 @@ namespace SpaceFab.SupplyChain {
 
             liveRoute.Nodes[liveRoute.NodeCount++] = node;
             SetNodeOwner(node, liveRoute);
+            liveRoute.NodeMask.Set(node.NodeBitIndex);
             LiveRouteLineUtility.AddSolid(liveRoute.Line, node.transform.position);
             LiveRouteLineUtility.UpdateTail(liveRoute.Line);
             LiveRouteLineUtility.RegenerateColliders(liveRoute.Line);
@@ -100,6 +97,8 @@ namespace SpaceFab.SupplyChain {
             liveRoute.Nodes[liveRoute.NodeCount] = null;
             SetNodeOwner(node, null);
 
+            liveRoute.NodeMask.Unset(node.NodeBitIndex);
+
             LiveRouteLineUtility.ClearSolids(liveRoute.Line);
             for(int i = 0; i < liveRoute.NodeCount; i++) {
                 LiveRouteLineUtility.AddSolid(liveRoute.Line, liveRoute.Nodes[i].transform.position);
@@ -120,6 +119,7 @@ namespace SpaceFab.SupplyChain {
             liveRoute.Nodes[idx] = null;
             liveRoute.NodeCount--;
             SetNodeOwner(node, null);
+            liveRoute.NodeMask.Unset(node.NodeBitIndex);
             LiveRouteLineUtility.PopSolid(liveRoute.Line);
             LiveRouteLineUtility.UpdateTail(liveRoute.Line);
             LiveRouteLineUtility.RegenerateColliders(liveRoute.Line);

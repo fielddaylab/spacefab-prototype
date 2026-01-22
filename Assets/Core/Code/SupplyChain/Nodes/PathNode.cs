@@ -13,6 +13,7 @@ namespace SpaceFab.SupplyChain {
         public PathNodeHighlight Highlight;
 
         [HideInInspector] public Port Port;
+        [NonSerialized] public int NodeBitIndex;
 
         private void Awake() {
             Port = GetComponentInChildren<Port>(true);

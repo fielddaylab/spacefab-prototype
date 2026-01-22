@@ -33,6 +33,7 @@ namespace SpaceFab.SupplyChain {
                     state.SelectedRoute = LiveRouteUtility.GetLiveRoute(state.SelectedShip.AssetId);
                     state.SelectedRoute.LineColor = shipWidget.RouteColor;
                     state.SelectedRoute.CarryingCapacity = state.SelectedShip.Capacity;
+                    state.SelectedRoute.Line.ShipId = state.SelectedShip.AssetId;
                     LiveRouteLineUtility.UpdateColor(state.SelectedRoute.Line, shipWidget.RouteColor);
                     panel.UpdateShipSelectionVisuals(state.SelectedWidget, true);
                     SelectCurrentRoute();
@@ -44,6 +45,19 @@ namespace SpaceFab.SupplyChain {
                     drawInterface.Hide();
                 }
             }
+        }
+
+        static public bool SelectShipFromId(StringHash32 shipId) {
+            RouteShipPanel panel = Find.Panel<RouteShipPanel>();
+
+            foreach(var widget in panel.ShipWidgets) {
+                if (widget.ShipId == shipId) {
+                    SelectShipFromWidget(widget);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         static private void SelectCurrentRoute() {

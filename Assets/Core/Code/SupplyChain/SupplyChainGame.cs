@@ -45,12 +45,14 @@ namespace SpaceFab.SupplyChain {
             profitPanel.SellPrice = SellPrice;
 
             var lineDrawerSystem = Find.State<RouteDrawerState>();
+            int nodeIndex = 0;
             foreach (var node in Find.Components<PathNode>()) {
+                node.NodeBitIndex = nodeIndex++;
                 if ((node.Flags & PathNodeFlags.IsDestination) != 0) {
                     lineDrawerSystem.StartingNode = node;
-                    break;
                 }
             }
+            Assert.True(nodeIndex <= 64, "Overflowed limit of 64 nodes in one level");
         }
     }
 }

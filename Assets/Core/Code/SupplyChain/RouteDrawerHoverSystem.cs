@@ -20,7 +20,7 @@ namespace SpaceFab.SupplyChain {
             PathNode hoverNode = null;
             if (!Game.Input.IsPointerOverCanvas() && MouseControls.TryGetWorldPosition2D(out Vector2 worldPos)) {
                 m_State.MousePosition = worldPos;
-                Collider2D node = Physics2D.OverlapCircle(worldPos, 0.005f, LayerMasks.SupplyNode_Mask);
+                Collider2D node = Physics2D.OverlapCircle(worldPos, 0, LayerMasks.SupplyNode_Mask);
                 if (node != null) {
                     hoverNode = node.ResolveComponent<PathNode>();
                 }
