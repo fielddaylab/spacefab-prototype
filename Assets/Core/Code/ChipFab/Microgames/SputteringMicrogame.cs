@@ -263,25 +263,28 @@ namespace SpaceFab.ChipFab
         {
             Vector3 sprayPos = Aim.position;
 
-            Collider2D hit = Physics2D.OverlapPoint(sprayPos, FillDotLayer);
-            if (hit != null)
+            Collider2D[] hits = Physics2D.OverlapPointAll(sprayPos, FillDotLayer);
+            foreach (var hit in hits)
             {
-                SpriteRenderer dot = hit.GetComponent<SpriteRenderer>();
-                if (dot && !dot.enabled)
+                if (hit != null)
                 {
-                    dot.enabled = true;
-                    fillCount++;
+                    SpriteRenderer dot = hit.GetComponent<SpriteRenderer>();
+                    if (dot && !dot.enabled)
+                    {
+                        dot.enabled = true;
+                        fillCount++;
+                    }
                 }
-            }
 
-            /*
-            if (m_StencilFillRoutine.Exists())
-            {
-                return;
-            }
+                /*
+                if (m_StencilFillRoutine.Exists())
+                {
+                    return;
+                }
 
-            m_StencilFillRoutine.Replace(StencilFillRoutine());
-            */
+                m_StencilFillRoutine.Replace(StencilFillRoutine());
+                */
+            }
         }
 
         private IEnumerator StencilFillRoutine()

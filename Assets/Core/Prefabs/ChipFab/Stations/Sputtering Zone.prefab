@@ -232,6 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 225fc680be308a44a8ef26f1bf8d7055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Priority: 0
   BoxType: 2
   OnHoverEnter:
     m_PersistentCalls:
@@ -1012,6 +1013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 225fc680be308a44a8ef26f1bf8d7055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Priority: 0
   BoxType: 1
   OnHoverEnter:
     m_PersistentCalls:
@@ -1266,9 +1268,10 @@ MonoBehaviour:
   ActivateButton: {fileID: 4235052449230393183}
   ActivateGroup: {fileID: 4929670998497594640}
   CamPos: {fileID: 0}
+  IsCurrentSessionAutomated: 0
   SprayStartPos: {x: 1.82, y: -1.13, z: 0}
   Sprayer: {fileID: 7780155139615285605}
-  SprayerMoveSpeed: 3.5
+  SprayerMoveSpeed: 2.5
   Aim: {fileID: 9037953037487947110}
   FillDotLayer:
     serializedVersion: 2

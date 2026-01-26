@@ -15,6 +15,7 @@ namespace SpaceFab.ChipFab
         public KeyCode NavLeftKey = KeyCode.LeftArrow;
         public KeyCode NavRightKey = KeyCode.RightArrow;
         public KeyCode NavUpKey = KeyCode.UpArrow;
+        public KeyCode NavUpKey2 = KeyCode.Space;
         public KeyCode NavDownKey = KeyCode.DownArrow;
 
         public ConveyorState State;
@@ -111,7 +112,7 @@ namespace SpaceFab.ChipFab
                     }
                 }
             }
-            else if (Input.GetKeyDown(NavUpKey))
+            else if (Input.GetKeyDown(NavUpKey) || Input.GetKeyDown(NavUpKey2))
             {
                 if (State == ConveyorState.Full)
                 {

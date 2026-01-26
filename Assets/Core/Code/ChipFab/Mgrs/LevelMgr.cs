@@ -106,7 +106,9 @@ namespace SpaceFab.ChipFab
             PrecisionText.gameObject.SetActive(true);
             PrecisionText.SetText("Accuracy: " + (currState.Precision.Avg() * 100).ToString("#.##") + "%");
             TimeText.SetText("Time: " + TimeMgr.Instance.RunningText.text);
-            CycleText.SetText("Total Production Time: " + Mathf.Ceil(TimeMgr.Instance.GetElapsedTime() / secondsPerCycle));
+            var cycles = Mathf.Ceil(TimeMgr.Instance.GetElapsedTime() / secondsPerCycle);
+            var unitStr = cycles == 1 ? "cycle" : "cycles";
+            CycleText.SetText("Total Production Time: " + cycles + unitStr);
 
             Game.Events.Dispatch(GameEvents.WaferSubmitted);
         }
