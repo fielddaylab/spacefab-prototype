@@ -78,6 +78,7 @@ namespace SpaceFab.ChipFab
         private void Update()
         {
             ProcessInputs();
+            AutomationMgr.Instance.StationControlReleasedThisFrame = false;
         }
 
         #endregion // Unity Callbacks

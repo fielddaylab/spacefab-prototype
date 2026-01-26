@@ -330,6 +330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 225fc680be308a44a8ef26f1bf8d7055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Priority: 0
   BoxType: 1
   OnHoverEnter:
     m_PersistentCalls:
@@ -776,6 +777,7 @@ MonoBehaviour:
   ActivateButton: {fileID: 6016908888656448866}
   ActivateGroup: {fileID: 3254979540106743597}
   CamPos: {fileID: 0}
+  IsCurrentSessionAutomated: 0
   CurrMaskData: {fileID: 11400000, guid: f7a8550aee343c14fb4522d95bca806f, type: 2}
   TargetPath: {fileID: 1334510871706499445}
   TargetCircle: {fileID: 4751811805901694771}
@@ -1301,12 +1303,14 @@ PrefabInstance:
       propertyPath: m_text
       value: '<b>Controls:</b>
 
-        Use the Arrow Keys to draw along the dashed
-        lines.'
+        Press [Space] to start tracing.
+
+        Use
+        the Arrow Keys to draw along the dashed lines.'
       objectReference: {fileID: 0}
     - target: {fileID: 3416249488974238764, guid: d312afbb807115746aab6afd45f2bfe0, type: 3}
       propertyPath: m_fontSize
-      value: 24.6
+      value: 18.45
       objectReference: {fileID: 0}
     - target: {fileID: 3424574739312478733, guid: d312afbb807115746aab6afd45f2bfe0, type: 3}
       propertyPath: m_LocalScale.x
@@ -1498,7 +1502,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 656921376028168496, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9938593
       objectReference: {fileID: 0}
     - target: {fileID: 656921376028168496, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1510,15 +1514,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 656921376028168496, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0.11065101
       objectReference: {fileID: 0}
     - target: {fileID: 656921376028168496, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -2.82
+      value: -3.216
       objectReference: {fileID: 0}
     - target: {fileID: 656921376028168496, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 4.87
+      value: 4.104
       objectReference: {fileID: 0}
     - target: {fileID: 656921376028168496, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1530,7 +1534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 656921376028168496, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 12.706
       objectReference: {fileID: 0}
     - target: {fileID: 5976815868764668284, guid: ed83d1e83ec90544d93a635d58eaa2f7, type: 3}
       propertyPath: m_Name

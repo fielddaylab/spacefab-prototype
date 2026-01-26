@@ -46,11 +46,13 @@ namespace SpaceFab.ChipFab
         public GameObject AutomationIndicator;
 
         public bool StationControlReleased { get; private set; }
+        public bool StationControlReleasedThisFrame;
 
         private void Awake()
         {
             Instance = this;
             StationControlReleased = true;
+            StationControlReleasedThisFrame = true;
         }
 
         private void Start()
@@ -65,6 +67,7 @@ namespace SpaceFab.ChipFab
             m_allTriggers = ChipFabConfig.Instance.CurrLevel.AutomatedStationTriggers();
 
             StationControlReleased = true;
+            StationControlReleasedThisFrame = true;
             AutomationIndicator.SetActive(false);
 
             ResetTriggers();
@@ -147,6 +150,7 @@ namespace SpaceFab.ChipFab
         private void HandleStationCompleted()
         {
             StationControlReleased = true;
+            StationControlReleasedThisFrame = true;
         }
 
         private void HandleNewWaferCreated()

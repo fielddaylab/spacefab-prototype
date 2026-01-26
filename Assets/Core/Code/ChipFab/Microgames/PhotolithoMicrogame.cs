@@ -10,6 +10,8 @@ namespace SpaceFab.ChipFab
 {
     public class PhotolithoMicrogame : StationMicrogame, IStationMicrogame
     {
+        private static KeyCode StartKey = KeyCode.Space;
+
         private bool m_autoRoutineStarted = false;
         public EtchMaskData CurrMaskData;
         private MaskId m_currSelectedMask = MaskId.NONE;
@@ -36,6 +38,8 @@ namespace SpaceFab.ChipFab
         private float TotalDif;
         private int NumSamples;
 
+        private bool TraceStarted;
+
         private Routine m_startupRoutine;
 
         public override void Activate(WaferState waferState, bool isAutomated)
@@ -53,6 +57,7 @@ namespace SpaceFab.ChipFab
             PlayerMoveDir = new Vector2(1, 0);
             LastKnownMoveDir = PlayerMoveDir;
             NewMoveDir = true;
+            TraceStarted = false;
 
             ControlsMgr.Instance.InputsEnabled = false;
 
@@ -144,9 +149,21 @@ namespace SpaceFab.ChipFab
             {
                 ProcessAutomation();
             }
-            else
+            else if (TraceStarted)
             {
                 ProcessManual();
+            }
+            else
+            {
+                AwaitTraceStart();
+            }
+        }
+
+        private void AwaitTraceStart()
+        {
+            if (Input.GetKeyDown(StartKey))
+            {
+                TraceStarted = true;
             }
         }
 
@@ -192,20 +209,20 @@ namespace SpaceFab.ChipFab
         private void ProcessInputs()
         {
             var newDir = Vector2.zero;
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
             {
                 newDir.y = 1;
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
             {
                 newDir.y = -1;
             }
 
-            if (Input.GetKey(KeyCode.RightArrow))
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
                 newDir.x = 1;
             }
-            else if (Input.GetKey(KeyCode.LeftArrow))
+            else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
             {
                 newDir.x = -1;
             }

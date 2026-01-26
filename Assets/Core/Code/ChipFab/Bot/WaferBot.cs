@@ -17,12 +17,21 @@ namespace SpaceFab.ChipFab
         public KeyCode NavUpKey = KeyCode.UpArrow;
         public KeyCode NavDownKey = KeyCode.DownArrow;
 
+        public KeyCode NavLeftKey2 = KeyCode.A;
+        public KeyCode NavRightKey2 = KeyCode.D;
+        public KeyCode NavUpKey2 = KeyCode.W;
+        public KeyCode NavDownKey2 = KeyCode.S;
+
+        public KeyCode NavUpKey3 = KeyCode.Space;
+
+
         public ConveyorState State;
 
         public float WaferOffset = 1.5f;
 
         public GameObject StartBotPrompt;
         public GameObject StunDialogue;
+        public GameObject RememberDialogue;
 
         public bool IsStunned = false;
         public const float StunTime = 4;
@@ -57,6 +66,7 @@ namespace SpaceFab.ChipFab
         {
             IsStunned = false;
             StunDialogue.SetActive(false);
+            RememberDialogue.SetActive(false);
             m_currNodeIndex = 0;
             m_currNode = NavNodesMgr.Instance.Nodes[0];
 
@@ -72,14 +82,18 @@ namespace SpaceFab.ChipFab
             StartBotPrompt.SetActive(true);
 
             Game.Events.Register(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Register(GameEvents.GlitchedInstructionAppeared, HandleGlitchedInstructionAppeared);
             Game.Events.Register(GameEvents.IncorrectStationAttempted, HandleIncorrectStationAttempted);
+            Game.Events.Register(GameEvents.StationStarted, HandleStationStarted);
         }
 
         private void OnDestroy()
         {
             if (Game.IsShuttingDown) { return; }
             Game.Events.Deregister(GameEvents.NewWaferCreated, HandleNewWaferCreated);
+            Game.Events.Deregister(GameEvents.GlitchedInstructionAppeared, HandleGlitchedInstructionAppeared);
             Game.Events.Deregister(GameEvents.IncorrectStationAttempted, HandleIncorrectStationAttempted);
+            Game.Events.Deregister(GameEvents.StationStarted, HandleStationStarted);
         }
 
         public void SetCurrNode(int index)
@@ -90,8 +104,9 @@ namespace SpaceFab.ChipFab
         public void ProcessInputs()
         {
             if (IsStunned) { return; }
+            if (AutomationMgr.Instance.StationControlReleasedThisFrame) { return; }
 
-            if (Input.GetKeyDown(NavLeftKey))
+            if (Input.GetKeyDown(NavLeftKey) || Input.GetKeyDown(NavLeftKey2))
             {
                 if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
@@ -101,7 +116,7 @@ namespace SpaceFab.ChipFab
                     }
                 }
             }
-            else if (Input.GetKeyDown(NavRightKey))
+            else if (Input.GetKeyDown(NavRightKey) || Input.GetKeyDown(NavRightKey2))
             {
                 if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
@@ -111,7 +126,7 @@ namespace SpaceFab.ChipFab
                     }
                 }
             }
-            else if (Input.GetKeyDown(NavUpKey))
+            else if (Input.GetKeyDown(NavUpKey) || Input.GetKeyDown(NavUpKey2) || Input.GetKeyDown(NavUpKey3))
             {
                 if (State == ConveyorState.Full)
                 {
@@ -122,7 +137,7 @@ namespace SpaceFab.ChipFab
                     }
                 }
             }
-            else if (Input.GetKeyDown(NavDownKey))
+            else if (Input.GetKeyDown(NavDownKey) || Input.GetKeyDown(NavDownKey2))
             {
                 if (State == ConveyorState.Empty && DragMgr.WaferInstance != null)
                 {
@@ -347,6 +362,16 @@ namespace SpaceFab.ChipFab
         {
             var targetVector = BodyTransform.position + Vector3.one * 0.3f;
             yield return BodyTransform.MoveTo(targetVector, 0.25f, Axis.X, Space.Self).Wave(Wave.Function.CosFade, 3);
+        }
+
+        private void HandleGlitchedInstructionAppeared()
+        {
+            RememberDialogue.SetActive(true);
+        }
+
+        private void HandleStationStarted()
+        {
+            RememberDialogue.SetActive(false);
         }
 
         #region Automation Charges
