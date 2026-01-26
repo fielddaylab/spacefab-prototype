@@ -18,6 +18,8 @@ namespace SpaceFab.SupplyChain {
     public sealed class RouteRequestPanel : SharedPanel, IRegistrationCallbacks {
         public RouteMaterialWidget[] Resources;
         public TMP_Text SellPrice;
+        public GameObject HintGroup;
+        public TMP_Text HintLabel;
 
         [NonSerialized] public FabMaterial[] ResourceMap = new FabMaterial[10];
         [NonSerialized] public int ResourceCount = 0;
@@ -36,6 +38,15 @@ namespace SpaceFab.SupplyChain {
             for (int i = ResourceCount; i < Resources.Length; i++) {
                 ResourceMap[i] = FabMaterial.None;
                 Resources[i].gameObject.SetActive(false);
+            }
+        }
+
+        public void PopulateHint(SupplyChainLevel level) {
+            if (!level || string.IsNullOrEmpty(level.Hint)) {
+                HintGroup.SetActive(false);
+            } else {
+                HintLabel.SetText(string.Format(level.Hint, level.SellPrice));
+                HintGroup.SetActive(true);
             }
         }
 

@@ -19,12 +19,15 @@ namespace SpaceFab.SupplyChain {
         public int SellPrice = 10;
         public SceneReference DefaultScene;
 
+        static public SupplyChainLevel CurrentLevel { get; private set; }
+
         protected override IEnumerator<WorkSlicer.Result?> OnScenePreload() {
             Game.Scenes.GetLoadContext(out var context);
             SceneReference toLoad = DefaultScene;
             StringHash32 levelId = context.Task.Name;
             if (!levelId.IsEmpty) {
                 SupplyChainLevel level = Find.NamedAsset<SupplyChainLevel>(levelId);
+                CurrentLevel = level;
                 Ships = level.Ships;
                 RequiredMaterials = level.RequiredMaterials;
                 SellPrice = level.SellPrice;
@@ -40,6 +43,7 @@ namespace SpaceFab.SupplyChain {
             routePanel.PopulateShips(Ships);
             var requestPanel = Find.Panel<RouteRequestPanel>();
             requestPanel.PopulateResources(RequiredMaterials);
+            requestPanel.PopulateHint(CurrentLevel);
             //requestPanel.SellPrice.SetText("Sell Price: $" + SellPrice.ToStringLookup());
             var profitPanel = Find.Panel<RouteProfitPanel>();
             profitPanel.DesiredMaterials = RequiredMaterials;
@@ -58,6 +62,7 @@ namespace SpaceFab.SupplyChain {
 
         protected override void OnSceneUnload() {
             CursorHint.DefaultCursor = null;
+            CurrentLevel = null;
         }
     }
 }

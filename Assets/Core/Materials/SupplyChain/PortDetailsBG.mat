@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PortDetailsBG
-  m_Shader: {fileID: 4800000, guid: fa007bbc45e8b0b419ad53474e4918fc, type: 3}
+  m_Shader: {fileID: 4800000, guid: aabb41ba2682bb04e878dc270a5ea68e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -44,7 +44,7 @@ Material:
     - _ZTestMode: 4
     - _ZWriteMode: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

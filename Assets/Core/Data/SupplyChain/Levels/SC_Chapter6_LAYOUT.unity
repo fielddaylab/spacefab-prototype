@@ -244,12 +244,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2110945157243795497, guid: 8798d7479e9545e49be939fc549fedd4, type: 3}
-      propertyPath: m_text
-      value: 'Battle
-
-        (Risky)'
-      objectReference: {fileID: 0}
     - target: {fileID: 3044622659613012512, guid: 8798d7479e9545e49be939fc549fedd4, type: 3}
       propertyPath: m_Name
       value: RiskyRegion

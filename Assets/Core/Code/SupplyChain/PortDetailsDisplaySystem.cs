@@ -15,7 +15,7 @@ namespace SpaceFab.SupplyChain {
             PortPools pools = Find.State<PortPools>();
             SupplyChainSprites sprites = Find.GlobalAsset<SupplyChainSprites>();
 
-            bool pathHighlight = routeDrawer.DrawState == RouteDrawState.Selected;
+            bool pathHighlight = false;// routeDrawer.DrawState == RouteDrawState.InProgress;
 
             foreach (var state in m_Components) {
                 PortDetailsMode desiredMode;

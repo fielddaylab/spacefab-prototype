@@ -101,7 +101,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Space
 
-    Battle'
+    Battle
+
+    (Risky)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4970293d3d2da54469062c5c527194c1, type: 2}
   m_sharedMaterial: {fileID: 4008094161453736792, guid: 4970293d3d2da54469062c5c527194c1, type: 2}

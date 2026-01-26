@@ -11,6 +11,7 @@ namespace SpaceFab.SupplyChain {
     public sealed class PortDetailsDisplayState : BatchedComponent {
         public PathNode Node;
         public PathNodeHighlight Highlight;
+        public Vector2 TooltipOffset = new Vector2(0, 1.5f);
 
         [NonSerialized] public PortDetailsMode CurrentMode;
     }
@@ -36,7 +37,7 @@ namespace SpaceFab.SupplyChain {
                 } else {
                     if (!port.Visuals.CurrentDetails) {
                         PortDetailsDisplay details = AllocateDisplayForPort(pools, port);
-                        MoveDisplayToBestLocation(details, port.transform);
+                        MoveDisplayToBestLocation(details, port.transform, displayer);
                         PopulatePortDetails(details, port, sprites);
                         port.Visuals.CurrentDetails = details;
                     }
@@ -56,12 +57,8 @@ namespace SpaceFab.SupplyChain {
             }
         }
 
-        static public void MoveDisplayToBestLocation(PortDetailsDisplay display, Transform portPosition) {
-            Vector2 localOffset = portPosition.localPosition;
-            localOffset.Normalize();
-
-            localOffset *= display.Size / 2;
-
+        static public void MoveDisplayToBestLocation(PortDetailsDisplay display, Transform portPosition, PortDetailsDisplayState portState) {
+            Vector2 localOffset = portState.TooltipOffset;
             display.transform.SetPosition(portPosition.position + (Vector3) localOffset, Axis.XY);
         }
 
@@ -69,7 +66,6 @@ namespace SpaceFab.SupplyChain {
             display.Parent = source;
             
             RouteNode route = source.GetComponent<RouteNode>();
-            display.DisplayName.SetText(route.DisplayName);
             display.Defense.sprite = sprites.DefenseSprite((int) route.Reliability);
 
             switch (source.Type) {
@@ -89,7 +85,7 @@ namespace SpaceFab.SupplyChain {
                 psb.Builder.Append('$').AppendNoAlloc(route.Cost);
                 display.Cost.SetText(psb);
 
-                psb.Builder.Clear().AppendNoAlloc(route.ProductionTime).Append("C:");
+                psb.Builder.Clear().AppendNoAlloc(route.ProductionTime);
                 display.Time.SetText(psb);
             }
 

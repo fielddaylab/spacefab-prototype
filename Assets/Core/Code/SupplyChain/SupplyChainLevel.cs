@@ -7,6 +7,7 @@ namespace SpaceFab.SupplyChain {
     [CreateAssetMenu(menuName = "SupplyChain/Level")]
     public sealed class SupplyChainLevel : NamedAsset {
         public string Label;
+        public string Hint;
         public SceneReference Scene;
 
         [AssetName(typeof(RouteShip))] public StringHash32[] Ships;

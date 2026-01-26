@@ -11,7 +11,6 @@ namespace SpaceFab.SupplyChain {
         public SpriteRenderer Outline;
 
         [Header("Data")]
-        public TMP_Text DisplayName;
         public SpriteRenderer[] Materials;
         public TMP_Text Cost;
         public TMP_Text Time;

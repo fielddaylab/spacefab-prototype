@@ -253,6 +253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Node: {fileID: 8883558234928427505}
   Highlight: {fileID: 6992217643158983761}
+  TooltipOffset: {x: 0, y: 1.5}
 --- !u!1 &7396055218447633415
 GameObject:
   m_ObjectHideFlags: 0
