@@ -5222,6 +5222,11 @@ MonoBehaviour:
   NavRightKey: 275
   NavUpKey: 273
   NavDownKey: 274
+  NavLeftKey2: 97
+  NavRightKey2: 100
+  NavUpKey2: 119
+  NavDownKey2: 115
+  NavUpKey3: 32
   State: 0
   WaferOffset: 1.5
   StartBotPrompt: {fileID: 1803834322}
@@ -10891,6 +10896,7 @@ MonoBehaviour:
   ActivelyChecking: 0
   UsesAutomation: 0
   AutomationIndicator: {fileID: 1036764584}
+  StationControlReleasedThisFrame: 0
 --- !u!4 &2118945581
 Transform:
   m_ObjectHideFlags: 0

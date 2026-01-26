@@ -24,6 +24,11 @@ namespace SpaceFab.ChipFab
         private static KeyCode UP_KEY = KeyCode.UpArrow;
         private static KeyCode DOWN_KEY = KeyCode.DownArrow;
 
+        private static KeyCode LEFT_KEY2 = KeyCode.A;
+        private static KeyCode RIGHT_KEY2 = KeyCode.D;
+        private static KeyCode UP_KEY2 = KeyCode.W;
+        private static KeyCode DOWN_KEY2 = KeyCode.S;
+
         public Vector3 SprayStartPos;
         public Transform Sprayer;
         public float SprayerMoveSpeed;
@@ -38,6 +43,8 @@ namespace SpaceFab.ChipFab
 
         public ClickBox SprayerBox;
         public SpriteRenderer StencilFill;
+
+        private bool AwaitingKeyUp;
 
         private Routine m_StencilFillRoutine;
 
@@ -57,6 +64,11 @@ namespace SpaceFab.ChipFab
             foreach (var dot in FillDots)
             {
                 dot.enabled = false;
+            }
+
+            if (Input.GetKey(FIRE_KEY))
+            {
+                AwaitingKeyUp = true;
             }
 
             TransitionToActivated();
@@ -99,6 +111,14 @@ namespace SpaceFab.ChipFab
         {
             if (!Container.activeInHierarchy && !IsCurrentSessionAutomated) { return; }
 
+            if (AwaitingKeyUp)
+            {
+                if (Input.GetKeyUp(FIRE_KEY))
+                {
+                    AwaitingKeyUp = false;
+                }
+            }
+
             switch (m_state)
             {
                 case SputteringMicrogameState.Activated:
@@ -133,19 +153,19 @@ namespace SpaceFab.ChipFab
         {
             Vector3 moveVector = Vector3.zero;
 
-            if (Input.GetKey(UP_KEY))
+            if (Input.GetKey(UP_KEY) || Input.GetKey(UP_KEY2))
             {
                 moveVector += Vector3.up;
             }
-            if (Input.GetKey(DOWN_KEY))
+            if (Input.GetKey(DOWN_KEY) || Input.GetKey(DOWN_KEY2))
             {
                 moveVector += Vector3.down;
             }
-            if (Input.GetKey(LEFT_KEY))
+            if (Input.GetKey(LEFT_KEY) || Input.GetKey(LEFT_KEY2))
             {
                 moveVector += Vector3.left;
             }
-            if (Input.GetKey(RIGHT_KEY))
+            if (Input.GetKey(RIGHT_KEY) || Input.GetKey(RIGHT_KEY2))
             {
                 moveVector += Vector3.right;
             }
@@ -155,9 +175,19 @@ namespace SpaceFab.ChipFab
 
             Sprayer.transform.localPosition += moveVector;
 
-            if (Input.GetKey(FIRE_KEY))
+            if (AwaitingKeyUp)
             {
-                HandleSprayMouseDown();
+                if (Input.GetKeyUp(FIRE_KEY))
+                {
+                    AwaitingKeyUp = false;
+                }
+            }
+            else
+            {
+                if (Input.GetKey(FIRE_KEY))
+                {
+                    HandleSprayMouseDown();
+                }
             }
 
             // Check if sufficiently sprayed

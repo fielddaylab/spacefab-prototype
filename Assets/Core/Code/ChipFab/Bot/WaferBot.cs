@@ -15,8 +15,15 @@ namespace SpaceFab.ChipFab
         public KeyCode NavLeftKey = KeyCode.LeftArrow;
         public KeyCode NavRightKey = KeyCode.RightArrow;
         public KeyCode NavUpKey = KeyCode.UpArrow;
-        public KeyCode NavUpKey2 = KeyCode.Space;
         public KeyCode NavDownKey = KeyCode.DownArrow;
+
+        public KeyCode NavLeftKey2 = KeyCode.A;
+        public KeyCode NavRightKey2 = KeyCode.D;
+        public KeyCode NavUpKey2 = KeyCode.W;
+        public KeyCode NavDownKey2 = KeyCode.S;
+
+        public KeyCode NavUpKey3 = KeyCode.Space;
+
 
         public ConveyorState State;
 
@@ -91,8 +98,9 @@ namespace SpaceFab.ChipFab
         public void ProcessInputs()
         {
             if (IsStunned) { return; }
+            if (AutomationMgr.Instance.StationControlReleasedThisFrame) { return; }
 
-            if (Input.GetKeyDown(NavLeftKey))
+            if (Input.GetKeyDown(NavLeftKey) || Input.GetKeyDown(NavLeftKey2))
             {
                 if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
@@ -102,7 +110,7 @@ namespace SpaceFab.ChipFab
                     }
                 }
             }
-            else if (Input.GetKeyDown(NavRightKey))
+            else if (Input.GetKeyDown(NavRightKey) || Input.GetKeyDown(NavRightKey2))
             {
                 if (State == ConveyorState.Full || State == ConveyorState.Uninitialized)
                 {
@@ -112,7 +120,7 @@ namespace SpaceFab.ChipFab
                     }
                 }
             }
-            else if (Input.GetKeyDown(NavUpKey) || Input.GetKeyDown(NavUpKey2))
+            else if (Input.GetKeyDown(NavUpKey) || Input.GetKeyDown(NavUpKey2) || Input.GetKeyDown(NavUpKey3))
             {
                 if (State == ConveyorState.Full)
                 {
@@ -123,7 +131,7 @@ namespace SpaceFab.ChipFab
                     }
                 }
             }
-            else if (Input.GetKeyDown(NavDownKey))
+            else if (Input.GetKeyDown(NavDownKey) || Input.GetKeyDown(NavDownKey2))
             {
                 if (State == ConveyorState.Empty && DragMgr.WaferInstance != null)
                 {

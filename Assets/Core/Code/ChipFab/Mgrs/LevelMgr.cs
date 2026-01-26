@@ -1,3 +1,4 @@
+using BeauRoutine;
 using BeauUtil;
 using FieldDay;
 using FieldDay.Rendering;
@@ -32,6 +33,8 @@ namespace SpaceFab.ChipFab
         public ClickBox ReturnBtn;
 
         [HideInInspector] public WaferData TargetData;
+
+        private Routine EvalRoutine = new Routine();
 
         private void Awake()
         {
@@ -95,6 +98,15 @@ namespace SpaceFab.ChipFab
     
         public void Evaluate()
         {
+            if (EvalRoutine.Exists()) { return; }
+
+            EvalRoutine.Replace(EvaluateRoutine());
+        }
+
+        private IEnumerator EvaluateRoutine()
+        {
+            yield return 1.75f;
+
             var currState = DragMgr.WaferInstance.Data;
             bool success = WaferData.IsEqual(currState, TargetData);
 
