@@ -24,6 +24,8 @@ namespace SpaceFab.ChipFab
         public static StringHash32 AutomationCompleted = "automation-completed";
 
         public static StringHash32 IncorrectStationAttempted = "incorrect-station-attempted";
+
+        public static StringHash32 GlitchedInstructionAppeared = "glitched-instruction-appeared";
     }
 
     public static class GameConsts

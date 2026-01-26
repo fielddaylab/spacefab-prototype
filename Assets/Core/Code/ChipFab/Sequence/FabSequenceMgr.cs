@@ -58,6 +58,7 @@ namespace SpaceFab.ChipFab
             if (CurrSequence.Steps[stepIndex].IsHidden)
             {
                 HiddenRenderer.enabled = true;
+                Game.Events.Dispatch(GameEvents.GlitchedInstructionAppeared);
             }
             else
             {
