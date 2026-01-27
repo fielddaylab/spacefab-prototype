@@ -250,6 +250,8 @@ namespace SpaceFab.ChipFab
                 )
             {
                 DragMgr.Instance.DragWaferEnabled = true;
+                Debug.Log("Invalid Prereqs");
+                Game.Events.Dispatch(GameEvents.IncorrectStationAttempted);
                 TryDeactivate();
             }
 
