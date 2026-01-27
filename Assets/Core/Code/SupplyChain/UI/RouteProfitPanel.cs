@@ -62,12 +62,8 @@ namespace SpaceFab.SupplyChain {
                 && materials.D >= DesiredMaterials.D);
                 
             using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
-                if (cost > 0) {
-                    psb.Builder.Append('$').AppendNoAlloc(Math.Abs(cost));
-                    ProfitLabel.SetText(psb);
-                } else {
-                    ProfitLabel.SetText("-");
-                }
+                psb.Builder.Append('$').AppendNoAlloc(Math.Abs(cost));
+                ProfitLabel.SetText(psb);
 
                 TimeLabel.SetText(time.ToStringLookup());
             }

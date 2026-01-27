@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: ProductionTime
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7109146899264252005, guid: d8f3846143bdbb047834e49caf630ef3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 780064077318569514, guid: e2ea2f1eeec83d243b98b9ff20efb103, type: 3}
     - target: {fileID: 7356809952763614006, guid: d8f3846143bdbb047834e49caf630ef3, type: 3}
       propertyPath: Input
       value: 1
@@ -104,7 +108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7375237603758174508, guid: aebb7aeafc145d649bc37c301496a586, type: 3}
       propertyPath: m_Name
-      value: SilicaSiliconPlanet Variant
+      value: SilicaSiliconPlanet
       objectReference: {fileID: 0}
     - target: {fileID: 8235571216970684727, guid: aebb7aeafc145d649bc37c301496a586, type: 3}
       propertyPath: m_LocalPosition.x

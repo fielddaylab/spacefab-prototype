@@ -31,9 +31,9 @@ namespace SpaceFab.SupplyChain {
 
             PopulateCategory(materials.A, FabMaterial.A, sprites);
             PopulateCategory(materials.B, FabMaterial.B, sprites);
-            PopulateCategory(materials.E, FabMaterial.D, sprites);
             PopulateCategory(materials.C, FabMaterial.C, sprites);
-            PopulateCategory(materials.D, FabMaterial.E, sprites);
+            PopulateCategory(materials.D, FabMaterial.D, sprites);
+            PopulateCategory(materials.E, FabMaterial.E, sprites);
 
             for (int i = ResourceCount; i < Resources.Length; i++) {
                 ResourceMap[i] = FabMaterial.None;
@@ -79,13 +79,6 @@ namespace SpaceFab.SupplyChain {
                         }
                         break;
                     }
-                    case FabMaterial.D: {
-                        if (materials.E > 0) {
-                            materials.E--;
-                            isFilled = true;
-                        }
-                        break;
-                    }
                     case FabMaterial.C: {
                         if (materials.C > 0) {
                             materials.C--;
@@ -93,9 +86,16 @@ namespace SpaceFab.SupplyChain {
                         }
                         break;
                     }
-                    case FabMaterial.E: {
+                    case FabMaterial.D: {
                         if (materials.D > 0) {
                             materials.D--;
+                            isFilled = true;
+                        }
+                        break;
+                    }
+                    case FabMaterial.E: {
+                        if (materials.E > 0) {
+                            materials.E--;
                             isFilled = true;
                         }
                         break;

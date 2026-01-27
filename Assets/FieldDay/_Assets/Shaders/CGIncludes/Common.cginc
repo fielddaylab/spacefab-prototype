@@ -15,17 +15,18 @@
 /// Instancing
 
 #define     AttributesInstancing    UNITY_VERTEX_INPUT_INSTANCE_ID
+#define     VaryingsInstancing      UNITY_VERTEX_INPUT_INSTANCE_ID
 #define     InstancingInitialize(input)     UNITY_SETUP_INSTANCE_ID(input)
 
 /// Stereo
 
-#define     VaryingsStereo          UNITY_VERTEX_OUTPUT_STEREO
-#define     StereoInitialize(output)         UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output)
+#define     VaryingsStereo                  UNITY_VERTEX_OUTPUT_STEREO
+#define     StereoInitialize(output)        UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output)
 
 /// Quantization
 
-#define QUANTIZE_PRECISION_8 half(0xff)
-#define INV_QUANTIZE_PRECISION_8 half(1.0 / QUANTIZE_PRECISION_8)
+#define QUANTIZE_PRECISION_8            half(0xff)
+#define INV_QUANTIZE_PRECISION_8        half(1.0 / QUANTIZE_PRECISION_8)
 
 inline float Quantize8(float value)
 {
@@ -35,6 +36,22 @@ inline float Quantize8(float value)
 inline half Quantize8(half value)
 {
     return round(value * QUANTIZE_PRECISION_8) * INV_QUANTIZE_PRECISION_8;
+}
+
+/// Math
+
+inline float2x2 MatrixCreateRotation2d(float radians)
+{
+    float s, c;
+    sincos(radians, s, c);
+    return float2x2(
+        c, -s, s, c
+    );
+}
+
+inline float2 Rotate2d(float2 base, float radians)
+{
+    return mul(MatrixCreateRotation2d(radians), base);
 }
 
 /// Fragment Operations
@@ -52,6 +69,11 @@ inline half Quantize8(half value)
 #endif // PIXELSNAP_ON
 
 #define ColorMakeOpaque(color)  color.a = 1
+
+/// Texture Coordinates
+
+#define TexCoordOffsetScaleByTexture(uv, texture)   TRANSFORM_TEX((uv), (texture))
+#define TexCoordRotate2d(uv, radians)               Rotate2d((uv), (radians))
 
 /// Samplers
 
@@ -71,5 +93,7 @@ inline half Quantize8(half value)
 #else
     #define SampleSingle(texture, uv) SampleR(texture, uv)
 #endif
+
+#define SampleTexture(texture, uv)              (tex2D((texture), (uv)))
 
 #endif // FD_COMMON_INCLUDED

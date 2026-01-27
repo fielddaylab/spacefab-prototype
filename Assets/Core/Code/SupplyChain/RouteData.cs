@@ -28,8 +28,8 @@ namespace SpaceFab.SupplyChain {
             materials.A += stats.Materials[(int) FabMaterial.A - 1];
             materials.B += stats.Materials[(int) FabMaterial.B - 1];
             materials.C += stats.Materials[(int) FabMaterial.C - 1];
-            materials.D += stats.Materials[(int) FabMaterial.E - 1];
-            materials.E += stats.Materials[(int) FabMaterial.D - 1];
+            materials.D += stats.Materials[(int) FabMaterial.D - 1];
+            materials.E += stats.Materials[(int) FabMaterial.E - 1];
         }
     }
 }
