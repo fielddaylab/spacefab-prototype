@@ -6,14 +6,28 @@ using UnityEngine;
 
 namespace FieldDay.Scripting {
     static public class DefaultLeaf {
+        static public VariantTable SceneTable { get; private set; }
+        static public VariantTable TimeTable { get; private set; }
+
         static public class KeyPairs {
             static public readonly TableKeyPair SceneName = TableKeyPair.Parse("scene:name");
             static public readonly TableKeyPair TimeNow = TableKeyPair.Parse("time:now");
         }
 
-        static internal void ConfigureDefaultVariables(CustomVariantResolver resolver) {
-            resolver.SetVar(KeyPairs.SceneName, LeafGetSceneName);
-            resolver.SetVar(KeyPairs.TimeNow, () => Time.time);
+        static internal void ConfigureDefaultVariables(VariantTableResolver resolver) {
+            SceneTable = new VariantTable(1);
+            TimeTable = new VariantTable(8);
+
+            SceneTable.Set(KeyPairs.SceneName.VariableId, Game.Scenes.MainScene().Name);
+
+            Game.Scenes.OnScenePreload.Register((args) => {
+                if (args.LoadType == Scenes.SceneType.Main) {
+                    SceneTable.Set(KeyPairs.SceneName.VariableId, args.Scene.name);
+                }
+            });
+            GameLoop.OnPreUpdate.Register(() => {
+                TimeTable.Set(KeyPairs.TimeNow.VariableId, Time.time);
+            });
         }
 
         static private Variant LeafGetSceneName() {

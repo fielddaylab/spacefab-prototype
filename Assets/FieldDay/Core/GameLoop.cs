@@ -106,11 +106,20 @@ namespace FieldDay {
         private GuiMgr.Config m_GuiConfig = new GuiMgr.Config();
 
         [SerializeField]
-        private FileSystem.Config m_FileSystemConfig = new FileSystem.Config();
+        private FileSystem.Config m_FileSystemConfig = new FileSystem.Config() {
+            RetryDelay = 1,
+            MaxInFlightRequests = 4,
+            MaxRetryCount = 8
+        };
 
         [SerializeField]
         private RenderMgr.Config m_RenderConfig = new RenderMgr.Config() {
             DebugClearColor = ColorBank.Magenta
+        };
+
+        [SerializeField]
+        private ShadingMgr.Config m_ShadingConfig = new ShadingMgr.Config() {
+            
         };
 
         [SerializeField]
@@ -256,7 +265,7 @@ namespace FieldDay {
             Log.Msg("[GameLoop] Starting...");
             Log.Msg("[GameLoop] Word Size = {0} ({1})", Unsafe.PointerSize, Unsafe.IsPointerSizeCompileTimeConstant ? "compile-time" : "runtime");
             Log.Msg("[GameLoop] Stopwatch Frequency = {0}hz", System.Diagnostics.Stopwatch.Frequency);
-            Log.Msg("[GameLoop] Graphics Device Type = {0}", SystemInfo.graphicsDeviceType);
+            Log.Msg("[GameLoop] Graphics Device Type = {0} (Shader Level {1})", SystemInfo.graphicsDeviceType, SystemInfo.graphicsShaderLevel);
 
             if (ReflectionBootData.ShouldUse()) {
                 ReflectionBootData.Mount(m_ReflectionData);
@@ -303,7 +312,7 @@ namespace FieldDay {
                 Game.Systems = new SystemsMgr();
 
                 Log.Msg("[GameLoop] Creating component manager...");
-                Game.Components = new ComponentMgr(Game.Systems);
+                Game.Components = new ComponentMgr();
 
                 Log.Msg("[GameLoop] Creating shared state manager...");
                 Game.SharedState = new SharedStateMgr();
@@ -320,6 +329,10 @@ namespace FieldDay {
                 Log.Msg("[GameLoop] Creating rendering manager...");
                 Game.Rendering = new RenderMgr();
                 Game.Rendering.Initialize(m_RenderConfig);
+
+                Log.Msg("[GameLoop] Creating shading manager...");
+                Game.Shading = new ShadingMgr();
+                Game.Shading.Initialize(m_ShadingConfig);
 
                 Log.Msg("[GameLoop] Creating input manager...");
                 Game.Input = new InputMgr();
@@ -391,7 +404,6 @@ namespace FieldDay {
                 Game.Rendering.LateInitialize();
                 Game.Animation.Initialize();
                 Game.Scenes.Prepare();
-                Game.Systems.ProcessInitQueue();
                 Game.Files.Tick();
                 FlushQueue(s_OnBootQueue);
 
@@ -527,6 +539,10 @@ namespace FieldDay {
             Log.Msg("[GameLoop] Shutting down input manager...");
             Game.Input.Shutdown();
             Game.Input = null;
+
+            Log.Msg("[GameLoop] Shutting down shading manager...");
+            Game.Shading.Shutdown();
+            Game.Shading = null;
 
             Log.Msg("[GameLoop] Shutting down rendering manager...");
             Game.Rendering.Shutdown();
@@ -700,6 +716,7 @@ namespace FieldDay {
 
             Game.Gui.ProcessUpdate();
             Game.Gui.ProcessShortcuts();
+            Game.Gui.FlushInputLayerChanges();
 
             // flush event queue
             Game.Events.Flush();
@@ -855,6 +872,9 @@ namespace FieldDay {
 
                     OnPreUpdate.Invoke(Frame.UnscaledDeltaTime);
                 }
+
+                Game.Gui.FlushCommands();
+                Game.Gui.FlushInputLayerChanges();
 
                 DequeueNextValues();
 

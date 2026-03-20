@@ -42,14 +42,12 @@ namespace FieldDay.Scripting {
 
         [LeafMember("InputPushPause")]
         static internal void LeafPushInputPause() {
-            Game.Input.PauseRaycasts();
-            Game.Input.PauseDevices();
+            Game.Input.PauseAll();
         }
 
         [LeafMember("InputPopPause")]
         static internal void LeafPopInputPause() {
-            Game.Input.ResumeRaycasts();
-            Game.Input.ResumeDevices();
+            Game.Input.ResumeAll();
         }
 
         #endregion // Input

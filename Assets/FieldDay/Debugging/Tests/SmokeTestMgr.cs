@@ -58,7 +58,9 @@ namespace FieldDay.Debugging {
             }
         }
 
+#if DEVELOPMENT
         static private readonly string[] CachedSmokeTestStateStrings = ReflectionCache.EnumInfo<SmokeTestState>().InspectorNames;
+#endif // DEVELOPMENT
 
         static private Action s_Reset;
         static private readonly RingBuffer<SmokeTestData> s_ScheduledTests = new RingBuffer<SmokeTestData>(MaxTests, RingBufferMode.Fixed);
@@ -167,10 +169,12 @@ namespace FieldDay.Debugging {
             }
 
             if (s_TestState >= SmokeTestState.Running) {
+#if DEVELOPMENT
                 s_DebugBuilder.Append("CURRENT TEST: ").Append(test.Name)
                     .Append("\nSTATE: ").Append(CachedSmokeTestStateStrings[(int) s_TestState]);
                 DebugDraw.AddViewportText(new Vector2(0.5f, 0), new Vector2(0, 16), s_DebugBuilder, Color.green, 0, TextAnchor.LowerCenter, DebugTextStyle.BackgroundDarkOpaque);
                 s_DebugBuilder.Clear();
+#endif // DEVELOPMENT
             }
         }
 
@@ -337,7 +341,7 @@ namespace FieldDay.Debugging {
         [EngineMenuFactory]
         static private DMInfo CreateDebugMenu() {
             DMInfo menu = new DMInfo("Smoke Tests", 64);
-            foreach(var testRegistration in Reflect.FindMethods<SmokeTestProviderAttribute>(ReflectionCache.UserAssemblies, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.NonPublic, false)) {
+            foreach(var testRegistration in Reflect.FindMethods<SmokeTestProviderAttribute>(ReflectionCache.UserAssemblies, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, false)) {
                 MethodInfo m = testRegistration.Info;
                 if (m.ReturnParameter.ParameterType != typeof(void) || m.GetParameters().Length != 0) {
                     UnityEngine.Debug.LogErrorFormat("[SmokeTestMgr] Method '{0}::{1}' does not match required signature of 'void func()'", m.DeclaringType.FullName, m.Name);

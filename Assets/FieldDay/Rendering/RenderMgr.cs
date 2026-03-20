@@ -163,6 +163,8 @@ namespace FieldDay.Rendering {
         public struct Config {
             public Camera FallbackCamera;
             public Color DebugClearColor;
+            public Color LetterboxColor;
+            public DisplayConfiguration DisplayConfig;
         }
 
         public struct CameraChangeData {
@@ -188,9 +190,16 @@ namespace FieldDay.Rendering {
         private RingBuffer<CameraClampToVirtualViewport> m_ClampedViewportCameras = new RingBuffer<CameraClampToVirtualViewport>(2, RingBufferMode.Expand);
         private Rect m_VirtualViewport = new Rect(0, 0, 1, 1);
 
+        private DisplayConfiguration.Axis m_ReferenceResolutionAxis;
+        private int m_ReferenceResolutionWidth;
+        private int m_ReferenceResolutionHeight;
+        private int m_ScaledReferenceResolutionWidth;
+        private int m_ScaledReferenceResolutionHeight;
+
         private float m_MinAspect;
         private float m_MaxAspect;
         private bool m_HasLetterboxing;
+        private Color m_LetterboxColor;
 
         private bool m_ShouldCheckFallback = true;
         private bool m_UsingFallback = false;
@@ -252,6 +261,24 @@ namespace FieldDay.Rendering {
             }
             s_DebugCameraClearColor = config.DebugClearColor;
 
+            if (config.LetterboxColor == Color.clear) {
+                m_LetterboxColor = Color.black;
+            } else {
+                m_LetterboxColor = config.LetterboxColor;
+            }
+
+            if (config.DisplayConfig) {
+                EnableAspectClamping(config.DisplayConfig.MinimumAspectRatio, config.DisplayConfig.MaximumAspectRatio);
+                m_ReferenceResolutionWidth = config.DisplayConfig.ReferenceResolution.x;
+                m_ReferenceResolutionHeight = config.DisplayConfig.ReferenceResolution.y;
+                m_ReferenceResolutionAxis = config.DisplayConfig.ReferenceAxis;
+            } else {
+                EnableAspectClamping(new Vector2Int(4, 3), new Vector2Int(16, 9));
+                m_ReferenceResolutionAxis = DisplayConfiguration.Axis.Height;
+                m_ReferenceResolutionWidth = 1024;
+                m_ReferenceResolutionHeight = 768;
+            }
+
             LightProbes.needsRetetrahedralization += OnLightProbesDirty;
             LightProbes.tetrahedralizationCompleted += OnLightProbesFinishedCompute;
         }
@@ -277,6 +304,18 @@ namespace FieldDay.Rendering {
 #endif // UNITY_2022_2_OR_NEWER
                 ) {
                 m_LastKnownResolution = resolution;
+                switch(m_ReferenceResolutionAxis) {
+                    case DisplayConfiguration.Axis.Width: {
+                        m_ScaledReferenceResolutionWidth = m_ReferenceResolutionWidth;
+                        m_ScaledReferenceResolutionHeight = m_ReferenceResolutionWidth * resolution.height / resolution.width;
+                        break;
+                    }
+                    case DisplayConfiguration.Axis.Height: {
+                        m_ScaledReferenceResolutionHeight = m_ReferenceResolutionHeight;
+                        m_ScaledReferenceResolutionWidth = m_ReferenceResolutionHeight * resolution.width / resolution.height;
+                        break;
+                    }
+                }
 
                 ScreenDpiType dpi = GetDpi(resolution);
                 bool dpiChanged = dpi != m_LastKnownDpi;
@@ -487,6 +526,17 @@ namespace FieldDay.Rendering {
 
         #endregion // Lighting
 
+        #region Reference Resolution
+
+        public Vector2 ReferencePixelsToVirtualViewportUnits(Vector2 referencePixels) {
+            Vector2 viewport;
+            viewport.x = referencePixels.x / m_ScaledReferenceResolutionWidth * m_VirtualViewport.x;
+            viewport.y = referencePixels.y / m_ScaledReferenceResolutionHeight * m_VirtualViewport.y;
+            return viewport;
+        }
+
+        #endregion // Reference Resolution
+
         #region Handlers
 
         private void OnLightProbesDirty() {
@@ -576,10 +626,12 @@ namespace FieldDay.Rendering {
             for(int i = 0; i < m_ClampedViewportCameras.Count; i++) {
                 ref var c = ref m_ClampedViewportCameras[i];
                 Rect r = c.Viewport;
-                r.x = m_VirtualViewport.x + r.x * m_VirtualViewport.width;
-                r.y = m_VirtualViewport.y + r.y * m_VirtualViewport.height;
-                r.width = r.width * m_VirtualViewport.width;
-                r.height = r.height * m_VirtualViewport.height;
+                Vector2 minOffset = ReferencePixelsToVirtualViewportUnits(c.MinPadding);
+                Vector2 maxOffset = ReferencePixelsToVirtualViewportUnits(c.MaxPadding);
+                r.x = m_VirtualViewport.x + (minOffset.x + r.x) * m_VirtualViewport.width;
+                r.y = m_VirtualViewport.y + (minOffset.y + r.y) * m_VirtualViewport.height;
+                r.width = (r.width - minOffset.x - maxOffset.x) * m_VirtualViewport.width;
+                r.height = (r.height - minOffset.y - maxOffset.y) * m_VirtualViewport.height;
                 c.Camera.rect = r;
             }
 
@@ -727,7 +779,7 @@ namespace FieldDay.Rendering {
                     if (DebugFlags.IsFlagSet(DebuggingFlags.TraceExecution)) {
                         Log.Trace("[RenderMgr] Rendering letterboxing for viewport {0}", m_VirtualViewport.ToString());
                     }
-                    CameraHelper.RenderLetterboxing(m_VirtualViewport, Color.black);
+                    CameraHelper.RenderLetterboxing(m_VirtualViewport, m_LetterboxColor);
                     GL.PopMatrix();
                 }
 

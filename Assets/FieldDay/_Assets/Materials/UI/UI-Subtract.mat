@@ -42,8 +42,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _ApplyAdditiveColor: 0
+    - _ApplyLerpColor: 0
     - _BlendOp: 2
     - _ColorMask: 15
+    - _CullMode: 0
     - _DestBlend: 1
     - _PremultiplyAlpha: 0
     - _SrcBlend: 5

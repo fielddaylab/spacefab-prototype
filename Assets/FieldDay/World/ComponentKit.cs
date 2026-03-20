@@ -19,6 +19,7 @@ namespace FieldDay {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Conditional("UNITY_EDITOR")]
         static protected void PrepareChange(UnityEngine.Object obj) {
 #if UNITY_EDITOR
             Baking.PrepareUndo(obj, "modified by ComponentKit");
@@ -32,7 +33,7 @@ namespace FieldDay {
             }
         }
 #else
-        private ComponentKit() {
+        protected ComponentKit() {
             throw new Exception("ComponentKits cannot exist outside of editor.");
         }
 #endif // UNITY_EDITOR

@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84a92b25f83d49b9bc132d206b370281, type: 3}
   m_Name: TextIcons
   m_EditorClassIdentifier: 
-  hashCode: -1010147099
-  material: {fileID: 5827155260577967271}
-  materialHashCode: 0
   m_Version: 1.1.0
   m_FaceInfo:
     m_FaceIndex: 0
@@ -38,6 +35,7 @@ MonoBehaviour:
     m_StrikethroughOffset: 0
     m_StrikethroughThickness: 0
     m_TabWidth: 0
+  m_Material: {fileID: 5827155260577967271}
   spriteSheet: {fileID: -8328923581568760697, guid: 305b55ac59945e74fade89d938be5da6, type: 3}
   m_SpriteCharacterTable:
   - m_ElementType: 2
@@ -45,26 +43,22 @@ MonoBehaviour:
     m_GlyphIndex: 3
     m_Scale: 1
     m_Name: ElectricalPropertyIcon
-    m_HashCode: 1141440738
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 0
     m_Scale: 1
     m_Name: DopantPropertyIcon
-    m_HashCode: -1017313428
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 1
     m_Scale: 1
     m_Name: ThermalPropertyIcon
-    m_HashCode: -1498873113
   - m_ElementType: 2
     m_Unicode: 65534
     m_GlyphIndex: 2
     m_Scale: 1
     m_Name: SpecialPropertyIcon
-    m_HashCode: 1047595469
-  m_SpriteGlyphTable:
+  m_GlyphTable:
   - m_Index: 0
     m_Metrics:
       m_Width: 120
@@ -161,7 +155,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
-    - _CullMode: 0
+    - _CullMode: 2
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0

@@ -11,6 +11,7 @@ namespace FieldDay.UI {
     [DefaultExecutionOrder(SharedPanel.DefaultExecutionOrder)]
     [NonIndexed]
     public abstract class SharedRoutinePanel : BasePanel, ISharedGuiPanel {
+        [SerializeField, PanelGroupName] private StringHash32 m_PanelGroup;
         [SerializeField] protected LayoutOffset m_LayoutOffset;
 
         protected override void Awake() {
@@ -29,6 +30,10 @@ namespace FieldDay.UI {
 
         Transform IGuiPanel.Root {
             get { return m_RootTransform; }
+        }
+
+        public StringHash32 Group {
+            get { return m_PanelGroup; }
         }
 
         public void Hide() {

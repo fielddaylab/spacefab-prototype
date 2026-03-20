@@ -4,7 +4,8 @@
 #define FD_SPRITES_INCLUDED
 
 #include "./Common.cginc"
-#include "./Effects.cginc"
+#include "./Fog.cginc"
+#include "./ColorMod.cginc"
 
 /// Configuration Defines
 
@@ -19,7 +20,7 @@ struct Attributes_Sprite
     float4 vertex   : POSITION;
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
-    AttributesInstancing
+    AttributesInstancing()
 };
 
 struct Varyings_Sprite
@@ -28,7 +29,8 @@ struct Varyings_Sprite
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
     VaryingsFog(1)
-    VaryingsStereo
+    VaryingsStereo()
+    VaryingsInstancing()
 };
 
 /// Instancing
@@ -47,7 +49,9 @@ struct Varyings_Sprite
     #define _RendererColor  UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteRendererColorArray)
     #define _Flip           UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteFlipArray)
 
-#endif // instancing
+#endif // UNITY_INSTANCING_ENABLED
+
+// make sure to keep this structure aligned with UnitySprites
 
 CBUFFER_START(UnityPerDrawSprite)
 #ifndef UNITY_INSTANCING_ENABLED
@@ -113,6 +117,7 @@ Varyings_Sprite DefaultSpriteVert(Attributes_Sprite v)
 {
     Varyings_Sprite output;
     InstancingInitialize(v);
+    InstancingTransfer(v, output);
     StereoInitialize(output);
 
     output.vertex = UnityObjectToClipPos(UnityFlipSprite(v.vertex, _Flip));
@@ -128,8 +133,11 @@ Varyings_Sprite DefaultSpriteVert(Attributes_Sprite v)
 
 fixed4 DefaultSpriteFrag(Varyings_Sprite v) : SV_Target
 {
+    InstancingInitialize(v);
     fixed4 color = SampleSpriteTexture(v.texcoord) * v.color;
     SpriteAlphaClip(color);
+    LayerApplyLerpColor(color);
+    LayerApplyAdditiveColor(color);
     FogApply(color, v);
     PremultiplyAlpha(color);
     return color;

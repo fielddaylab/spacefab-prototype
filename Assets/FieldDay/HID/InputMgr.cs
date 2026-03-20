@@ -8,6 +8,7 @@ using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
+using FieldDay.UI;
 using NativeUtils;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -451,6 +452,10 @@ namespace FieldDay.HID {
         static private DMInfo CreateDebugMenu() {
             DMInfo input = new DMInfo("Input");
             DebugFlags.Menu.AddFlagToggle(input, "Display Pointer Info", DebuggingFlags.DisplayCurrentPointerInfo);
+            input.AddSelector("Hinted Cursor Visiblity",
+                () => (int)HintedCursor.Visibility,
+                (i) => HintedCursor.Visibility = (HintedCursor.VisiblityMode)i,
+                new string[] { "Invisible", "Interactive Only", "Always" });
             return input;
         }
 

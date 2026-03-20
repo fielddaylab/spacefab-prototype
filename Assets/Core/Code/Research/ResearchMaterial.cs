@@ -11,7 +11,6 @@ namespace SpaceFab.Research {
     public sealed class ResearchMaterial : NamedAsset {
         public string DisplayName;
         public string UnknownDisplayName;
-        public Material Material;
 
         [Header("Atomic Info")]
         public string ChemicalSymbol;
@@ -43,7 +42,6 @@ namespace SpaceFab.Research {
     public enum ThermalTag : uint {
         None = 0,
         HighTemp = 0x01,
-        LowTemp = 0x02,
     }
 
     [Flags]
@@ -115,14 +113,11 @@ namespace SpaceFab.Research {
             if ((material.Thermal & ThermalTag.HighTemp) == 0 && temperature > 0.8f) {
                 return false;
             }
-            if ((material.Thermal & ThermalTag.LowTemp) == 0 && temperature < 0.2f) {
-                return false;
-            }
             return true;
         }
 
         static public bool IsStableAtVoltage(ResearchMaterial material, float voltage) {
-            if (Math.Abs(voltage) >= 0.75f && (material.SpecialTags & SpecialTag.HighVoltage) == 0) {
+            if (Math.Abs(voltage) > 0.8f && (material.SpecialTags & SpecialTag.HighVoltage) == 0) {
                 return false;
             }
 

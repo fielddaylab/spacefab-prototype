@@ -233,6 +233,8 @@ namespace FieldDay.Memory {
             m_ArenaTracker = new RingBuffer<Unsafe.ArenaHandle>(64, RingBufferMode.Expand);
 #endif // MEMORY_LEAK_DETECTION
 
+            PooledObjectWorkList.Initialize();
+
             GameObject prefabPoolGO = new GameObject("Prefab Pools");
             GameObject.DontDestroyOnLoad(prefabPoolGO);
             prefabPoolGO.SetActive(false);
@@ -288,6 +290,7 @@ namespace FieldDay.Memory {
             }
 #endif // MEMORY_LEAK_DETECTION
 
+            PooledObjectWorkList.Shutdown();
             Mem.Mgr = null;
         }
 

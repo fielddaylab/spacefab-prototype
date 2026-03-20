@@ -47,7 +47,7 @@ namespace FieldDay.UI.Widgets {
         }
 
         /// <summary>
-        /// The closeset parent GuiPanel.
+        /// The closest parent GuiPanel.
         /// </summary>
         public IGuiPanel Panel {
             get { return ReferenceEquals(m_Panel, null) ? (m_Panel = GetComponentInParent<IGuiPanel>()) : m_Panel; }

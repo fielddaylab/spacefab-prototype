@@ -217,8 +217,6 @@ namespace FieldDay.Data {
             return configVarMenu;
         }
 
-#endif // DEVELOPMENT
-
         /// <summary>
         /// Creates a debug menu for the given config variable.
         /// </summary>
@@ -265,6 +263,8 @@ namespace FieldDay.Data {
                 }
             }
         }
+
+#endif // DEVELOPMENT
 
         #endregion // Debug Menu
 

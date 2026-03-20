@@ -19,7 +19,7 @@ namespace FieldDay.Scripting {
         private readonly ScriptRuntimeState m_RuntimeState;
         private readonly ScriptDatabase m_Database;
         private readonly IMethodCache m_CachedMethodCache;
-        private readonly IVariantResolver m_CachedResolver;
+        private readonly VariantTableResolver m_CachedResolver;
         private readonly LeafRuntimeConfiguration m_Configuration;
 
         public ScriptPlugin(ScriptRuntimeState runtimeState, ScriptDatabase database) {
@@ -213,9 +213,8 @@ namespace FieldDay.Scripting {
             m_RuntimeState.OnTaggedLineProcessed.Invoke(thread, str);
 
             TagStringEventHandler evtHandler = m_RuntimeState.TagEventHandler;
-            var nodes = str.Nodes;
-            for(int i = 0; i < nodes.Length; i++) {
-                var node = nodes[i];
+            for(int i = 0; i < str.NodeCount; i++) {
+                var node = str.GetNode(i);
                 if (node.Type == TagNodeType.Event && !m_RuntimeState.SkippableTagEvents.Contains(node.Event.Type)) {
                     evtHandler.TryEvaluate(node.Event, thread, out IEnumerator coroutine);
                     if (coroutine != null) {
@@ -241,11 +240,11 @@ namespace FieldDay.Scripting {
             StringHash32? newStyle = null;
 
             // INITIAL DATA
-            
+
+            int nodeIndex = 0;
             if (tagStr.EventCount > 0) {
-                var nodes = tagStr.Nodes;
-                for(int i = 0; i < nodes.Length; i++) {
-                    TagNodeData node = nodes[i];
+                for(nodeIndex = 0; nodeIndex < tagStr.NodeCount; nodeIndex++) {
+                    TagNodeData node = tagStr.GetNode(nodeIndex);
                     if (node.Type != TagNodeType.Event) {
                         break;
                     }
@@ -274,6 +273,8 @@ namespace FieldDay.Scripting {
                         break;
                     }
                 }
+
+                thread.SetCharacterState(charState);
             }
 
             // CHARACTER ID
@@ -370,9 +371,8 @@ namespace FieldDay.Scripting {
             bool sentFakeSubtitleData = false;
             int visibleCount = 0,
                 richCount = 0;
-            var tagNodes = tagStr.Nodes;
-            for(int i = 0; i < tagNodes.Length; i++) {
-                TagNodeData node = tagStr.Nodes[i];
+            for(; nodeIndex < tagStr.NodeCount; nodeIndex++) {
+                TagNodeData node = tagStr.GetNode(nodeIndex);
                 switch (node.Type) {
                     case TagNodeType.Event: {
                         if (thread.IsSkipping() && m_RuntimeState.SkippableTagEvents.Contains(node.Event.Type)) {
@@ -408,7 +408,7 @@ namespace FieldDay.Scripting {
                         }
 
                         if (dialogBoxDesired) {
-                            yield return Routine.Inline(thread.GetPrinter()?.TypeLine(tagStr, node.Text));
+                            yield return Routine.Inline(thread.GetPrinter()?.TypeLine(tagStr, node.Text, thread.GetCharacterState()));
                         } else if (voxDesired && !hadVox && !sentFakeSubtitleData) {
                             SubtitleUtility.RequestDisplay(fakeSubtitleData);
                             sentFakeSubtitleData = true;
@@ -524,7 +524,7 @@ namespace FieldDay.Scripting {
 
         #region ILeafVariableAccess
 
-        IVariantResolver ILeafVariableAccess.Resolver {
+        VariantTableResolver ILeafVariableAccess.Resolver {
             get { return m_CachedResolver; }
         }
 

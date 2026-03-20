@@ -559,6 +559,8 @@ namespace FieldDay.Debugging {
                 FramerateDisplay.Show();
             }
 
+            DebugFlags.SetDebugConsoleVisible(visible);
+
             if (!visible) {
                 SetMenuVisible(false);
                 ClearFreecam();

@@ -272,7 +272,7 @@ namespace FieldDay.Scripting {
                 }
                 m_CurrentPrinter = printer;
                 if (m_CurrentPrinter != null && m_CurrentPrinter != m_CurrentChoicePresenter) {
-                    m_CurrentPrinter.SetThreadOwner(GetHandle());
+                    m_CurrentPrinter.SwitchThreadOwner(GetHandle());
                 }
             }
         }
@@ -306,7 +306,7 @@ namespace FieldDay.Scripting {
                 }
                 m_CurrentChoicePresenter = choicePresenter;
                 if (m_CurrentChoicePresenter != null && m_CurrentChoicePresenter != m_CurrentPrinter) {
-                    m_CurrentChoicePresenter.SetThreadOwner(GetHandle());
+                    m_CurrentChoicePresenter.SwitchThreadOwner(GetHandle());
                 }
             }
         }
@@ -340,7 +340,7 @@ namespace FieldDay.Scripting {
             }
 
             if (printer == null && choicePresenter == null) {
-                owned.SetThreadOwner(GetHandle());
+                owned.SwitchThreadOwner(GetHandle());
                 m_OwnedResources.PushBack(owned);
             }
         }
@@ -370,6 +370,8 @@ namespace FieldDay.Scripting {
         #endregion // Resources
 
         protected override void Reset() {
+            ScriptThreadOwnershipClearReason releaseReason = !HasNodes() ? ScriptThreadOwnershipClearReason.Completed : ScriptThreadOwnershipClearReason.Cancelled;
+
             m_CustomPlugin.StopTracking(this);
             if (m_Voiceover.IsValid) {
                 VoxUtility.Stop(ref m_Voiceover);
@@ -382,11 +384,11 @@ namespace FieldDay.Scripting {
             LeafThreadHandle handle = GetHandle();
 
             while(m_OwnedResources.TryPopBack(out var owned)) {
-                owned.TryClearThreadOwner(handle, ScriptThreadOwnershipClearReason.Cancelled);
+                owned.TryClearThreadOwner(handle, releaseReason);
             }
 
-            m_CurrentChoicePresenter?.TryClearThreadOwner(handle, ScriptThreadOwnershipClearReason.Cancelled);
-            m_CurrentPrinter?.TryClearThreadOwner(handle, ScriptThreadOwnershipClearReason.Cancelled);
+            m_CurrentChoicePresenter?.TryClearThreadOwner(handle, releaseReason);
+            m_CurrentPrinter?.TryClearThreadOwner(handle, releaseReason);
 
             m_CurrentPrinter = null;
             m_CurrentChoicePresenter = null;

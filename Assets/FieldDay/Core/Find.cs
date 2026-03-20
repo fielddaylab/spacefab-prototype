@@ -4,12 +4,14 @@ using FieldDay.Assets;
 using FieldDay.Components;
 using FieldDay.SharedState;
 using FieldDay.UI;
+using Unity.IL2CPP.CompilerServices;
 using UnityEngine;
 
 namespace FieldDay {
     /// <summary>
     /// Object lookup shortcuts.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     public class Find {
         #region Assets
 
@@ -17,6 +19,7 @@ namespace FieldDay {
         /// Looks up the global asset of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public T GlobalAsset<T>() where T : class, IGlobalAsset {
             return Game.Assets.GetGlobal<T>();
         }
@@ -24,6 +27,8 @@ namespace FieldDay {
         /// <summary>
         /// Looks up the named asset of the given type.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public T NamedAsset<T>(StringHash32 id) where T : class, INamedAsset {
             return Game.Assets.GetNamed<T>(id);
         }
@@ -32,6 +37,7 @@ namespace FieldDay {
         /// Looks up the lite asset with the given id.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public T LiteAsset<T>(StringHash32 id) where T : struct, ILiteAsset {
             return Game.Assets.GetLite<T>(id);
         }
@@ -44,6 +50,7 @@ namespace FieldDay {
         /// Looks up the shared state of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public T State<T>() where T : class, ISharedState {
             return Game.SharedState.Get<T>();
         }
@@ -56,6 +63,7 @@ namespace FieldDay {
         /// Looks up the shared gui panel of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public T Panel<T>() where T : class, ISharedGuiPanel {
             return Game.Gui.GetShared<T>();
         }
@@ -64,6 +72,7 @@ namespace FieldDay {
         /// Looks up the gui module of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public T GuiModule<T>() where T : class, IGuiModule {
             return Game.Gui.GetModule<T>();
         }
@@ -72,6 +81,7 @@ namespace FieldDay {
         /// Looks up the named RectTransform of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public RectTransform NamedRectTransform(StringHash32 name) {
             return Game.Gui.FindNamed(name);
         }
@@ -84,6 +94,7 @@ namespace FieldDay {
         /// Looks up the list of components of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public ComponentIterator<T> Components<T>() where T : class, IComponentData {
             return Game.Components.ComponentsOfType<T>();
         }
@@ -92,6 +103,7 @@ namespace FieldDay {
         /// Looks up the first component of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public T FirstComponent<T>() where T : class, IComponentData {
             return Game.Components.FirstComponentOfType<T>();
         }

@@ -6,9 +6,19 @@ using System;
 using UnityEngine;
 
 namespace SpaceFab.SupplyChain {
-    [SysUpdate(GameLoopPhase.LateUpdate, 150)]
-    public sealed class PortDetailsDisplaySystem : ComponentSystemBehaviour<PortDetailsDisplayState> {
-        public override void ProcessWorkForComponent(PortDetailsDisplayState component, float deltaTime) {
+    public sealed class PortDetailsDisplaySystem : SystemModule {
+        protected override unsafe void RegisterSystems(ref SystemRegistrationTable ecs) {
+            ecs.Register(&ProcessWork,
+                new SysUpdate(GameLoopPhase.LateUpdate, 150),
+                new SysPermissions().ReadWrite<PortDetailsDisplayState>()
+                    .ReadWriteShared<PortPools>()
+                    .ReadShared<LiveRoutesState>()
+                    .ReadShared<RouteHoverState>()
+                    .ReadShared<RouteDrawerState>()
+                );
+        }
+        
+        static private void ProcessWork(float deltaTime) {
             RouteDrawerState routeDrawer = Find.State<RouteDrawerState>();
             RouteHoverState hoverState = Find.State<RouteHoverState>();
             LiveRoutesState liveState = Find.State<LiveRoutesState>();
@@ -17,7 +27,7 @@ namespace SpaceFab.SupplyChain {
 
             bool pathHighlight = false;// routeDrawer.DrawState == RouteDrawState.InProgress;
 
-            foreach (var state in m_Components) {
+            foreach (var state in ECS.GetComponents<PortDetailsDisplayState>()) {
                 PortDetailsMode desiredMode;
                 if (pathHighlight && state.Highlight.HasPath) {
                     desiredMode = PortDetailsMode.Interactive;

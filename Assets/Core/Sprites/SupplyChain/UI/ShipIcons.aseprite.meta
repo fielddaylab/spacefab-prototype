@@ -8,6 +8,7 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
     alphaSource: 1
     mipMapMode: 0
@@ -164,7 +165,12 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1387482354
+    uuid:
+      value0: 858160954
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 858160954
     name: ShipIcons
     layerFlags: 0
     layerType: 0
@@ -255,3 +261,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 128, y: 64}
+  previousTextureSize: {x: 128, y: 128}

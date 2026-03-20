@@ -9,6 +9,7 @@ namespace FieldDay.UI {
     [TypeIndexCapacity(512)]
     public interface IGuiPanel {
         Transform Root { get; }
+        StringHash32 Group { get; }
 
         void Show();
         void Hide();
@@ -22,7 +23,19 @@ namespace FieldDay.UI {
     /// <summary>
     /// Singleton interface panel.
     /// </summary>
-    public interface ISharedGuiPanel : IGuiPanel {  }
+    public interface ISharedGuiPanel : IGuiPanel { }
+
+    /// <summary>
+    /// Populatable interface.
+    /// </summary>
+    public interface IParameterizedGuiPanel<TParams> : IGuiPanel {
+        void Populate(in TParams parms);
+    }
+
+    /// <summary>
+    /// Popup panel.
+    /// </summary>
+    public interface IPopupPanel : IGuiPanel { }
 
     /// <summary>
     /// Interface panel extensions.
@@ -35,6 +48,13 @@ namespace FieldDay.UI {
             } else {
                 panel.Hide();
             }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public void PopulateAndShow<TPanel, TParams>(this IParameterizedGuiPanel<TParams> panel, in TParams parms)
+            where TPanel : IParameterizedGuiPanel<TParams> {
+            panel.Populate(parms);
+            panel.Show();
         }
     }
 }

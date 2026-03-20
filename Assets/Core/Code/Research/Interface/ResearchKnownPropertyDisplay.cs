@@ -268,9 +268,6 @@ namespace SpaceFab.Research {
                 if ((thermal & ThermalTag.HighTemp) != 0) {
                     row.WriteChip("RESIST HIGH", confirmed);
                 }
-                if ((thermal & ThermalTag.LowTemp) != 0) {
-                    row.WriteChip("RESIST LOW", confirmed);
-                }
             }
         }
 

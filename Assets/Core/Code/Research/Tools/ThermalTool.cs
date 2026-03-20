@@ -28,21 +28,24 @@ namespace SpaceFab.Research {
             this.CacheComponent(ref m_Tool);
 
             m_Tool.OnInputSlotsUpdated.Register(OnSlotFillUpdated);
-            CoilRenderer.color = Colors[2];
-            TemperatureLabel.SetText(Labels[2]);
-            TemperatureIndex = 2;
+            CoilRenderer.color = Colors[0];
+            TemperatureLabel.SetText(Labels[0]);
+            TemperatureIndex = 0;
 
             IncreaseButton.Cursor.onClick.Register(OnClickIncrease);
             DecreaseButton.Cursor.onClick.Register(OnClickDecrease);
+
+            IncreaseButton.gameObject.SetActive(true);
+            DecreaseButton.gameObject.SetActive(false);
         }
 
         private void OnDisable() {
-            TemperatureIndex = 2;
-            CoilRenderer.color = Colors[2];
-            TemperatureLabel.SetText(Labels[2]);
+            TemperatureIndex = 0;
+            CoilRenderer.color = Colors[0];
+            TemperatureLabel.SetText(Labels[0]);
             Temperature = 0.5f;
             IncreaseButton.gameObject.SetActive(true);
-            DecreaseButton.gameObject.SetActive(true);
+            DecreaseButton.gameObject.SetActive(false);
 
         }
 
@@ -78,7 +81,7 @@ namespace SpaceFab.Research {
                 if (!ResearchMaterialUtility.IsStableAtTemperature(input, Temperature)) {
                     CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                     CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
-                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), Temperature > 0.5f ? ExplosionStyle.TemperatureBreakdownHot : ExplosionStyle.TemperatureBreakdownCold, 0.4f);
+                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), ExplosionStyle.TemperatureBreakdownHot, 0.4f);
                 } else {
                     float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
                     CircuitUtility.SetLightStrength(m_Tool.Circuit, current);

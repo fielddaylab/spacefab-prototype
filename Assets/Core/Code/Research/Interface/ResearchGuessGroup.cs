@@ -145,9 +145,6 @@ namespace SpaceFab.Research {
                 if ((thermalGuess & ThermalTag.HighTemp) != 0) {
                     list.Add("HighTemp");
                 }
-                if ((thermalGuess & ThermalTag.LowTemp) != 0) {
-                    list.Add("LowTemp");
-                }
             }
 
             return list;
@@ -214,9 +211,6 @@ namespace SpaceFab.Research {
             } else {
                 if (list.Contains("HighTemp")) {
                     thermalTags |= ThermalTag.HighTemp;
-                }
-                if (list.Contains("LowTemp")) {
-                    thermalTags |= ThermalTag.LowTemp;
                 }
                 if (list.Contains("Sensitive")) {
                     thermalTags = ThermalTag.None;

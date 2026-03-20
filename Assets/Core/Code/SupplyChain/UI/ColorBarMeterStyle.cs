@@ -9,7 +9,7 @@ namespace SpaceFab.SupplyChain {
         public Color32 OnColor;
         public Color32 OffColor;
 
-        public override void Populate(in int data) {
+        public override void Populate(in int data, GuiWidgetUpdateFlags flags) {
             Assert.True(data >= 0 && data <= Targets.Length);
             for(int i = 0; i < Targets.Length; i++) {
                 Targets[i].color = data > i ? OnColor : OffColor;

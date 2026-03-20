@@ -8,6 +8,8 @@ using UnityEngine.UI;
 namespace FieldDay.UI.Animation {
     [AddComponentMenu("Field Day/Canvas/Components/Fade Group")]
     public sealed class FadeGroup : MonoBehaviour, IGuiPanel {
+        [PanelGroupName] public StringHash32 GroupName;
+
         public CanvasGroup Group;
         public LayoutOffset Offset;
 
@@ -35,6 +37,10 @@ namespace FieldDay.UI.Animation {
         #region IGuiPanel
 
         public Transform Root { get { return this.CacheComponent(ref CachedTransform); } }
+
+        StringHash32 IGuiPanel.Group {
+            get { return GroupName; }
+        }
 
         public void Show() {
             if (!CurrentState) {

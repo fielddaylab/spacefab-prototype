@@ -1,3 +1,7 @@
+#if (UNITY_EDITOR && !IGNORE_UNITY_EDITOR) || DEVELOPMENT_BUILD || DEVELOPMENT
+#define GENERATE_ENUM_INSPECTOR_NAMES 
+#endif
+
 using BeauUtil;
 using System;
 using System.Collections;
@@ -15,7 +19,9 @@ namespace FieldDay {
         /// </summary>
         public struct EnumInfoCache {
             public object[] Values;
+#if GENERATE_ENUM_INSPECTOR_NAMES
             public string[] InspectorNames;
+#endif // GENERATE_ENUM_INSPECTOR_NAMES
         }
 
         static private readonly Dictionary<Type, EnumInfoCache> s_CachedEnumInfo = new Dictionary<Type, EnumInfoCache>(4);
@@ -43,12 +49,15 @@ namespace FieldDay {
             EnumInfoCache cache;
             if (!s_CachedEnumInfo.TryGetValue(enumType, out cache)) {
                 List<object> values = new List<object>();
+#if GENERATE_ENUM_INSPECTOR_NAMES
                 List<string> names = new List<string>();
-                foreach(var field in enumType.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)) {
+#endif // GENERATE_ENUM_INSPECTOR_NAMES
+                foreach (var field in enumType.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.DeclaredOnly)) {
                     if (field.IsDefined(typeof(HiddenAttribute)) || field.IsDefined(typeof(ObsoleteAttribute))) {
                         continue;
                     }
 
+#if GENERATE_ENUM_INSPECTOR_NAMES
                     LabelAttribute label = (LabelAttribute) field.GetCustomAttribute(typeof(LabelAttribute));
                     string name;
                     if (label != null) {
@@ -56,15 +65,21 @@ namespace FieldDay {
                     } else {
                         name = InspectorName(field.Name);
                     }
+#endif // GENERATE_ENUM_INSPECTOR_NAMES
 
                     object value = field.GetValue(null);
 
                     values.Add(value);
+
+#if GENERATE_ENUM_INSPECTOR_NAMES
                     names.Add(name);
+#endif // GENERATE_ENUM_INSPECTOR_NAMES
                 }
 
                 cache.Values = values.ToArray();
+#if GENERATE_ENUM_INSPECTOR_NAMES
                 cache.InspectorNames = names.ToArray();
+#endif // GENERATE_ENUM_INSPECTOR_NAMES
                 s_CachedEnumInfo.Add(enumType, cache);
             }
             return cache;
@@ -189,17 +204,5 @@ namespace FieldDay {
         }
 
         #endregion // String
-    }
-
-    public struct EnumStringTable<T> where T : unmanaged, Enum {
-        public readonly string[] Strings;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public string Get(T value) {
-            return Strings[Enums.ToInt(value)] ?? (Strings[Enums.ToInt(value)] = value.ToString());
-        }
     }
 }

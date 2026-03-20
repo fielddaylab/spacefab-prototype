@@ -109,7 +109,6 @@ namespace SpaceFab.Research {
         InvalidCombo,
         VoltageBreakdown,
         TemperatureBreakdownHot,
-        TemperatureBreakdownCold,
         TooBig,
     }
 }

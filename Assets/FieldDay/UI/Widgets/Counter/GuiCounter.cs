@@ -15,7 +15,7 @@ namespace FieldDay.UI.Widgets {
 
         private void Awake() {
             if (m_CurrentValue < 0) {
-                SetValue(m_StartingValue, true);
+                SetValue(m_StartingValue, GuiWidgetUpdateFlags.Force | GuiWidgetUpdateFlags.NoAnimation);
             }
         }
 
@@ -25,22 +25,22 @@ namespace FieldDay.UI.Widgets {
 
         public int Value {
             get { return m_CurrentValue; }
-            set { SetValue(value, false); }
+            set { SetValue(value, 0); }
         }
 
-        public void SetValue(int value, bool force) {
-            if (!force && value == m_CurrentValue) {
+        public void SetValue(int value, GuiWidgetUpdateFlags flags = 0) {
+            if ((flags & GuiWidgetUpdateFlags.Force) == 0 && value == m_CurrentValue) {
                 return;
             }
 
             value = Math.Clamp(value, 0, m_MaxValue);
             m_CurrentValue = value;
 
-            m_Style.Populate(value);
+            m_Style.Populate(value, flags);
         }
 
         public void ResetValue() {
-            SetValue(m_StartingValue, false);
+            SetValue(m_StartingValue, 0);
         }
     }
 }

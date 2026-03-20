@@ -12,6 +12,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: DraggingGem
       objectReference: {fileID: 0}
+    - target: {fileID: 594318183271135650, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 594318183271135650, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 594318183271135650, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 1131371722075355750, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
       propertyPath: m_SortingOrder
       value: 16
@@ -36,6 +48,10 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4852069638948720738, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_ActiveFontFeatures.Array.data[0]
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 6466765261630097642, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.5
@@ -48,10 +64,6 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: -5
       objectReference: {fileID: 0}
-    - target: {fileID: 8641799775696115083, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: fb0ac4d0cfb24d4438cb3de3547f7561, type: 2}
     - target: {fileID: 9006521967290568994, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.4249799

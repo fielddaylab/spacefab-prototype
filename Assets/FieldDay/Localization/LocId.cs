@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Text;
 using BeauUtil;
 using UnityEngine;
 
@@ -46,6 +47,10 @@ namespace FieldDay.Localization {
 
         public string ToDebugString() {
             return new StringHash32(m_HashValue).ToDebugString();
+        }
+
+        public void ToDebugString(StringBuilder sb) {
+            new StringHash32(m_HashValue).ToDebugString(sb);
         }
 
         #endregion // Interfaces

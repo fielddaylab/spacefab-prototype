@@ -6,6 +6,7 @@ using BeauUtil.Tags;
 using BeauUtil.Variants;
 using FieldDay.Data;
 using FieldDay.Debugging;
+using FieldDay.Localization;
 using FieldDay.Scenes;
 using FieldDay.SharedState;
 using FieldDay.Vox;
@@ -62,8 +63,8 @@ namespace FieldDay.Scripting {
         internal IPool<VariantTable> TablePool;
 
         // Variable Resolvers
-        internal CustomVariantResolver Resolver;
-        internal CustomVariantResolver ResolverOverride;
+        internal VariantTableResolver Resolver;
+        internal VariantTableResolver ResolverOverride;
 
         // Randomization
         internal System.Random Random = new System.Random();
@@ -100,10 +101,10 @@ namespace FieldDay.Scripting {
         }
 
         void IRegistrationCallbacks.OnRegister() {
-            Resolver = new CustomVariantResolver();
+            Resolver = new VariantTableResolver(8);
             MethodCache = LeafUtils.CreateMethodCache(typeof(IScriptActorComponent));
 
-            ResolverOverride = new CustomVariantResolver();
+            ResolverOverride = new VariantTableResolver(2);
             ResolverOverride.Base = Resolver;
 
             TagParserConfig = new CustomTagParserConfig();
@@ -159,8 +160,6 @@ namespace FieldDay.Scripting {
             }
         }
 
-        // TODO: Figure out why this needs to be called later in the scene loading process
-        // when in WebGL. Also why LoadStaticAsync is broken
         private void InitialMethodCache() {
             MethodCache.Load(typeof(ScriptActor));
             MethodCache.LoadStatic();
@@ -220,8 +219,8 @@ namespace FieldDay.Scripting {
         static private void Initialize() {
             Game.SharedState.Register(new ScriptDatabase());
             Game.SharedState.Register(new ScriptRuntimeState());
-            Game.Systems.Register(new ScriptLoadingSystem());
-            Game.Systems.Register(new ScriptRuntimeTickSystem());
+            ScriptLoadingSystem.RegisterModule();
+            ScriptRuntimeTickSystem.RegisterModule();
         }
 
         #region Tables
@@ -245,25 +244,11 @@ namespace FieldDay.Scripting {
         #region Variables
 
         /// <summary>
-        /// Binds a named variable to the runtime.
-        /// </summary>
-        static public void BindVariable(TableKeyPair keyPair, CustomVariantResolver.GetVarDelegate resolver) {
-            Runtime.Resolver.SetVar(keyPair, resolver);
-        }
-
-        /// <summary>
-        /// Removes a named variable from the runtime.
-        /// </summary>
-        static public void UnbindVariable(TableKeyPair keyPair) {
-            Runtime.Resolver.ClearVar(keyPair);
-        }
-
-        /// <summary>
         /// Reads the variable at the given location.
         /// </summary>
         static public Variant ReadVariable(TableKeyPair keyPair, Variant defaultVal = default) {
             Variant result;
-            if (!Runtime.Resolver.TryResolve(null, keyPair, out result)) {
+            if (!Runtime.Resolver.TryResolve(keyPair, out result)) {
                 result = defaultVal;
             }
             return result;
@@ -274,7 +259,7 @@ namespace FieldDay.Scripting {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public void WriteVariable(TableKeyPair keyPair, Variant value) {
-            Runtime.Resolver.TryModify(null, keyPair, VariantModifyOperator.Set, value);
+            Runtime.Resolver.TryModify(keyPair, VariantModifyOperator.Set, value);
         }
 
         #endregion // Variables
@@ -298,6 +283,16 @@ namespace FieldDay.Scripting {
         }
 
         /// <summary>
+        /// Returns the character id embedded in the given line.
+        /// </summary>
+        static public StringHash32 GetCharacterId(TagString tagString, StringHash32 defaultValue) {
+            if (!tagString.TryFindEvent(LeafUtils.Events.Character, out var evtData)) {
+                return defaultValue;
+            }
+            return evtData.Argument0.AsStringHash();
+        }
+
+        /// <summary>
         /// Returns the character name override embedded in the given line.
         /// </summary>
         static public StringSlice GetCharacterNameOverride(TagString tagString) {
@@ -305,7 +300,107 @@ namespace FieldDay.Scripting {
             return evtData.StringArgument;
         }
 
+        /// <summary>
+        /// Returns the character state embedded in the given line.
+        /// </summary>
+        static public DialogueCharacterState GetCharacterState(TagString tagString, DialogueCharacterState baseValues) {
+            DialogueCharacterState charState = baseValues;
+            
+            int nodeIndex = 0;
+            if (tagString.EventCount > 0) {
+                for (nodeIndex = 0; nodeIndex < tagString.NodeCount; nodeIndex++) {
+                    TagNodeData node = tagString.GetNode(nodeIndex);
+                    if (node.Type != TagNodeType.Event) {
+                        break;
+                    }
+
+                    StringHash32 eventType = node.Event.Type;
+                    if (eventType == TagEvents.HasNoVox) {
+                    } else if (eventType == TagEvents.HasVox) {
+                    } else if (eventType == TagEvents.VoxOnly) {
+                    } else if (eventType == TagEvents.SetStyle) {
+                    } else if (eventType == LeafUtils.Events.Character) {
+                        charState.CharacterId = node.Event.Argument0.AsStringHash();
+                        charState.PoseId = node.Event.Argument1.AsStringHash();
+                        charState.OverrideName = null;
+                    } else if (eventType == LeafUtils.Events.Pose) {
+                        charState.PoseId = node.Event.Argument0.AsStringHash();
+                    } else if (eventType == TagEvents.OverrideCharName) {
+                        charState.OverrideName = node.Event.StringArgument.ToString();
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            return charState;
+        }
+
         #endregion // Tag Parsing
+
+        #region Text Lookup
+
+        /// <summary>
+        /// Attempts to parse a line code out to a TagString.
+        /// </summary>
+        static public bool ReadText(ref TagString tagString, StringHash32 lineId, object context = null) {
+            // TODO: Implement with Loc
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to parse a line code out to a TagString.
+        /// </summary>
+        static public bool ReadText(TagString tagString, StringHash32 lineId, object context = null) {
+            // TODO: Implement with Loc
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to parse a line code out to a TagString.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public bool ReadText(ref TagString tagString, LeafThreadHandle threadContext, StringHash32 lineId, object context = null) {
+            return ReadText(ref tagString, threadContext.GetThread<ScriptThread>().PeekNode(), lineId, context);
+        }
+
+        /// <summary>
+        /// Attempts to parse a line code out to a TagString.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public bool ReadText(TagString tagString, LeafThreadHandle threadContext, StringHash32 lineId, object context = null) {
+            return ReadText(tagString, threadContext.GetThread<ScriptThread>().PeekNode(), lineId, context);
+        }
+
+        /// <summary>
+        /// Attempts to parse a line code out to a TagString.
+        /// </summary>
+        static public bool ReadText(ref TagString tagString, LeafNode nodeContext, StringHash32 lineId, object context = null) {
+            if (LeafUtils.TryLookupLine(Runtime.Plugin, lineId, nodeContext, out string line)) {
+                Runtime.TagParser.Parse(ref tagString, line, context);
+                return true;
+            }
+
+            tagString?.Clear();
+            return false;
+        }
+
+        /// <summary>
+        /// Attempts to parse a line code out to a TagString.
+        /// </summary>
+        static public bool ReadText(TagString tagString, LeafNode nodeContext, StringHash32 lineId, object context = null) {
+            Assert.NotNull(tagString);
+
+            if (LeafUtils.TryLookupLine(Runtime.Plugin, lineId, nodeContext, out string line)) {
+                Runtime.TagParser.Parse(ref tagString, line, context);
+                return true;
+            }
+
+            tagString?.Clear();
+            return false;
+        }
+
+        #endregion // Text Lookup
 
         #region Actors
 

@@ -1,12 +1,19 @@
 using System;
 using BeauUtil;
 using FieldDay.Assets;
+using FieldDay.Debugging;
 using FieldDay.HID;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace FieldDay.UI {
     public class HintedCursor : MonoBehaviour, IOnGuiUpdate {
+        public enum VisiblityMode {
+            Invisible,
+            Interactable,
+            Always,
+        }
+
         #region Inspector
 
         [Header("Components")]
@@ -41,8 +48,8 @@ namespace FieldDay.UI {
         }
 
         void IOnGuiUpdate.OnGuiUpdate() {
-#if UNITY_EDITOR
             bool cursorIsFocused = GameLoop.IsFocused() && CursorUtility.IsCursorWithinGameWindow();
+#if UNITY_EDITOR
             if (!cursorIsFocused) {
                 CursorUtility.ShowCursor();
             } else {
@@ -85,6 +92,13 @@ namespace FieldDay.UI {
                     type = Find.NamedAsset<CursorType>(overrideType);
                     defaultSprite = type.DefaultImage;
                 }
+            }
+
+            bool showCursor = DebugFlags.IsConsoleOpen || (s_Visibility != VisiblityMode.Invisible && cursorIsFocused && (s_Visibility == VisiblityMode.Always || hintIsInteractable));
+            m_Sprite.enabled = showCursor;
+
+            if (!showCursor) {
+                return;
             }
 
             Sprite icon = defaultSprite;
@@ -133,5 +147,19 @@ namespace FieldDay.UI {
 
             m_Position.localScale = new Vector3(scale, scale, scale);
         }
+
+        #region Statics
+
+        static private VisiblityMode s_Visibility = VisiblityMode.Always;
+
+        /// <summary>
+        /// When the HintedCursor should be displayed.
+        /// </summary>
+        static public VisiblityMode Visibility {
+            get { return s_Visibility; }
+            set { s_Visibility = value; }
+        }
+
+        #endregion // Statics
     }
 }

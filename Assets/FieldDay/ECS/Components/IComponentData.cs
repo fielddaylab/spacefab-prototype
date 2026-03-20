@@ -2,6 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using BeauUtil;
 using BeauUtil.Debugger;
+using FieldDay.UI;
 using UnityEngine;
 
 namespace FieldDay.Components {
@@ -9,13 +10,17 @@ namespace FieldDay.Components {
     /// <summary>
     /// Interface for a component that can be used with a component system.
     /// </summary>
-    [TypeIndexCapacity(512)]
     public interface IComponentData { }
+
+    public interface IComponentTuple {
+        int Count { get; }
+        bool IsValid { get; }
+    }
 
     /// <summary>
     /// Tuple of two component types.
     /// </summary>
-    public struct ComponentTuple<TPrimary, TSecondary>
+    public struct ComponentTuple<TPrimary, TSecondary> : IComponentTuple
         where TPrimary : class, IComponentData
         where TSecondary : class, IComponentData {
 
@@ -26,12 +31,23 @@ namespace FieldDay.Components {
             Primary = primary;
             Secondary = additional;
         }
+
+        public readonly int Count {
+            get { return 2; }
+        }
+
+        public readonly bool IsValid {
+            get {
+                return !ReferenceEquals(Primary, null)
+                    && !ReferenceEquals(Secondary, null);
+            }
+        }
     }
 
     /// <summary>
     /// Tuple of three component types.
     /// </summary>
-    public struct ComponentTuple<TPrimary, TComponentA, TComponentB>
+    public struct ComponentTuple<TPrimary, TComponentA, TComponentB> : IComponentTuple
         where TPrimary : class, IComponentData
         where TComponentA : class, IComponentData
         where TComponentB : class, IComponentData {
@@ -45,12 +61,24 @@ namespace FieldDay.Components {
             ComponentA = additionalA;
             ComponentB = additionalB;
         }
+
+        public readonly int Count {
+            get { return 3; }
+        }
+
+        public readonly bool IsValid {
+            get {
+                return !ReferenceEquals(Primary, null)
+                    && !ReferenceEquals(ComponentA, null)
+                    && !ReferenceEquals(ComponentB, null);
+            }
+        }
     }
 
     /// <summary>
     /// Tuple of four component types.
     /// </summary>
-    public struct ComponentTuple<TPrimary, TComponentA, TComponentB, TComponentC>
+    public struct ComponentTuple<TPrimary, TComponentA, TComponentB, TComponentC> : IComponentTuple
         where TPrimary : class, IComponentData
         where TComponentA : class, IComponentData
         where TComponentB : class, IComponentData
@@ -67,95 +95,35 @@ namespace FieldDay.Components {
             ComponentB = additionalB;
             ComponentC = additionalC;
         }
+
+        public readonly int Count {
+            get { return 4; }
+        }
+
+        public readonly bool IsValid {
+            get {
+                return !ReferenceEquals(Primary, null)
+                    && !ReferenceEquals(ComponentA, null)
+                    && !ReferenceEquals(ComponentB, null)
+                    && !ReferenceEquals(ComponentC, null);
+            }
+        }
     }
 
     /// <summary>
     /// Component utility.
     /// </summary>
     static public class ComponentUtility {
-        static private readonly Type IComponentDataType = typeof(IComponentData);
-        static private readonly Type UnityComponentType = typeof(UnityEngine.Component);
-
-        /// <summary>
-        /// Filter for getting a component tuple from a primary component.
-        /// </summary>
-        private delegate IComponentData ComponentSiblingPredicate(in IComponentData primary, Type secondary);
-
-        /// <summary>
-        /// Filter for getting if a component is not null.
-        /// </summary>
-        private delegate bool ComponentValidPredicate(in IComponentData primary);
-
-        static private readonly ComponentSiblingPredicate UnityComponentPredicate = (in IComponentData primary, Type secondary) => {
-            return (IComponentData) ((Component) primary).GetComponent(secondary);
-        };
-
-        static private readonly ComponentSiblingPredicate DefaultComponentPredicate = (in IComponentData primary, Type secondary) => {
-            return null;
-        };
-
-        static private readonly ComponentValidPredicate UnityComponentValidPredicate = (in IComponentData primary) => {
-            return ((UnityEngine.Object) primary);
-        };
-
-        static private readonly ComponentValidPredicate DefaultComponentValidPredicate = (in IComponentData primary) => {
-            return !ReferenceEquals(primary, null);
-        };
-
-        static private class PrimaryLookup<TPrimary> where TPrimary : class, IComponentData {
-            /// <summary>
-            /// Predicate that retrieves a sibling component.
-            /// </summary>
-            static private readonly ComponentSiblingPredicate SiblingFilter = GetSiblingPredicate(typeof(TPrimary));
-
-            /// <summary>
-            /// Predicate that retrieves a sibling component.
-            /// </summary>
-            static private readonly ComponentValidPredicate ValidFilter = GetValidPredicate(typeof(TPrimary));
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            static public TComponent GetSibling<TComponent>(TPrimary primary) where TComponent : class, IComponentData {
-                return (TComponent) SiblingFilter(primary, typeof(TComponent));
-            }
-
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            static public bool IsValid(TPrimary primary) {
-                return ValidFilter(primary);
-            }
-        }
-
-        /// <summary>
-        /// Retrieves a predicate that can get sibling behaviours for instances of the given primary component type.
-        /// </summary>
-        static private ComponentSiblingPredicate GetSiblingPredicate(Type primaryType) {
-            Assert.True(IComponentDataType.IsAssignableFrom(primaryType), "Component type '{0}' is not an IComponentData type", primaryType.FullName);
-            if (UnityComponentType.IsAssignableFrom(primaryType)) {
-                return UnityComponentPredicate;
-            }
-
-            return DefaultComponentPredicate;
-        }
-
-        /// <summary>
-        /// Retrieves a predicate that can get if a component instance is valid.
-        /// </summary>
-        static private ComponentValidPredicate GetValidPredicate(Type primaryType) {
-            Assert.True(IComponentDataType.IsAssignableFrom(primaryType), "Component type '{0}' is not an IComponentData type", primaryType.FullName);
-            if (UnityComponentType.IsAssignableFrom(primaryType)) {
-                return UnityComponentValidPredicate;
-            }
-
-            return DefaultComponentValidPredicate;
-        }
+        #region Siblings
 
         /// <summary>
         /// Retrieves the subling of the given type from the given primary component.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public TComponent Sibling<TPrimary, TComponent>(this TPrimary primary)
-            where TPrimary : class, IComponentData
-            where TComponent : class, IComponentData {
-            return PrimaryLookup<TPrimary>.GetSibling<TComponent>(primary);
+            where TPrimary : UnityEngine.Component, IComponentData
+            where TComponent : UnityEngine.Component, IComponentData {
+            return primary.GetComponent<TComponent>();
         }
 
         /// <summary>
@@ -163,10 +131,9 @@ namespace FieldDay.Components {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool Sibling<TPrimary, TComponent>(TPrimary primary, out TComponent component)
-            where TPrimary : class, IComponentData
-            where TComponent : class, IComponentData {
-            component = PrimaryLookup<TPrimary>.GetSibling<TComponent>(primary);
-            return component != null;
+            where TPrimary : UnityEngine.Component, IComponentData
+            where TComponent : UnityEngine.Component, IComponentData {
+            return primary.TryGetComponent(out component);
         }
 
         /// <summary>
@@ -174,12 +141,12 @@ namespace FieldDay.Components {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool Siblings<TPrimary, TComponentA, TComponentB>(TPrimary primary, out TComponentA componentA, out TComponentB componentB)
-            where TPrimary : class, IComponentData
-            where TComponentA : class, IComponentData
-            where TComponentB : class, IComponentData {
-            componentA = PrimaryLookup<TPrimary>.GetSibling<TComponentA>(primary);
-            componentB = PrimaryLookup<TPrimary>.GetSibling<TComponentB>(primary);
-            return componentA != null && componentB != null;
+            where TPrimary : UnityEngine.Component, IComponentData
+            where TComponentA : UnityEngine.Component, IComponentData
+            where TComponentB : UnityEngine.Component, IComponentData {
+            bool result = primary.TryGetComponent(out componentA);
+            result &= primary.TryGetComponent(out componentB);
+            return result;
         }
 
         /// <summary>
@@ -187,21 +154,70 @@ namespace FieldDay.Components {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool Siblings<TPrimary, TComponentA, TComponentB, TComponentC>(TPrimary primary, out TComponentA componentA, out TComponentB componentB, out TComponentC componentC)
-            where TPrimary : class, IComponentData
-            where TComponentA : class, IComponentData
-            where TComponentB : class, IComponentData
-            where TComponentC : class, IComponentData {
-            componentA = PrimaryLookup<TPrimary>.GetSibling<TComponentA>(primary);
-            componentB = PrimaryLookup<TPrimary>.GetSibling<TComponentB>(primary);
-            componentC = PrimaryLookup<TPrimary>.GetSibling<TComponentC>(primary);
-            return componentA != null && componentB != null && componentC != null;
+            where TPrimary : UnityEngine.Component, IComponentData
+            where TComponentA : UnityEngine.Component, IComponentData
+            where TComponentB : UnityEngine.Component, IComponentData
+            where TComponentC : UnityEngine.Component, IComponentData {
+            bool result = primary.TryGetComponent(out componentA);
+            result &= primary.TryGetComponent(out componentB);
+            result &= primary.TryGetComponent(out componentC);
+            return result;
         }
+
+        #endregion // Siblings
+
+        #region Tuples
+
+        /// <summary>
+        /// Retrieves the subling of the given type from the given primary component.
+        /// </summary>
+        static public ComponentTuple<TPrimary, TComponent> Tuple<TPrimary, TComponent>(TPrimary primary)
+            where TPrimary : UnityEngine.Component, IComponentData
+            where TComponent : UnityEngine.Component, IComponentData {
+            ComponentTuple<TPrimary, TComponent> result;
+            result.Primary = primary;
+            primary.TryGetComponent(out result.Secondary);
+            return result;
+        }
+
+        /// <summary>
+        /// Retrieves the subling of the given type from the given primary component.
+        /// </summary>
+        static public ComponentTuple<TPrimary, TComponentA, TComponentB> Tuple<TPrimary, TComponentA, TComponentB>(TPrimary primary)
+            where TPrimary : UnityEngine.Component, IComponentData
+            where TComponentA : UnityEngine.Component, IComponentData
+            where TComponentB : UnityEngine.Component, IComponentData {
+            ComponentTuple<TPrimary, TComponentA, TComponentB> result;
+            result.Primary = primary;
+            primary.TryGetComponent(out result.ComponentA);
+            primary.TryGetComponent(out result.ComponentB);
+            return result;
+        }
+
+        /// <summary>
+        /// Retrieves the subling of the given type from the given primary component.
+        /// </summary>
+        static public ComponentTuple<TPrimary, TComponentA, TComponentB, TComponentC> Tuple<TPrimary, TComponentA, TComponentB, TComponentC>(TPrimary primary)
+            where TPrimary : UnityEngine.Component, IComponentData
+            where TComponentA : UnityEngine.Component, IComponentData
+            where TComponentB : UnityEngine.Component, IComponentData
+            where TComponentC : UnityEngine.Component, IComponentData {
+            ComponentTuple<TPrimary, TComponentA, TComponentB, TComponentC> result;
+            result.Primary = primary;
+            primary.TryGetComponent(out result.ComponentA);
+            primary.TryGetComponent(out result.ComponentB);
+            primary.TryGetComponent(out result.ComponentC);
+            return result;
+        }
+
+        #endregion // Tuples
 
         /// <summary>
         /// Returns if this component is a valid instance.
         /// </summary>
-        static public bool IsValid<TComponent>(TComponent component) where TComponent : class, IComponentData {
-            return PrimaryLookup<TComponent>.IsValid(component);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public bool IsValid<TComponent>(TComponent component) where TComponent : UnityEngine.Component, IComponentData {
+            return (bool) component;
         }
     }
 }

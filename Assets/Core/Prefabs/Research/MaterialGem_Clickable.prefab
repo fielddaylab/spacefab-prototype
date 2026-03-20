@@ -231,6 +231,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: MaterialGem_Clickable
       objectReference: {fileID: 0}
+    - target: {fileID: 6466765261630097642, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466765261630097642, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6466765261630097642, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7981244713096388077, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 9084437635895688955, guid: fe8dca1ee7afa164f94427d949e5d60c, type: 3}
     - target: {fileID: 9006521967290568994, guid: b9626772a9730d143bae5899c0375e0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -8,8 +8,9 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
-    alphaSource: 1
+    alphaSource: 2
     mipMapMode: 0
     enableMipMap: 0
     fadeOut: 0
@@ -97,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638992367269451186
+  platformSettingsDirtyTick: 639096017813629265
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -141,15 +142,11 @@ ScriptedImporter:
       - {x: 242, y: -114.5}
       - {x: 242, y: 114.5}
     - outline:
-      - {x: -87, y: -98.5}
-      - {x: -134, y: -93.5}
-      - {x: -164, y: -93.5}
+      - {x: -81, y: -98.5}
+      - {x: -148, y: -90.5}
       - {x: -218, y: -98.5}
       - {x: -219, y: 97.5}
-      - {x: -39, y: 99.5}
-      - {x: -5, y: 98.5}
-      - {x: 128, y: 97.5}
-      - {x: 222, y: 98.5}
+      - {x: 221, y: 97.5}
       - {x: 224, y: -96.5}
     vertices: []
     spritePhysicsOutline: []
@@ -160,6 +157,11 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
+    uuid:
+      value0: 1269527469
+      value1: 0
+      value2: 0
+      value3: 0
     guid: 1269527469
     name: CircuitLine
     layerFlags: 0
@@ -193,9 +195,9 @@ ScriptedImporter:
   - name: DefaultTexturePlatform
     overridden: 0
     ignorePlatformSupport: 0
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 63
     textureCompression: 0
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -219,7 +221,7 @@ ScriptedImporter:
     ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 26
     textureCompression: 1
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -230,3 +232,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 512, y: 256}
+  previousTextureSize: {x: 512, y: 256}

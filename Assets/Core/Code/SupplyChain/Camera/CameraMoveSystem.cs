@@ -8,11 +8,18 @@ using System;
 using UnityEngine;
 
 namespace SpaceFab.SupplyChain {
-    [SysUpdate(GameLoopPhase.Update)]
-    public sealed class CameraMoveSystem : SharedStateSystemBehaviour<CameraControlState> {
-        public override void ProcessWork(float deltaTime) {
+    public sealed class CameraMoveSystem : SystemModule {
+        protected override unsafe void RegisterSystems(ref SystemRegistrationTable ecs) {
+            ecs.Register(&ProcessWork,
+                SysUpdate.Default(),
+                new SysPermissions().ReadWriteShared<CameraControlState>());
+        }
+
+        static private void ProcessWork(float deltaTime) {
+            ECS.GetState(out CameraControlState camState);
+            
             Vector2 adjust = default;
-            float moveSpeed = deltaTime * m_State.MovementSpeed;
+            float moveSpeed = deltaTime * camState.MovementSpeed;
             if (Game.Input.IsKeyDown(KeyCode.A)) {
                 adjust.x -= 1;
             }
@@ -31,7 +38,7 @@ namespace SpaceFab.SupplyChain {
                 adjust.x *= moveSpeed;
                 adjust.y *= moveSpeed;
 
-                m_State.TargetPosition += adjust;
+                camState.TargetPosition += adjust;
             }
         }
     }
