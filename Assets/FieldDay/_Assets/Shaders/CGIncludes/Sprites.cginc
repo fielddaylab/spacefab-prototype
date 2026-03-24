@@ -19,7 +19,7 @@ struct Attributes_Sprite
     float4 vertex   : POSITION;
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
-    AttributesInstancing
+    AttributesInstancing()
 };
 
 struct Varyings_Sprite
@@ -28,7 +28,7 @@ struct Varyings_Sprite
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
     VaryingsFog(1)
-    VaryingsStereo
+    VaryingsStereo()
 };
 
 /// Instancing

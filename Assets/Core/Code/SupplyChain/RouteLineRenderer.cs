@@ -47,6 +47,33 @@ namespace SpaceFab.SupplyChain {
             }
         }
 
+        static public int FindClosestSegment(RouteLineRenderer line, Vector3 clickWorldPos) {
+            int index = -1;
+            float minDistSqr = float.MaxValue;
+
+            for (int i = 0; i < line.Solid.positionCount - 1; i++) {
+                Vector3 a = line.Solid.GetPosition(i);
+                Vector3 b = line.Solid.GetPosition(i + 1);
+                Vector3 length = b - a;
+                float lengthSqr = length.sqrMagnitude;
+                if (lengthSqr < Mathf.Epsilon)
+                    continue;
+
+                float proj = Vector3.Dot(clickWorldPos - a, length) / lengthSqr;
+                proj = Mathf.Clamp01(proj);
+
+                Vector3 closest = a + proj * length;
+                float distSqr = (clickWorldPos - closest).sqrMagnitude;
+
+                if (distSqr < minDistSqr) {
+                    minDistSqr = distSqr;
+                    index = i;
+                }
+            }
+
+            return index + 1; // first node of orphaned path
+        }
+
 
         #region Solid Line
 

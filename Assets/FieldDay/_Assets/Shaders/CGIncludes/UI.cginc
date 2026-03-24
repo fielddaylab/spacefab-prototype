@@ -19,7 +19,7 @@ struct Attributes_UI
     float4 vertex   : POSITION;
     fixed4 color    : COLOR;
     float2 texcoord : TEXCOORD0;
-    AttributesInstancing
+    AttributesInstancing()
 };
 
 struct Varyings_UI
@@ -31,7 +31,7 @@ struct Varyings_UI
 #if UNITY_UI_CLIP_RECT
     half4  mask             : TEXCOORD2;
 #endif // UNITY_UI_CLIP_RECT
-    VaryingsStereo
+    VaryingsStereo()
 };
 
 /// Uniforms
@@ -70,12 +70,6 @@ float4 UIComputeRectMask(float4 vertexPos)
 }
 
 inline float UIPerformRectClip(float4 mask)
-{
-    half2 m = saturate((_ClipRect.zw - _ClipRect.xy - abs(mask.xy)) * mask.zw);
-    return m.x * m.y;
-}
-
-inline float UIPerformRectClip(half4 mask)
 {
     half2 m = saturate((_ClipRect.zw - _ClipRect.xy - abs(mask.xy)) * mask.zw);
     return m.x * m.y;

@@ -34,6 +34,7 @@ namespace SpaceFab.SupplyChain {
                     state.SelectedRoute.LineColor = shipWidget.RouteColor;
                     state.SelectedRoute.CarryingCapacity = state.SelectedShip.Capacity;
                     state.SelectedRoute.Line.ShipId = state.SelectedShip.AssetId;
+                    state.SelectedRoute.TempLine.ShipId = state.SelectedShip.AssetId;
                     LiveRouteLineUtility.UpdateColor(state.SelectedRoute.Line, shipWidget.RouteColor);
                     panel.UpdateShipSelectionVisuals(state.SelectedWidget, true);
                     SelectCurrentRoute();

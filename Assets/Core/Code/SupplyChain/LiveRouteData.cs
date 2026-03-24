@@ -14,6 +14,7 @@ namespace SpaceFab.SupplyChain {
         public const int MaxNodes = 32;
         public const int MaxPorts = 16;
         public const int MaxHazards = 16;
+        public const int MaxLines = 2;
 
         public StringHash32 ShipId;
         public SupplyRouteStats Stats;
@@ -29,6 +30,9 @@ namespace SpaceFab.SupplyChain {
         public readonly PathNode[] Nodes = new PathNode[MaxNodes];
         public readonly Port[] Ports = new Port[MaxPorts];
         public readonly HazardRegion[] IntersectingHazards = new HazardRegion[MaxHazards];
+
+        public RouteLineRenderer TempLine;
+        public PathNode[] TempNodes;
     }
 
     static public partial class LiveRouteUtility {
@@ -86,7 +90,7 @@ namespace SpaceFab.SupplyChain {
 
         static public bool TryRemoveNode(LiveRouteData liveRoute, PathNode node) {
             int index = IndexOfNodeInPath(liveRoute, node);
-            if (index < 0) {
+            if (index < 0 || index != liveRoute.NodeCount - 1) {
                 return false;
             }
 
@@ -265,6 +269,48 @@ namespace SpaceFab.SupplyChain {
         }
 
         #endregion // Hazards
+
+        #region Temp
+        static public void SplitRoute(LiveRouteData route, int index) {
+            PathNode node = route.Nodes[index];
+            if (index == route.NodeCount - 1) {
+                TryRemoveNode(route, node);
+                return;
+            }
+        
+            route.TempNodes = new PathNode[route.NodeCount - index];
+            LiveRouteLineUtility.ClearSolids(route.TempLine);
+
+            for (int i = route.NodeCount - 1; i >= index; i--) {
+                LiveRouteLineUtility.AddSolid(route.TempLine, route.Nodes[i].transform.position);
+                route.TempNodes[i - index] = route.Nodes[i];
+                TryRemoveNode(route, route.Nodes[i]);
+            }
+            TryRemoveNode(route, route.Nodes[index]);
+            LiveRouteLineUtility.UpdateColor(route.TempLine, Color.red);
+        }
+
+        static public bool TryReconnectRoute(LiveRouteData route, PathNode node) {
+            if (route.TempNodes == null)
+                return false;
+            
+            bool isReconnected = false;
+            if (node.Equals(route.TempNodes[0])) { // In forward order
+                for (int i = 0; i < route.TempNodes.Length; i++) {
+                    TryAddNode(route, route.TempNodes[i]);
+                }
+                isReconnected = true;
+            } else if (node.Equals(route.TempNodes[route.TempNodes.Length - 1])) { // In reverse order
+                for (int i = route.TempNodes.Length - 1; i >= 0; i--) {
+                    TryAddNode(route, route.TempNodes[i]);
+                }
+                isReconnected = true;
+            }
+            LiveRouteLineUtility.ClearSolids(route.TempLine);
+            route.TempNodes = null;
+            return isReconnected;
+        }
+        #endregion // Temp
 
         static private readonly RaycastHit2D[] RaycastBufferA = new RaycastHit2D[8];
         static private readonly RaycastHit2D[] RaycastBufferB = new RaycastHit2D[8];

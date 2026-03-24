@@ -2,6 +2,9 @@
 #define FD_COMMON_INCLUDED
 
 #include "UnityCG.cginc"
+#include "./DXCompat.cginc"
+
+/// Keywords
 
 /// Configuration Defines
 
@@ -14,13 +17,14 @@
 
 /// Instancing
 
-#define     AttributesInstancing    UNITY_VERTEX_INPUT_INSTANCE_ID
-#define     VaryingsInstancing      UNITY_VERTEX_INPUT_INSTANCE_ID
+#define     AttributesInstancing()    UNITY_VERTEX_INPUT_INSTANCE_ID
+#define     VaryingsInstancing()      UNITY_VERTEX_INPUT_INSTANCE_ID
 #define     InstancingInitialize(input)     UNITY_SETUP_INSTANCE_ID(input)
+#define     InstancingTransfer(input, output)   UNITY_TRANSFER_INSTANCE_ID(input, output)
 
 /// Stereo
 
-#define     VaryingsStereo                  UNITY_VERTEX_OUTPUT_STEREO
+#define     VaryingsStereo()                UNITY_VERTEX_OUTPUT_STEREO
 #define     StereoInitialize(output)        UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output)
 
 /// Quantization
@@ -33,10 +37,14 @@ inline float Quantize8(float value)
     return round(value * QUANTIZE_PRECISION_8) * INV_QUANTIZE_PRECISION_8;
 }
 
+#if FD_SUPPORTS_HALF
+
 inline half Quantize8(half value)
 {
     return round(value * QUANTIZE_PRECISION_8) * INV_QUANTIZE_PRECISION_8;
 }
+
+#endif // FD_SUPPORTS_HALF
 
 /// Math
 
@@ -54,6 +62,8 @@ inline float2 Rotate2d(float2 base, float radians)
     return mul(MatrixCreateRotation2d(radians), base);
 }
 
+/// Color Space
+
 /// Fragment Operations
 
 #if FD_PREMULTIPLY_ALPHA
@@ -68,7 +78,7 @@ inline float2 Rotate2d(float2 base, float radians)
     #define PixelSnapApply(position)
 #endif // PIXELSNAP_ON
 
-#define ColorMakeOpaque(color)  color.a = 1
+#define ColorMakeOpaque(color)  (color).a = 1
 
 /// Texture Coordinates
 
@@ -95,5 +105,22 @@ inline float2 Rotate2d(float2 base, float radians)
 #endif
 
 #define SampleTexture(texture, uv)              (tex2D((texture), (uv)))
+
+inline float4 SamplePalette(sampler2D palette, float normalizedIndex)
+{
+    return tex2D(palette, float2(normalizedIndex, 0.5));
+}
+
+inline float4 SamplePaletteRegion(sampler2D palette, float normalizedIndex, float2 regionStart, float regionWidth)
+{
+    return tex2D(palette, float2(regionStart.x + normalizedIndex * regionWidth, regionStart.y));
+}
+
+/*
+inline float4 SamplePaletteArray(sampler2DArray palette, float normalizedIndex, float depth)
+{
+    return tex2DArray(palette, float3(normalizedIndex, 0.5, depth));
+}
+*/
 
 #endif // FD_COMMON_INCLUDED
