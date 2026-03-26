@@ -14,6 +14,7 @@ namespace FieldDay.SharedState {
     /// Manager for shared singleton state objects.
     /// This maintains access to singleton state objects by type.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     public sealed class SharedStateMgr {
         static private readonly StaticInjector<SharedStateReferenceAttribute, ISharedState> s_StaticInjector = new StaticInjector<SharedStateReferenceAttribute, ISharedState>();
 

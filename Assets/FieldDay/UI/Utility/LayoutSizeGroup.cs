@@ -82,8 +82,8 @@ namespace FieldDay.UI {
         }
 
         public void SetSize(Vector2 size) {
-            size.x = (int) (Math.Max(size.x, MinSize.x) + 0.5f);
-            size.y = (int) (Math.Max(size.y, MinSize.y) + 0.5f);
+            size.x = (int) (Math.Max(size.x, MinSize.x) + 0.999f);
+            size.y = (int) (Math.Max(size.y, MinSize.y) + 0.999f);
 
             if (m_LastKnownSize != size) {
                 m_LastKnownSize = size;
@@ -100,8 +100,8 @@ namespace FieldDay.UI {
                     }
                 }
 
-                size.x = (int) (size.x + Padding.x + 0.5f);
-                size.y = (int) (size.y + Padding.y + 0.5f);
+                size.x = (int) (size.x + Padding.x + 0.999f);
+                size.y = (int) (size.y + Padding.y + 0.999f);
                 m_LastPaddedSize = size;
 
                 foreach (var child in Children) {

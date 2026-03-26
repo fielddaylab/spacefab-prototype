@@ -482,6 +482,7 @@ MonoBehaviour:
   m_pageToDisplay: 1
   m_maxLineWidth: 400
   m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_roundUpCalculatedPreferredValues: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -620,6 +621,7 @@ MonoBehaviour:
   m_pageToDisplay: 1
   m_maxLineWidth: 400
   m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_roundUpCalculatedPreferredValues: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -707,7 +709,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 53db6ac88793e9b46ab61c1678d16cc9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3d19e2a251ddf6b488f8c993deba2c69, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

@@ -46,6 +46,7 @@ using FieldDay.Systems;
 using FieldDay.Threading;
 using FieldDay.Localization;
 using FieldDay.Files;
+using Unity.IL2CPP.CompilerServices;
 
 #if USE_SRP
 #endif // USE_SRP
@@ -55,6 +56,7 @@ namespace FieldDay {
     /// Game loop manager.
     /// </summary>
     [DefaultExecutionOrder(-23000), DisallowMultipleComponent]
+    [Il2CppEagerStaticClassConstruction]
     public sealed class GameLoop : MonoBehaviour, ICameraPreCullCallback, ICameraPostRenderCallback, ICameraPreRenderCallback {
         #region Types
 

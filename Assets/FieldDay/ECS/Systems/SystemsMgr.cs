@@ -30,6 +30,7 @@ namespace FieldDay.Systems {
     /// <summary>
     /// Manages game system updates.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     public sealed class SystemsMgr {
         public const int MaxSystems = 128;
 
@@ -37,6 +38,7 @@ namespace FieldDay.Systems {
 
         #region Types
 
+        [Il2CppEagerStaticClassConstruction]
         private struct OrderedSystemReference { // 8 bytes
             public int Order;
             public UniqueId16 Id;
@@ -484,7 +486,7 @@ namespace FieldDay.Systems {
 
         [EngineMenuFactory]
         static private DMInfo CreateSystemsDebugMenu() {
-            DMInfo info = new DMInfo("ECS Sys", 24);
+            DMInfo info = new DMInfo("ECS Systems", 24);
             info.SetMinWidth(300);
             
             DebugFlags.Menu.AddFlagToggle(info, "Display Stats", DebuggingFlags.DisplayStats);

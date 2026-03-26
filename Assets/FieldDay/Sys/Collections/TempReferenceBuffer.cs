@@ -5,15 +5,16 @@ using System;
 using System.Runtime.CompilerServices;
 using TinyIL;
 using Unity.IL2CPP.CompilerServices;
+using UnityEditor;
 
 namespace FieldDay.Collections {
-    public struct TempComponentBuffer<T> : IWorkList<T>, IDisposable
+    public struct TempReferenceBuffer<T> : IWorkList<T>, IDisposable
         where T : class
     {
         private WorkList<object> m_PooledList;
         private IPool<WorkList<object>> m_Pool;
 
-        private TempComponentBuffer(IPool<WorkList<object>> pool) {
+        private TempReferenceBuffer(IPool<WorkList<object>> pool) {
             m_Pool = pool;
             m_PooledList = pool.Alloc();
         }
@@ -63,12 +64,12 @@ namespace FieldDay.Collections {
             m_PooledList.EnsureCapacity(capacity);
         }
 
-        static public TempComponentBuffer<T> Create() {
-            return new TempComponentBuffer<T>(PooledObjectWorkList.GetPoolForCapacity(0));
+        static public TempReferenceBuffer<T> Create() {
+            return new TempReferenceBuffer<T>(PooledObjectWorkList.GetPoolForCapacity(0));
         }
 
-        static public TempComponentBuffer<T> Create(int capacity) {
-            return new TempComponentBuffer<T>(PooledObjectWorkList.GetPoolForCapacity(capacity));
+        static public TempReferenceBuffer<T> Create(int capacity) {
+            return new TempReferenceBuffer<T>(PooledObjectWorkList.GetPoolForCapacity(capacity));
         }
     }
 
@@ -88,6 +89,8 @@ namespace FieldDay.Collections {
         }
 
         static internal void Initialize() {
+            Assert.True(s_SmallWorkLists == null, "Pool has already been initialized");
+
             s_SmallWorkLists = new FixedPool<WorkList<object>>(8, (p) => new WorkList<object>(SmallSize));
             s_LargeWorkLists = new FixedPool<WorkList<object>>(8, (p) => new WorkList<object>(LargeSize));
 
@@ -96,8 +99,13 @@ namespace FieldDay.Collections {
         }
 
         static internal void Shutdown() {
+            Assert.True(s_SmallWorkLists != null, "Pool has already been shut down");
+
             s_SmallWorkLists.Dispose();
             s_LargeWorkLists.Dispose();
+
+            s_SmallWorkLists = null;
+            s_LargeWorkLists = null;
         }
 
         static internal IPool<WorkList<object>> GetPoolForCapacity(int capacity) {
@@ -106,5 +114,33 @@ namespace FieldDay.Collections {
             }
             return s_LargeWorkLists;
         }
+
+        #region Editor
+
+#if UNITY_EDITOR
+
+        [InitializeOnLoadMethod]
+        static private void EditorInitialize() {
+            EditorApplication.playModeStateChanged += (state) => {
+                if (state == PlayModeStateChange.ExitingEditMode) {
+                    Shutdown();
+                } else if (state == PlayModeStateChange.EnteredEditMode) {
+                    Initialize();
+                }
+            };
+
+            EditorApplication.quitting += Shutdown;
+            AppDomain.CurrentDomain.DomainUnload += (_, __) => Shutdown();
+
+            if (EditorApplication.isPlayingOrWillChangePlaymode) {
+                return;
+            }
+
+            Initialize();
+        }
+
+#endif // UNITY_EDITOR
+
+        #endregion // Editor
     }
 }

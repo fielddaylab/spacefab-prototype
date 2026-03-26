@@ -12,7 +12,7 @@ namespace SpaceFab.Research {
         }
 
         static private void ProcessWork(float deltaTime) {
-            ECS.GetState(out ExplosionState state);
+            Find.State(out ExplosionState state);
 
             if (state.AreAnyExploding) {
                 bool anyExploding = false;

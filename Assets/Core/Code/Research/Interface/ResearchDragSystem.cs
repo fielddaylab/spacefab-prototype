@@ -18,7 +18,7 @@ namespace SpaceFab.Research {
         }
 
         static private void ProcessWork(float deltaTime) {
-            ECS.GetState(out ResearchDragState dragState);
+            Find.State(out ResearchDragState dragState);
 
             bool cancelQueued = false;
             bool cursorOnCanvas = Game.Input.IsPointerOverCanvas();

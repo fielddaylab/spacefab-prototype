@@ -158,6 +158,9 @@ namespace FieldDay.Data {
         /// <summary>
         /// Retrieves the parent index for the given index.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         public int GetParent(int index) {
             Assert.True(index >= 0 && index < Count, "Index {0} is out of mapped range 0-{1}", index, Count - 1);
             return ParentMap[index];

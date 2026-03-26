@@ -1668,7 +1668,7 @@ namespace TMPro.EditorUtilities
                 AssetDatabase.AddObjectToAsset(m_FontAtlasTexture, fontAsset);
 
                 // Create new Material and Add it as Sub-Asset
-                Shader default_Shader = Shader.Find("TextMeshPro/Distance Field");
+                Shader default_Shader = Shader.Find("TextMeshPro/Mobile/Distance Field");
                 Material tmp_material = new Material(default_Shader);
 
                 tmp_material.name = tex_FileName + " Material";
@@ -1681,6 +1681,8 @@ namespace TMPro.EditorUtilities
 
                 tmp_material.SetFloat(ShaderUtilities.ID_WeightNormal, fontAsset.normalStyle);
                 tmp_material.SetFloat(ShaderUtilities.ID_WeightBold, fontAsset.boldStyle);
+
+                tmp_material.SetFloat("_CullMode", 2);
 
                 fontAsset.material = tmp_material;
 

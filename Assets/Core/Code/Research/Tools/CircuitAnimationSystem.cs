@@ -14,7 +14,7 @@ namespace SpaceFab.Research {
         static private readonly float[] RotSpeeds = { 24, -30.2f, 17 };
 
         static private void ProcessWork(float deltaTime) {
-            foreach(var obj in ECS.GetComponents<CircuitRenderer>()) {
+            foreach(var obj in Find.Components<CircuitRenderer>()) {
                 if (obj.CircuitSpriteSpeed == 0) {
                     return;
                 }

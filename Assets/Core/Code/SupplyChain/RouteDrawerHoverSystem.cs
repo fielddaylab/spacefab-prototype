@@ -18,7 +18,7 @@ namespace SpaceFab.SupplyChain {
         }
 
         static private void ProcessWork(float deltaTime) {
-            ECS.GetState(out RouteHoverState hoverState);
+            Find.State(out RouteHoverState hoverState);
             
             if (hoverState.Locked) {
                 hoverState.MousePosition = null;

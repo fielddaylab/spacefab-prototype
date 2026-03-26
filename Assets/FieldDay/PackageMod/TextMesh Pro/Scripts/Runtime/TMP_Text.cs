@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Unity.Plastic.Newtonsoft.Json.Linq;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -4843,8 +4842,8 @@ namespace TMPro
             //Debug.Log("Preferred Values: (" + renderedWidth + ", " + renderedHeight + ") with Recursive count of " + m_recursiveCount);
 
             if (m_roundUpCalculatedPreferredValues) {
-                m_RenderedWidth = (int)(m_RenderedWidth + 0.5f);
-                m_RenderedHeight = (int)(m_RenderedHeight + 0.5f);
+                m_RenderedWidth = (int)(m_RenderedWidth + 0.999f);
+                m_RenderedHeight = (int)(m_RenderedHeight + 0.999f);
             } else {
                 // Round Preferred Values to nearest 1/100.
                 m_RenderedWidth = (int)(m_RenderedWidth * 100 + 1f) / 100f;

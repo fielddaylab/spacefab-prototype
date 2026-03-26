@@ -17,6 +17,8 @@ namespace FieldDay.UI.Widgets {
     public enum GuiWidgetUpdateFlags : ushort {
         Default = 0,
         Force = 0x01,
-        NoAnimation = 0x02
+        NoAnimation = 0x02,
+        IsIncrease = 0x04,
+        IsDecrease = 0x08
     }
 }

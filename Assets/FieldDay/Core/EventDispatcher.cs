@@ -444,7 +444,7 @@ namespace FieldDay {
         private const int MaxUnmanagedSize = (int) (64 - 4 - 8);
 
         private struct UnmanagedData {
-            public unsafe fixed ulong Data[MaxUnmanagedSize / 8];
+            public unsafe fixed uint Data[MaxUnmanagedSize / 4];
         }
 
         private object m_Instance;
@@ -574,7 +574,7 @@ namespace FieldDay {
             [MethodImpl(MethodImplOptions.NoInlining)]
             static private T Cast(EvtArgs args) {
                 Assert.True(ReferenceEquals(args.m_Instance, typeof(T)), "Mismatched create/cast between '{0}' and '{1}'", ((Type) args.m_Instance).FullName, typeof(T).FullName);
-                return Unsafe.FastReinterpret<ulong, T>(args.m_Unmanaged.Data);
+                return Unsafe.FastReinterpret<uint, T>(args.m_Unmanaged.Data);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]

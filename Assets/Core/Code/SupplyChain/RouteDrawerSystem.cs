@@ -23,7 +23,7 @@ namespace SpaceFab.SupplyChain {
         }
 
         static private void ProcessWork(float deltaTime) {
-            ECS.GetState(out RouteDrawerState m_StateA, out RouteHoverState m_StateB, out RouteShipSelectionState m_StateC);
+            Find.State(out RouteDrawerState m_StateA, out RouteHoverState m_StateB, out RouteShipSelectionState m_StateC);
 
             LiveRouteData route = m_StateC.SelectedRoute;
 

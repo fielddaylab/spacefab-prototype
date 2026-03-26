@@ -25,6 +25,42 @@ namespace FieldDay {
         }
 
         /// <summary>
+        /// Looks up the global asset of the given type.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public void GlobalAsset<T0>(out T0 assetA)
+            where T0 : class, IGlobalAsset {
+            assetA = Game.Assets.GetGlobal<T0>();
+        }
+
+        /// <summary>
+        /// Looks up the global assets of the given types.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public void GlobalAsset<T0, T1>(out T0 assetA, out T1 assetB)
+            where T0 : class, IGlobalAsset
+            where T1 : class, IGlobalAsset {
+            assetA = Game.Assets.GetGlobal<T0>();
+            assetB = Game.Assets.GetGlobal<T1>();
+        }
+
+        /// <summary>
+        /// Looks up the global assets of the given types.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public void GlobalAsset<T0, T1, T2>(out T0 assetA, out T1 assetB, out T2 assetC)
+            where T0 : class, IGlobalAsset
+            where T1 : class, IGlobalAsset
+            where T2 : class, IGlobalAsset {
+            assetA = Game.Assets.GetGlobal<T0>();
+            assetB = Game.Assets.GetGlobal<T1>();
+            assetC = Game.Assets.GetGlobal<T2>();
+        }
+
+        /// <summary>
         /// Looks up the named asset of the given type.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,6 +89,57 @@ namespace FieldDay {
         [Il2CppSetOption(Option.NullChecks, false)]
         static public T State<T>() where T : class, ISharedState {
             return Game.SharedState.Get<T>();
+        }
+
+        /// <summary>
+        /// Looks up the shared state of the given type.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public void State<T0>(out T0 stateA) where T0 : class, ISharedState {
+            stateA = Game.SharedState.Get<T0>();
+        }
+
+        /// <summary>
+        /// Looks up the shared states of the given types.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public void State<T0, T1>(out T0 stateA, out T1 stateB)
+            where T0 : class, ISharedState
+            where T1 : class, ISharedState {
+            stateA = Game.SharedState.Get<T0>();
+            stateB = Game.SharedState.Get<T1>();
+        }
+
+        /// <summary>
+        /// Looks up the shared states of the given types.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public void State<T0, T1, T2>(out T0 stateA, out T1 stateB, out T2 stateC)
+            where T0 : class, ISharedState
+            where T1 : class, ISharedState
+            where T2 : class, ISharedState {
+            stateA = Game.SharedState.Get<T0>();
+            stateB = Game.SharedState.Get<T1>();
+            stateC = Game.SharedState.Get<T2>();
+        }
+
+        /// <summary>
+        /// Looks up the shared states of the given types.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public void State<T0, T1, T2, T3>(out T0 stateA, out T1 stateB, out T2 stateC, out T3 stateD)
+            where T0 : class, ISharedState
+            where T1 : class, ISharedState
+            where T2 : class, ISharedState
+            where T3 : class, ISharedState {
+            stateA = Game.SharedState.Get<T0>();
+            stateB = Game.SharedState.Get<T1>();
+            stateC = Game.SharedState.Get<T2>();
+            stateD = Game.SharedState.Get<T3>();
         }
 
         #endregion // Shared State

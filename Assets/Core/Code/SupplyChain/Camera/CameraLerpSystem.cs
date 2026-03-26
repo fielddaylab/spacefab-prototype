@@ -16,7 +16,7 @@ namespace SpaceFab.SupplyChain {
         }
         
         static private void ProcessWork(float deltaTime) {
-            ECS.GetState(out CameraControlState camState);
+            Find.State(out CameraControlState camState);
 
             Vector2 frameSize = CameraUtility.GetFrustumSize(camState.Camera, 0);
             Rect region = Geom.BoundsToRect(camState.Region.bounds);

@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using BeauUtil;
 using BeauUtil.Debugger;
+using Unity.IL2CPP.CompilerServices;
 
 namespace FieldDay {
     /// <summary>
     /// Game loop phase buckets.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     static internal class PhaseBuckets {
         private const GameLoopPhase MinPhase = GameLoopPhase.DebugUpdate;
         private const GameLoopPhase MaxPhase = GameLoopPhase.FrameAdvance;

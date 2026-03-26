@@ -20,7 +20,7 @@ namespace SpaceFab.SupplyChain {
         static private void ProcessWork(float deltaTime) {
             Vector2 cameraPos = Game.Rendering.PrimaryCamera.transform.position;
 
-            foreach(var c in ECS.GetComponents<ParallaxLayer>()) {
+            foreach(var c in Find.Components<ParallaxLayer>()) {
                 c.transform.SetPosition(cameraPos * c.Scale, Axis.XY, Space.World);
             }
         }

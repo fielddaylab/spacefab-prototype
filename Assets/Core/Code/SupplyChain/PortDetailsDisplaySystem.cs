@@ -27,7 +27,7 @@ namespace SpaceFab.SupplyChain {
 
             bool pathHighlight = false;// routeDrawer.DrawState == RouteDrawState.InProgress;
 
-            foreach (var state in ECS.GetComponents<PortDetailsDisplayState>()) {
+            foreach (var state in Find.Components<PortDetailsDisplayState>()) {
                 PortDetailsMode desiredMode;
                 if (pathHighlight && state.Highlight.HasPath) {
                     desiredMode = PortDetailsMode.Interactive;

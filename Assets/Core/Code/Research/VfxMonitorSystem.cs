@@ -15,7 +15,7 @@ namespace SpaceFab.Research {
         }
 
         static private void ProcessWork(float deltaTime) {
-            foreach(var instance in ECS.GetComponents<VfxInstance>()) {
+            foreach(var instance in Find.Components<VfxInstance>()) {
                 if (!VfxUtility.IsPlaying(instance)) {
                     GuiCommands.TryFreePrefab(instance);
                 }

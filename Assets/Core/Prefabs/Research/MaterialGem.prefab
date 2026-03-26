@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9006521967290568994}
   - component: {fileID: 9117546907384163573}
+  - component: {fileID: 8119820090116565946}
   m_Layer: 0
   m_Name: MaterialGem
   m_TagString: Untagged
@@ -137,6 +138,20 @@ MonoBehaviour:
   ShadowPosition: {fileID: 594318183271135650}
   Label: {fileID: 4852069638948720738}
   Highlight: {fileID: 0}
+--- !u!114 &8119820090116565946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497516261691308305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbebfd8c0d3d5e147ad916cd97566e1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Pivot: {x: 0.5, y: 0.5, z: 0.5}
+  Size: {x: 1.5, y: 1.5, z: 0.1}
 --- !u!1 &1669591149575411715
 GameObject:
   m_ObjectHideFlags: 0
@@ -389,6 +404,7 @@ MonoBehaviour:
   m_pageToDisplay: 1
   m_maxLineWidth: 0
   m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_roundUpCalculatedPreferredValues: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
