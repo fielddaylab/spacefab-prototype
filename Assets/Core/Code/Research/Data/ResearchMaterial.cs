@@ -17,8 +17,6 @@ namespace SpaceFab.Research {
         public string SampleNumber;
         public AtomicStructure[] Atoms;
 
-        [AssetName(typeof(ResearchMaterial))] public StringHash32 Parent;
-
         [Header("Properties")]
         public ElectricalTag Electrical;
         public ThermalTag Thermal;
@@ -29,6 +27,15 @@ namespace SpaceFab.Research {
         [Range(0, 2)] public float ConductionMultiplier = 1;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantN;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantP;
+
+        [Header("Chips")]
+        public ResearchChipWithContext[] ValidChips;
+    }
+
+    [Serializable]
+    public struct ResearchChipWithContext {
+        public ResearchChipId Id;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32 Context;
     }
 
     public enum ElectricalTag : uint {

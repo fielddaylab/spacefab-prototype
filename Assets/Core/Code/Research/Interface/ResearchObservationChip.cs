@@ -1,4 +1,7 @@
+using BeauPools;
+using BeauRoutine;
 using BeauUtil;
+using FieldDay;
 using FieldDay.UI.Widgets;
 using TMPro;
 using UnityEngine;
@@ -22,8 +25,35 @@ namespace SpaceFab.Research {
                 chip.Background.color = style.Colors.Background;
             }
 
+            if (style.IsTall) {
+                chip.Rect.SetSizeDelta(48, Axis.Y);
+            } else {
+                chip.Rect.SetSizeDelta(32, Axis.Y);
+            }
+
             chip.Background.sprite = style.Background;
             chip.Icon.sprite = style.Icon;
+        }
+
+        static public void PopulateObservationChip(ResearchObservationChip chip, ResearchChipId chipId, StringHash32 materialContext) {
+            ResearchChipMetadata meta = ResearchChipUtility.Metadata(chipId);
+            ApplyStyle(chip, Find.NamedAsset<ResearchChipStyle>(ResearchChipUtility.CategoryStyleId(meta.Category)));
+            
+            if (ResearchChipUtility.CategoryRequiresContext(meta.Category)) {
+                using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                    string name;
+                    if (materialContext.IsEmpty) {
+                        name = "???";
+                    } else {
+                        ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(materialContext);
+                        name = IsNameKnown(materialContext) ? material.DisplayName : material.UnknownDisplayName;
+                    }
+                    psb.Builder.AppendFormat(meta.Label, name);
+                    chip.Label.SetText(psb);
+                }
+            } else {
+                chip.Label.SetText(meta.Label);
+            }
         }
     }
 }

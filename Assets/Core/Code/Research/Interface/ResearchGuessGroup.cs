@@ -240,43 +240,4 @@ namespace SpaceFab.Research {
             }
         }
     }
-
-    public struct ResearchSelectionList {
-        public int Length;
-        public UnsafeSpan<StringHash32> Data;
-
-        public void Add(StringHash32 id) {
-            Assert.True(Length < Data.Length, "Reached capacity");
-            Data[Length++] = id;
-        }
-
-        public void Commit() {
-            Data = Data.Slice(0, Length);
-        }
-
-        public int IndexOf(StringHash32 id) {
-            for(int i = 0, len = Length; i < Length; i++) {
-                if (Data[i] == id) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        public bool Contains(StringHash32 id) {
-            for (int i = 0, len = Length; i < Length; i++) {
-                if (Data[i] == id) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        static public ResearchSelectionList Alloc(int capacity) {
-            ResearchSelectionList list;
-            list.Length = 0;
-            list.Data = Frame.AllocSpan<StringHash32>(capacity);
-            return list;
-        }
-    }
 }

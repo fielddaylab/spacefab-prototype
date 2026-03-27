@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Silicon Carbide
   UnknownDisplayName: Sample 70
-  Material: {fileID: 2100000, guid: b085f94002d6111459dc1d1254d88fca, type: 2}
   ChemicalSymbol: SiC
   SampleNumber: 70
   Atoms:
@@ -32,10 +31,8 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4293459855
     Symbol: C
-  Parent:
-    m_HashValue: 0
   Electrical: 3
-  Thermal: 1
+  Thermal: 4294967295
   SpecialTags: 4
   DopantType: 0
   ConductionMultiplier: 1
@@ -43,3 +40,4 @@ MonoBehaviour:
     m_HashValue: 541320182
   DopantP:
     m_HashValue: 3317014541
+  ValidChips: []

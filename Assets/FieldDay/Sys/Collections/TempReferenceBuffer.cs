@@ -8,6 +8,9 @@ using Unity.IL2CPP.CompilerServices;
 using UnityEditor;
 
 namespace FieldDay.Collections {
+    /// <summary>
+    /// Temporary buffer for object references.
+    /// </summary>
     public struct TempReferenceBuffer<T> : IWorkList<T>, IDisposable
         where T : class
     {

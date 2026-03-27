@@ -56,7 +56,7 @@ namespace SpaceFab.Research {
             DopantGroup.gameObject.SetActive(false);
             ElectricalGroup.gameObject.SetActive(true);
 
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             ElectricalGroup.PopulateInitialSelection(ResearchGuessGroup.GetElectricalGuessList(guess));
         }
 
@@ -68,7 +68,7 @@ namespace SpaceFab.Research {
             DopantGroup.gameObject.SetActive(false);
             ThermalGroup.gameObject.SetActive(true);
 
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             ThermalGroup.PopulateInitialSelection(ResearchGuessGroup.GetThermalGuessList(guess));
         }
 
@@ -80,7 +80,7 @@ namespace SpaceFab.Research {
             ThermalGroup.gameObject.SetActive(false);
             DopantGroup.gameObject.SetActive(true);
 
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             DopantGroup.PopulateInitialSelection(ResearchGuessGroup.GetDopantGuessList(guess));
         }
 
@@ -92,32 +92,32 @@ namespace SpaceFab.Research {
             DopantGroup.gameObject.SetActive(false);
             SpecialGroup.gameObject.SetActive(true);
 
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             SpecialGroup.PopulateInitialSelection(ResearchGuessGroup.GetSpecialGuessList(guess));
         }
 
         private void UpdateElectricGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             ResearchGuessGroup.PopulateElectricalGuess(ref guess, list);
-            ResearchMaterialUtility.SetGuess(MaterialId, guess);
+            ResearchMaterialUtility.SetObservations(MaterialId, guess);
         }
 
         private void UpdateDopantGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             ResearchGuessGroup.PopulateDopantGuess(ref guess, list);
-            ResearchMaterialUtility.SetGuess(MaterialId, guess);
+            ResearchMaterialUtility.SetObservations(MaterialId, guess);
         }
 
         private void UpdateThermalGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             ResearchGuessGroup.PopulateThermalGuess(ref guess, list);
-            ResearchMaterialUtility.SetGuess(MaterialId, guess);
+            ResearchMaterialUtility.SetObservations(MaterialId, guess);
         }
 
         private void UpdateSpecialGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetGuess(MaterialId);
+            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
             ResearchGuessGroup.PopulateSpecialGuess(ref guess, list);
-            ResearchMaterialUtility.SetGuess(MaterialId, guess);
+            ResearchMaterialUtility.SetObservations(MaterialId, guess);
         }
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {

@@ -6,7 +6,6 @@ using ScriptableBake;
 using System;
 using System.Runtime.CompilerServices;
 using Unity.IL2CPP.CompilerServices;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -146,48 +145,42 @@ namespace FieldDay {
             }
 
             float* offsets = stackalloc float[len];
+            float* pivots = stackalloc float[len];
+            float* sizes = stackalloc float[len];
+
             float totalSize = 0;
-            float size = 0;
-            float pivot;
 
             RectTransform rect;
             switch (options.Source) {
                 case LayoutSource.PreferredSize: {
                     for (int i = 0; i < len; i++) {
                         rect = buffer[i];
-                        size = LayoutUtility.GetPreferredHeight(rect);
-                        pivot = rect.pivot.y;
-                        offsets[i] = totalSize + (1 - pivot) * size;
-                        totalSize += options.Spacing + size;
+                        sizes[i] = LayoutUtility.GetPreferredHeight(rect);
+                        pivots[i] = rect.pivot.x;
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsDynamicSize(len, sizes, pivots, options.Spacing, offsets);
                     break;
                 }
                 case LayoutSource.Size: {
                     for (int i = 0; i < len; i++) {
                         rect = buffer[i];
-                        size = rect.rect.height;
-                        pivot = rect.pivot.y;
-                        offsets[i] = totalSize + (1 - pivot) * size;
-                        totalSize += options.Spacing + size;
+                        sizes[i] = rect.rect.height;
+                        pivots[i] = rect.pivot.x;
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsDynamicSize(len, sizes, pivots, options.Spacing, offsets);
                     break;
                 }
                 case LayoutSource.FixedSize: {
-                    size = options.FixedSize;
                     for (int i = 0; i < len; i++) {
                         rect = buffer[i];
-                        pivot = rect.pivot.y;
-                        offsets[i] = totalSize + (1 - pivot) * size;
-                        totalSize += options.Spacing + size;
+                        pivots[i] = rect.pivot.y;
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsFixedSize(len, options.FixedSize, pivots, options.Spacing, offsets);
                     break;
                 }
             }
 
-            basePosition = basePosition - (totalSize) * (1 - options.NormalizedAlignment);
+            basePosition = ComputeBasePosition(basePosition, totalSize, options.NormalizedAlignment);
 
             for (int i = 0; i < len; i++) {
                 rect = buffer[i];
@@ -221,53 +214,48 @@ namespace FieldDay {
             }
 
             float* offsets = stackalloc float[len];
+            float* pivots = stackalloc float[len];
+            float* sizes = stackalloc float[len];
             float totalSize = 0;
-            float size = 0;
-            float pivot;
+
             float direction = -1;
             bool flipPivot = false;
             if ((options.Flags & LayoutFlags.VerticalLayoutUp) != 0) {
                 direction = 1;
                 flipPivot = true;
             }
+
             RectTransform rect;
             switch(options.Source) {
                 case LayoutSource.PreferredSize: {
                     for (int i = 0; i < len; i++) {
                         rect = buffer[i];
-                        size = LayoutUtility.GetPreferredHeight(rect);
-                        pivot = rect.pivot.y;
-                        offsets[i] = totalSize + (flipPivot ? pivot : (1 - pivot)) * size;
-                        totalSize += options.Spacing + size;
+                        sizes[i] = LayoutUtility.GetPreferredHeight(rect);
+                        pivots[i] = ConditionalFlipPivot(rect.pivot.y, flipPivot);
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsDynamicSize(len, sizes, pivots, options.Spacing, offsets);
                     break;
                 }
                 case LayoutSource.Size: {
                     for (int i = 0; i < len; i++) {
                         rect = buffer[i];
-                        size = rect.rect.height;
-                        pivot = rect.pivot.y;
-                        offsets[i] = totalSize + (flipPivot ? pivot : (1 - pivot)) * size;
-                        totalSize += options.Spacing + size;
+                        sizes[i] = rect.rect.height;
+                        pivots[i] = ConditionalFlipPivot(rect.pivot.y, flipPivot);
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsDynamicSize(len, sizes, pivots, options.Spacing, offsets);
                     break;
                 }
                 case LayoutSource.FixedSize: {
-                    size = options.FixedSize;
                     for (int i = 0; i < len; i++) {
                         rect = buffer[i];
-                        pivot = rect.pivot.y;
-                        offsets[i] = totalSize + (flipPivot ? pivot : (1 - pivot)) * size;
-                        totalSize += options.Spacing + size;
+                        pivots[i] = ConditionalFlipPivot(rect.pivot.y, flipPivot);
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsFixedSize(len, options.FixedSize, pivots, options.Spacing, offsets);
                     break;
                 }
             }
 
-            basePosition = basePosition - (direction * totalSize) * (flipPivot ? options.NormalizedAlignment : (1 - options.NormalizedAlignment));
+            basePosition = ComputeBasePosition(basePosition, direction * totalSize, ConditionalFlipPivot(options.NormalizedAlignment, flipPivot));
 
             for (int i = 0; i < len; i++) {
                 rect = buffer[i];
@@ -304,9 +292,9 @@ namespace FieldDay {
             int axisIndex = Bits.IndexOf(axis);
 
             float* offsets = stackalloc float[len];
+            float* pivots = stackalloc float[len];
+            float* sizes = stackalloc float[len];
             float totalSize = 0;
-            float size = 0;
-            float pivot;
 
             Transform transform;
             LayoutSizeInfo sizeInfo;
@@ -316,36 +304,31 @@ namespace FieldDay {
                     for (int i = 0; i < len; i++) {
                         transform = buffer[i];
                         if (transform.TryGetComponent(out sizeInfo)) {
-                            pivot = sizeInfo.Pivot[axisIndex];
-                            size = sizeInfo.Size[axisIndex];
+                            pivots[i] = sizeInfo.Pivot[axisIndex];
+                            sizes[i] = sizeInfo.Size[axisIndex];
                         } else {
-                            pivot = 0.5f;
-                            size = transform.localScale[axisIndex];
+                            pivots[i] = 0.5f;
+                            sizes[i] = transform.localScale[axisIndex];
                         }
-                        offsets[i] = totalSize + (1 - pivot) * size;
-                        totalSize += options.Spacing + size;
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsDynamicSize(len, sizes, pivots, options.Spacing, offsets);
                     break;
                 }
                 case LayoutSource.FixedSize: {
-                    size = options.FixedSize;
                     for (int i = 0; i < len; i++) {
                         transform = buffer[i];
                         if (transform.TryGetComponent(out sizeInfo)) {
-                            pivot = sizeInfo.Pivot[axisIndex];
+                            pivots[i] = sizeInfo.Pivot[axisIndex];
                         } else {
-                            pivot = 0.5f;
+                            pivots[i] = 0.5f;
                         }
-                        offsets[i] = totalSize + (1 - pivot) * size;
-                        totalSize += options.Spacing + size;
                     }
-                    totalSize -= options.Spacing;
+                    totalSize = ProcessPositionsFixedSize(len, options.FixedSize, pivots, options.Spacing, offsets);
                     break;
                 }
             }
 
-            basePosition = basePosition - (totalSize) * (1 - options.NormalizedAlignment);
+            basePosition = ComputeBasePosition(basePosition, totalSize, options.NormalizedAlignment);
 
             for (int i = 0; i < len; i++) {
                 transform = buffer[i];
@@ -361,6 +344,44 @@ namespace FieldDay {
         }
 
         #endregion // Axis Layout
+
+        #region Layout Math
+
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static private unsafe float ProcessPositionsDynamicSize(int entryCount, float* sizes, float* pivots, float spacing, float* results) {
+            float total = 0;
+            float size;
+            for(int i = 0; i < entryCount; i++) {
+                size = sizes[i];
+                results[i] = total + (1 - pivots[i]) * size;
+                total += spacing + size;
+            }
+            total -= spacing;
+            return total;
+        }
+
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static private unsafe float ProcessPositionsFixedSize(int entryCount, float size, float* pivots, float spacing, float* results) {
+            float total = 0;
+            for (int i = 0; i < entryCount; i++) {
+                results[i] = total + (1 - pivots[i]) * size;
+                total += spacing + size;
+            }
+            total -= spacing;
+            return total;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static private float ComputeBasePosition(float originalBasePosition, float totalSize, float normalizedAlignment) {
+            return originalBasePosition - (totalSize * (1 - normalizedAlignment));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static private float ConditionalFlipPivot(float pivot, bool flip) {
+            return flip ? (1 - pivot) : pivot;
+        }
+
+        #endregion // Layout Math
     }
 
     public enum LayoutSource : byte {

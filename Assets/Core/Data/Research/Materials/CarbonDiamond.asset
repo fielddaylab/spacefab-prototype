@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: Carbon
   UnknownDisplayName: Sample 2
-  Material: {fileID: 2100000, guid: 42dfcd1336adbf347a75e6cb0a3fea06, type: 2}
   ChemicalSymbol: C
   SampleNumber: 2
   Atoms:
@@ -25,10 +24,8 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4293459855
     Symbol: C
-  Parent:
-    m_HashValue: 0
   Electrical: 3
-  Thermal: 1
+  Thermal: 4294967295
   SpecialTags: 5
   DopantType: 0
   ConductionMultiplier: 1
@@ -36,3 +33,4 @@ MonoBehaviour:
     m_HashValue: 336354447
   DopantP:
     m_HashValue: 3317014541
+  ValidChips: []

@@ -175,7 +175,7 @@ namespace SpaceFab.Research {
             RootId = rootId;
 
             ResearchMaterialKnowledge knowledge = ResearchMaterialUtility.GetKnownCategories(rootId);
-            ResearchMaterialGuessState guesses = ResearchMaterialUtility.GetGuess(rootId);
+            ResearchMaterialGuessState guesses = ResearchMaterialUtility.GetObservations(rootId);
 
             MaterialTitle.SetText((knowledge & ResearchMaterialKnowledge.Name) != 0 ? material.DisplayName : material.UnknownDisplayName);
 
