@@ -102,13 +102,14 @@ namespace FieldDay.Collections {
         }
 
         static internal void Shutdown() {
-            Assert.True(s_SmallWorkLists != null, "Pool has already been shut down");
+            if (s_SmallWorkLists != null) {
 
-            s_SmallWorkLists.Dispose();
-            s_LargeWorkLists.Dispose();
+                s_SmallWorkLists.Dispose();
+                s_LargeWorkLists.Dispose();
 
-            s_SmallWorkLists = null;
-            s_LargeWorkLists = null;
+                s_SmallWorkLists = null;
+                s_LargeWorkLists = null;
+            }
         }
 
         static internal IPool<WorkList<object>> GetPoolForCapacity(int capacity) {
@@ -128,7 +129,9 @@ namespace FieldDay.Collections {
                 if (state == PlayModeStateChange.ExitingEditMode) {
                     Shutdown();
                 } else if (state == PlayModeStateChange.EnteredEditMode) {
-                    Initialize();
+                    if (s_SmallWorkLists == null) {
+                        Initialize();
+                    }
                 }
             };
 
@@ -139,7 +142,9 @@ namespace FieldDay.Collections {
                 return;
             }
 
-            Initialize();
+            if (s_SmallWorkLists == null) {
+                Initialize();
+            }
         }
 
 #endif // UNITY_EDITOR

@@ -31,7 +31,7 @@ namespace SpaceFab.Research {
         private void OnSlotFillUpdated() {
             if (m_Tool.AllSlotsFilled) {
                 var input = ResearchToolUtility.GetInputMaterial(m_Tool, 0);
-                float current = ResearchMaterialUtility.GetCurrent(input, Voltage.InputVoltage, Temperature);
+                float current = ResearchMaterialUtility.GetCurrent(input, Voltage.InputVoltage, Temperature, m_Tool.DopingState);
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
                 if (!ResearchMaterialUtility.IsStableAtVoltage(input, Voltage.InputVoltage)) {

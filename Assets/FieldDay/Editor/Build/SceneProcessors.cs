@@ -154,6 +154,8 @@ namespace FieldDay.Editor {
     /// Generates the SceneDataExt object.
     /// </summary>
     public class GenerateSceneDataExtProcessor : IProcessSceneWithReport {
+        static private AttributeCache<LateInitializeOrderAttribute, int> s_LateInitOrderCache = new AttributeCache<LateInitializeOrderAttribute, int>((a, m) => a.Order, 100, 0);
+
         public int callbackOrder { get { return 31; } }
 
         public void OnProcessScene(Scene scene, BuildReport report) {
@@ -185,6 +187,15 @@ namespace FieldDay.Editor {
                     ext.LateEnable[i] = allLateEnables[i].gameObject;
                     ext.LateEnable[i].SetActive(false);
                     Baking.Destroy(allLateEnables[i]);
+                }
+
+                // scene late initialize
+                List<ISceneLateInitialize> allSceneLateInit = new List<ISceneLateInitialize>(32);
+                scene.GetAllComponents(true, allSceneLateInit);
+                allSceneLateInit.Sort((a, b) => s_LateInitOrderCache.Get(a) - s_LateInitOrderCache.Get(b));
+                ext.LateInitialize = new Component[allSceneLateInit.Count];
+                for (int i = 0; i < allSceneLateInit.Count; i++) {
+                    ext.LateInitialize[i] = (Component)allSceneLateInit[i];
                 }
 
                 // remaining ImportScene objects

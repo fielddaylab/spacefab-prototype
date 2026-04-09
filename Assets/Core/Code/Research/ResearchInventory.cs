@@ -14,10 +14,10 @@ namespace SpaceFab.Research {
     }
 
     public struct ResearchObservationList {
-        public const int MaxObservations = 8;
+        public const int MaxObservations = 10;
 
-        public int Count;
         public StringHash32 Context;
+        public ushort Count;
         private unsafe fixed byte m_Buffer[MaxObservations];
 
         public unsafe ResearchChipId this[int index] {
@@ -80,6 +80,21 @@ namespace SpaceFab.Research {
             return false;
         }
 
+        public unsafe int RemoveChipsWithContext(ResearchChipId* removedList) {
+            int removed = 0;
+            for(int i = Count; i-- > 0;) {
+                if (ResearchChipUtility.CategoryRequiresContext(ResearchChipUtility.Category((ResearchChipId)m_Buffer[i]))) {
+                    *removedList++ = (ResearchChipId)m_Buffer[i];
+                    for(int j = i + 1; j < Count; j++) {
+                        m_Buffer[j - 1] = m_Buffer[j];
+                    }
+                    Count--;
+                    removed++;
+                }
+            }
+            return removed;
+        }
+
         public void Clear() {
             Count = 0;
             Context = default;
@@ -87,9 +102,72 @@ namespace SpaceFab.Research {
     }
 
     public struct ResearchMaterialKnowledge {
-        public BitSet32 KnownProperties;
+        public const int MaxProperties = 6;
 
-        public const int Bit_KnownsName = 31;
+        public byte Count;
+        private unsafe fixed byte m_IdBuffer[MaxProperties];
+        private unsafe fixed uint m_ContextBuffer[MaxProperties];
+
+        public unsafe ResearchChipId Chip(int index) {
+            Assert.True(index >= 0 && index < Count);
+            return (ResearchChipId)m_IdBuffer[index];
+        }
+
+        public unsafe StringHash32 Context(int index) {
+            Assert.True(index >= 0 && index < Count);
+            return new StringHash32(m_ContextBuffer[index]);
+        }
+
+        public unsafe bool Has(ResearchChipId chipId) {
+            for (int i = Count; i-- > 0;) {
+                if (m_IdBuffer[i] == (byte) chipId) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public unsafe bool HasCategory(ResearchChipCategory categoryId) {
+            for (int i = Count; i-- > 0;) {
+                if (ResearchChipUtility.Category((ResearchChipId) m_IdBuffer[i]) == categoryId) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public unsafe bool TryAdd(ResearchChipId chipId, StringHash32 context) {
+            ResearchChipCategory category = ResearchChipUtility.Category(chipId);
+
+            Assert.True(ResearchChipUtility.IsProperty(category), "Chip {0} is not property", chipId);
+            Assert.True(!ResearchChipUtility.CategoryRequiresContext(category) || !context.IsEmpty, "Context not set appropriately");
+
+            for (int i = Count; i-- > 0;) {
+                if (m_IdBuffer[i] == (byte) chipId && m_ContextBuffer[i] == context.HashValue) {
+                    return false;
+                }
+            }
+
+            if (ResearchChipUtility.CategoryIsExclusive(category)) {
+                for (int i = Count; i-- > 0;) {
+                    if (ResearchChipUtility.Category((ResearchChipId) m_IdBuffer[i]) == category
+                        && m_ContextBuffer[i] == context.HashValue) {
+                        return false;
+                    }
+                }
+            }
+
+            Assert.False(Count < MaxProperties, "Property list has run out of room");
+            m_IdBuffer[Count] = (byte)chipId;
+            m_ContextBuffer[Count++] = context.HashValue;
+            return true;
+        }
+
+        public void Clear() {
+            Count = 0;
+        }
     }
 
     static public partial class ResearchMaterialUtility {
@@ -100,18 +178,15 @@ namespace SpaceFab.Research {
             return material.AssetId;
         }
 
-        static public ResearchMaterialKnowledge GetKnownCategories(StringHash32 materialId) {
+        static public ResearchMaterialKnowledge GetKnownProperties(StringHash32 materialId) {
             Find.State<ResearchInventory>().MaterialKnowledge.TryGetValue(materialId, out var knowledge);
             return knowledge;
         }
 
         static public bool IsNameKnown(StringHash32 materialId) {
             Find.State<ResearchInventory>().MaterialKnowledge.TryGetValue(materialId, out var knowledge);
-            return knowledge.KnownProperties.IsSet(ResearchMaterialKnowledge.Bit_KnownsName);
-        }
-
-        static public void SetKnownCategories(StringHash32 materialId, ResearchMaterialKnowledge knowledge) {
-            Find.State<ResearchInventory>().MaterialKnowledge[materialId] = knowledge;
+            //return knowledge.KnownProperties.IsSet(ResearchMaterialKnowledge.Bit_KnownsName);
+            return false;
         }
 
         static public ResearchObservationList GetObservations(StringHash32 materialId) {
@@ -124,92 +199,28 @@ namespace SpaceFab.Research {
         }
 
         static public bool AddKnowledgeFlag(StringHash32 materialId, ResearchMaterialKnowledge knowledge) {
-            ResearchInventory inv = Find.State<ResearchInventory>();
-            inv.MaterialKnowledge.TryGetValue(materialId, out var alreadyKnown);
-            if ((alreadyKnown & knowledge) == knowledge) {
-                return false;
-            }
+            //ResearchInventory inv = Find.State<ResearchInventory>();
+            //inv.MaterialKnowledge.TryGetValue(materialId, out var alreadyKnown);
+            //if ((alreadyKnown & knowledge) == knowledge) {
+            //    return false;
+            //}
 
-            knowledge |= alreadyKnown;
+            //knowledge |= alreadyKnown;
 
-            if ((knowledge & ResearchMaterialKnowledge.Name) == 0) {
-                if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
-                    knowledge |= ResearchMaterialKnowledge.Name;
-                }
-            }
+            //if ((knowledge & ResearchMaterialKnowledge.Name) == 0) {
+            //    if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
+            //        knowledge |= ResearchMaterialKnowledge.Name;
+            //    }
+            //}
 
-            inv.MaterialKnowledge[materialId] = knowledge;
+            //inv.MaterialKnowledge[materialId] = knowledge;
 
-            ResearchMaterialKnowledgePair pair = new ResearchMaterialKnowledgePair() {
-                MaterialId = materialId,
-                Knowledge = knowledge
-            };
-            SpaceFabGame.Events.Queue(Event_KnowledgeUpdated, EvtArgs.Create(pair));
+            //ResearchMaterialKnowledgePair pair = new ResearchMaterialKnowledgePair() {
+            //    MaterialId = materialId,
+            //    Chip = knowledge
+            //};
+            //SpaceFabGame.Events.Queue(Event_KnowledgeUpdated, EvtArgs.Create(pair));
             return true;
-        }
-
-        static public ResearchMaterialGuessResult ProcessGuess(StringHash32 materialId) {
-            ResearchInventory inv = Find.State<ResearchInventory>();
-            ResearchMaterial mat = Find.NamedAsset<ResearchMaterial>(materialId);
-            inv.MaterialGuesses.TryGetValue(materialId, out var guess);
-            inv.MaterialKnowledge.TryGetValue(materialId, out var knowledge);
-
-            ResearchMaterialKnowledge originalKnowledge = knowledge;
-            ResearchMaterialKnowledge submittedKnowledge = default;
-
-            if (guess.Electric != ElectricalTag.Unknown) {
-                submittedKnowledge |= ResearchMaterialKnowledge.Electrical;
-                if (guess.Electric == mat.Electrical) {
-                    guess.Electric = default;
-                    knowledge |= ResearchMaterialKnowledge.Electrical;
-                }
-            }
-
-            if (guess.Dopant.HasValue) {
-                submittedKnowledge |= ResearchMaterialKnowledge.Dopant;
-                if (guess.Dopant == mat.DopantType) {
-                    guess.Dopant = default;
-                    knowledge |= ResearchMaterialKnowledge.Dopant;
-                }
-            }
-
-            if (guess.Thermal.HasValue) {
-                submittedKnowledge |= ResearchMaterialKnowledge.Thermal;
-                if (guess.Thermal == mat.Thermal) {
-                    guess.Thermal = default;
-                    knowledge |= ResearchMaterialKnowledge.Thermal;
-                }
-            }
-
-            if (guess.Special.HasValue) {
-                submittedKnowledge |= ResearchMaterialKnowledge.Special;
-                if (guess.Special == mat.SpecialTags) {
-                    guess.Special = default;
-                    knowledge |= ResearchMaterialKnowledge.Special;
-                }
-            }
-
-            if ((knowledge & ResearchMaterialKnowledge.Name) == 0) {
-                if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
-                    knowledge |= ResearchMaterialKnowledge.Name;
-                }
-            }
-
-            inv.MaterialGuesses[materialId] = guess;
-            inv.MaterialKnowledge[materialId] = knowledge;
-
-            if (knowledge != originalKnowledge) {
-                ResearchMaterialKnowledgePair pair = new ResearchMaterialKnowledgePair() {
-                    MaterialId = materialId,
-                    Knowledge = knowledge
-                };
-                SpaceFabGame.Events.Queue(Event_KnowledgeUpdated, EvtArgs.Create(pair));
-            }
-
-            ResearchMaterialGuessResult result;
-            result.Correct = knowledge ^ originalKnowledge;
-            result.Incorrect = submittedKnowledge ^ result.Correct;
-            return result;
         }
     }
 

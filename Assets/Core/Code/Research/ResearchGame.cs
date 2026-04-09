@@ -15,6 +15,8 @@ namespace SpaceFab.Research {
     public sealed class ResearchGame : SceneController {
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] Materials;
         public ResearchToolsMask Unlocks;
+        public ResearchChipId[] AvailableProperties;
+        public ResearchChipId StartingHypothesis;
         
         [Header("-- DEBUG -- ")]
         [SerializeField, AssetName(typeof(ResearchLevel))] private StringHash32 m_DEBUGLevel;
@@ -34,16 +36,22 @@ namespace SpaceFab.Research {
                 CurrentLevel = Find.NamedAsset<ResearchLevel>(levelName);
                 Materials = CurrentLevel.AvailableMaterials;
                 Unlocks = CurrentLevel.AvailableTools;
+                AvailableProperties = CurrentLevel.AvailableProperties;
+                StartingHypothesis = CurrentLevel.StartingHypothesis;
 
                 foreach(var prepopulate in CurrentLevel.PrePopulate) {
-                    ResearchMaterialKnowledge knowledge = prepopulate.Knowledge;
-                    if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
-                        knowledge |= ResearchMaterialKnowledge.Name;
-                    }
-                    inventory.MaterialKnowledge.Add(prepopulate.MaterialId, knowledge);
+                    //ResearchMaterialKnowledge knowledge = prepopulate.Chip;
+                    //if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
+                    //    knowledge |= ResearchMaterialKnowledge.Name;
+                    //}
+                    //inventory.MaterialKnowledge.Add(prepopulate.MaterialId, knowledge);
                 }
             }
 
+            ResearchHypothesisPanel hypothesisModule = Find.GuiModule<ResearchHypothesisPanel>();
+            hypothesisModule.AvailableProperties = AvailableProperties;
+            hypothesisModule.PropertyIndex = Array.IndexOf(AvailableProperties, StartingHypothesis);
+            
             foreach(var material in Materials) {
                 ResearchMaterialUtility.SpawnNewTrayItem(Find.NamedAsset<ResearchMaterial>(material));
                 inventory.KnownMaterials.Add(material);

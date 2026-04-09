@@ -13,25 +13,24 @@ MonoBehaviour:
   m_Name: Copper
   m_EditorClassIdentifier: 
   DisplayName: Copper
-  UnknownDisplayName: Sample 11
-  Material: {fileID: 2100000, guid: eed970c6324bea64e834b576cc415f32, type: 2}
+  UnknownDisplayName: Sample 5
   ChemicalSymbol: Cu
-  SampleNumber: 11
+  SampleNumber: 5
   Atoms:
   - Size: 145
     ValenceElectrons: 1
-    Appearance: 2
+    Appearance: 5
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4282758655
-    Symbol: Cu
-  Parent:
-    m_HashValue: 0
-  Electrical: 1
-  Thermal: 0
+      rgba: 4281198847
+    Symbol: Ge
+  ConductionMultiplier: 0.9
+  ThermalMultiplier: 0.5
+  MaxTemperature: 0.6
+  MaxVoltage: 1
   SpecialTags: 0
   DopantType: 0
-  ConductionMultiplier: 1
   DopantN:
     m_HashValue: 0
   DopantP:

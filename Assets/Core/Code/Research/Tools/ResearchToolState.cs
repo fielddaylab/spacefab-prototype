@@ -39,9 +39,6 @@ namespace SpaceFab.Research {
             foreach (var slot in tool.Slots) {
                 ResearchSlotUtility.FillInSlot(slot, null);
             }
-            if (tool.OutputSlot) {
-                ResearchSlotUtility.FillInSlot(tool.OutputSlot, null);
-            }
             tool.OnReset.Invoke(tool);
         }
 

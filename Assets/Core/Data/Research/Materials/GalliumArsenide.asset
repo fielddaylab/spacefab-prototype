@@ -13,31 +13,33 @@ MonoBehaviour:
   m_Name: GalliumArsenide
   m_EditorClassIdentifier: 
   DisplayName: Gallium Arsenide
-  UnknownDisplayName: Sample 72
+  UnknownDisplayName: Sample 13
   ChemicalSymbol: GaAs
-  SampleNumber: 72
+  SampleNumber: 13
   Atoms:
   - Size: 136
     ValenceElectrons: 3
-    Appearance: 3
+    Appearance: 4
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4286282619
+      rgba: 4289738402
     Symbol: Ga
-  - Size: 56
+  - Size: 114
     ValenceElectrons: 5
-    Appearance: 3
+    Appearance: 5
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4294931914
+      rgba: 4287427354
     Symbol: As
-  Electrical: 3
-  Thermal: 4294967295
-  SpecialTags: 4
+  ConductionMultiplier: 0.4
+  ThermalMultiplier: 2
+  MaxTemperature: 0.6
+  MaxVoltage: 0.6
+  SpecialTags: 4294967295
   DopantType: 0
-  ConductionMultiplier: 1
   DopantN:
-    m_HashValue: 0
+    m_HashValue: 1163381446
   DopantP:
     m_HashValue: 336354447
-  ValidChips: []

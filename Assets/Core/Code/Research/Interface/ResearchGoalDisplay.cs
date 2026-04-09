@@ -38,55 +38,55 @@ namespace SpaceFab.Research {
             }
             int rowCount = 0;
             using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
-                foreach (var objective in Objectives) {
-                    psb.Builder.Clear();
-                    ResearchGoalRow row = Rows[rowCount++];
-                    ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(objective.MaterialId);
-                    psb.Builder.Append("Identify the");
-                    int bitCount = Bits.Count(objective.Knowledge);
-                    int remainingCount = bitCount;
-                    if ((objective.Knowledge & ResearchMaterialKnowledge.Electrical) != 0) {
-                        psb.Builder.Append(" <sprite name=\"ElectricalPropertyIcon\"><b>Electrical</b>,");
-                        remainingCount--;
-                    }
-                    if ((objective.Knowledge & ResearchMaterialKnowledge.Thermal) != 0) {
-                        if (bitCount > 1 && remainingCount == 1) {
-                            if (bitCount == 2) {
-                                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                            }
-                            psb.Builder.Append(" and");
-                        }
-                        psb.Builder.Append(" <sprite name=\"ThermalPropertyIcon\"><b>Thermal</b>,");
-                        remainingCount--;
-                    }
-                    if ((objective.Knowledge & ResearchMaterialKnowledge.Dopant) != 0) {
-                        if (bitCount > 1 && remainingCount == 1) {
-                            if (bitCount == 2) {
-                                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                            }
-                            psb.Builder.Append(" and");
-                        }
-                        psb.Builder.Append(" <sprite name=\"DopantPropertyIcon\"><b>Dopant</b>,");
-                        remainingCount--;
-                    }
-                    if ((objective.Knowledge & ResearchMaterialKnowledge.Special) != 0) {
-                        if (bitCount > 1 && remainingCount == 1) {
-                            if (bitCount == 2) {
-                                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                            }
-                            psb.Builder.Append(" and");
-                        }
-                        psb.Builder.Append(" <sprite name=\"SpecialPropertyIcon\"><b>Special</b>,");
-                        remainingCount--;
-                    }
-                    psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                    psb.Builder.Append(" properties of <b>").Append(material.UnknownDisplayName).Append("<b>");
-                    row.Text.SetText(psb.Builder);
-                    row.Goal = objective;
-                    row.Hint.UserData = row;
-                    row.Hint.onClick.Register(OnGoalHintClicked);
-                    row.gameObject.SetActive(true);
-                }
+                //foreach (var objective in Objectives) {
+                //    psb.Builder.Clear();
+                //    ResearchGoalRow row = Rows[rowCount++];
+                //    ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(objective.MaterialId);
+                //    psb.Builder.Append("Identify the");
+                //    int bitCount = Bits.Count(objective.Chip);
+                //    int remainingCount = bitCount;
+                //    if ((objective.Chip & ResearchMaterialKnowledge.Electrical) != 0) {
+                //        psb.Builder.Append(" <sprite name=\"ElectricalPropertyIcon\"><b>Electrical</b>,");
+                //        remainingCount--;
+                //    }
+                //    if ((objective.Chip & ResearchMaterialKnowledge.Thermal) != 0) {
+                //        if (bitCount > 1 && remainingCount == 1) {
+                //            if (bitCount == 2) {
+                //                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
+                //            }
+                //            psb.Builder.Append(" and");
+                //        }
+                //        psb.Builder.Append(" <sprite name=\"ThermalPropertyIcon\"><b>Thermal</b>,");
+                //        remainingCount--;
+                //    }
+                //    if ((objective.Chip & ResearchMaterialKnowledge.Dopant) != 0) {
+                //        if (bitCount > 1 && remainingCount == 1) {
+                //            if (bitCount == 2) {
+                //                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
+                //            }
+                //            psb.Builder.Append(" and");
+                //        }
+                //        psb.Builder.Append(" <sprite name=\"DopantPropertyIcon\"><b>Dopant</b>,");
+                //        remainingCount--;
+                //    }
+                //    if ((objective.Chip & ResearchMaterialKnowledge.Special) != 0) {
+                //        if (bitCount > 1 && remainingCount == 1) {
+                //            if (bitCount == 2) {
+                //                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
+                //            }
+                //            psb.Builder.Append(" and");
+                //        }
+                //        psb.Builder.Append(" <sprite name=\"SpecialPropertyIcon\"><b>Special</b>,");
+                //        remainingCount--;
+                //    }
+                //    psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
+                //    psb.Builder.Append(" properties of <b>").Append(material.UnknownDisplayName).Append("<b>");
+                //    row.Text.SetText(psb.Builder);
+                //    row.Goal = objective;
+                //    row.Hint.UserData = row;
+                //    row.Hint.onClick.Register(OnGoalHintClicked);
+                //    row.gameObject.SetActive(true);
+                //}
             }
             for(int i = rowCount; i < Rows.Length; i++) {
                 Rows[i].gameObject.SetActive(false);
@@ -120,7 +120,7 @@ namespace SpaceFab.Research {
                     continue;
                 }
 
-                if ((pair.Knowledge & Objectives[i].Knowledge) == Objectives[i].Knowledge) {
+                if ((pair.Chip & Objectives[i].Chip) == Objectives[i].Chip) {
                     Completed.Set(i);
 
                     Rows[i].Checkbox.SetAlpha(0.5f);

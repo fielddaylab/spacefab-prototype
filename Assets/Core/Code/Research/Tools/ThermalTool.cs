@@ -43,7 +43,7 @@ namespace SpaceFab.Research {
             TemperatureIndex = 0;
             CoilRenderer.color = Colors[0];
             TemperatureLabel.SetText(Labels[0]);
-            Temperature = 0.5f;
+            Temperature = 0;
             IncreaseButton.gameObject.SetActive(true);
             DecreaseButton.gameObject.SetActive(false);
 
@@ -56,9 +56,9 @@ namespace SpaceFab.Research {
 
             Sfx.Play("Research.Tool.Button");
             GuiCommands.SetActive(DecreaseButton.gameObject, true);
-            GuiCommands.SetActive(IncreaseButton.gameObject, TemperatureIndex < 4);
+            GuiCommands.SetActive(IncreaseButton.gameObject, TemperatureIndex < 5);
 
-            Temperature = TemperatureIndex / 4f;
+            Temperature = TemperatureIndex / 5f;
             OnSlotFillUpdated();
         }
 
@@ -71,7 +71,7 @@ namespace SpaceFab.Research {
             GuiCommands.SetActive(IncreaseButton.gameObject, true);
             GuiCommands.SetActive(DecreaseButton.gameObject, TemperatureIndex > 0);
 
-            Temperature = TemperatureIndex / 4f;
+            Temperature = TemperatureIndex / 5f;
             OnSlotFillUpdated();
         }
 
@@ -83,7 +83,7 @@ namespace SpaceFab.Research {
                     CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
                     ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), ExplosionStyle.TemperatureBreakdownHot, 0.4f);
                 } else {
-                    float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
+                    float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature, m_Tool.DopingState);
                     CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
                     CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
                     ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.HighMobility) != 0 ? current : 0);

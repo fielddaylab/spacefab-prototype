@@ -6,6 +6,7 @@ using FieldDay.UI.Widgets;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 namespace SpaceFab.Research {
     public sealed class ResearchObservationChip : GuiWidget {
@@ -16,6 +17,7 @@ namespace SpaceFab.Research {
 
     static public partial class ResearchMaterialUtility {
         static private readonly StringHash32 Class_Slot = "Slot";
+        static private readonly StringHash32 Class_Hypothesis = "Hypothesis";
 
         static public void ApplyStyle(ResearchObservationChip chip, ResearchChipStyle style) {
             bool applyColors = chip.Class != Class_Slot;
@@ -25,10 +27,13 @@ namespace SpaceFab.Research {
                 chip.Background.color = style.Colors.Background;
             }
 
-            if (style.IsTall) {
-                chip.Rect.SetSizeDelta(48, Axis.Y);
-            } else {
-                chip.Rect.SetSizeDelta(32, Axis.Y);
+            bool applySize = chip.Class != Class_Hypothesis;
+            if (applySize) {
+                if (style.IsTall) {
+                    chip.Rect.SetSizeDelta(48, Axis.Y);
+                } else {
+                    chip.Rect.SetSizeDelta(32, Axis.Y);
+                }
             }
 
             chip.Background.sprite = style.Background;
@@ -38,9 +43,13 @@ namespace SpaceFab.Research {
         static public void PopulateObservationChip(ResearchObservationChip chip, ResearchChipId chipId, StringHash32 materialContext) {
             ResearchChipMetadata meta = ResearchChipUtility.Metadata(chipId);
             ApplyStyle(chip, Find.NamedAsset<ResearchChipStyle>(ResearchChipUtility.CategoryStyleId(meta.Category)));
-            
+            ApplyContextualTextToObservationChip(chip, chipId, materialContext);
+        }
+
+        static public void ApplyContextualTextToObservationChip(ResearchObservationChip chip, ResearchChipId chipId, StringHash32 materialContext) {
+            ResearchChipMetadata meta = ResearchChipUtility.Metadata(chipId);
             if (ResearchChipUtility.CategoryRequiresContext(meta.Category)) {
-                using(PooledStringBuilder psb = PooledStringBuilder.Create()) {
+                using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
                     string name;
                     if (materialContext.IsEmpty) {
                         name = "???";

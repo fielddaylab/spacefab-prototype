@@ -3,12 +3,13 @@ using System.Text;
 using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
+using FieldDay;
 using FieldDay.Assets;
 using UnityEngine;
 
 namespace SpaceFab.Research {
     [CreateAssetMenu(menuName = "Research/Research Material")]
-    public sealed class ResearchMaterial : NamedAsset {
+    public sealed class ResearchMaterial : NamedAsset, IRegistrationCallbacks {
         public string DisplayName;
         public string UnknownDisplayName;
 
@@ -18,45 +19,34 @@ namespace SpaceFab.Research {
         public AtomicStructure[] Atoms;
 
         [Header("Properties")]
-        public ElectricalTag Electrical;
-        public ThermalTag Thermal;
+        [Range(0, 2)] public float ConductionMultiplier = 1;
+        [Range(0, 2)] public float ThermalMultiplier = 1;
+        [Range(0, 1)] public float MaxTemperature = 0.6f;
+        [Range(0, 1)] public float MaxVoltage = 0.6f;
         public SpecialTag SpecialTags;
 
-        [Header("Fields")]
+        [Header("Doping")]
         public DopantType DopantType;
-        [Range(0, 2)] public float ConductionMultiplier = 1;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantN;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 DopantP;
 
-        [Header("Chips")]
-        public ResearchChipWithContext[] ValidChips;
-    }
+        [NonSerialized] public Color32 GemColor;
+        [NonSerialized] public float GemScale;
 
-    [Serializable]
-    public struct ResearchChipWithContext {
-        public ResearchChipId Id;
-        [AssetName(typeof(ResearchMaterial))] public StringHash32 Context;
-    }
+        void IRegistrationCallbacks.OnDeregister() {
+        }
 
-    public enum ElectricalTag : uint {
-        Unknown = 0,
-        Conductor,
-        Insulator,
-        Semiconductor
-    }
-
-    [Flags]
-    public enum ThermalTag : uint {
-        None = 0,
-        HighTemp = 0x01,
+        void IRegistrationCallbacks.OnRegister() {
+            GemColor = ResearchMaterialUtility.CalculateMaterialColor(this);
+            GemScale = ResearchMaterialUtility.CalculateMaterialScaleFactor(this);
+        }
     }
 
     [Flags]
     public enum SpecialTag : uint {
         None = 0,
-        HighMobility = 0x01,
-        LightEmitting = 0x02,
-        HighVoltage = 0x04
+        LightEmitting = 0x01,
+        HighMobility = 0x02
     }
 
     [Flags]
@@ -71,6 +61,7 @@ namespace SpaceFab.Research {
         [Range(1, 200)] public byte Size;
         [Range(0, 8)] public byte ValenceElectrons;
         public AtomicAppearance Appearance;
+        public byte Count;
         public Color32 Color;
         public string Symbol;
     }
@@ -85,50 +76,29 @@ namespace SpaceFab.Research {
     }
 
     static public partial class ResearchMaterialUtility {
-        static public float GetCurrent(ResearchMaterial material, float voltage, float temperature) {
-            // TODO: implement correctly
-            float multiplier = material.ConductionMultiplier * ((material.SpecialTags & SpecialTag.HighMobility) != 0 ? 1.5f : 1);
-
-            switch(material.Electrical) {
-                case ElectricalTag.Insulator: {
-                    return 0;
-                }
-                case ElectricalTag.Conductor: {
-                    return multiplier * voltage * (0.2f + 0.8f * (1 - temperature));
-                }
-                case ElectricalTag.Semiconductor: {
-                    return multiplier * voltage * (0.2f + 0.8f * temperature);
-                }
-                default: {
-                    Assert.Fail("unknown electrical mode");
-                    return 0;
-                }
+        static public float GetCurrent(ResearchMaterial material, float voltage, float temperature, DopantType dopingState) {
+            float conductionMultiplier = material.ConductionMultiplier;
+            if (dopingState != DopantType.None) {
+                conductionMultiplier = 0.8f;
             }
+            if ((material.SpecialTags & SpecialTag.HighMobility) != 0) {
+                conductionMultiplier *= 1.5f;
+            }
+
+            float thermalMultiplier = 1 + temperature * (material.ThermalMultiplier - 1);
+            return voltage * thermalMultiplier * conductionMultiplier;
         }
 
         static public bool BehavesAsInsulator(ResearchMaterial material) {
-            switch(material.Electrical) {
-                case ElectricalTag.Insulator:
-                    return true;
-
-                default:
-                    return false;
-            }
+            return material.ConductionMultiplier <= 0.2f;
         }
 
         static public bool IsStableAtTemperature(ResearchMaterial material, float temperature) {
-            if ((material.Thermal & ThermalTag.HighTemp) == 0 && temperature > 0.8f) {
-                return false;
-            }
-            return true;
+            return temperature <= material.MaxTemperature;
         }
 
         static public bool IsStableAtVoltage(ResearchMaterial material, float voltage) {
-            if (Math.Abs(voltage) > 0.8f && (material.SpecialTags & SpecialTag.HighVoltage) == 0) {
-                return false;
-            }
-
-            return true;
+            return Math.Abs(voltage) <= material.MaxVoltage;
         }
     }
 }

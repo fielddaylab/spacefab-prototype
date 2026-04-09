@@ -13,24 +13,25 @@ MonoBehaviour:
   m_Name: Tungsten
   m_EditorClassIdentifier: 
   DisplayName: Tungsten
-  UnknownDisplayName: Sample 8
+  UnknownDisplayName: Sample 12
   ChemicalSymbol: W
-  SampleNumber: 8
+  SampleNumber: 12
   Atoms:
   - Size: 193
-    ValenceElectrons: 6
-    Appearance: 3
+    ValenceElectrons: 2
+    Appearance: 0
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4278233824
+      rgba: 4279288319
     Symbol: W
-  Electrical: 1
-  Thermal: 4294967295
+  ConductionMultiplier: 0.7
+  ThermalMultiplier: 0.5
+  MaxTemperature: 1
+  MaxVoltage: 0.6
   SpecialTags: 0
   DopantType: 0
-  ConductionMultiplier: 1
   DopantN:
     m_HashValue: 0
   DopantP:
     m_HashValue: 0
-  ValidChips: []

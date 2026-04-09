@@ -16,7 +16,7 @@ namespace SpaceFab.Research {
         static private void ProcessWork(float deltaTime) {
             foreach(var obj in Find.Components<CircuitRenderer>()) {
                 if (obj.CircuitSpriteSpeed == 0) {
-                    return;
+                    continue;
                 }
 
                 obj.CircuitSpriteTimer += deltaTime * Math.Abs(obj.CircuitSpriteSpeed) * obj.AnimSpeedMultiplier;

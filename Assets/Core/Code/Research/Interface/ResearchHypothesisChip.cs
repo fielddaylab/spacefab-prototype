@@ -3,6 +3,7 @@ using BeauUtil.Debugger;
 using FieldDay;
 using FieldDay.Collections;
 using FieldDay.UI.Widgets;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,10 @@ namespace SpaceFab.Research {
         public ResearchObservationChip[] Dependencies;
 
         public GameObject WrongStationGroup;
+
+        [NonSerialized] public ResearchObservationChip Base;
+        [NonSerialized] public ResearchChipId CurrentChip;
+        [NonSerialized] public StringHash32 CurrentContext;
     }
 
     static public partial class ResearchMaterialUtility {
@@ -37,6 +42,33 @@ namespace SpaceFab.Research {
                 }
 
                 Positioning.VerticalLayout(chipRects, hypothesis.Layout, hypothesis.ChipBaseY);
+            }
+
+            PopulateObservationChip(hypothesis.CacheComponent(ref hypothesis.Base), chipId, materialContext);
+
+            hypothesis.CurrentChip = chipId;
+            hypothesis.CurrentContext = materialContext;
+        }
+
+        static public void UpdateHypothesisContext(ResearchHypothesisChip hypothesis, StringHash32 materialContext) {
+            if (hypothesis.CurrentContext == materialContext) {
+                return;
+            }
+
+            hypothesis.CurrentContext = materialContext;
+
+            if (hypothesis.CurrentChip == ResearchChipId.None) {
+                return;
+            }
+
+            ApplyContextualTextToObservationChip(hypothesis.CacheComponent(ref hypothesis.Base), hypothesis.CurrentChip, materialContext);
+
+            ResearchChipMetadata meta = ResearchChipUtility.Metadata(hypothesis.CurrentChip);
+            if (meta.DependencyA != ResearchChipId.None && ResearchChipUtility.CategoryRequiresContext(ResearchChipUtility.Category(meta.DependencyA))) {
+                ApplyContextualTextToObservationChip(hypothesis.Dependencies[0], meta.DependencyA, materialContext);
+            }
+            if (meta.DependencyB != ResearchChipId.None && ResearchChipUtility.CategoryRequiresContext(ResearchChipUtility.Category(meta.DependencyB))) {
+                ApplyContextualTextToObservationChip(hypothesis.Dependencies[1], meta.DependencyB, materialContext);
             }
         }
     }

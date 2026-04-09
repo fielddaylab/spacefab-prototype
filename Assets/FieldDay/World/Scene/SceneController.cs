@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace FieldDay.Scenes {
-    public abstract class SceneController : MonoBehaviour, IScenePreload {
+    public abstract class SceneController : MonoBehaviour, IScenePreload, ISceneLateInitialize {
         /// <summary>
         /// Invoked when the scene is preloading.
         /// </summary>
@@ -34,10 +34,13 @@ namespace FieldDay.Scenes {
         }
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
-            Game.Scenes.QueueOnEnable(this, OnSceneEnable);
             Game.Scenes.QueueOnLoad(this, OnSceneReady);
             Game.Scenes.QueueOnUnload(this, OnSceneUnload);
             return OnScenePreload();
+        }
+
+        void ISceneLateInitialize.LateInitialize() {
+            OnSceneEnable();
         }
     }
 }

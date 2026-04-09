@@ -245,6 +245,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8956996191565869632}
     m_Modifications:
+    - target: {fileID: 1604271252481478277, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
+      propertyPath: CursorType.m_HashValue
+      value: 2354262440
+      objectReference: {fileID: 0}
     - target: {fileID: 4098552875292831775, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -283,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 32
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -362,6 +366,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8956996191565869632}
     m_Modifications:
+    - target: {fileID: 1604271252481478277, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
+      propertyPath: CursorType.m_HashValue
+      value: 2354262440
+      objectReference: {fileID: 0}
     - target: {fileID: 4946626342380903748, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_Name
       value: KnowledgeChipSlot (1)
@@ -432,7 +440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -62
+      value: -78
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -529,7 +537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1455467017889461371, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 160
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 1455467017889461371, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -589,6 +597,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3340728278362051831, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: CursorType.m_HashValue
+      value: 2354262440
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: m_AlwaysFireClickEvents
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5953014303264816631, guid: 14f9df00a75e03441a941819b98299b0, type: 3}

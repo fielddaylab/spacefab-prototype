@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.CompilerServices;
 using BeauUtil;
 using Unity.IL2CPP.CompilerServices;
 
@@ -80,7 +82,10 @@ namespace SpaceFab.Research {
         public ResearchChipId DependencyB;
 
         public string Label;
+        public ResearchChipEvaluationDelegate Evaluator;
     }
+
+    public delegate bool ResearchChipEvaluationDelegate(ResearchChipId chip, ResearchMaterial material, ResearchMaterial context);
 
     [Il2CppEagerStaticClassConstruction]
     static public class ResearchChipUtility {
@@ -89,84 +94,180 @@ namespace SpaceFab.Research {
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.BaseConductivity,
-                Label = "Allows current flow"
+                Label = "Allows current flow",
+                Evaluator = (chip, material, context) => {
+                    return material.ConductionMultiplier > 0.2f;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.BaseConductivity,
-                Label = "Blocks current flow"
+                Label = "Blocks current flow",
+                Evaluator = (chip, material, context) => {
+                    return material.ConductionMultiplier <= 0.2f;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalConductivity,
-                Label = "Heat increases current"
+                Label = "Heat increases current",
+                Evaluator = (chip, material, context) => {
+                    return material.ThermalMultiplier > 1;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalConductivity,
-                Label = "Heat decreases current"
+                Label = "Heat decreases current",
+                Evaluator = (chip, material, context) => {
+                    return material.ThermalMultiplier < 1;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalConductivity,
-                Label = "Heat does not affect current"
+                Label = "Heat does not affect current",
+                Evaluator = (chip, material, context) => {
+                    return material.ThermalMultiplier == 1;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalResistance,
-                Label = "Explodes under extreme heat"
+                Label = "Explodes under extreme heat",
+                Evaluator = (chip, material, context) => {
+                    return material.MaxTemperature < 0.8f;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalResistance,
-                Label = "Withstands extreme heat"
+                Label = "Withstands extreme heat",
+                Evaluator = (chip, material, context) => {
+                    return material.MaxTemperature >= 0.8f;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Radius,
-                Label = "Atomic radius less than {0}"
+                Label = "Atomic radius less than {0}",
+                Evaluator = (chip, material, context) => {
+                    if (material.Atoms.Length > 1) {
+                        return false;
+                    }
+
+                    for(int i = 0; i < context.Atoms.Length; i++) {
+                        if (context.Atoms[i].Size > material.Atoms[0].Size) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Radius,
-                Label = "Atomic radius greater than {0}"
+                Label = "Atomic radius greater than {0}",
+                Evaluator = (chip, material, context) => {
+                    if (material.Atoms.Length > 1) {
+                        return false;
+                    }
+
+                    for(int i = 0; i < context.Atoms.Length; i++) {
+                        if (context.Atoms[i].Size < material.Atoms[0].Size) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Valence,
-                Label = "1 less valence electron than {0}"
+                Label = "1 less valence electron than {0}",
+                Evaluator = (chip, material, context) => {
+                    if (material.Atoms.Length > 1) {
+                        return false;
+                    }
+
+                    for(int i = 0; i < context.Atoms.Length; i++) {
+                        if (context.Atoms[i].ValenceElectrons == material.Atoms[0].ValenceElectrons + 1) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Valence,
-                Label = "1 more valence electron than {0}"
+                Label = "1 more valence electron than {0}",
+                Evaluator = (chip, material, context) => {
+                    if (material.Atoms.Length > 1) {
+                        return false;
+                    }
+
+                    for(int i = 0; i < context.Atoms.Length; i++) {
+                        if (context.Atoms[i].ValenceElectrons == material.Atoms[0].ValenceElectrons + 1) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Diode,
-                Label = "In {0}, forms a diode with a known N-type"
+                Label = "In {0}, forms a diode with a known N-type",
+                Evaluator = (chip, material, context) => {
+                    return context.DopantP == material.AssetId;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Diode,
-                Label = "In {0}, forms a diode with a known P-type"
+                Label = "In {0}, forms a diode with a known P-type",
+                Evaluator = (chip, material, context) => {
+                    return context.DopantN == material.AssetId;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.DopingConductivity,
-                Label = "Increases the conductivity of {0}"
+                Label = "Increases the conductivity of {0}",
+                Evaluator = (chip, material, context) => {
+                    return context.DopantP == material.AssetId
+                        || context.DopantN == material.AssetId;
+                }
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.DopingConductivity,
-                Label = "Does not increase the conductivity of {0}"
+                Label = "Does not increase the conductivity of {0}",
+                Evaluator = (chip, material, context) => {
+                    return context.DopantP != material.AssetId
+                        & context.DopantN != material.AssetId;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.SpecialLight,
-                Label = "Diodes emit light"
+                Label = "Diodes emit light",
+                Evaluator = (chip, material, context) => {
+                    return (material.SpecialTags & SpecialTag.LightEmitting) != 0;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.SpecialMobility,
-                Label = "Current is extremely strong"
+                Label = "Current is extremely strong",
+                Evaluator = (chip, material, context) => {
+                    return (material.SpecialTags & SpecialTag.HighMobility) != 0;
+                }
             },
 
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.SpecialVoltage,
-                Label = "Withstands extreme voltage"
+                Label = "Withstands extreme voltage",
+                Evaluator = (chip, material, context) => {
+                    return (material.MaxVoltage) >= 0.8f;
+                }
             },
 
             new ResearchChipMetadata() {
@@ -252,25 +353,25 @@ namespace SpaceFab.Research {
             },
 
             new ResearchChipMetadata() {
-                Category = ResearchChipCategory.SpecialLight,
+                Category = ResearchChipCategory.PropertySpecial,
                 Label = "Light-Emitting Semiconductor",
 
                 DependencyA = ResearchChipId.Semiconductor,
                 DependencyB = ResearchChipId.LightEmitting,
             },
             new ResearchChipMetadata() {
-                Category = ResearchChipCategory.SpecialVoltage,
+                Category = ResearchChipCategory.PropertySpecial,
                 Label = "High Voltage Semiconductor",
 
                 DependencyA = ResearchChipId.Semiconductor,
                 DependencyB = ResearchChipId.VoltageResistant,
             },
             new ResearchChipMetadata() {
-                Category = ResearchChipCategory.SpecialMobility,
+                Category = ResearchChipCategory.PropertySpecial,
                 Label = "High Mobility Semiconductor",
 
                 DependencyA = ResearchChipId.Semiconductor,
-                DependencyB = ResearchChipId.HighMobilitySemiconductor,
+                DependencyB = ResearchChipId.ElectronMobility,
             },
         };
 
@@ -307,24 +408,52 @@ namespace SpaceFab.Research {
             (1 << (int) ResearchChipCategory.PropertySpecial)
         );
 
+        #region Metadata
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public ResearchChipMetadata Metadata(ResearchChipId chip) {
             return MetadataTable[(int)chip];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public ResearchChipCategory Category(ResearchChipId chip) {
             return MetadataTable[(int)chip].Category;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public bool IsProperty(ResearchChipId chip) {
+            return MetadataTable[(int) chip].Category >= ResearchChipCategory.PropertyElectricNaive;
+        }
+
+        #endregion // Metadata
+
+        #region Category Info
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public bool IsProperty(ResearchChipCategory category) {
+            return category >= ResearchChipCategory.PropertyElectricNaive;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
         static public StringHash32 CategoryStyleId(ResearchChipCategory category) {
             return CategoryStyleTable[(int)category];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool CategoryRequiresContext(ResearchChipCategory category) {
             return CategoryRequiresContextTable.IsSet((int)category);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static public bool CategoryIsExclusive(ResearchChipCategory category) {
             return !CategoryAllowsMultipleTable.IsSet((int)category);
         }
+
+        #endregion // Category Info
     }
 }

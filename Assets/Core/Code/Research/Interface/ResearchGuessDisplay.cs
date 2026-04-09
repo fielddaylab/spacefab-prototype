@@ -21,10 +21,6 @@ namespace SpaceFab.Research {
         public ActionEvent OnClose = new ActionEvent();
 
         private void Awake() {
-            ElectricalGroup.OnSelectionUpdated.Register(UpdateElectricGuess);
-            DopantGroup.OnSelectionUpdated.Register(UpdateDopantGuess);
-            ThermalGroup.OnSelectionUpdated.Register(UpdateThermalGuess);
-            SpecialGroup.OnSelectionUpdated.Register(UpdateSpecialGuess);
             CloseButton.onClick.Register(() => {
                 OnClose.Invoke();
                 gameObject.SetActive(false);
@@ -48,90 +44,7 @@ namespace SpaceFab.Research {
             MaterialId = default;
         }
 
-        public void PopupElectrical(StringHash32 materialId) {
-            MaterialId = materialId;
-            gameObject.SetActive(true);
-            ThermalGroup.gameObject.SetActive(false);
-            SpecialGroup.gameObject.SetActive(false);
-            DopantGroup.gameObject.SetActive(false);
-            ElectricalGroup.gameObject.SetActive(true);
-
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            ElectricalGroup.PopulateInitialSelection(ResearchGuessGroup.GetElectricalGuessList(guess));
-        }
-
-        public void PopupThermal(StringHash32 materialId) {
-            MaterialId = materialId;
-            gameObject.SetActive(true);
-            ElectricalGroup.gameObject.SetActive(false);
-            SpecialGroup.gameObject.SetActive(false);
-            DopantGroup.gameObject.SetActive(false);
-            ThermalGroup.gameObject.SetActive(true);
-
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            ThermalGroup.PopulateInitialSelection(ResearchGuessGroup.GetThermalGuessList(guess));
-        }
-
-        public void PopupDopant(StringHash32 materialId) {
-            MaterialId = materialId;
-            gameObject.SetActive(true);
-            ElectricalGroup.gameObject.SetActive(false);
-            SpecialGroup.gameObject.SetActive(false);
-            ThermalGroup.gameObject.SetActive(false);
-            DopantGroup.gameObject.SetActive(true);
-
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            DopantGroup.PopulateInitialSelection(ResearchGuessGroup.GetDopantGuessList(guess));
-        }
-
-        public void PopupSpecial(StringHash32 materialId) {
-            MaterialId = materialId;
-            gameObject.SetActive(true);
-            ThermalGroup.gameObject.SetActive(false);
-            ElectricalGroup.gameObject.SetActive(false);
-            DopantGroup.gameObject.SetActive(false);
-            SpecialGroup.gameObject.SetActive(true);
-
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            SpecialGroup.PopulateInitialSelection(ResearchGuessGroup.GetSpecialGuessList(guess));
-        }
-
-        private void UpdateElectricGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            ResearchGuessGroup.PopulateElectricalGuess(ref guess, list);
-            ResearchMaterialUtility.SetObservations(MaterialId, guess);
-        }
-
-        private void UpdateDopantGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            ResearchGuessGroup.PopulateDopantGuess(ref guess, list);
-            ResearchMaterialUtility.SetObservations(MaterialId, guess);
-        }
-
-        private void UpdateThermalGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            ResearchGuessGroup.PopulateThermalGuess(ref guess, list);
-            ResearchMaterialUtility.SetObservations(MaterialId, guess);
-        }
-
-        private void UpdateSpecialGuess(ResearchSelectionList list) {
-            var guess = ResearchMaterialUtility.GetObservations(MaterialId);
-            ResearchGuessGroup.PopulateSpecialGuess(ref guess, list);
-            ResearchMaterialUtility.SetObservations(MaterialId, guess);
-        }
-
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
-            ResearchToolsMask unlocks = Find.State<ResearchToolState>().CurrentUnlocks;
-            if ((unlocks & ResearchToolsMask.Thermal) == 0) {
-                ResearchGuessButtonWidget semiButton = ElectricalGroup.Buttons[1];
-                CanvasGroup group = semiButton.EnsureComponent<CanvasGroup>();
-                group.alpha = 0.25f;
-                group.blocksRaycasts = false;
-                semiButton.GetComponentInChildren<TMP_Text>().SetText("???");
-
-                ResearchGuessButtonWidget condButton = ElectricalGroup.Buttons[0];
-                condButton.Collider.GetComponent<CursorHint>().Tooltip = "The material conducts electricity.";
-            }
             return null;
         }
     }

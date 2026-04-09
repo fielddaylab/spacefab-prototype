@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace SpaceFab.Research {
     public sealed class CombinerTool : MonoBehaviour {
@@ -81,7 +82,7 @@ namespace SpaceFab.Research {
             bool validMaterial = hasMaterial;
             if (validMaterial) {
                 ResearchMaterial material = item.Material;
-                validMaterial = (material.Electrical == ElectricalTag.Semiconductor && (ResearchMaterialUtility.GetKnownCategories(material.AssetId) & ResearchMaterialKnowledge.Electrical) != 0);
+                validMaterial = ResearchMaterialUtility.GetKnownProperties(material.AssetId).HasCategory(ResearchChipCategory.PropertyElectric);
             }
 
             if (!validMaterial) {
@@ -106,11 +107,11 @@ namespace SpaceFab.Research {
                 RightSelector.Cursor.gameObject.SetActive(true);
 
                 LeftSelector.Atom.sprite = sprites.AtomIcons[(int) item.Material.Atoms[0].Appearance];
-                LeftSelector.Atom.transform.SetScale(item.Material.Atoms[0].Size / AtomSizeScale);
+                LeftSelector.Atom.transform.SetScale(ResearchMaterialUtility.CalculateAtomicSizeFactor(item.Material.Atoms[0].Size));
                 LeftSelector.Atom.color = item.Material.Atoms[0].Color;
 
                 RightSelector.Atom.sprite = sprites.AtomIcons[(int) item.Material.Atoms[1].Appearance];
-                RightSelector.Atom.transform.SetScale(item.Material.Atoms[1].Size / AtomSizeScale);
+                RightSelector.Atom.transform.SetScale(ResearchMaterialUtility.CalculateAtomicSizeFactor(item.Material.Atoms[1].Size));
                 RightSelector.Atom.color = item.Material.Atoms[1].Color;
             } else {
                 LeftSelector.Cursor.gameObject.SetActive(false);
@@ -146,18 +147,12 @@ namespace SpaceFab.Research {
 
             if (targetMaterial.DopantN == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons + 1) {
                 ShowFeedback("N-Type Dopant", CorrectNTypeValencePipColor);
-                if (ResearchMaterialUtility.AddKnowledgeFlag(targetMaterial.AssetId, ResearchMaterialKnowledge.DopantMaterialN)) {
-                    Sfx.Play("Research.Row.Correct");
-                }
             } else if (targetMaterial.DopantP == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons - 1) {
                 ShowFeedback("P-Type Dopant", CorrectPTypeValencePipColor);
-                if (ResearchMaterialUtility.AddKnowledgeFlag(targetMaterial.AssetId, ResearchMaterialKnowledge.DopantMaterialP)) {
-                    Sfx.Play("Research.Row.Correct");
-                }
             } else if (dopant.Atoms.Length > 1) {
-                ShowFeedback("Not Atomic", IncorrectValencePipColor);
+                ShowFeedback("Polyelemental", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.TooBig);
-            } else if (dopantAtom.Size > targetAtom.Size) {
+            } else if (dopantAtom.Size >= targetAtom.Size) {
                 ShowFeedback("Atomic Size Too Big", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.TooBig);
             } else if (dopantAtom.ValenceElectrons < targetAtom.ValenceElectrons - 1) {
@@ -166,8 +161,6 @@ namespace SpaceFab.Research {
             } else if (dopantAtom.ValenceElectrons > targetAtom.ValenceElectrons + 1) {
                 ShowFeedback("Too Many Electrons", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.InvalidCombo);
-            } else if (targetMaterial == dopant) {
-                ShowFeedback("Identical Material", IncorrectValencePipColor);
             } else {
                 ShowFeedback("Unknown Error", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.InvalidCombo);
@@ -201,7 +194,7 @@ namespace SpaceFab.Research {
                 AtomicStructure atomData = atoms[(offset + i + 1) % atoms.Length];
                 SpriteRenderer renderer = AtomSlots[i];
                 renderer.sprite = sprites.AtomIcons[(int) atomData.Appearance];
-                renderer.transform.SetScale(atomData.Size / AtomSizeScale);
+                renderer.transform.SetScale(ResearchMaterialUtility.CalculateAtomicSizeFactor(atomData.Size));
                 renderer.color = atomData.Color;
                 renderer.enabled = true;
             }
