@@ -20,7 +20,7 @@ namespace FieldDay.Systems {
     /// </summary>
     [Flags]
     public enum SysFlags : ushort {
-        DuringLoading = 0x01
+        ExecuteDuringLoad = 0x01
     }
 
     /// <summary>
@@ -36,20 +36,20 @@ namespace FieldDay.Systems {
             PhaseMask = (GameLoopPhaseMask)(1 << (int)phase);
             Order = order;
             CategoryMask = Bits.All32;
-            Flags = SysFlags.DuringLoading;
+            Flags = 0;
         }
 
         public SysUpdate(GameLoopPhaseMask phaseMask, int order) {
             PhaseMask = phaseMask;
             Order = order;
             CategoryMask = Bits.All32;
-            Flags = SysFlags.DuringLoading;
+            Flags = 0;
         }
 
         public SysUpdate RestrictDuringLoad() {
             return new SysUpdate() {
                 PhaseMask = this.PhaseMask,
-                Flags = this.Flags & ~SysFlags.DuringLoading,
+                Flags = this.Flags & ~SysFlags.ExecuteDuringLoad,
                 Order = this.Order,
                 CategoryMask = this.CategoryMask
             };
@@ -58,7 +58,7 @@ namespace FieldDay.Systems {
         public SysUpdate AllowDuringLoad() {
             return new SysUpdate() {
                 PhaseMask = this.PhaseMask,
-                Flags = this.Flags | SysFlags.DuringLoading,
+                Flags = this.Flags | SysFlags.ExecuteDuringLoad,
                 Order = this.Order,
                 CategoryMask = this.CategoryMask
             };

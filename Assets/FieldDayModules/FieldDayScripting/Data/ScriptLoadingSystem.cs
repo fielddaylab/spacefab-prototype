@@ -6,14 +6,14 @@ using FieldDay.Systems;
 using Leaf;
 
 namespace FieldDay.Scripting {
-    internal static  class ScriptLoadingSystem {
+    internal static class ScriptLoadingSystem {
         static public unsafe void RegisterModule() {
             Game.Systems.Register(&ProcessWork,
                 new SysUpdate(GameLoopPhaseMask.PreUpdate | GameLoopPhaseMask.LateUpdate, -100).AllowDuringLoad(),
                 new SysPermissions().ReadWriteShared<ScriptDatabase>());
         }
 
-        static public void ProcessWork(float dt) {
+        static private void ProcessWork(float dt) {
             if (HandleCurrentLoad(ScriptUtility.DB)) {
                 return;
             }

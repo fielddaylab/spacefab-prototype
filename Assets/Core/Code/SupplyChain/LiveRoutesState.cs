@@ -10,6 +10,7 @@ namespace SpaceFab.SupplyChain {
         public const int MaxShips = 4;
 
         public RouteLineRenderer[] RouteLines;
+        public RouteLineRenderer[] TempRouteLines;
         
         [NonSerialized] public LiveRouteData[] Routes = new LiveRouteData[MaxShips];
         [NonSerialized] public int RouteCount;
@@ -23,6 +24,7 @@ namespace SpaceFab.SupplyChain {
             for (int i = 0; i < Routes.Length; i++) {
                 Routes[i] = new LiveRouteData();
                 Routes[i].Line = RouteLines[i];
+                Routes[i].TempLine = TempRouteLines[i];
             }
         }
     }

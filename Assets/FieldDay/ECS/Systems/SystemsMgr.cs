@@ -379,7 +379,7 @@ namespace FieldDay.Systems {
                 ref InternalSystemDefinition sys = ref s_SystemDefinitions[sysIndex];
 #if DEVELOPMENT
                 try {
-                    if (((categoryMask & sys.CategoryMask) != 0) & ((currentSystemMask & sys.PackedPhaseMask) == 0)) {
+                    if (((categoryMask & sys.CategoryMask) != 0) & ((currentSystemMask & sys.PackedSystemMask) == 0)) {
                         sys.Function(deltaTime);
                     }
                 } catch (Exception e) {
@@ -387,7 +387,7 @@ namespace FieldDay.Systems {
                     Debug.LogException(e);
                 }
 #else
-                if (((categoryMask & sys.CategoryMask) != 0) & ((currentSystemMask & sys.PackedPhaseMask) == 0)) {
+                if (((categoryMask & sys.CategoryMask) != 0) & ((currentSystemMask & sys.PackedSystemMask) == 0)) {
                     sys.Function(deltaTime);
                 }
 #endif // DEVELOPMENT
@@ -401,7 +401,7 @@ namespace FieldDay.Systems {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         static private ushort SysFlagsToMask(SysFlags flags) {
             ushort mask = 0;
-            if ((flags & SysFlags.DuringLoading) == 0) {
+            if ((flags & SysFlags.ExecuteDuringLoad) == 0) {
                 mask |= SystemFlag_IsLoading;
             }
             return mask;

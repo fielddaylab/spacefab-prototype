@@ -66,16 +66,27 @@ namespace SpaceFab.SupplyChain {
                             nodeToAdd.gameObject.SetActive(true);
                         }
 
+                        Vector3 clickPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+                        RaycastHit2D hit = Physics2D.Raycast(clickPos, Vector2.zero);
+
                         if (nodeToAdd) {
                             if ((nodeToAdd.Flags & PathNodeFlags.IsDestination) != 0) {
                                 RouteShipUtility.AttemptFinishRoute();
                             } else if (LiveRouteUtility.TryRemoveNode(route, nodeToAdd)) {
                                 // remove feedback
+                            } else if (LiveRouteUtility.TryReconnectRoute(route, nodeToAdd)) {
+                                // reconnect feedback
                             } else {
                                 if (!LiveRouteUtility.TryAddNode(route, nodeToAdd)) {
                                     Pool.TryFree(nodeToAdd);
                                 }
                             }
+                        } else if (hit.collider != null) {
+                                int tempNodeIndex = LiveRouteLineUtility.FindClosestSegment(route.Line, clickPos);
+
+                                if (tempNodeIndex != -1) {
+                                    LiveRouteUtility.SplitRoute(route, tempNodeIndex);
+                                }
                         } else if (!Game.Input.IsPointerOverCanvas()) {
                             RouteShipUtility.AttemptFinishRoute();
                         }
