@@ -32,5 +32,5 @@ Material:
     - _DestBlend: 1
     - _IntensityAlphaThreshold: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 0.34901962}
+    - _Color: {r: 1, g: 1, b: 1, a: 0.6}
   m_BuildTextureStacks: []

@@ -16,13 +16,8 @@ using UnityEngine.UI;
 
 namespace SpaceFab.Research {
 	public sealed class ResearchGoalRow : MonoBehaviour {
-        public TMP_Text Text;
-        public Graphic Checkbox;
+        public ResearchObservationChip Display;
         public Graphic CrossOff;
         public Graphic Flash;
-
-        public CursorHint Hint;
-
-        [NonSerialized] public ResearchMaterialKnowledgePair Goal;
     }
 }

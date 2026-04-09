@@ -195,6 +195,26 @@ namespace FieldDay {
             return totalSize;
         }
 
+        /// <summary>
+        /// Horizontally aligns the given set of RectTransforms.
+        /// </summary>
+        static public void HorizontalAlign(TempReferenceBuffer<RectTransform> buffer, float basePosition) {
+            int len = buffer.Count;
+
+            if (len == 0) {
+                return;
+            }
+
+            RectTransform rect;
+            Vector3 anchorPos;
+            for(int i = 0; i < len; i++) {
+                rect = buffer[i];
+                anchorPos = rect.anchoredPosition3D;
+                anchorPos.x = basePosition;
+                rect.anchoredPosition3D = anchorPos;
+            }
+        }
+
         #endregion // Horizontal Layout
 
         #region Vertical Layout
@@ -268,6 +288,26 @@ namespace FieldDay {
             }
 
             return totalSize;
+        }
+
+        /// <summary>
+        /// Vertically aligns the given set of RectTransforms.
+        /// </summary>
+        static public void VerticalAlign(TempReferenceBuffer<RectTransform> buffer, float basePosition) {
+            int len = buffer.Count;
+
+            if (len == 0) {
+                return;
+            }
+
+            RectTransform rect;
+            Vector3 anchorPos;
+            for (int i = 0; i < len; i++) {
+                rect = buffer[i];
+                anchorPos = rect.anchoredPosition3D;
+                anchorPos.y = basePosition;
+                rect.anchoredPosition3D = anchorPos;
+            }
         }
 
         #endregion // Vertical Layout

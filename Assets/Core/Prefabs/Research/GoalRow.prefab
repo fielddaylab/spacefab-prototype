@@ -85,7 +85,8 @@ GameObject:
   m_Component:
   - component: {fileID: 533296167874678712}
   - component: {fileID: 3611749255345110096}
-  - component: {fileID: 4529832891007190995}
+  - component: {fileID: 1517251041631473398}
+  - component: {fileID: 8015219436152797951}
   m_Layer: 0
   m_Name: GoalRow
   m_TagString: Untagged
@@ -128,12 +129,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66b3345bc11b83a45a7d4e613bc0f365, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Text: {fileID: 0}
-  Checkbox: {fileID: 0}
+  Display: {fileID: 1517251041631473398}
   CrossOff: {fileID: 0}
   Flash: {fileID: 0}
-  Hint: {fileID: 0}
---- !u!114 &4529832891007190995
+--- !u!114 &1517251041631473398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174756967066408728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 715a476f22dd03841a97bc731b6f2363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Id:
+    m_Source: 
+    m_HashValue: 0
+  m_Class:
+    m_Source: 
+    m_HashValue: 0
+  m_Group:
+    m_Source: 
+    m_HashValue: 0
+  Icon: {fileID: 3233710428782509878}
+  Label: {fileID: 7174501933656812388}
+  Background: {fileID: 3312241963256851164}
+--- !u!114 &8015219436152797951
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,9 +170,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 40
+  m_MinHeight: 32
   m_PreferredWidth: -1
-  m_PreferredHeight: 40
+  m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
@@ -361,6 +384,7 @@ MonoBehaviour:
   m_pageToDisplay: 1
   m_maxLineWidth: 0
   m_margin: {x: 28, y: 0, z: 0, w: 0}
+  m_roundUpCalculatedPreferredValues: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

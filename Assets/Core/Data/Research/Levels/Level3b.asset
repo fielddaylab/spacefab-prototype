@@ -10,32 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55426b3fefba51d4a9e042406bdc47d5, type: 3}
-  m_Name: Level3
+  m_Name: Level3b
   m_EditorClassIdentifier: 
   Label: 
-  AvailableTools: 7
-  AvailableProperties: -1
+  AvailableTools: 18
+  AvailableProperties: 1615171918
+  StartingHypothesis: 24
   AvailableMaterials:
+  - m_HashValue: 1571298950
   - m_HashValue: 3821421172
-  - m_HashValue: 3383598718
   - m_HashValue: 1163381446
-  - m_HashValue: 541320182
-  PrePopulate:
-  - MaterialId:
-      m_HashValue: 3821421172
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 3383598718
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 1163381446
-    Knowledge: 3
+  - m_HashValue: 3774176290
+  - m_HashValue: 527899933
+  PrePopulate: []
   Objectives:
-  - MaterialId:
-      m_HashValue: 541320182
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 541320182
-    Knowledge: 8
+  - Chip: 24
+    ContextId:
+      m_HashValue: 0
+  - Chip: 25
+    ContextId:
+      m_HashValue: 0
   NextLevelId:
     m_HashValue: 576425451

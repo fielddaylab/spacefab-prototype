@@ -5,6 +5,7 @@ using BeauUtil.Debugger;
 using BeauUtil.UI;
 using FieldDay;
 using FieldDay.Audio;
+using FieldDay.Collections;
 using FieldDay.Components;
 using FieldDay.HID;
 using FieldDay.Scenes;
@@ -22,75 +23,43 @@ using UnityEngine.UIElements;
 
 namespace SpaceFab.Research {
     [PreloadOrder(102)]
-	public sealed class ResearchGoalDisplay : MonoBehaviour, IScenePreload {
+	public sealed class ResearchGoalDisplay : MonoBehaviour, IScenePreload, ISceneLateInitialize {
         public TMP_Text GoalLabel;
         public ResearchGoalRow[] Rows;
-        public ResearchMaterialKnowledgePair[] Objectives;
+        public ResearchMaterialGoal[] Objectives;
         public GameObject EndLevelButtonGroup;
         public PointerListener BackToLevelSelectButton;
+        public LayoutOptions ContentLayout;
+        public LayoutSizeGroup LayoutSizer;
 
         [NonSerialized] public BitSet32 Completed;
 
-        private void OnLateEnable() {
+        void ISceneLateInitialize.LateInitialize() {
             Assert.True(Objectives.Length <= Rows.Length);
             if (Objectives.Length > 0) {
                 SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnMaterialKnowledgeUpdated); 
             }
+
             int rowCount = 0;
-            using (PooledStringBuilder psb = PooledStringBuilder.Create()) {
-                //foreach (var objective in Objectives) {
-                //    psb.Builder.Clear();
-                //    ResearchGoalRow row = Rows[rowCount++];
-                //    ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(objective.MaterialId);
-                //    psb.Builder.Append("Identify the");
-                //    int bitCount = Bits.Count(objective.Chip);
-                //    int remainingCount = bitCount;
-                //    if ((objective.Chip & ResearchMaterialKnowledge.Electrical) != 0) {
-                //        psb.Builder.Append(" <sprite name=\"ElectricalPropertyIcon\"><b>Electrical</b>,");
-                //        remainingCount--;
-                //    }
-                //    if ((objective.Chip & ResearchMaterialKnowledge.Thermal) != 0) {
-                //        if (bitCount > 1 && remainingCount == 1) {
-                //            if (bitCount == 2) {
-                //                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                //            }
-                //            psb.Builder.Append(" and");
-                //        }
-                //        psb.Builder.Append(" <sprite name=\"ThermalPropertyIcon\"><b>Thermal</b>,");
-                //        remainingCount--;
-                //    }
-                //    if ((objective.Chip & ResearchMaterialKnowledge.Dopant) != 0) {
-                //        if (bitCount > 1 && remainingCount == 1) {
-                //            if (bitCount == 2) {
-                //                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                //            }
-                //            psb.Builder.Append(" and");
-                //        }
-                //        psb.Builder.Append(" <sprite name=\"DopantPropertyIcon\"><b>Dopant</b>,");
-                //        remainingCount--;
-                //    }
-                //    if ((objective.Chip & ResearchMaterialKnowledge.Special) != 0) {
-                //        if (bitCount > 1 && remainingCount == 1) {
-                //            if (bitCount == 2) {
-                //                psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                //            }
-                //            psb.Builder.Append(" and");
-                //        }
-                //        psb.Builder.Append(" <sprite name=\"SpecialPropertyIcon\"><b>Special</b>,");
-                //        remainingCount--;
-                //    }
-                //    psb.Builder.TrimEnd(StringUtils.DefaultCommaChar);
-                //    psb.Builder.Append(" properties of <b>").Append(material.UnknownDisplayName).Append("<b>");
-                //    row.Text.SetText(psb.Builder);
-                //    row.Goal = objective;
-                //    row.Hint.UserData = row;
-                //    row.Hint.onClick.Register(OnGoalHintClicked);
-                //    row.gameObject.SetActive(true);
-                //}
+            using(TempReferenceBuffer<RectTransform> rowLayoutRefs = TempReferenceBuffer<RectTransform>.Create(Rows.Length)) {
+                rowLayoutRefs.Add(GoalLabel.rectTransform);
+                foreach(var objective in Objectives) {
+                    ResearchGoalRow row = Rows[rowCount++];
+                    ResearchMaterialUtility.PopulateObservationChip(row.Display, objective.Chip, objective.ContextId);
+                    row.gameObject.SetActive(true);
+                    rowLayoutRefs.Add((RectTransform) row.transform);
+                }
+
+                float height = Positioning.VerticalLayout(rowLayoutRefs, ContentLayout, 0);
+                LayoutSizer.Root.GetComponent<LayoutSizeInfo>().Size.y = height;
+                LayoutSizer.Sync();
             }
+
             for(int i = rowCount; i < Rows.Length; i++) {
                 Rows[i].gameObject.SetActive(false);
             }
+
+            LayoutSizer.Sync();
 
             if (rowCount == 0) {
                 EndLevelButtonGroup.SetActive(true);
@@ -116,16 +85,16 @@ namespace SpaceFab.Research {
                     continue;
                 }
 
-                if (pair.MaterialId != Objectives[i].MaterialId) {
+                if (pair.MaterialId != Objectives[i].ContextId) {
                     continue;
                 }
 
                 if ((pair.Chip & Objectives[i].Chip) == Objectives[i].Chip) {
                     Completed.Set(i);
 
-                    Rows[i].Checkbox.SetAlpha(0.5f);
-                    Rows[i].CrossOff.enabled = true;
-                    Rows[i].Hint.gameObject.SetActive(false);
+                    //Rows[i].Checkbox.SetAlpha(0.5f);
+                    //Rows[i].CrossOff.enabled = true;
+                    //Rows[i].Hint.gameObject.SetActive(false);
                     FlashAnim.Play(Rows[i].Flash, Color.white, FlashAnim.Default);
                 }
             }
@@ -140,13 +109,12 @@ namespace SpaceFab.Research {
                 Objectives = ResearchGame.CurrentLevel.Objectives;
                 GoalLabel.SetText(ResearchGame.CurrentLevel.Label + " goals");
             }
-            Game.Scenes.QueueOnEnable(this, OnLateEnable);
             return null;
         }
 
         private void OnGoalHintClicked(CursorHint.EventData evtData) {
             ResearchGoalRow row = (ResearchGoalRow)evtData.Source.UserData;
-            SpaceFabGame.Events.Dispatch(ResearchMaterialUtility.Event_GoalHintRequested, EvtArgs.Create(row.Goal));
+            //SpaceFabGame.Events.Dispatch(ResearchMaterialUtility.Event_GoalHintRequested, EvtArgs.Create(row.Goal));
         }
     }
 }

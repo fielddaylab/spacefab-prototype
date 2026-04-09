@@ -10,7 +10,6 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 namespace SpaceFab.Research {
     public sealed class CombinerTool : MonoBehaviour {
@@ -22,7 +21,6 @@ namespace SpaceFab.Research {
         }
 
         public SpriteRenderer[] AtomSlots;
-        public float AtomSizeScale = 100;
 
         [Header("Background")]
         public SpriteRenderer Background;

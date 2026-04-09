@@ -44,6 +44,7 @@ namespace FieldDay.UI {
             get { return m_LastKnownSize; }
         }
 
+        [ContextMenu("Force Sync")]
         public void Sync() {
             Sync(Root, Mode, Padding);
         }

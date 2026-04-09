@@ -34,8 +34,8 @@ namespace SpaceFab.Research {
                 }
             });
 
-            SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated)
-                .Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_GoalHintRequested, OnGoalHintRequested);
+            //SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated)
+            //    .Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_GoalHintRequested, OnGoalHintRequested);
         }
 
         private void OnKnowledgeUpdated(ResearchMaterialKnowledgePair pair) {
@@ -51,13 +51,13 @@ namespace SpaceFab.Research {
             //}
         }
 
-        private void OnGoalHintRequested(ResearchMaterialKnowledgePair pair) {
-            ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
-            ResearchMaterialItem item = ResearchMaterialUtility.FindTrayItemForMaterial(material);
-            if (item != null) {
-                item.FlashRoutine.Replace(item, ItemFlashRoutine(item));
-            }
-        }
+        //private void OnGoalHintRequested(ResearchMaterialKnowledgePair pair) {
+        //    ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
+        //    ResearchMaterialItem item = ResearchMaterialUtility.FindTrayItemForMaterial(material);
+        //    if (item != null) {
+        //        item.FlashRoutine.Replace(item, ItemFlashRoutine(item));
+        //    }
+        //}
 
         static private IEnumerator ItemFlashRoutine(ResearchMaterialItem item) {
             item.Flash.SetAlpha(0);

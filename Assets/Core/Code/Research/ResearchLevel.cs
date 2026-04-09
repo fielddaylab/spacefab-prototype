@@ -12,7 +12,7 @@ namespace SpaceFab.Research {
         public ResearchChipId StartingHypothesis;
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] AvailableMaterials;
         public ResearchMaterialKnowledgePair[] PrePopulate;
-        public ResearchMaterialKnowledgePair[] Objectives;
+        public ResearchMaterialGoal[] Objectives;
 
         [AssetName(typeof(ResearchLevel))] public StringHash32 NextLevelId;
     }
@@ -22,7 +22,13 @@ namespace SpaceFab.Research {
         AdjustableBattery = 0x01,
         Thermal = 0x02,
         Doping = 0x04,
-        Junction = 0x08
+        ThermalHighHeat = 0x10
+    }
+
+    [Serializable]
+    public struct ResearchMaterialGoal {
+        public ResearchChipId Chip;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32 ContextId;
     }
 
     [Serializable]

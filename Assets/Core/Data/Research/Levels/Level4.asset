@@ -13,34 +13,24 @@ MonoBehaviour:
   m_Name: Level4
   m_EditorClassIdentifier: 
   Label: 
-  AvailableTools: 7
-  AvailableProperties: 4294967295
+  AvailableTools: 4294967295
+  AvailableProperties: 16151719181f1f1e20
+  StartingHypothesis: 31
   AvailableMaterials:
+  - m_HashValue: 1571298950
   - m_HashValue: 3821421172
-  - m_HashValue: 3383598718
   - m_HashValue: 1163381446
-  - m_HashValue: 541320182
   - m_HashValue: 3774176290
-  - m_HashValue: 3317014541
-  PrePopulate:
-  - MaterialId:
-      m_HashValue: 3821421172
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 3383598718
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 1163381446
-    Knowledge: 3
-  - MaterialId:
-      m_HashValue: 541320182
-    Knowledge: 15
+  - m_HashValue: 527899933
+  - m_HashValue: 296790427
+  - m_HashValue: 2929137943
+  PrePopulate: []
   Objectives:
-  - MaterialId:
-      m_HashValue: 3774176290
-    Knowledge: 5
-  - MaterialId:
-      m_HashValue: 3317014541
-    Knowledge: 8
+  - Chip: 31
+    ContextId:
+      m_HashValue: 0
+  - Chip: 32
+    ContextId:
+      m_HashValue: 0
   NextLevelId:
-    m_HashValue: 0
+    m_HashValue: 559647832

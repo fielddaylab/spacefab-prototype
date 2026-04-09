@@ -3,6 +3,7 @@ using BeauUtil;
 using FieldDay;
 using FieldDay.Audio;
 using FieldDay.Components;
+using FieldDay.Scenes;
 using FieldDay.UI;
 using System;
 using System.Collections;
@@ -10,7 +11,7 @@ using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.Research {
-    public sealed class ThermalTool : MonoBehaviour {
+    public sealed class ThermalTool : MonoBehaviour, ISceneLateInitialize {
         [Range(-1, 1)] public float InputVoltage;
         [Range(0, 1)] public float Temperature;
 
@@ -23,6 +24,7 @@ namespace SpaceFab.Research {
 
         [NonSerialized] private ResearchTool m_Tool;
         [NonSerialized] public int TemperatureIndex;
+        [NonSerialized] public int MaxTemperature;
 
         private void Awake() {
             this.CacheComponent(ref m_Tool);
@@ -31,6 +33,8 @@ namespace SpaceFab.Research {
             CoilRenderer.color = Colors[0];
             TemperatureLabel.SetText(Labels[0]);
             TemperatureIndex = 0;
+
+            MaxTemperature = Labels.Length;
 
             IncreaseButton.Cursor.onClick.Register(OnClickIncrease);
             DecreaseButton.Cursor.onClick.Register(OnClickDecrease);
@@ -56,7 +60,7 @@ namespace SpaceFab.Research {
 
             Sfx.Play("Research.Tool.Button");
             GuiCommands.SetActive(DecreaseButton.gameObject, true);
-            GuiCommands.SetActive(IncreaseButton.gameObject, TemperatureIndex < 5);
+            GuiCommands.SetActive(IncreaseButton.gameObject, TemperatureIndex < MaxTemperature - 1);
 
             Temperature = TemperatureIndex / 5f;
             OnSlotFillUpdated();
@@ -92,6 +96,14 @@ namespace SpaceFab.Research {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
                 ResearchToolUtility.SetHighMobilityStrength(null, 0);
+            }
+        }
+
+        void ISceneLateInitialize.LateInitialize() {
+            if (ResearchGame.CurrentLevel != null) {
+                if ((ResearchGame.CurrentLevel.AvailableTools & ResearchToolsMask.ThermalHighHeat) == 0) {
+                    MaxTemperature = Labels.Length - 2;
+                }
             }
         }
     }

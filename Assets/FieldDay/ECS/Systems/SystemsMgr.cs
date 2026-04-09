@@ -69,8 +69,9 @@ namespace FieldDay.Systems {
         #endregion // Types
 
         internal SystemsMgr() {
-            m_Updates = new PhaseBuckets<OrderedSystemReference>(16);
+            m_Updates = new PhaseBuckets<OrderedSystemReference>(4);
             m_Updates.SetDefaultCapacity(GameLoopPhase.DebugUpdate, 4);
+            m_Updates.SetDefaultCapacity(GameLoopPhase.PreUpdate, 16);
             m_Updates.SetDefaultCapacity(GameLoopPhase.FixedUpdate, 16);
             m_Updates.SetDefaultCapacity(GameLoopPhase.Update, 32);
             m_Updates.SetDefaultCapacity(GameLoopPhase.LateUpdate, 32);
@@ -175,7 +176,7 @@ namespace FieldDay.Systems {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        //[IntrinsicIL("ldnull; ldarg.0; newobj FieldDay.Systems.SystemFunction::.ctor(object, intptr); ret")]
+        [IntrinsicIL("ldnull; ldarg.0; newobj FieldDay.Systems.SystemFunction::.ctor(object, intptr); ret")]
         static private unsafe SystemFunction CreateDelegateFromPointer(delegate*<float, void> delegatePtr) {
             return (SystemFunction)Activator.CreateInstance(typeof(SystemFunction), null, (IntPtr) delegatePtr);
         }
@@ -447,7 +448,7 @@ namespace FieldDay.Systems {
                             }
                             psb.Builder.Append('\n');
                             ref InternalSystemDefinition sys = ref s_SystemDefinitions[sysRef.Id.Index];
-                            if (((categoryMask & sys.CategoryMask) != 0) & ((currentSystemMask & sys.PackedPhaseMask) == 0)) {
+                            if (((categoryMask & sys.CategoryMask) != 0) & ((currentSystemMask & sys.PackedSystemMask) == 0)) {
                                 psb.Builder.Append("[X] ");
                             } else {
                                 psb.Builder.Append("[ ] ");
