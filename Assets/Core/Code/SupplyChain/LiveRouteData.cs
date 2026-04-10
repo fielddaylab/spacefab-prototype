@@ -306,9 +306,13 @@ namespace SpaceFab.SupplyChain {
                 }
                 isReconnected = true;
             }
+            ClearTempNodes(route);
+            return isReconnected;
+        }
+
+        static public void ClearTempNodes(LiveRouteData route) {
             LiveRouteLineUtility.ClearSolids(route.TempLine);
             route.TempNodes = null;
-            return isReconnected;
         }
         #endregion // Temp
 

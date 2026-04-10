@@ -106,10 +106,12 @@ namespace SpaceFab.SupplyChain {
             line.Drawing.enabled = true;
             line.Drawing.SetPosition(0, line.Solid.GetPosition(line.Solid.positionCount - 1));
             line.Drawing.SetPosition(1, position);
+            line.Collider.enabled = true;
         }
 
         static public void HideDottedLine(RouteLineRenderer line) {
             line.Drawing.enabled = false;
+            line.Collider.enabled = false;
         }
 
         #endregion // Dotted Line

@@ -96,6 +96,7 @@ namespace SpaceFab.SupplyChain {
             Assert.NotNull(route);
 
             LiveRouteLineUtility.HideDottedLine(route.Line);
+            LiveRouteUtility.ClearTempNodes(route);
 
             bool hasNonTempNode = false;
             for(int i = 1; i < route.NodeCount; i++) {
@@ -138,6 +139,7 @@ namespace SpaceFab.SupplyChain {
             Assert.NotNull(route);
 
             LiveRouteLineUtility.HideDottedLine(route.Line);
+            LiveRouteUtility.ClearTempNodes(route);
 
             bool hasNonTempNode = false;
             for (int i = 1; i < route.NodeCount; i++) {
