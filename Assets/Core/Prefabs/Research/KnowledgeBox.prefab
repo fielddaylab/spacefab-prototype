@@ -334,7 +334,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 20.25
+    width: 20.875
     height: 10.125
   m_UnitsPerTile: {x: 16, y: 16}
   m_Offset: {x: 0, y: 0}
@@ -969,6 +969,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6806877789006650595}
     m_Modifications:
+    - target: {fileID: 919888581969013093, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 5054122581364904652, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
       propertyPath: m_text
       value: Conductor
@@ -976,6 +980,10 @@ PrefabInstance:
     - target: {fileID: 8359057068793511471, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
       propertyPath: m_Name
       value: HypothesisChip
+      objectReference: {fileID: 0}
+    - target: {fileID: 8637977799194614953, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 225
       objectReference: {fileID: 0}
     - target: {fileID: 8956996191565869632, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
       propertyPath: m_Pivot.y
@@ -1210,7 +1218,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7714019840229019447, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 680
+      value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 7714019840229019447, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1266,7 +1274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_UVRect.width
-      value: 42.5
+      value: 43.75
       objectReference: {fileID: 0}
     - target: {fileID: 8391598166970369242, guid: daf67091c60971c4d86bb19706dbd58e, type: 3}
       propertyPath: m_UVRect.height

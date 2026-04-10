@@ -80,7 +80,7 @@ namespace SpaceFab.Research {
             bool validMaterial = hasMaterial;
             if (validMaterial) {
                 ResearchMaterial material = item.Material;
-                validMaterial = ResearchMaterialUtility.GetKnownProperties(material.AssetId).HasCategory(ResearchChipCategory.PropertyElectric);
+                //validMaterial = ResearchMaterialUtility.GetKnownProperties(material.AssetId).HasCategory(ResearchChipCategory.PropertyElectric);
             }
 
             if (!validMaterial) {
@@ -98,7 +98,6 @@ namespace SpaceFab.Research {
             }
 
             Assert.True(item.Material.Atoms.Length <= 2);
-
             ResearchMaterialUtility.UpdateContextMaterial(item.Material);
 
             if (item.Material.Atoms.Length > 1) {

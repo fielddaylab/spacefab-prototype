@@ -596,6 +596,10 @@ PrefabInstance:
       value: Conductor
       objectReference: {fileID: 0}
     - target: {fileID: 3340728278362051831, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: m_fontStyle
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3340728278362051831, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}

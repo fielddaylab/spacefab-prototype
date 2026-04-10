@@ -36,6 +36,7 @@ namespace SpaceFab.Research {
                 }
             }
 
+            chip.Label.fontStyle = style.TextStyle;
             chip.Background.sprite = style.Background;
             chip.Icon.sprite = style.Icon;
         }

@@ -1,6 +1,7 @@
 using FieldDay;
 using FieldDay.Assets;
 using System;
+using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.Research {
@@ -10,5 +11,6 @@ namespace SpaceFab.Research {
         public Sprite Background;
         public ColorPalette2 Colors;
         public bool IsTall;
+        public FontStyles TextStyle;
     }
 }
