@@ -61,13 +61,15 @@ namespace SpaceFab.Research {
                 return;
             }
 
-            ApplyContextualTextToObservationChip(hypothesis.CacheComponent(ref hypothesis.Base), hypothesis.CurrentChip, materialContext);
+            if (ResearchChipUtility.RequiresContext(hypothesis.CurrentChip)) {
+                ApplyContextualTextToObservationChip(hypothesis.CacheComponent(ref hypothesis.Base), hypothesis.CurrentChip, materialContext);
+            }
 
             ResearchChipMetadata meta = ResearchChipUtility.Metadata(hypothesis.CurrentChip);
-            if (meta.DependencyA != ResearchChipId.None && ResearchChipUtility.CategoryRequiresContext(ResearchChipUtility.Category(meta.DependencyA))) {
+            if (meta.DependencyA != ResearchChipId.None && ResearchChipUtility.RequiresContext(meta.DependencyA)) {
                 ApplyContextualTextToObservationChip(hypothesis.Dependencies[0], meta.DependencyA, materialContext);
             }
-            if (meta.DependencyB != ResearchChipId.None && ResearchChipUtility.CategoryRequiresContext(ResearchChipUtility.Category(meta.DependencyB))) {
+            if (meta.DependencyB != ResearchChipId.None && ResearchChipUtility.RequiresContext(meta.DependencyB)) {
                 ApplyContextualTextToObservationChip(hypothesis.Dependencies[1], meta.DependencyB, materialContext);
             }
         }

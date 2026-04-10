@@ -19,7 +19,6 @@ namespace SpaceFab.Research {
 
         [NonSerialized] public bool AllSlotsFilled;
         [NonSerialized] public DopantType DopingState;
-        [NonSerialized] public StringHash32 ContextId;
 
         public CastableEvent<ResearchTool> OnActivate = new CastableEvent<ResearchTool>();
         public CastableEvent<ResearchTool> OnDeactivate = new CastableEvent<ResearchTool>();

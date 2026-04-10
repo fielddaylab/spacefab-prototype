@@ -2,6 +2,7 @@ using BeauUtil;
 using BeauUtil.Debugger;
 using BeauUtil.UI;
 using FieldDay;
+using FieldDay.Assets;
 using FieldDay.Collections;
 using FieldDay.Scenes;
 using FieldDay.UI;
@@ -33,6 +34,11 @@ namespace SpaceFab.Research {
             PrevButton.onClick.AddListener(() => {
                 PropertyIndex = (PropertyIndex + AvailableProperties.Length - 1) % AvailableProperties.Length;
                 ResearchMaterialUtility.PopulateHypothesisChip(Chip, AvailableProperties[PropertyIndex], ContextId);
+            });
+
+            Find.State<ResearchSelectionState>().OnUpdatedContext.Register((m) => {
+                ContextId = m ? m.AssetId : null;
+                ResearchMaterialUtility.UpdateHypothesisContext(Chip, ContextId);
             });
 
             ResearchMaterialUtility.PopulateHypothesisChip(Chip, AvailableProperties[PropertyIndex], null);

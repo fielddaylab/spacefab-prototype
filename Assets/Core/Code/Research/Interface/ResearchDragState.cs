@@ -17,6 +17,7 @@ namespace SpaceFab.Research {
 		
 		[NonSerialized] public ResearchMaterial CurrentlyDragging;
 		[NonSerialized] public ResearchSlot SlotHoveredOver;
+		[NonSerialized] public ResearchMaterial CurrentContext;
 
         private void Awake() {
 			DragRenderer.gameObject.SetActive(false);

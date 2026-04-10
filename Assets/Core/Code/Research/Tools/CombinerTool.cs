@@ -91,12 +91,15 @@ namespace SpaceFab.Research {
                 LeftSelector.Cursor.gameObject.SetActive(false);
                 RightSelector.Cursor.gameObject.SetActive(false);
                 ClearAtomicView();
+                ResearchMaterialUtility.UpdateContextMaterial(null);
                 Background.color = BackgroundDisabledColor;
                 m_DopingIndex = 0;
                 return;
             }
 
             Assert.True(item.Material.Atoms.Length <= 2);
+
+            ResearchMaterialUtility.UpdateContextMaterial(item.Material);
 
             if (item.Material.Atoms.Length > 1) {
                 ResearchSprites sprites = Find.GlobalAsset<ResearchSprites>();

@@ -9,12 +9,12 @@ namespace FieldDay.Scenes {
     /// Contains an array of scene preload callbacks.
     /// </summary>
     [Serializable]
-    public class PreloadManifest {
+    internal class PreloadManifest {
         [Serializable]
         internal struct BucketInfo {
             public int Order;
-            public int LoaderOffset;
-            public int LoaderCount;
+            public ushort LoaderOffset;
+            public ushort LoaderCount;
         }
 
         [SerializeField] internal Component[] Loaders;
@@ -82,8 +82,8 @@ namespace FieldDay.Scenes {
                         if (count > 0) {
                             buckets.Add(new BucketInfo() {
                                 Order = bucketOrder,
-                                LoaderOffset = bucketStart,
-                                LoaderCount = count
+                                LoaderOffset = (ushort) bucketStart,
+                                LoaderCount = (ushort) count
                             });
                         }
                         bucketStart = loaderPtr;
@@ -94,8 +94,8 @@ namespace FieldDay.Scenes {
 
                 buckets.Add(new BucketInfo() {
                     Order = bucketOrder,
-                    LoaderOffset = bucketStart,
-                    LoaderCount = loaderPtr - bucketStart
+                    LoaderOffset = (ushort) bucketStart,
+                    LoaderCount = (ushort) (loaderPtr - bucketStart)
                 });
 
                 manifest.Buckets = buckets.ToArray();

@@ -408,6 +408,13 @@ namespace SpaceFab.Research {
             (1 << (int) ResearchChipCategory.PropertySpecial)
         );
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public ResearchChipId Unalias(ResearchChipId chip) {
+            ResearchChipId alias = MetadataTable[(int)chip].AliasFor;
+            return alias != ResearchChipId.None ? alias : chip;
+        }
+
         #region Metadata
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -426,6 +433,12 @@ namespace SpaceFab.Research {
         [Il2CppSetOption(Option.NullChecks, false)]
         static public bool IsProperty(ResearchChipId chip) {
             return MetadataTable[(int) chip].Category >= ResearchChipCategory.PropertyElectricNaive;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [Il2CppSetOption(Option.NullChecks, false)]
+        static public bool RequiresContext(ResearchChipId chip) {
+            return CategoryRequiresContextTable.IsSet((int) MetadataTable[(int)chip].Category);
         }
 
         #endregion // Metadata

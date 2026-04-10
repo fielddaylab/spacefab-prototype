@@ -83,7 +83,7 @@ namespace SpaceFab.Research {
         public unsafe int RemoveChipsWithContext(ResearchChipId* removedList) {
             int removed = 0;
             for(int i = Count; i-- > 0;) {
-                if (ResearchChipUtility.CategoryRequiresContext(ResearchChipUtility.Category((ResearchChipId)m_Buffer[i]))) {
+                if (ResearchChipUtility.RequiresContext((ResearchChipId)m_Buffer[i])) {
                     *removedList++ = (ResearchChipId)m_Buffer[i];
                     for(int j = i + 1; j < Count; j++) {
                         m_Buffer[j - 1] = m_Buffer[j];

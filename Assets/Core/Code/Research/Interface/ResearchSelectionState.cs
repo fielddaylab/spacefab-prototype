@@ -11,8 +11,10 @@ namespace SpaceFab.Research {
 	public sealed class ResearchSelectionState : SharedStateComponent {
 		[NonSerialized] public ResearchMaterial Current;
 		[NonSerialized] public bool Locked;
+		[NonSerialized] public ResearchMaterial Context;
 
 		public CastableEvent<ResearchMaterial> OnUpdated = new CastableEvent<ResearchMaterial>();
+        public CastableEvent<ResearchMaterial> OnUpdatedContext = new CastableEvent<ResearchMaterial>();
     }
 
 	static public partial class ResearchMaterialUtility {
@@ -22,16 +24,18 @@ namespace SpaceFab.Research {
 				return;
 			}
 
-			ResearchInventory inv = Find.State<ResearchInventory>();
-
 			state.Current = material;
-			if (inv.KnownMaterials.Add(material.AssetId)) {
-				ResearchMaterialItem spawned = ResearchMaterialUtility.SpawnNewTrayItem(material);
-				ResearchMaterialUtility.ArrangeTrayItems();
-                VfxUtility.PlayFromPool(Find.State<ResearchPools>().ShineEffectPool, spawned.transform);
-            }
-
 			state.OnUpdated.Invoke(material);
 		}
+
+        static public void UpdateContextMaterial(ResearchMaterial material) {
+            var state = Find.State<ResearchSelectionState>();
+            if (state.Locked || state.Context == material) {
+                return;
+            }
+
+            state.Context = material;
+            state.OnUpdatedContext.Invoke(material);
+        }
     }
 }
