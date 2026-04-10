@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 namespace SpaceFab.Research {
     public sealed class ResearchInventory : SharedStateComponent {
-        public HashSet<StringHash32> KnownMaterials = SetUtils.Create<StringHash32>(16);
         public Dictionary<StringHash32, ResearchMaterialKnowledge> MaterialKnowledge = MapUtils.Create<StringHash32, ResearchMaterialKnowledge>(16);
         public Dictionary<StringHash32, ResearchObservationList> MaterialGuesses = MapUtils.Create<StringHash32, ResearchObservationList>(16);
     }
@@ -25,10 +24,6 @@ namespace SpaceFab.Research {
                 Assert.True(index >= 0 && index < Count);
                 return (ResearchChipId) m_Buffer[index];
             }
-            set {
-                Assert.True(index >= 0 && index < Count);
-                m_Buffer[index] = (byte) value;
-            }
         }
 
         public unsafe bool Has(ResearchChipId chipId) {
@@ -42,6 +37,8 @@ namespace SpaceFab.Research {
         }
 
         public unsafe bool TryAdd(ResearchChipId chipId, out ResearchChipId replaced) {
+            Assert.True(!ResearchChipUtility.IsProperty(chipId), "Chip {0} is not observation", chipId);
+
             for (int i = Count; i-- > 0;) {
                 if (m_Buffer[i] == (byte) chipId) {
                     replaced = default;
@@ -60,7 +57,7 @@ namespace SpaceFab.Research {
                 }
             }
 
-            Assert.False(Count < MaxObservations, "Observation list has run out of room");
+            Assert.True(Count < MaxObservations, "Observation list has run out of room");
             m_Buffer[Count++] = (byte) chipId;
             replaced = ResearchChipId.None;
             return true;
@@ -159,7 +156,7 @@ namespace SpaceFab.Research {
                 }
             }
 
-            Assert.False(Count < MaxProperties, "Property list has run out of room");
+            Assert.True(Count < MaxProperties, "Property list has run out of room");
             m_IdBuffer[Count] = (byte)chipId;
             m_ContextBuffer[Count++] = context.HashValue;
             return true;

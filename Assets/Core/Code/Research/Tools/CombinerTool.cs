@@ -42,6 +42,10 @@ namespace SpaceFab.Research {
         public Color32 CorrectPTypeValencePipColor;
         public TMP_Text FeedbackText;
 
+        [Header("Voltage")]
+        [Range(0, 1)] public float Temperature;
+        public VoltageControl Voltage;
+
         [NonSerialized] private ResearchTool m_Tool;
         [NonSerialized] private int m_DopingIndex;
 
@@ -53,6 +57,8 @@ namespace SpaceFab.Research {
 
             LeftSelector.Cursor.onClick.Register(OnLeftAtomClicked);
             RightSelector.Cursor.onClick.Register(OnRightAtomClicked);
+
+            Voltage.OnVoltageModified.Register(UpdateVoltage);
         }
 
         private void OnLeftAtomClicked() {
@@ -80,7 +86,7 @@ namespace SpaceFab.Research {
             bool validMaterial = hasMaterial;
             if (validMaterial) {
                 ResearchMaterial material = item.Material;
-                //validMaterial = ResearchMaterialUtility.GetKnownProperties(material.AssetId).HasCategory(ResearchChipCategory.PropertyElectric);
+                validMaterial = ResearchMaterialUtility.GetKnownProperties(material.AssetId).HasCategory(ResearchChipCategory.PropertyElectric);
             }
 
             if (!validMaterial) {
@@ -94,6 +100,7 @@ namespace SpaceFab.Research {
                 ResearchMaterialUtility.UpdateContextMaterial(null);
                 Background.color = BackgroundDisabledColor;
                 m_DopingIndex = 0;
+                m_Tool.DopingState = DopantType.None;
                 return;
             }
 
@@ -124,6 +131,7 @@ namespace SpaceFab.Research {
             GuiCommands.SetActive(SemiconductorWarning, false);
             Background.color = Color.white;
             m_DopingIndex = 0;
+            m_Tool.DopingState = DopantType.None;
             SetSelectedAtomVisuals(0);
             DisplayAtomicView(item.Material.Atoms, m_DopingIndex);
             UpdateValencePips(item.Material.Atoms[m_DopingIndex].ValenceElectrons, 0);
@@ -135,9 +143,12 @@ namespace SpaceFab.Research {
             }
 
             if (item == null) {
+                m_Tool.DopingState = DopantType.None;
                 UpdateValencePips(m_Tool.Slots[0].Item.Material.Atoms[m_DopingIndex].ValenceElectrons, 0);
                 return;
             }
+
+            m_Tool.DopingState = DopantType.None;
 
             ResearchMaterial targetMaterial = m_Tool.Slots[0].Item.Material;
             AtomicStructure targetAtom = targetMaterial.Atoms[m_DopingIndex];
@@ -147,8 +158,10 @@ namespace SpaceFab.Research {
 
             if (targetMaterial.DopantN == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons + 1) {
                 ShowFeedback("N-Type Dopant", CorrectNTypeValencePipColor);
+                m_Tool.DopingState = DopantType.N;
             } else if (targetMaterial.DopantP == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons - 1) {
                 ShowFeedback("P-Type Dopant", CorrectPTypeValencePipColor);
+                m_Tool.DopingState = DopantType.P;
             } else if (dopant.Atoms.Length > 1) {
                 ShowFeedback("Polyelemental", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.TooBig);
@@ -166,6 +179,7 @@ namespace SpaceFab.Research {
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.InvalidCombo);
             }
 
+            UpdateVoltage();
             UpdateValencePips(targetAtom.ValenceElectrons, dopantAtom.ValenceElectrons);
         }
 
@@ -181,6 +195,33 @@ namespace SpaceFab.Research {
             FeedbackText.enabled = false;
         }
 
+        private void UpdateVoltage() {
+            if (!m_Tool.AllSlotsFilled || m_Tool.DopingState != DopantType.None) {
+                ClearVoltage();
+                return;
+            }
+
+            var input = m_Tool.Slots[0].Item.Material;
+            float current = ResearchMaterialUtility.GetCurrent(input, Voltage.InputVoltage, Temperature, m_Tool.DopingState);
+
+            //if (m_Tool.DopingState == DopantType.N && current > 0) {
+
+            //}
+
+            CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
+            CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
+
+            ResearchToolUtility.SetLightEmissionStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.LightEmitting) != 0 ? current : 0);
+            ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.HighMobility) != 0 ? current : 0);
+        }
+
+        private void ClearVoltage() {
+            CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
+            CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
+            ResearchToolUtility.SetLightEmissionStrength(null, 0);
+            ResearchToolUtility.SetHighMobilityStrength(null, 0);
+        }
+        
         private void ShowFeedback(string text, Color color) {
             FeedbackText.enabled = true;
             FeedbackText.SetText(text);

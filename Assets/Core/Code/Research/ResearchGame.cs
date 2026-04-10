@@ -40,11 +40,9 @@ namespace SpaceFab.Research {
                 StartingHypothesis = CurrentLevel.StartingHypothesis;
 
                 foreach(var prepopulate in CurrentLevel.PrePopulate) {
-                    //ResearchMaterialKnowledge knowledge = prepopulate.Chip;
-                    //if ((knowledge & ResearchMaterialKnowledge.AllBasic) == ResearchMaterialKnowledge.AllBasic) {
-                    //    knowledge |= ResearchMaterialKnowledge.Name;
-                    //}
-                    //inventory.MaterialKnowledge.Add(prepopulate.MaterialId, knowledge);
+                    inventory.MaterialKnowledge.TryGetValue(prepopulate.MaterialId, out ResearchMaterialKnowledge knowledge);
+                    knowledge.TryAdd(prepopulate.Chip, prepopulate.ContextId);
+                    inventory.MaterialKnowledge[prepopulate.MaterialId] = knowledge;
                 }
             }
 
@@ -54,7 +52,6 @@ namespace SpaceFab.Research {
             
             foreach(var material in Materials) {
                 ResearchMaterialUtility.SpawnNewTrayItem(Find.NamedAsset<ResearchMaterial>(material));
-                inventory.KnownMaterials.Add(material);
             }
             ResearchMaterialUtility.ArrangeTrayItems();
             yield return null;

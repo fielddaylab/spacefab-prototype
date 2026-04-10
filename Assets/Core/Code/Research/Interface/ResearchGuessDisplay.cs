@@ -1,5 +1,6 @@
 using BeauUtil;
 using FieldDay;
+using FieldDay.HID;
 using FieldDay.Scenes;
 using FieldDay.UI;
 using System;
@@ -9,25 +10,21 @@ using UnityEngine;
 
 namespace SpaceFab.Research {
     [PreloadOrder(150)]
-    public sealed class ResearchGuessDisplay : MonoBehaviour, IScenePreload {
-        public ResearchGuessGroup ElectricalGroup;
-        public ResearchGuessGroup ThermalGroup;
-        public ResearchGuessGroup DopantGroup;
-        public ResearchGuessGroup SpecialGroup;
-        public CursorHint CloseButton;
-
-        [NonSerialized] public StringHash32 MaterialId;
+    public sealed class ResearchGuessDisplay : MonoBehaviour, IScenePreload, IOnGuiUpdate {
+        public ResearchObservationChip[] GuessButtons;
+        public LayoutOptions VerticalLayout;
+        public LayoutSizeInfo VerticalGroup;
+        public LayoutSizeGroup BoxSizer;
 
         public ActionEvent OnClose = new ActionEvent();
 
-        private void Awake() {
-            CloseButton.onClick.Register(() => {
-                OnClose.Invoke();
-                gameObject.SetActive(false);
-            });
+        private void Close() {
+            OnClose.Invoke();
+            GuiCommands.SetActive(this, false);
         }
 
         private void OnEnable() {
+            Game.Gui.RegisterUpdate(this);
             Find.State<ResearchSelectionState>().Locked = true;
         }
 
@@ -36,16 +33,22 @@ namespace SpaceFab.Research {
                 return;
             }
 
+            Game.Gui.DeregisterUpdate(this);
             Find.State<ResearchSelectionState>().Locked = false;
-            ElectricalGroup.gameObject.SetActive(false);
-            ThermalGroup.gameObject.SetActive(false);
-            SpecialGroup.gameObject.SetActive(false);
-            DopantGroup.gameObject.SetActive(false);
-            MaterialId = default;
         }
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
             return null;
+        }
+
+        void IOnGuiUpdate.OnGuiUpdate() {
+            if (Game.Input.IsMousePressed(MouseButton.Right)) {
+                Close();
+            } else if (Game.Input.IsMousePressed(MouseButton.Left)) {
+                if (!Game.Input.IsPointerOverHierarchy(transform)) {
+                    Close();
+                }
+            }
         }
     }
 }

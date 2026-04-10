@@ -39,6 +39,7 @@ namespace SpaceFab.Research {
             foreach (var slot in tool.Slots) {
                 ResearchSlotUtility.FillInSlot(slot, null);
             }
+            tool.DopingState = 0;
             tool.OnReset.Invoke(tool);
         }
 

@@ -29,13 +29,13 @@ namespace SpaceFab.Research {
         [NonSerialized] public StringHash32 RootId;
 
         private void Awake() {
-            //DisplayNull();
+            DisplayNull();
 
-            //Find.State<ResearchSelectionState>().OnUpdated.Register(DisplayCurrent);
-            //Guesser.OnClose.Register(() => {
-            //    //RowHighlight.gameObject.SetActive(false);
-            //    DisplayCurrent(Find.State<ResearchSelectionState>().Current);
-            //});
+            Find.State<ResearchSelectionState>().OnUpdated.Register(DisplayCurrent);
+            Guesser.OnClose.Register(() => {
+                //RowHighlight.gameObject.SetActive(false);
+                DisplayCurrent(Find.State<ResearchSelectionState>().Current);
+            });
 
             //SubmitButton.onClick.Register(() => Routine.Start(this, OnClickSubmit()).TryManuallyUpdate(0));
             //SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated);
@@ -75,6 +75,8 @@ namespace SpaceFab.Research {
                 DisplayNull();
                 return;
             }
+
+            MaterialTitle.SetText(material.UnknownDisplayName);
         }
 
         IEnumerator<WorkSlicer.Result?> IScenePreload.Preload() {
