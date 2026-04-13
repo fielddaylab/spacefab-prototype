@@ -35,6 +35,7 @@ namespace FieldDay.UI {
 
         [NonSerialized] private Vector2 m_LastKnownSize;
         [NonSerialized] private Vector2 m_LastPaddedSize;
+        [NonSerialized] private bool m_SyncQueued;
 
         /// <summary>
         /// Returns the last known size.
@@ -46,6 +47,11 @@ namespace FieldDay.UI {
 
         [ContextMenu("Force Sync")]
         public void Sync() {
+            if ((Mode == SyncMode.PreferredSize || Mode == SyncMode.PreferredSizeUpdateRoot) && isActiveAndEnabled) {
+                m_SyncQueued = true;
+                return;
+            }
+
             Sync(Root, Mode, Padding);
         }
 
@@ -79,42 +85,49 @@ namespace FieldDay.UI {
                 }
             }
 
-            SetSize(new Vector2(width, height));
+            SetSize(width, height);
         }
 
-        public void SetSize(Vector2 size) {
-            size.x = (int) (Math.Max(size.x, MinSize.x) + 0.999f);
-            size.y = (int) (Math.Max(size.y, MinSize.y) + 0.999f);
+        public void SetSize(float width, float height) {
+            width = (int)(Math.Max(width, MinSize.x) + 0.999f);
+            height = (int)(Math.Max(height, MinSize.y) + 0.999f);
 
-            if (m_LastKnownSize != size) {
-                m_LastKnownSize = size;
+            if (m_LastKnownSize.x != width || m_LastKnownSize.y != height) {
+                m_LastKnownSize.Set(width, height);
 
                 bool horizontal = (SyncDimensions & Dimensions.Horizontal) != 0;
                 bool vertical = (SyncDimensions & Dimensions.Vertical) != 0;
 
                 if (Root && Mode == SyncMode.PreferredSizeUpdateRoot) {
                     if ((UpdateRootDimensions & Dimensions.Horizontal) != 0) {
-                        Root.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+                        Root.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
                     }
                     if ((UpdateRootDimensions & Dimensions.Vertical) != 0) {
-                        Root.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+                        Root.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
                     }
                 }
 
-                size.x = (int) (size.x + Padding.x + 0.999f);
-                size.y = (int) (size.y + Padding.y + 0.999f);
-                m_LastPaddedSize = size;
+                width = (int)(width + Padding.x + 0.999f);
+                height = (int)(height + Padding.y + 0.999f);
+                m_LastPaddedSize.Set(width, height);
 
                 foreach (var child in Children) {
                     Assert.NotNullOrDestroyed(child, "LayoutSizeGroup sync child is null or destroyed!");
-                    
+
                     if (horizontal) {
-                        child.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, size.x);
+                        child.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
                     }
                     if (vertical) {
-                        child.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, size.y);
+                        child.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
                     }
                 }
+            }
+        }
+
+        private void OnEnable() {
+            if (m_SyncQueued) {
+                m_SyncQueued = false;
+                Sync();
             }
         }
 

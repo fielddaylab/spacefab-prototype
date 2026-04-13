@@ -21,6 +21,8 @@ namespace SpaceFab.Research {
         [NonSerialized] public ResearchTool CurrentTool;
         [NonSerialized] public ResearchToolsMask CurrentUnlocks;
 
+        public CastableEvent<ResearchTool> OnCurrentToolUpdated = new CastableEvent<ResearchTool>();
+        public CastableEvent<ResearchTool> OnCurrentToolChangedState = new CastableEvent<ResearchTool>();
         public CastableEvent<ResearchToolsMask> OnUnlockedToolsChanged = new CastableEvent<ResearchToolsMask>(8);
 
         private void Awake() {
@@ -64,6 +66,14 @@ namespace SpaceFab.Research {
                 toolState.CurrentStation = station;
                 toolState.CurrentTool = station.Tool;
                 EnableStationTransitionZones(station.StationIndex);
+                toolState.OnCurrentToolUpdated.Invoke(toolState.CurrentTool);
+            }
+        }
+
+        static public void PingToolChangedState() {
+            ResearchToolState toolState = Find.State<ResearchToolState>();
+            if (toolState.CurrentTool) {
+                toolState.OnCurrentToolChangedState.Invoke(toolState.CurrentTool);
             }
         }
     }

@@ -86,7 +86,7 @@ namespace SpaceFab.Research {
             bool validMaterial = hasMaterial;
             if (validMaterial) {
                 ResearchMaterial material = item.Material;
-                validMaterial = ResearchMaterialUtility.GetKnownProperties(material.AssetId).HasCategory(ResearchChipCategory.PropertyElectric);
+                validMaterial = ResearchMaterialUtility.GetKnownProperties(material.AssetId).Has(ResearchChipId.Semiconductor);
             }
 
             if (!validMaterial) {

@@ -60,6 +60,7 @@ namespace SpaceFab.Research {
         }
 
         protected override void OnSceneReady() {
+            ResearchMaterialUtility.UpdateSelectedMaterial(Find.NamedAsset<ResearchMaterial>(Materials[0]));
             ScriptUtility.Trigger("SceneReady");
         }
 

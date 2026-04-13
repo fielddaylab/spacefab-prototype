@@ -22,7 +22,8 @@ namespace SpaceFab.Research {
         AdjustableBattery = 0x01,
         Thermal = 0x02,
         Doping = 0x04,
-        ThermalHighHeat = 0x10
+        ThermalHighHeat = 0x10,
+        SpecialProperties = 0x20,
     }
 
     [Serializable]
