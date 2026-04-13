@@ -25,7 +25,7 @@ namespace SpaceFab.Research {
         [Header("Background")]
         public SpriteRenderer Background;
         public Color32 BackgroundDisabledColor = Color.white;
-        public GameObject SemiconductorWarning;
+        public GameObject SemiconductorHint, SemiconductorWarning;
 
         [Header("Selection")]
         public AtomSelector LeftSelector;
@@ -46,6 +46,12 @@ namespace SpaceFab.Research {
         [Range(0, 1)] public float Temperature;
         public VoltageControl Voltage;
 
+        [Header("Junction")]
+        public GameObject SlotGroup, Junction;
+        public ResearchSpriteButton JunctionButton;
+        public ResearchSpriteButton NButton, PButton;
+        public SpriteRenderer JunctionBackground;
+
         [NonSerialized] private ResearchTool m_Tool;
         [NonSerialized] private int m_DopingIndex;
 
@@ -59,6 +65,10 @@ namespace SpaceFab.Research {
             RightSelector.Cursor.onClick.Register(OnRightAtomClicked);
 
             Voltage.OnVoltageModified.Register(UpdateVoltage);
+
+            JunctionButton.Cursor.onClick.Register(ShowJunction);
+            NButton.Cursor.onClick.Register(() => JunctionBackground.color = CorrectNTypeValencePipColor);
+            PButton.Cursor.onClick.Register(() => JunctionBackground.color = CorrectPTypeValencePipColor);
         }
 
         private void OnLeftAtomClicked() {
@@ -129,6 +139,7 @@ namespace SpaceFab.Research {
             ResearchSlotUtility.FillInSlot(m_Tool.Slots[1], null);
             GuiCommands.SetActive(m_Tool.Slots[1].gameObject, true);
             GuiCommands.SetActive(SemiconductorWarning, false);
+            GuiCommands.SetActive(SemiconductorHint, false);
             Background.color = Color.white;
             m_DopingIndex = 0;
             m_Tool.DopingState = DopantType.None;
@@ -195,6 +206,8 @@ namespace SpaceFab.Research {
             ValenceGroup.SetActive(false);
             m_Tool.Slots[0].Root.localScale = new Vector3(1f, 1f, 1f);
             m_Tool.Slots[0].Root.localPosition = m_Tool.Slots[1].Root.localPosition;
+            GuiCommands.SetActive(SemiconductorHint, true);
+            HideJunction();
         }
 
         private void HideFeedback() {
@@ -232,6 +245,15 @@ namespace SpaceFab.Research {
             FeedbackText.enabled = true;
             FeedbackText.SetText(text);
             FeedbackText.color = color;
+            if (color == IncorrectValencePipColor) {
+                Background.color = Color.white;
+                HideJunction();
+            }
+            else {
+                Background.color = color;
+                if (!Junction.activeSelf)
+                    JunctionButton.gameObject.SetActive(true);
+            }
         }
 
         private void DisplayAtomicView(AtomicStructure[] atoms, int offset) {
@@ -272,6 +294,26 @@ namespace SpaceFab.Research {
             LeftSelector.Selected.SetActive(index == 0);
             RightSelector.Cursor.GetComponent<Collider2D>().enabled = index != 1;
             RightSelector.Selected.SetActive(index == 1);
+        }
+
+        private void ShowJunction() {
+            if (Junction.activeSelf)
+                return;
+            Junction.SetActive(true);
+            JunctionButton.gameObject.SetActive(false);
+            Vector3 localPos = SlotGroup.transform.localPosition;
+            SlotGroup.transform.localPosition = new Vector3(localPos.x -2.5f, localPos.y - 0.5f, localPos.z);
+            SlotGroup.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
+        }
+
+        private void HideJunction() {
+            JunctionButton.gameObject.SetActive(false);
+            if (!Junction.activeSelf)
+                return;
+            Junction.SetActive(false);
+            Vector3 localPos = SlotGroup.transform.localPosition;
+            SlotGroup.transform.localPosition = new Vector3(localPos.x + 2.5f, localPos.y + 0.5f, localPos.z);
+            SlotGroup.transform.localScale = new Vector3(1f, 1f, 1f);
         }
     }
 }
