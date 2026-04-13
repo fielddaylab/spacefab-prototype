@@ -127,6 +127,10 @@ namespace SpaceFab.Research {
             SetSelectedAtomVisuals(0);
             DisplayAtomicView(item.Material.Atoms, m_DopingIndex);
             UpdateValencePips(item.Material.Atoms[m_DopingIndex].ValenceElectrons, 0);
+
+            m_Tool.Slots[0].Root.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            Vector3 localPos = m_Tool.Slots[1].Root.localPosition;
+            m_Tool.Slots[0].Root.localPosition = new Vector3(localPos.x + 1.3f, localPos.y + 1.3f, localPos.z);
         }
 
         private void OnSecondSlotUpdated(ResearchSlot _, ResearchMaterialItem item) {
@@ -175,6 +179,8 @@ namespace SpaceFab.Research {
             }
 
             ValenceGroup.SetActive(false);
+            m_Tool.Slots[0].Root.localScale = new Vector3(1f, 1f, 1f);
+            m_Tool.Slots[0].Root.localPosition = m_Tool.Slots[1].Root.localPosition;
         }
 
         private void HideFeedback() {

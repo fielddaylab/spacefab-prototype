@@ -164,8 +164,8 @@ ScriptedImporter:
     uvTransform: {x: 2, y: 266}
   - name: Ligihtbulb_Shine
     originalName: 
-    pivot: {x: 0.49387753, y: 0.48076922}
-    alignment: 9
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
