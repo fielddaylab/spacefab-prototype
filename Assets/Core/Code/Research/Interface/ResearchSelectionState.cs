@@ -2,6 +2,7 @@ using BeauUtil;
 using FieldDay;
 using FieldDay.Components;
 using FieldDay.HID;
+using FieldDay.Scenes;
 using FieldDay.SharedState;
 using SpaceFab.Research;
 using System;
@@ -24,6 +25,8 @@ namespace SpaceFab.Research {
 				return;
 			}
 
+            ClearContextfulObservations(state.Current);
+
 			state.Current = material;
 			state.OnUpdated.Invoke(material);
 		}
@@ -34,8 +37,26 @@ namespace SpaceFab.Research {
                 return;
             }
 
+            ClearContextfulObservations(state.Current);
+
             state.Context = material;
             state.OnUpdatedContext.Invoke(material);
+        }
+
+        static public bool ClearContextfulObservations(ResearchMaterial material) {
+            if (!material) {
+                return false;
+            }
+
+            var observations = ResearchMaterialUtility.GetObservations(material.AssetId);
+            unsafe {
+                if (observations.RemoveChipsWithContext(null) > 0) {
+                    ResearchMaterialUtility.SetObservations(material.AssetId, observations);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

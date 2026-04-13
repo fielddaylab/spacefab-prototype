@@ -13,6 +13,66 @@ namespace FieldDay {
     [Il2CppEagerStaticClassConstruction]
     static public class Positioning {
 
+        #region Queries
+
+        /// <summary>
+        /// Returns a temporary buffer containing all active immediate children of the given root.
+        /// </summary>
+        static public TempReferenceBuffer<Transform> QueryActiveChildren(this Transform root) {
+            int count = root.childCount;
+            if (count <= 0) {
+                return default;
+            }
+
+            TempReferenceBuffer<Transform> temp = TempReferenceBuffer<Transform>.Create(count);
+            QueryActiveChildren(root, temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Fills a temporary buffer containing all active immediate children of the given root.
+        /// </summary>
+        static public int QueryActiveChildren(this Transform root, TempReferenceBuffer<Transform> buffer) {
+            int count = root.childCount;
+            for (int i = 0; i < count; i++) {
+                Transform t = root.GetChild(i);
+                if (t.gameObject.activeSelf) {
+                    buffer.Add(t);
+                }
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// Returns a temporary buffer containing all active immediate children of the given root.
+        /// </summary>
+        static public TempReferenceBuffer<RectTransform> QueryActiveChildren(this RectTransform root) {
+            int count = root.childCount;
+            if (count <= 0) {
+                return default;
+            }
+
+            TempReferenceBuffer<RectTransform> temp = TempReferenceBuffer<RectTransform>.Create(count);
+            QueryActiveChildren(root, temp);
+            return temp;
+        }
+
+        /// <summary>
+        /// Fills a temporary buffer containing all active immediate children of the given root.
+        /// </summary>
+        static public int QueryActiveChildren(this RectTransform root, TempReferenceBuffer<RectTransform> buffer) {
+            int count = root.childCount;
+            for(int i = 0; i < count; i++) {
+                Transform t = root.GetChild(i);
+                if (t.gameObject.activeSelf) {
+                    buffer.Add(Unsafe.FastCast<RectTransform>(t));
+                }
+            }
+            return count;
+        }
+
+        #endregion // Queries
+
         #region Anchors
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -441,6 +501,12 @@ namespace FieldDay {
         public LayoutFlags Flags;
         public float NormalizedAlignment;
         public float Spacing;
-        public float FixedSize;
+        [ShowIfField("DisplayFixedSize")] public float FixedSize;
+
+#if UNITY_EDITOR
+        private bool DisplayFixedSize() {
+            return Source == LayoutSource.FixedSize;
+        }
+#endif // UNITY_EDITOR
     }
 }

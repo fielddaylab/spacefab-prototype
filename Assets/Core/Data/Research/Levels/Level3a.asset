@@ -22,7 +22,22 @@ MonoBehaviour:
   - m_HashValue: 1163381446
   - m_HashValue: 541320182
   - m_HashValue: 3317014541
-  PrePopulate: []
+  PrePopulate:
+  - Chip: 21
+    MaterialId:
+      m_HashValue: 1571298950
+    ContextId:
+      m_HashValue: 0
+  - Chip: 22
+    MaterialId:
+      m_HashValue: 3821421172
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    MaterialId:
+      m_HashValue: 1163381446
+    ContextId:
+      m_HashValue: 0
   Objectives:
   - Chip: 26
     ContextId:

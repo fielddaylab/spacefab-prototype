@@ -24,7 +24,42 @@ MonoBehaviour:
   - m_HashValue: 527899933
   - m_HashValue: 296790427
   - m_HashValue: 2929137943
-  PrePopulate: []
+  PrePopulate:
+  - Chip: 21
+    MaterialId:
+      m_HashValue: 1571298950
+    ContextId:
+      m_HashValue: 0
+  - Chip: 22
+    MaterialId:
+      m_HashValue: 3821421172
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    MaterialId:
+      m_HashValue: 1163381446
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    MaterialId:
+      m_HashValue: 3774176290
+    ContextId:
+      m_HashValue: 0
+  - Chip: 25
+    MaterialId:
+      m_HashValue: 3774176290
+    ContextId:
+      m_HashValue: 0
+  - Chip: 22
+    MaterialId:
+      m_HashValue: 527899933
+    ContextId:
+      m_HashValue: 0
+  - Chip: 24
+    MaterialId:
+      m_HashValue: 527899933
+    ContextId:
+      m_HashValue: 0
   Objectives:
   - Chip: 31
     ContextId:

@@ -1,18 +1,23 @@
+using System;
 using BeauPools;
 using BeauRoutine;
 using BeauUtil;
+using BeauUtil.UI;
 using FieldDay;
+using FieldDay.UI;
 using FieldDay.UI.Widgets;
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
-using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 namespace SpaceFab.Research {
     public sealed class ResearchObservationChip : GuiWidget {
         public Image Icon;
         public TMP_Text Label;
         public Image Background;
+        public CursorHint Cursor;
+        public Image InputBlocker;
+
+        [NonSerialized] public ResearchChipId Chip;
     }
 
     static public partial class ResearchMaterialUtility {
@@ -39,10 +44,15 @@ namespace SpaceFab.Research {
             chip.Label.fontStyle = style.TextStyle;
             chip.Background.sprite = style.Background;
             chip.Icon.sprite = style.Icon;
+
+            if (chip.InputBlocker) {
+                chip.InputBlocker.sprite = style.Background;
+            }
         }
 
         static public void PopulateObservationChip(ResearchObservationChip chip, ResearchChipId chipId, StringHash32 materialContext) {
             ResearchChipMetadata meta = ResearchChipUtility.Metadata(chipId);
+            chip.Chip = chipId;
             ApplyStyle(chip, Find.NamedAsset<ResearchChipStyle>(ResearchChipUtility.CategoryStyleId(meta.Category)));
             ApplyContextualTextToObservationChip(chip, chipId, materialContext);
         }
