@@ -149,13 +149,13 @@ namespace SpaceFab.Research {
                 obsList.Remove(meta.DependencyB);
                 knowledge.TryAdd(actualChip, contextId);
                 ResearchMaterialUtility.SetKnownProperties(currentSelection, knowledge);
+                SpaceFabGame.Events.Queue(ResearchMaterialUtility.Event_KnowledgeUpdated, EvtArgs.Create(new ResearchMaterialKnowledgePair() {
+                    Chip = actualChip,
+                    ContextId = contextId,
+                    MaterialId = SelectedId
+                }));
             }
             ResearchMaterialUtility.SetObservations(currentSelection, obsList);
-            SpaceFabGame.Events.Queue(ResearchMaterialUtility.Event_KnowledgeUpdated, EvtArgs.Create(new ResearchMaterialKnowledgePair() {
-                Chip = actualChip,
-                ContextId = contextId,
-                MaterialId = SelectedId
-            }));
 
             RefreshList();
             CursorHint.Unlock(WaitingCursor);
@@ -174,8 +174,12 @@ namespace SpaceFab.Research {
                 submitAvailable &= !propList.HasCategory(propCategory);
             }
 
-            submitAvailable &= obsList.HasCategory(ResearchChipUtility.Category(meta.DependencyA), out _);
-            submitAvailable &= meta.DependencyB == ResearchChipId.None || obsList.HasCategory(ResearchChipUtility.Category(meta.DependencyB), out _);
+            ResearchChipCategory dependencyCategory = ResearchChipUtility.Category(meta.DependencyA);
+            submitAvailable &= ResearchChipUtility.IsProperty(meta.DependencyA) ? propList.HasCategory(dependencyCategory) : obsList.HasCategory(dependencyCategory, out _);
+            if (meta.DependencyB != ResearchChipId.None) {
+                dependencyCategory = ResearchChipUtility.Category(meta.DependencyB);
+                submitAvailable &= ResearchChipUtility.IsProperty(meta.DependencyB) ? propList.HasCategory(dependencyCategory) : obsList.HasCategory(dependencyCategory, out _);
+            }
 
             SubmitButton.gameObject.SetActive(submitAvailable);
         }

@@ -82,6 +82,7 @@ namespace SpaceFab.Research {
         public ResearchChipId DependencyB;
 
         public string Label;
+        public string Tooltip;
         public ResearchChipEvaluationDelegate Evaluator;
     }
 
@@ -187,8 +188,9 @@ namespace SpaceFab.Research {
                         return false;
                     }
 
+                    int valence = material.Atoms[0].ValenceElectrons;
                     for(int i = 0; i < context.Atoms.Length; i++) {
-                        if (context.Atoms[i].ValenceElectrons == material.Atoms[0].ValenceElectrons + 1) {
+                        if (context.Atoms[i].ValenceElectrons - 1 == valence) {
                             return true;
                         }
                     }
@@ -204,8 +206,9 @@ namespace SpaceFab.Research {
                         return false;
                     }
 
+                    int valence = material.Atoms[0].ValenceElectrons;
                     for(int i = 0; i < context.Atoms.Length; i++) {
-                        if (context.Atoms[i].ValenceElectrons == material.Atoms[0].ValenceElectrons + 1) {
+                        if (context.Atoms[i].ValenceElectrons + 1 == valence) {
                             return true;
                         }
                     }

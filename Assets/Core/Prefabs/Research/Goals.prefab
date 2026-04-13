@@ -1403,7 +1403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Root: {fileID: 6979506271411151653}
-  Mode: 1
+  Mode: 0
   SyncDimensions: 2
   UpdateRootDimensions: 2
   Padding: {x: 0, y: 16}

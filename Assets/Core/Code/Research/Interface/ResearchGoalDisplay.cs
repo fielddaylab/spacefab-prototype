@@ -51,15 +51,12 @@ namespace SpaceFab.Research {
                 }
 
                 float height = Positioning.VerticalLayout(rowLayoutRefs, ContentLayout, 0);
-                LayoutSizer.Root.GetComponent<LayoutSizeInfo>().Size.y = height;
-                LayoutSizer.Sync();
+                LayoutSizer.SetSize(0, height);
             }
 
             for(int i = rowCount; i < Rows.Length; i++) {
                 Rows[i].gameObject.SetActive(false);
             }
-
-            LayoutSizer.Sync();
 
             if (rowCount == 0) {
                 EndLevelButtonGroup.SetActive(true);
@@ -85,18 +82,19 @@ namespace SpaceFab.Research {
                     continue;
                 }
 
-                if (pair.MaterialId != Objectives[i].ContextId) {
+                if (pair.Chip != Objectives[i].Chip) {
                     continue;
                 }
 
-                if ((pair.Chip & Objectives[i].Chip) == Objectives[i].Chip) {
-                    Completed.Set(i);
-
-                    //Rows[i].Checkbox.SetAlpha(0.5f);
-                    //Rows[i].CrossOff.enabled = true;
-                    //Rows[i].Hint.gameObject.SetActive(false);
-                    FlashAnim.Play(Rows[i].Flash, Color.white, FlashAnim.Default);
+                if (pair.ContextId != Objectives[i].ContextId) {
+                    continue;
                 }
+                
+                Completed.Set(i);
+
+                //Rows[i].Checkbox.SetAlpha(0.5f);
+                Rows[i].CrossOff.enabled = true;
+                FlashAnim.Play(Rows[i].Flash, Color.white, FlashAnim.Default);
             }
 
             if (Completed.Count == Objectives.Length) {
