@@ -35,6 +35,18 @@ namespace SpaceFab.Research {
             return false;
         }
 
+        public unsafe bool HasCategory(ResearchChipCategory category, out ResearchChipId chip) {
+            for (int i = Count; i-- > 0;) {
+                if (ResearchChipUtility.Category((ResearchChipId) m_Buffer[i]) == category) {
+                    chip = (ResearchChipId) m_Buffer[i];
+                    return true;
+                }
+            }
+
+            chip = 0;
+            return false;
+        }
+
         public unsafe bool TryAdd(ResearchChipId chipId, out ResearchChipId replaced) {
             Assert.True(!ResearchChipUtility.IsProperty(chipId), "Chip {0} is not observation", chipId);
 
@@ -174,6 +186,10 @@ namespace SpaceFab.Research {
         static public ResearchMaterialKnowledge GetKnownProperties(StringHash32 materialId) {
             Find.State<ResearchInventory>().MaterialKnowledge.TryGetValue(materialId, out var knowledge);
             return knowledge;
+        }
+
+        static public void SetKnownProperties(StringHash32 materialId, ResearchMaterialKnowledge knowledge) {
+            Find.State<ResearchInventory>().MaterialKnowledge[materialId] = knowledge;
         }
 
         static public BitSet32 GetLockedCategoryMask(ResearchMaterialKnowledge knowledge, StringHash32 context) {

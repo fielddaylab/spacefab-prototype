@@ -20,7 +20,10 @@ namespace SpaceFab.Research {
 
         [NonSerialized] public ResearchChipId[] AvailableProperties;
         [NonSerialized] public int PropertyIndex;
+        [NonSerialized] public ResearchChipId CurrentHypothesis;
         [NonSerialized] public StringHash32 ContextId;
+
+        public CastableEvent<ResearchChipId> OnHypothesisUpdated = new CastableEvent<ResearchChipId>();
 
         void ISceneLateInitialize.LateInitialize() {
             if (PropertyIndex < 0) {
@@ -29,11 +32,15 @@ namespace SpaceFab.Research {
 
             NextButton.onClick.AddListener(() => {
                 PropertyIndex = (PropertyIndex + 1) % AvailableProperties.Length;
-                ResearchMaterialUtility.PopulateHypothesisChip(Chip, AvailableProperties[PropertyIndex], ContextId);
+                CurrentHypothesis = AvailableProperties[PropertyIndex];
+                ResearchMaterialUtility.PopulateHypothesisChip(Chip, CurrentHypothesis, ContextId);
+                OnHypothesisUpdated.Invoke(CurrentHypothesis);
             });
             PrevButton.onClick.AddListener(() => {
                 PropertyIndex = (PropertyIndex + AvailableProperties.Length - 1) % AvailableProperties.Length;
-                ResearchMaterialUtility.PopulateHypothesisChip(Chip, AvailableProperties[PropertyIndex], ContextId);
+                CurrentHypothesis = AvailableProperties[PropertyIndex];
+                ResearchMaterialUtility.PopulateHypothesisChip(Chip, CurrentHypothesis, ContextId);
+                OnHypothesisUpdated.Invoke(CurrentHypothesis);
             });
 
             Find.State<ResearchSelectionState>().OnUpdatedContext.Register((m) => {
@@ -41,7 +48,8 @@ namespace SpaceFab.Research {
                 ResearchMaterialUtility.UpdateHypothesisContext(Chip, ContextId);
             });
 
-            ResearchMaterialUtility.PopulateHypothesisChip(Chip, AvailableProperties[PropertyIndex], null);
+            CurrentHypothesis = AvailableProperties[PropertyIndex];
+            ResearchMaterialUtility.PopulateHypothesisChip(Chip, CurrentHypothesis, null);
         }
     }
 

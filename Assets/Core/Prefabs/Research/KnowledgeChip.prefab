@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1455467017889461371}
   - component: {fileID: 794764769942384935}
+  - component: {fileID: 6152833197747519967}
   m_Layer: 0
   m_Name: KnowledgeChip
   m_TagString: Untagged
@@ -66,6 +67,22 @@ MonoBehaviour:
   Background: {fileID: 6934179277818156367}
   Cursor: {fileID: 5663381278024690645}
   InputBlocker: {fileID: 2522732877298452428}
+--- !u!114 &6152833197747519967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053123574095542292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd60b9a67a0443343b479b094c836759, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Offset0: {x: 0, y: 0}
+  m_Offset1: {x: 0, y: 0}
+  m_Offset2: {x: 0, y: 0}
+  m_Offset3: {x: 0, y: 0}
 --- !u!1 &3182255333025103919
 GameObject:
   m_ObjectHideFlags: 0

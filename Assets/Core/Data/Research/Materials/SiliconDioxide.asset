@@ -33,7 +33,7 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4293984126
     Symbol: O
-  ConductionMultiplier: 0.4
+  ConductionMultiplier: 0.1
   ThermalMultiplier: 1
   MaxTemperature: 0.6
   MaxVoltage: 0.6
