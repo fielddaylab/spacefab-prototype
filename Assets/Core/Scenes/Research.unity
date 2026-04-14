@@ -1300,6 +1300,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: 
   Tooltip: Open Junction
+  TooltipFooter: 
 --- !u!61 &470602130
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1875,6 +1876,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: 
   Tooltip: P Type
+  TooltipFooter: 
 --- !u!61 &642900029
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2093,6 +2095,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: 
   Tooltip: Increase Temperature
+  TooltipFooter: 
 --- !u!61 &676579592
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2655,6 +2658,8 @@ MonoBehaviour:
     rgba: 4283387727
   SemiconductorHint: {fileID: 1665887390}
   SemiconductorWarning: {fileID: 747828797}
+  DefaultObservations: 08090a0b
+  JunctionObservations: 0e0f0c0d
   LeftSelector:
     Cursor: {fileID: 1021768978}
     Atom: {fileID: 755827514}
@@ -3386,6 +3391,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: replace
   Tooltip: Switch which atom in the semiconductor's crystal structure to replace.
+  TooltipFooter: 
 --- !u!61 &1021768979
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4327,6 +4333,7 @@ MonoBehaviour:
   TooltipHeader: thermal coil
   Tooltip: Heats/cools the material in the slot. Some materials may break down at
     extreme temperatues.
+  TooltipFooter: 
 --- !u!61 &1533501500
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4426,6 +4433,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: replace
   Tooltip: Switch which atom in the semiconductor's crystal structure to replace.
+  TooltipFooter: 
 --- !u!61 &1545222079
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5636,6 +5644,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: 
   Tooltip: Decrease Temperature
+  TooltipFooter: 
 --- !u!61 &1829424720
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6589,6 +6598,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: 
   Tooltip: N Type
+  TooltipFooter: 
 --- !u!61 &2070940479
 BoxCollider2D:
   m_ObjectHideFlags: 0

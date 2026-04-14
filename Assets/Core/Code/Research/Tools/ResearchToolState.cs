@@ -70,9 +70,9 @@ namespace SpaceFab.Research {
             }
         }
 
-        static public void PingToolChangedState() {
+        static public void PingToolChangedState(ResearchTool tool) {
             ResearchToolState toolState = Find.State<ResearchToolState>();
-            if (toolState.CurrentTool) {
+            if (toolState.CurrentTool == tool) {
                 toolState.OnCurrentToolChangedState.Invoke(toolState.CurrentTool);
             }
         }
