@@ -188,10 +188,10 @@ namespace SpaceFab.Research {
 
             if (targetMaterial.DopantN == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons + 1) {
                 m_Tool.DopingState = DopantType.N;
-                ShowFeedback("N-Type Dopant", CorrectNTypeValencePipColor);
+                ShowFeedback(string.Empty, CorrectNTypeValencePipColor);
             } else if (targetMaterial.DopantP == dopantId && dopantAtom.ValenceElectrons == targetAtom.ValenceElectrons - 1) {
                 m_Tool.DopingState = DopantType.P;
-                ShowFeedback("P-Type Dopant", CorrectPTypeValencePipColor);
+                ShowFeedback(string.Empty, CorrectPTypeValencePipColor);
             } else if (dopant.Atoms.Length > 1) {
                 ShowFeedback("Polyelemental", IncorrectValencePipColor);
                 ResearchMaterialUtility.ExplodeItem(item, ExplosionStyle.TooBig);
