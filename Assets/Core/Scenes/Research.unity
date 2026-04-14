@@ -2612,7 +2612,7 @@ MonoBehaviour:
   - {fileID: 2066847180}
   AvailableObservations: 08090a0b
   Circuit: {fileID: 1351826510}
-  SlotsEffectPosition: {fileID: 1836648400}
+  SlotsEffectPosition: {fileID: 215735597}
 --- !u!4 &780359132
 Transform:
   m_ObjectHideFlags: 0
@@ -2659,7 +2659,7 @@ MonoBehaviour:
   SemiconductorHint: {fileID: 1665887390}
   SemiconductorWarning: {fileID: 747828797}
   DefaultObservations: 08090a0b
-  JunctionObservations: 0e0f0c0d
+  JunctionObservations: 0e0f0c0d10
   LeftSelector:
     Cursor: {fileID: 1021768978}
     Atom: {fileID: 755827514}
@@ -6402,7 +6402,7 @@ MonoBehaviour:
   AvailableProperties: 15161718191a1b1c1d1e1f20
   StartingHypothesis: 0
   m_DEBUGLevel:
-    m_HashValue: 2687278129
+    m_HashValue: 559647832
 --- !u!114 &2020295784
 MonoBehaviour:
   m_ObjectHideFlags: 0

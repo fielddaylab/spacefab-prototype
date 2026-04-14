@@ -239,16 +239,25 @@ namespace SpaceFab.Research {
             float current = ResearchMaterialUtility.GetCurrent(input, Voltage.InputVoltage, Temperature, m_Tool.DopingState);
 
             bool np = Voltage.InputVoltage > 0;
-            if (np && m_Tool.DopingState == DopantType.P && m_AltDopant == DopantType.N) {
-                current = 0;
-            } else if (!np && m_Tool.DopingState == DopantType.N && m_AltDopant == DopantType.P) {
-                current = 0;
+            bool diode = false;
+            if (np) {
+                if (m_Tool.DopingState == DopantType.P && m_AltDopant == DopantType.N) {
+                    current = 0;
+                } else if (m_AltDopant != DopantType.None) {
+                    diode = true;
+                }
+            } else {
+                if (m_Tool.DopingState == DopantType.N && m_AltDopant == DopantType.P) {
+                    current = 0;
+                } else if (m_AltDopant != DopantType.None) {
+                    diode = true;
+                }
             }
-
+            
             CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
             CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
 
-            ResearchToolUtility.SetLightEmissionStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.LightEmitting) != 0 ? current : 0);
+            ResearchToolUtility.SetLightEmissionStrength(m_Tool.SlotsEffectPosition, diode && (input.SpecialTags & SpecialTag.LightEmitting) != 0 ? current : 0);
             ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.HighMobility) != 0 ? current : 0);
         }
 
