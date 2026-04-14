@@ -1,6 +1,7 @@
 using BeauRoutine;
 using BeauUtil;
 using FieldDay;
+using FieldDay.Collections;
 using FieldDay.Components;
 using FieldDay.Rendering;
 using FieldDay.SharedState;
@@ -33,30 +34,30 @@ namespace SpaceFab.Research {
                 }
             });
 
-            SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated)
-                .Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_GoalHintRequested, OnGoalHintRequested);
+            //SpaceFabGame.Events.Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_KnowledgeUpdated, OnKnowledgeUpdated)
+            //    .Register<ResearchMaterialKnowledgePair>(ResearchMaterialUtility.Event_GoalHintRequested, OnGoalHintRequested);
         }
 
         private void OnKnowledgeUpdated(ResearchMaterialKnowledgePair pair) {
-            if ((pair.Knowledge & ResearchMaterialKnowledge.Name) != 0) {
-                ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
-                ResearchMaterialUtility.UpdateMaterialDisplayInTray(material);
+            //if ((pair.Chip) != 0) {
+            //    ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
+            //    ResearchMaterialUtility.UpdateMaterialDisplayInTray(material);
 
-                foreach(var slot in Find.Components<ResearchSlot>()) {
-                    if (slot.Item != null && slot.Item.Material == material) {
-                        slot.Item.Hint.TooltipHeader = material.DisplayName;
-                    }
-                }
-            }
+            //    foreach(var slot in Find.Components<ResearchSlot>()) {
+            //        if (slot.Item != null && slot.Item.Material == material) {
+            //            slot.Item.Hint.TooltipHeader = material.DisplayName;
+            //        }
+            //    }
+            //}
         }
 
-        private void OnGoalHintRequested(ResearchMaterialKnowledgePair pair) {
-            ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
-            ResearchMaterialItem item = ResearchMaterialUtility.FindTrayItemForMaterial(material);
-            if (item != null) {
-                item.FlashRoutine.Replace(item, ItemFlashRoutine(item));
-            }
-        }
+        //private void OnGoalHintRequested(ResearchMaterialKnowledgePair pair) {
+        //    ResearchMaterial material = Find.NamedAsset<ResearchMaterial>(pair.MaterialId);
+        //    ResearchMaterialItem item = ResearchMaterialUtility.FindTrayItemForMaterial(material);
+        //    if (item != null) {
+        //        item.FlashRoutine.Replace(item, ItemFlashRoutine(item));
+        //    }
+        //}
 
         static private IEnumerator ItemFlashRoutine(ResearchMaterialItem item) {
             item.Flash.SetAlpha(0);
@@ -82,6 +83,10 @@ namespace SpaceFab.Research {
             item.Material = material;
             item.CurrentSlot = null;
 
+            float radius = item.Renderer.RendererPosition.localScale.x / 2;
+            item.Clickable.radius = radius;
+            item.GetComponent<LayoutSizeInfo>().Size = new Vector3(radius * 2, radius * 2, 0.1f);
+
             tray.Items.PushBack(item);
 
             return item;
@@ -99,13 +104,16 @@ namespace SpaceFab.Research {
 
         static public void ArrangeTrayItems() {
             ResearchMaterialTray tray = Find.State<ResearchMaterialTray>();
-            int itemCount = tray.Root.childCount;
-            if (itemCount > 0) {
-                float left = (itemCount - 1) * -0.5f * tray.Spacing;
-                for(int i = 0; i < itemCount; i++) {
-                    Transform item = tray.Root.GetChild(i);
-                    item.localPosition = new Vector3(0, left + tray.Spacing * i, 0);
+            LayoutOptions options = default;
+            options.Spacing = tray.Spacing;
+            options.Source = LayoutSource.Size;
+            options.NormalizedAlignment = 0.5f;
+
+            using(TempReferenceBuffer<Transform> transforms = TempReferenceBuffer<Transform>.Create(tray.Items.Count)) {
+                foreach(var item in tray.Items) {
+                    transforms.Add(item.transform);
                 }
+                Positioning.AxisLayout(transforms, options, 0, Axis.Y);
             }
         }
     }

@@ -15,7 +15,7 @@ using UnityEngine;
 namespace SpaceFab.Research {
     public sealed class ResearchMaterialItem : BatchedComponent {
         public ResearchMaterialRig Renderer;
-        public Collider2D Clickable;
+        public CircleCollider2D Clickable;
         public CursorHint Hint;
         public ColorGroup Flash;
 
@@ -75,7 +75,7 @@ namespace SpaceFab.Research {
                 }
 
                 default: {
-                    item.Renderer.Renderer.sharedMaterial = Find.State<ResearchPools>().PreExplodeItemMaterial;
+                    item.Renderer.Renderer.color = ColorBank.Black;
                     yield return item.transform.MoveTo(item.transform.localPosition.x + 0.1f, 0.27f, Axis.X, Space.Self).Wave(Wave.Function.Sin, 6);
                     VfxUtility.PlayFromPool(pools.ExplosionEffectPool, item.transform);
                     Sfx.Play("Research.Gem.Explode");
@@ -109,7 +109,6 @@ namespace SpaceFab.Research {
         InvalidCombo,
         VoltageBreakdown,
         TemperatureBreakdownHot,
-        TemperatureBreakdownCold,
         TooBig,
     }
 }

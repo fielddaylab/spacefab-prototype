@@ -1,5 +1,6 @@
 using BeauPools;
 using BeauUtil;
+using FieldDay.Assets;
 using BeauUtil.Debugger;
 using FieldDay.HID;
 using FieldDay.Collections;
@@ -12,6 +13,7 @@ using System.Runtime.CompilerServices;
 using Unity.IL2CPP.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
+
 using ModuleIndex = BeauUtil.TypeIndex<FieldDay.UI.IGuiModule>;
 using PanelIndex = BeauUtil.TypeIndex<FieldDay.UI.IGuiPanel>;
 
@@ -20,6 +22,15 @@ namespace FieldDay.UI {
     /// Interface manager.
     /// </summary>
     public sealed class GuiMgr {
+        #region Types
+
+        private struct PriorityRecord {
+            public CanvasSortKey Sort;
+            public int ContextId;
+        }
+
+        #endregion // Types
+
         #region Config
 
         [Serializable]
@@ -35,9 +46,15 @@ namespace FieldDay.UI {
         private IGuiModule[] m_ModuleMap = new IGuiModule[ModuleIndex.Capacity];
 
         private readonly Dictionary<StringHash32, RectTransform> m_NamedElementMap = new Dictionary<StringHash32, RectTransform>(16, CompareUtils.DefaultEquals<StringHash32>());
+        private readonly Dictionary<StringHash32, List<IGuiPanel>> m_PanelGroups = new Dictionary<StringHash32, List<IGuiPanel>>(8, CompareUtils.DefaultEquals<StringHash32>());
 
         private readonly RingBuffer<IOnGuiUpdate> m_UpdateCallbacks = new RingBuffer<IOnGuiUpdate>(32, RingBufferMode.Expand);
         private readonly Pipe<GuiCommandData> m_Commands = new Pipe<GuiCommandData>(16, true);
+
+        private readonly RingBuffer<IInputLayer> m_InputLayers = new RingBuffer<IInputLayer>(16, RingBufferMode.Expand);
+        private CanvasSortKey m_CurrentInputPriority;
+        private readonly RingBuffer<PriorityRecord> m_InputPriorityStack = new RingBuffer<PriorityRecord>(16, RingBufferMode.Expand);
+        private bool m_InputLayersDirty;
 
         private InputMgr m_InputMgr;
         private Camera m_PrimaryUICamera;
@@ -59,7 +76,7 @@ namespace FieldDay.UI {
             m_GlobalOverlay.SetupGlobal();
 
             m_FaderPool = new PrefabPool<GuiFader>(32, faderPrefab, Game.Memory.PersistentPrefabPoolRoot, null, false, true);
-            m_FaderPool.Prewarm(16);
+            m_FaderPool.Prewarm(4);
         }
 
         #region Gui Camera
@@ -146,6 +163,11 @@ namespace FieldDay.UI {
                     m_SharedPanelMap[index] = shared;
                 }
 
+                StringHash32 panelGroup = panel.Group;
+                if (!panelGroup.IsEmpty) {
+
+                }
+
                 RegistrationCallbacks.InvokeRegister(panel);
                 Log.Msg("[GuiMgr] Panel '{0}' registered", panelType.FullName);
             }
@@ -163,6 +185,11 @@ namespace FieldDay.UI {
 
                 if (m_SharedPanelMap[index] == panel) {
                     m_SharedPanelMap[index] = null;
+                }
+
+                StringHash32 panelGroup = panel.Group;
+                if (!panelGroup.IsEmpty) {
+
                 }
 
                 RegistrationCallbacks.InvokeDeregister(panel);
@@ -657,6 +684,13 @@ namespace FieldDay.UI {
             }
         }
 
+        internal void FlushInputLayerChanges() {
+            if (m_InputLayersDirty) {
+                UpdateInputLayers();
+                m_InputLayersDirty = false;
+            }
+        }
+
         internal void FlushCommands() {
             while(m_Commands.TryRead(out GuiCommandData cmd)) {
                 ExecuteCommand(ref cmd);
@@ -675,5 +709,108 @@ namespace FieldDay.UI {
         }
 
         #endregion // Events
+
+        #region Input Layers
+
+        public void RegisterInputLayer(IInputLayer inputLayer) {
+            Assert.NotNullOrDestroyed(inputLayer);
+            Assert.False(m_InputLayers.Contains(inputLayer), "Already registered");
+            m_InputLayers.PushBack(inputLayer);
+            ForceUpdate(inputLayer);
+        }
+
+        public void DeregisterInputLayer(IInputLayer inputLayer) {
+            Assert.NotNullOrDestroyed(inputLayer);
+            Assert.True(m_InputLayers.Contains(inputLayer), "Already deregistered");
+            m_InputLayers.FastRemove(inputLayer);
+            inputLayer.UpdateInputEnabled(false);
+        }
+
+        private void UpdateInputLayers() {
+            foreach(var layer in m_InputLayers) {
+                layer.UpdateInputEnabled(EvaluateInputLayer(layer.InputMask, m_CurrentInputPriority));
+            }
+        }
+
+        static private bool EvaluateInputLayer(InputLayerMask mask, CanvasSortKey minDepth) {
+            if ((mask.Flags & InputLayerFlags.ForceOff) != 0) {
+                return false;
+            }
+
+            if ((mask.Flags & InputLayerFlags.ForceOn) != 0) {
+                return true;
+            }
+
+            if ((mask.Flags & InputLayerFlags.IgnoreSortOrder) == 0 && mask.SortKey.RawValue < minDepth.RawValue) {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Forces an input layer to recalculate its enabled state.
+        /// </summary>
+        public void ForceUpdate(IInputLayer layer) {
+            bool enabled = EvaluateInputLayer(layer.InputMask, m_CurrentInputPriority);
+            layer.UpdateInputEnabled(enabled);
+        }
+
+        /// <summary>
+        /// Pushes the priority of the given layer.
+        /// All layers below this will be disabled.
+        /// </summary>
+        public void PushPriority(IInputLayer layer) {
+            Assert.NotNullOrDestroyed(layer);
+            CanvasSortKey sortKey = layer.InputMask.SortKey;
+            m_InputPriorityStack.PushBack(new PriorityRecord() {
+                Sort = sortKey,
+                ContextId = UnityHelper.Id(layer as UnityEngine.Object)
+            });
+
+            if (sortKey.RawValue > m_CurrentInputPriority.RawValue) {
+                m_CurrentInputPriority = sortKey;
+                m_InputLayersDirty = true;
+            }
+        }
+
+        /// <summary>
+        /// Pops the priority of the given layer.
+        /// </summary>
+        public void PopPriority(IInputLayer layer) {
+            Assert.NotNullOrDestroyed(layer);
+            CanvasSortKey sortKey = layer.InputMask.SortKey;
+            int contextId = UnityHelper.Id(layer as UnityEngine.Object);
+
+            bool found = false;
+            for(int i = m_InputPriorityStack.Count; i-- > 0;) {
+                PriorityRecord record = m_InputPriorityStack[i];
+                if (record.Sort.RawValue == sortKey.RawValue
+                    && record.ContextId == contextId) {
+                    m_InputPriorityStack.RemoveAt(i);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                return;
+            }
+
+            CanvasSortKey largestSortKey = default;
+            for (int i = m_InputPriorityStack.Count; i-- > 0;) {
+                CanvasSortKey check = m_InputPriorityStack[i].Sort;
+                if (check.RawValue > largestSortKey.RawValue) {
+                    largestSortKey = check;
+                }
+            }
+
+            if (largestSortKey.RawValue != m_CurrentInputPriority.RawValue) {
+                m_CurrentInputPriority = largestSortKey;
+                m_InputLayersDirty = true;
+            }
+        }
+
+        #endregion // Input Layers
     }
 }

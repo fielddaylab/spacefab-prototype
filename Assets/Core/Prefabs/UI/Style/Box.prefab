@@ -206,15 +206,15 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: -8328923581568760697, guid: b50eba66dca67d34dac0c16407490c41, type: 3}
+  m_Texture: {fileID: -8328923581568760697, guid: fc6ef4563c8aeba4d93dc72407c298ad, type: 3}
   m_UVRect:
     serializedVersion: 2
-    x: 0.44155845
+    x: 0
     y: 0
-    width: 3.8961039
-    height: 1.8181819
-  m_UnitsPerTile: {x: 77, y: 77}
-  m_Offset: {x: 34, y: 0}
+    width: 18.75
+    height: 8.75
+  m_UnitsPerTile: {x: 16, y: 16}
+  m_Offset: {x: 0, y: 0}
 --- !u!1 &8439657523736819395
 GameObject:
   m_ObjectHideFlags: 0

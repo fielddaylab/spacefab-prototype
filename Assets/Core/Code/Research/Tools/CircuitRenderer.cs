@@ -11,7 +11,7 @@ namespace SpaceFab.Research {
         public SpriteRenderer Bulb;
         public Sprite BulbOffSprite;
         public Sprite BulbOnSprite;
-        public SpriteRenderer BulbShine;
+        public SpriteRenderer[] BulbShines;
         public float AnimSpeedMultiplier = 4;
 
         [NonSerialized] public int CircuitSpriteIndex;
@@ -23,12 +23,15 @@ namespace SpaceFab.Research {
         static public void SetLightStrength(CircuitRenderer circuit, float strength) {
             strength = Mathf.Abs(strength);
 
-            circuit.Bulb.sprite = strength > 0 ? circuit.BulbOnSprite : circuit.BulbOffSprite;
-            circuit.BulbShine.enabled = strength > 0;
-            circuit.BulbShine.SetAlpha(strength);
+            circuit.Bulb.sprite = strength > 0.1f ? circuit.BulbOnSprite : circuit.BulbOffSprite;
+            for(int i = 0; i < circuit.BulbShines.Length; i++) {
+                circuit.BulbShines[i].enabled = strength > 0;
+                circuit.BulbShines[i].SetAlpha(strength * strength);
+            }
         }
 
         static public void SetFlowSpeed(CircuitRenderer circuit, float speed) {
+            circuit.CircuitFlow.SetAlpha(Math.Abs(speed));
             circuit.CircuitFlow.enabled = speed != 0;
             if (speed == 0) {
                 circuit.CircuitSpriteTimer = 0;

@@ -2,6 +2,7 @@ using BeauUtil;
 using FieldDay;
 using FieldDay.Components;
 using FieldDay.HID;
+using FieldDay.Scenes;
 using FieldDay.SharedState;
 using SpaceFab.Research;
 using System;
@@ -11,8 +12,10 @@ namespace SpaceFab.Research {
 	public sealed class ResearchSelectionState : SharedStateComponent {
 		[NonSerialized] public ResearchMaterial Current;
 		[NonSerialized] public bool Locked;
+		[NonSerialized] public ResearchMaterial Context;
 
 		public CastableEvent<ResearchMaterial> OnUpdated = new CastableEvent<ResearchMaterial>();
+        public CastableEvent<ResearchMaterial> OnUpdatedContext = new CastableEvent<ResearchMaterial>();
     }
 
 	static public partial class ResearchMaterialUtility {
@@ -22,16 +25,38 @@ namespace SpaceFab.Research {
 				return;
 			}
 
-			ResearchInventory inv = Find.State<ResearchInventory>();
+            ClearContextfulObservations(state.Current);
 
 			state.Current = material;
-			if (inv.KnownMaterials.Add(material.AssetId)) {
-				ResearchMaterialItem spawned = ResearchMaterialUtility.SpawnNewTrayItem(material);
-				ResearchMaterialUtility.ArrangeTrayItems();
-                VfxUtility.PlayFromPool(Find.State<ResearchPools>().ShineEffectPool, spawned.transform);
-            }
-
 			state.OnUpdated.Invoke(material);
 		}
+
+        static public void UpdateContextMaterial(ResearchMaterial material) {
+            var state = Find.State<ResearchSelectionState>();
+            if (state.Locked || state.Context == material) {
+                return;
+            }
+
+            ClearContextfulObservations(state.Current);
+
+            state.Context = material;
+            state.OnUpdatedContext.Invoke(material);
+        }
+
+        static public bool ClearContextfulObservations(ResearchMaterial material) {
+            if (!material) {
+                return false;
+            }
+
+            var observations = ResearchMaterialUtility.GetObservations(material.AssetId);
+            unsafe {
+                if (observations.RemoveChipsWithContext(null) > 0) {
+                    ResearchMaterialUtility.SetObservations(material.AssetId, observations);
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

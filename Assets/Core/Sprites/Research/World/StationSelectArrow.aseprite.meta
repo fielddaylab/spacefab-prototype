@@ -8,8 +8,9 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: 62a9f0aa5b59740cfbadc7e5f9823bb0, type: 3}
+  importerVersion: 2
   textureImporterSettings:
-    alphaSource: 1
+    alphaSource: 2
     mipMapMode: 0
     enableMipMap: 0
     fadeOut: 0
@@ -97,7 +98,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 639034649885999493
+  platformSettingsDirtyTick: 639096017813619295
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -134,7 +135,14 @@ ScriptedImporter:
       height: 121
     spriteID: b030b55c84eeaad46a30de8e9857a2f2
     spriteBone: []
-    spriteOutline: []
+    spriteOutline:
+    - outline:
+      - {x: 13, y: 60.5}
+      - {x: -30, y: 3.5}
+      - {x: -30, y: -17.5}
+      - {x: 10, y: -60.5}
+      - {x: 30, y: -60.5}
+      - {x: 30, y: 60.5}
     vertices: []
     spritePhysicsOutline: []
     indices: 
@@ -144,7 +152,12 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 666843639
+    uuid:
+      value0: 2987601555
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: -1307365741
     name: StationSelectArrow
     layerFlags: 0
     layerType: 0
@@ -177,9 +190,9 @@ ScriptedImporter:
   - name: DefaultTexturePlatform
     overridden: 0
     ignorePlatformSupport: 0
-    maxTextureSize: 2048
+    maxTextureSize: 1024
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 63
     textureCompression: 0
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -203,7 +216,7 @@ ScriptedImporter:
     ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 12
+    textureFormat: 26
     textureCompression: 1
     compressionQuality: 50
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -214,3 +227,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 128}
+  previousTextureSize: {x: 64, y: 128}

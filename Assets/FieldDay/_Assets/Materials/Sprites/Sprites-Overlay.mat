@@ -45,6 +45,8 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _AlphaCutoff: 0
+    - _ApplyAdditiveColor: 0
+    - _ApplyLerpColor: 0
     - _BlendOp: 0
     - _CullMode: 0
     - _DestBlend: 10
@@ -55,7 +57,9 @@ Material:
     - _ZTestMode: 8
     - _ZWriteMode: 0
     m_Colors:
+    - _AdditiveColor: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _LerpColor: {r: 1, g: 1, b: 1, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -76,7 +76,7 @@ namespace SpaceFab.SupplyChain {
                 widget.IconDisplay.sprite = ship.Icon;
                 widget.CursorHint.TooltipHeader = ship.DisplayName;
 
-                widget.SpeedStat.SetValue(ship.Speed - 1, false);
+                widget.SpeedStat.SetValue(ship.Speed - 1, 0);
 
                 widget.RouteColorIndicator.color = widget.RouteColor;
 
@@ -105,7 +105,7 @@ namespace SpaceFab.SupplyChain {
                 psb.Builder.Append("$").AppendNoAlloc(stats.Cost);
                 widget.RouteCost.SetText(psb.Builder);
 
-                widget.RouteTime.SetValue(stats.Time, false);
+                widget.RouteTime.SetValue(stats.Time, 0);
 
                 float percentage = (float) stats.Reliability / SupplyUtility.MaxReliability;
 

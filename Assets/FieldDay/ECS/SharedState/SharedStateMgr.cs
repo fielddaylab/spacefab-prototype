@@ -8,17 +8,17 @@ using System.Runtime.CompilerServices;
 using BeauUtil;
 using BeauUtil.Debugger;
 using Unity.IL2CPP.CompilerServices;
-using StateIndex = BeauUtil.TypeIndex<FieldDay.SharedState.ISharedState>;
 
 namespace FieldDay.SharedState {
     /// <summary>
     /// Manager for shared singleton state objects.
     /// This maintains access to singleton state objects by type.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     public sealed class SharedStateMgr {
         static private readonly StaticInjector<SharedStateReferenceAttribute, ISharedState> s_StaticInjector = new StaticInjector<SharedStateReferenceAttribute, ISharedState>();
 
-        private ISharedState[] m_StateMap = new ISharedState[StateIndex.Capacity];
+        private ISharedState[] m_StateMap = new ISharedState[SharedStateIndex.Capacity];
         private readonly HashSet<ISharedState> m_StateSet = new HashSet<ISharedState>(32);
 
         internal SharedStateMgr() { }
@@ -32,7 +32,7 @@ namespace FieldDay.SharedState {
             Assert.NotNull(state);
             
             Type stateType = state.GetType();
-            int index = StateIndex.Get(stateType);
+            int index = SharedStateIndex.Get(stateType);
 
             Assert.True(m_StateMap[index] == null, "[SharedStateMgr] Shared state of type '{0}' already registered", stateType);
             m_StateMap[index] = state;
@@ -50,7 +50,7 @@ namespace FieldDay.SharedState {
             Assert.NotNull(state);
             
             Type stateType = state.GetType();
-            int index = StateIndex.Get(stateType);
+            int index = SharedStateIndex.Get(stateType);
 
             if (m_StateMap[index] == state) {
                 m_StateMap[index] = null;
@@ -86,7 +86,7 @@ namespace FieldDay.SharedState {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         [Il2CppSetOption(Option.NullChecks, false)]
         public ISharedState Get(Type type) {
-            int index = StateIndex.Get(type);
+            int index = SharedStateIndex.Get(type);
             ISharedState state = m_StateMap[index];
 #if DEVELOPMENT
             if (state == null) {
@@ -104,7 +104,7 @@ namespace FieldDay.SharedState {
         [Il2CppSetOption(Option.ArrayBoundsChecks, false)]
         [Il2CppSetOption(Option.NullChecks, false)]
         public T Get<T>() where T : class, ISharedState {
-            int index = StateIndex.Get<T>();
+            int index = SharedStateIndex.Get<T>();
             ISharedState state = m_StateMap[index];
 #if DEVELOPMENT
             if (state == null) {
@@ -121,7 +121,7 @@ namespace FieldDay.SharedState {
         [Il2CppSetOption(Option.NullChecks, false)]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal T FastGet<T>() where T : class, ISharedState {
-            return Unsafe.FastCast<T>(m_StateMap[StateIndex.Get<T>()]);
+            return Unsafe.FastCast<T>(m_StateMap[SharedStateIndex.Get<T>()]);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace FieldDay.SharedState {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryGet(Type type, out ISharedState state) {
-            int index = StateIndex.Get(type);
+            int index = SharedStateIndex.Get(type);
             state = index < m_StateMap.Length ? m_StateMap[index] : null;
             return state != null;
         }
@@ -139,7 +139,7 @@ namespace FieldDay.SharedState {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool TryGet<T>(out T state) where T : class, ISharedState {
-            int index = StateIndex.Get<T>();
+            int index = SharedStateIndex.Get<T>();
             state = (T) (index < m_StateMap.Length ? m_StateMap[index] : null);
             return state != null;
         }
@@ -149,7 +149,7 @@ namespace FieldDay.SharedState {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Has(Type type) {
-            int index = StateIndex.Get(type);
+            int index = SharedStateIndex.Get(type);
             return index < m_StateMap.Length ? m_StateMap[index] != null : false;
         }
 
@@ -158,7 +158,7 @@ namespace FieldDay.SharedState {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool Has<T>() where T : class, ISharedState {
-            int index = StateIndex.Get<T>();
+            int index = SharedStateIndex.Get<T>();
             return index < m_StateMap.Length ? m_StateMap[index] != null : false;
         }
 
@@ -217,7 +217,7 @@ namespace FieldDay.SharedState {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ISharedState Require(Type type) {
-            int index = StateIndex.Get(type);
+            int index = SharedStateIndex.Get(type);
             ISharedState state;
 
             if ((state = m_StateMap[index]) == null) {
@@ -238,7 +238,7 @@ namespace FieldDay.SharedState {
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Require<T>() where T : class, ISharedState {
-            int index = StateIndex.Get<T>();
+            int index = SharedStateIndex.Get<T>();
             ISharedState state;
 
             if ((state = m_StateMap[index]) == null) {

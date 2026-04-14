@@ -13,11 +13,12 @@ namespace SpaceFab.Research {
     public sealed class ResearchTool : BatchedComponent, IScenePreload {
         public string ToolName;
         public ResearchSlot[] Slots;
-        public ResearchSlot OutputSlot;
+        public ResearchChipId[] AvailableObservations;
         public CircuitRenderer Circuit;
         public Transform SlotsEffectPosition;
 
         [NonSerialized] public bool AllSlotsFilled;
+        [NonSerialized] public DopantType DopingState;
 
         public CastableEvent<ResearchTool> OnActivate = new CastableEvent<ResearchTool>();
         public CastableEvent<ResearchTool> OnDeactivate = new CastableEvent<ResearchTool>();

@@ -3,6 +3,7 @@ using BeauUtil;
 using FieldDay;
 using FieldDay.Audio;
 using FieldDay.Components;
+using FieldDay.Scenes;
 using FieldDay.UI;
 using System;
 using System.Collections;
@@ -10,7 +11,7 @@ using TMPro;
 using UnityEngine;
 
 namespace SpaceFab.Research {
-    public sealed class ThermalTool : MonoBehaviour {
+    public sealed class ThermalTool : MonoBehaviour, ISceneLateInitialize {
         [Range(-1, 1)] public float InputVoltage;
         [Range(0, 1)] public float Temperature;
 
@@ -23,26 +24,32 @@ namespace SpaceFab.Research {
 
         [NonSerialized] private ResearchTool m_Tool;
         [NonSerialized] public int TemperatureIndex;
+        [NonSerialized] public int MaxTemperature;
 
         private void Awake() {
             this.CacheComponent(ref m_Tool);
 
             m_Tool.OnInputSlotsUpdated.Register(OnSlotFillUpdated);
-            CoilRenderer.color = Colors[2];
-            TemperatureLabel.SetText(Labels[2]);
-            TemperatureIndex = 2;
+            CoilRenderer.color = Colors[0];
+            TemperatureLabel.SetText(Labels[0]);
+            TemperatureIndex = 0;
+
+            MaxTemperature = Labels.Length;
 
             IncreaseButton.Cursor.onClick.Register(OnClickIncrease);
             DecreaseButton.Cursor.onClick.Register(OnClickDecrease);
+
+            IncreaseButton.gameObject.SetActive(true);
+            DecreaseButton.gameObject.SetActive(false);
         }
 
         private void OnDisable() {
-            TemperatureIndex = 2;
-            CoilRenderer.color = Colors[2];
-            TemperatureLabel.SetText(Labels[2]);
-            Temperature = 0.5f;
+            TemperatureIndex = 0;
+            CoilRenderer.color = Colors[0];
+            TemperatureLabel.SetText(Labels[0]);
+            Temperature = 0;
             IncreaseButton.gameObject.SetActive(true);
-            DecreaseButton.gameObject.SetActive(true);
+            DecreaseButton.gameObject.SetActive(false);
 
         }
 
@@ -53,9 +60,9 @@ namespace SpaceFab.Research {
 
             Sfx.Play("Research.Tool.Button");
             GuiCommands.SetActive(DecreaseButton.gameObject, true);
-            GuiCommands.SetActive(IncreaseButton.gameObject, TemperatureIndex < 4);
+            GuiCommands.SetActive(IncreaseButton.gameObject, TemperatureIndex < MaxTemperature - 1);
 
-            Temperature = TemperatureIndex / 4f;
+            Temperature = TemperatureIndex / 5f;
             OnSlotFillUpdated();
         }
 
@@ -68,7 +75,7 @@ namespace SpaceFab.Research {
             GuiCommands.SetActive(IncreaseButton.gameObject, true);
             GuiCommands.SetActive(DecreaseButton.gameObject, TemperatureIndex > 0);
 
-            Temperature = TemperatureIndex / 4f;
+            Temperature = TemperatureIndex / 5f;
             OnSlotFillUpdated();
         }
 
@@ -78,9 +85,9 @@ namespace SpaceFab.Research {
                 if (!ResearchMaterialUtility.IsStableAtTemperature(input, Temperature)) {
                     CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                     CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
-                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), Temperature > 0.5f ? ExplosionStyle.TemperatureBreakdownHot : ExplosionStyle.TemperatureBreakdownCold, 0.4f);
+                    ResearchMaterialUtility.ExplodeItem(ResearchToolUtility.GetInputMaterialItem(m_Tool, 0), ExplosionStyle.TemperatureBreakdownHot, 0.4f);
                 } else {
-                    float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature);
+                    float current = ResearchMaterialUtility.GetCurrent(input, InputVoltage, Temperature, m_Tool.DopingState);
                     CircuitUtility.SetLightStrength(m_Tool.Circuit, current);
                     CircuitUtility.SetFlowSpeed(m_Tool.Circuit, current);
                     ResearchToolUtility.SetHighMobilityStrength(m_Tool.SlotsEffectPosition, (input.SpecialTags & SpecialTag.HighMobility) != 0 ? current : 0);
@@ -89,6 +96,14 @@ namespace SpaceFab.Research {
                 CircuitUtility.SetLightStrength(m_Tool.Circuit, 0);
                 CircuitUtility.SetFlowSpeed(m_Tool.Circuit, 0);
                 ResearchToolUtility.SetHighMobilityStrength(null, 0);
+            }
+        }
+
+        void ISceneLateInitialize.LateInitialize() {
+            if (ResearchGame.CurrentLevel != null) {
+                if ((ResearchGame.CurrentLevel.AvailableTools & ResearchToolsMask.ThermalHighHeat) == 0) {
+                    MaxTemperature = Labels.Length - 2;
+                }
             }
         }
     }

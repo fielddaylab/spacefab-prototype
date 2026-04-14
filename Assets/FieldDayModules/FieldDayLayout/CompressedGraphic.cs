@@ -134,7 +134,7 @@ namespace FieldDay.Layout {
             data.CharacterSpacing = CompressionRange.Encode8(SpacingRange, text.characterSpacing);
             data.WordSpacing = CompressionRange.Encode8(SpacingRange, text.wordSpacing);
             data.LineSpacing = CompressionRange.Encode8(SpacingRange, text.lineSpacing);
-            data.Wrapping = (byte) (text.enableWordWrapping ? 1 : 0);
+            data.Wrapping = (byte) text.textWrappingMode;
             data.Overflow = (byte) text.overflowMode;
             data.Margin0 = CompressionRange.Encode8(MarginRange, text.margin.x);
             data.Margin1 = CompressionRange.Encode8(MarginRange, text.margin.y);
@@ -155,7 +155,7 @@ namespace FieldDay.Layout {
             text.characterSpacing = CompressionRange.Decode8(SpacingRange, data.CharacterSpacing, 1);
             text.wordSpacing = CompressionRange.Decode8(SpacingRange, data.WordSpacing, 1);
             text.lineSpacing = CompressionRange.Decode8(SpacingRange, data.LineSpacing, 1);
-            text.enableWordWrapping = data.Wrapping > 0;
+            text.textWrappingMode = (TextWrappingModes) data.Wrapping;
             text.overflowMode = (TextOverflowModes) data.Overflow;
             text.margin = new Vector4(CompressionRange.Decode8(MarginRange, data.Margin0), CompressionRange.Decode8(MarginRange, data.Margin1),
                 CompressionRange.Decode8(MarginRange, data.Margin2), CompressionRange.Decode8(MarginRange, data.Margin3));

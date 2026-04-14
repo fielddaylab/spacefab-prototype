@@ -12,33 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d57d038f46f5c947b2157e21d6457c0, type: 3}
   m_Name: SiliconCarbide
   m_EditorClassIdentifier: 
-  DisplayName: Silicon Carbide
-  UnknownDisplayName: Sample 70
-  Material: {fileID: 2100000, guid: b085f94002d6111459dc1d1254d88fca, type: 2}
+  DisplayName: SiliconCarbide
+  UnknownDisplayName: Sample 11
   ChemicalSymbol: SiC
-  SampleNumber: 70
+  SampleNumber: 11
   Atoms:
   - Size: 111
     ValenceElectrons: 4
     Appearance: 1
+    Count: 1
     Color:
       serializedVersion: 2
       rgba: 4291809231
     Symbol: Si
   - Size: 67
     ValenceElectrons: 4
-    Appearance: 2
+    Appearance: 3
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4293459855
+      rgba: 4284374639
     Symbol: C
-  Parent:
-    m_HashValue: 0
-  Electrical: 3
-  Thermal: 1
-  SpecialTags: 4
+  ConductionMultiplier: 0.4
+  ThermalMultiplier: 2
+  MaxTemperature: 1
+  MaxVoltage: 1
+  SpecialTags: 0
   DopantType: 0
-  ConductionMultiplier: 1
   DopantN:
     m_HashValue: 541320182
   DopantP:

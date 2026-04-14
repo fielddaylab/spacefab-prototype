@@ -30,6 +30,7 @@ namespace FieldDay.UI {
         [SerializeField] private LayoutGroup m_Layout;
         [SerializeField] private TMP_Text m_Text;
         [SerializeField] private TMP_Text m_Header;
+        [SerializeField] private TMP_Text m_Footer;
 
         [Header("Defaults")]
         [SerializeField] private float m_DefaultHoverDelay = 0.6f;
@@ -166,6 +167,17 @@ namespace FieldDay.UI {
             }
 
             m_Text.gameObject.SetActive(textActive);
+
+            bool footerActive = false;
+            if (footerActive = (contents.DynamicFooter != null && contents.DynamicFooter.Length > 0)) {
+                m_Footer.SetText(contents.DynamicFooter);
+            } else if (footerActive = !string.IsNullOrEmpty(contents.Footer)) {
+                m_Footer.SetText(contents.Footer);
+            } else if (footerActive = !contents.LocFooter.IsEmpty) {
+                // TODO: handle localization key
+            }
+
+            m_Footer.gameObject.SetActive(footerActive);
         }
 
         void IOnGuiUpdate.OnGuiUpdate() {

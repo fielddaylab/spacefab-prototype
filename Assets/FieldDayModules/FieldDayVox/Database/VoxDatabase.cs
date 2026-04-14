@@ -109,8 +109,8 @@ namespace FieldDay.Vox {
             if (EngineHints.GetHintBool("VOX_ENABLED", true)) {
                 Game.SharedState.Register(new VoxDatabase());
                 Game.SharedState.Register(new VoxRequestState());
-                Game.Systems.Register(new VoxLoadingSystem());
-                Game.Systems.Register(new VoxRequestSystem());
+                VoxLoadingSystem.RegisterModule();
+                VoxRequestSystem.RegisterModule();
             }
         }
 

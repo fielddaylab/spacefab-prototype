@@ -12,18 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55426b3fefba51d4a9e042406bdc47d5, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: 
+  Label: 
   AvailableTools: 0
-  AvailableProperties: 1
+  AvailableProperties: 1314
+  StartingHypothesis: 19
   AvailableMaterials:
+  - m_HashValue: 1571298950
   - m_HashValue: 3821421172
-  - m_HashValue: 3383598718
   PrePopulate: []
   Objectives:
-  - MaterialId:
-      m_HashValue: 3821421172
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 3383598718
-    Knowledge: 1
+  - Chip: 19
+    ContextId:
+      m_HashValue: 0
+  - Chip: 20
+    ContextId:
+      m_HashValue: 0
   NextLevelId:
     m_HashValue: 677091165

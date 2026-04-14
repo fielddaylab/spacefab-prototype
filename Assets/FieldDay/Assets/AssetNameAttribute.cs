@@ -13,6 +13,7 @@ namespace FieldDay.Assets {
     /// Property attribute marking a string/StringHash32/SerializedHash32 field as an asset identifier.
     /// This will store the name of the asset.
     /// </summary>
+    [Conditional("UNITY_EDITOR")]
     public class AssetNameAttribute : PropertyAttribute {
         public readonly Type AssetType;
         internal readonly bool UseDropdown;

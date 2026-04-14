@@ -8,10 +8,11 @@ namespace SpaceFab.Research {
     public sealed class ResearchLevel : NamedAsset {
         public string Label;
         public ResearchToolsMask AvailableTools;
-        public ResearchMaterialKnowledge AvailableProperties = ResearchMaterialKnowledge.AllBasic;
+        public ResearchChipId[] AvailableProperties;
+        public ResearchChipId StartingHypothesis;
         [AssetName(typeof(ResearchMaterial))] public StringHash32[] AvailableMaterials;
         public ResearchMaterialKnowledgePair[] PrePopulate;
-        public ResearchMaterialKnowledgePair[] Objectives;
+        public ResearchMaterialGoal[] Objectives;
 
         [AssetName(typeof(ResearchLevel))] public StringHash32 NextLevelId;
     }
@@ -21,12 +22,20 @@ namespace SpaceFab.Research {
         AdjustableBattery = 0x01,
         Thermal = 0x02,
         Doping = 0x04,
-        Junction = 0x08
+        ThermalHighHeat = 0x10,
+        SpecialProperties = 0x20,
+    }
+
+    [Serializable]
+    public struct ResearchMaterialGoal {
+        public ResearchChipId Chip;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32 ContextId;
     }
 
     [Serializable]
     public struct ResearchMaterialKnowledgePair {
+        public ResearchChipId Chip;
         [AssetName(typeof(ResearchMaterial))] public StringHash32 MaterialId;
-        public ResearchMaterialKnowledge Knowledge;
+        [AssetName(typeof(ResearchMaterial))] public StringHash32 ContextId;
     }
 }

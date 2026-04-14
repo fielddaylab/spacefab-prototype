@@ -12,13 +12,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace FieldDay.Vox {
-    [SysUpdate(GameLoopPhaseMask.PreUpdate | GameLoopPhaseMask.UnscaledUpdate | GameLoopPhaseMask.UnscaledLateUpdate, 1000, AllowExecutionDuringLoad = true)]
-    internal class VoxLoadingSystem : ISystem {
-        public bool HasWork() {
-            return VoxUtility.DB != null;
+    internal static class VoxLoadingSystem {
+        static public unsafe void RegisterModule() {
+            Game.Systems.Register(&ProcessWork,
+                new SysUpdate(GameLoopPhaseMask.PreUpdate | GameLoopPhaseMask.UnscaledUpdate | GameLoopPhaseMask.UnscaledLateUpdate, 1000).AllowDuringLoad(),
+                new SysPermissions().ReadWriteShared<VoxDatabase>());
         }
 
-        public void ProcessWork(float deltaTime) {
+        static public void ProcessWork(float deltaTime) {
             VoxDatabase db = VoxUtility.DB;
             bool didWork = HandleLoading(db);
             if (!didWork) {
@@ -122,12 +123,6 @@ namespace FieldDay.Vox {
             }
 
             return didWork;
-        }
-
-        public void Initialize() {
-        }
-
-        public void Shutdown() {
         }
     }
 }

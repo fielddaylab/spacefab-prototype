@@ -47,6 +47,11 @@ namespace FieldDay.Scenes {
         public GameObject[] LateEnable;
 
         /// <summary>
+        /// List of objects to call LateInitialize.
+        /// </summary>
+        public Component[] LateInitialize;
+
+        /// <summary>
         /// Additional data objects.
         /// </summary>
         public Component[] CustomData;

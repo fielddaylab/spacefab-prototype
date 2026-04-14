@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55426b3fefba51d4a9e042406bdc47d5, type: 3}
+  m_Name: Level5
+  m_EditorClassIdentifier: 
+  Label: 
+  AvailableTools: 4294967295
+  AvailableProperties: 16151719181f1e201a1b1c1d
+  StartingHypothesis: 26
+  AvailableMaterials:
+  - m_HashValue: 1571298950
+  - m_HashValue: 3821421172
+  - m_HashValue: 1163381446
+  - m_HashValue: 3774176290
+  - m_HashValue: 527899933
+  - m_HashValue: 296790427
+  - m_HashValue: 2929137943
+  - m_HashValue: 336354447
+  PrePopulate:
+  - Chip: 21
+    MaterialId:
+      m_HashValue: 1571298950
+    ContextId:
+      m_HashValue: 0
+  - Chip: 22
+    MaterialId:
+      m_HashValue: 3821421172
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    MaterialId:
+      m_HashValue: 1163381446
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    MaterialId:
+      m_HashValue: 3774176290
+    ContextId:
+      m_HashValue: 0
+  - Chip: 25
+    MaterialId:
+      m_HashValue: 3774176290
+    ContextId:
+      m_HashValue: 0
+  - Chip: 22
+    MaterialId:
+      m_HashValue: 527899933
+    ContextId:
+      m_HashValue: 0
+  - Chip: 24
+    MaterialId:
+      m_HashValue: 527899933
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    MaterialId:
+      m_HashValue: 2929137943
+    ContextId:
+      m_HashValue: 0
+  - Chip: 32
+    MaterialId:
+      m_HashValue: 2929137943
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    MaterialId:
+      m_HashValue: 296790427
+    ContextId:
+      m_HashValue: 0
+  - Chip: 31
+    MaterialId:
+      m_HashValue: 296790427
+    ContextId:
+      m_HashValue: 0
+  Objectives:
+  - Chip: 26
+    ContextId:
+      m_HashValue: 296790427
+  - Chip: 28
+    ContextId:
+      m_HashValue: 296790427
+  - Chip: 26
+    ContextId:
+      m_HashValue: 2929137943
+  - Chip: 28
+    ContextId:
+      m_HashValue: 2929137943
+  NextLevelId:
+    m_HashValue: 0

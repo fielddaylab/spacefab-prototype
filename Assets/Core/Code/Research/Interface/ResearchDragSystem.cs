@@ -10,9 +10,16 @@ using System;
 using UnityEngine;
 
 namespace SpaceFab.Research {
-    [SysUpdate(GameLoopPhase.LateUpdate, 1000)]
-    public sealed class ResearchDragSystem : SharedStateSystemBehaviour<ResearchDragState> {
-        public override void ProcessWork(float deltaTime) {
+    public sealed class ResearchDragSystem : SystemModule {
+        protected override unsafe void RegisterSystems(ref SystemRegistrationTable ecs) {
+            ecs.Register(&ProcessWork,
+                new SysUpdate(GameLoopPhase.LateUpdate, 1000),
+                new SysPermissions().ReadWriteShared<ResearchDragState>().ReadWrite<ResearchSlot>().ReadWrite<ResearchMaterialItem>());
+        }
+
+        static private void ProcessWork(float deltaTime) {
+            Find.State(out ResearchDragState dragState);
+
             bool cancelQueued = false;
             bool cursorOnCanvas = Game.Input.IsPointerOverCanvas();
 
@@ -25,7 +32,7 @@ namespace SpaceFab.Research {
                 OverlapResults results = default;
                 bool leftClicked = Game.Input.IsMousePressed(0);
 
-                if (m_State.CurrentlyDragging) {
+                if (dragState.CurrentlyDragging) {
                     if (cursorValid) {
                         GetPositionOverlap(worldPos, out results);
                     }
@@ -34,7 +41,7 @@ namespace SpaceFab.Research {
                         if (results.Slot) {
                             ResearchSlotUtility.DepositCurrentDrag(results.Slot);
                         } else if (results.Gem) {
-                            if (results.Gem.Material == m_State.CurrentlyDragging) {
+                            if (results.Gem.Material == dragState.CurrentlyDragging) {
                                 cancelQueued = true;
                             } else {
                                 ResearchSlotUtility.LiftItem(results.Gem);
@@ -43,13 +50,13 @@ namespace SpaceFab.Research {
                             cancelQueued = true;
                         }
                     } else {
-                        if (results.Slot != m_State.SlotHoveredOver) {
-                            if (m_State.SlotHoveredOver) {
-                                m_State.SlotHoveredOver.HoverVfx.Stop(true, UnityEngine.ParticleSystemStopBehavior.StopEmitting);
+                        if (results.Slot != dragState.SlotHoveredOver) {
+                            if (dragState.SlotHoveredOver) {
+                                dragState.SlotHoveredOver.HoverVfx.Stop(true, UnityEngine.ParticleSystemStopBehavior.StopEmitting);
                             }
-                            m_State.SlotHoveredOver = results.Slot;
-                            if (m_State.SlotHoveredOver) {
-                                m_State.SlotHoveredOver.HoverVfx.Play();
+                            dragState.SlotHoveredOver = results.Slot;
+                            if (dragState.SlotHoveredOver) {
+                                dragState.SlotHoveredOver.HoverVfx.Play();
                             }
                         }
                     }
@@ -65,8 +72,8 @@ namespace SpaceFab.Research {
                 ResearchSlotUtility.CancelCurrentDrag();
             }
 
-            if (cursorOnWorld && m_State.CurrentlyDragging) {
-                m_State.DragRenderer.transform.SetPosition(worldPos, Axis.XY, Space.World);
+            if (cursorOnWorld && dragState.CurrentlyDragging) {
+                dragState.DragRenderer.transform.SetPosition(worldPos, Axis.XY, Space.World);
             }
         }
 

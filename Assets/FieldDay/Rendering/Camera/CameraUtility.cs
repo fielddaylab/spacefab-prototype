@@ -104,7 +104,25 @@ namespace FieldDay.Rendering {
         static public bool IsGameCamera(Camera camera) {
             return camera.cameraType == CameraType.Game;
         }
-    
+
+        /// <summary>
+        /// Returns if the given camera is a game camera.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static public bool IsOverlayCamera(Camera camera) {
+            // cameras rendering to a target
+            if (camera.cameraType != CameraType.Game || camera.targetTexture != null) {
+                return false;
+            }
+#if USE_URP
+            // overlay cameras
+            var data = camera.GetUniversalAdditionalCameraData();
+            return data.renderType == CameraRenderType.Overlay;
+#else
+            return camera.clearFlags >= CameraClearFlags.Depth && !camera.CompareTag("MainCamera");
+#endif // USE_URP
+        }
+
         /// <summary>
         /// Gets a matrix that faces towards the given camera.
         /// </summary>

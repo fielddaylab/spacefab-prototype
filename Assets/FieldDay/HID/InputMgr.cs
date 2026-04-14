@@ -8,6 +8,7 @@ using BeauPools;
 using BeauUtil;
 using BeauUtil.Debugger;
 using FieldDay.Debugging;
+using FieldDay.UI;
 using NativeUtils;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -30,6 +31,63 @@ namespace FieldDay.HID {
             }
         }
 
+        private sealed class NullInputStream : BaseInput {
+            protected override void Awake() {
+                base.Awake();
+                hideFlags = HideFlags.HideAndDontSave;
+            }
+
+            public override string compositionString {
+                get { return string.Empty; }
+            }
+
+            public override int touchCount {
+                get { return 0; }
+            }
+
+            public override Vector2 mousePosition {
+                get { return new Vector2(-1024, -1024); }
+            }
+
+            public override Touch GetTouch(int index) {
+                return default;
+            }
+
+            public override bool GetMouseButton(int button) {
+                return false;
+            }
+
+            public override bool GetMouseButtonDown(int button) {
+                return false;
+            }
+
+            public override bool GetMouseButtonUp(int button) {
+                return false;
+            }
+
+            public override bool GetButtonDown(string buttonName) {
+                return false;
+            }
+
+            public override float GetAxisRaw(string axisName) {
+                return 0;
+            }
+
+            public override IMECompositionMode imeCompositionMode {
+                get { return IMECompositionMode.Off; }
+                set { }
+            }
+
+            public override Vector2 compositionCursorPos {
+                get { return default; }
+                set { }
+            }
+
+            public override Vector2 mouseScrollDelta {
+                get { return default; }
+            }
+        }
+
         #endregion // Types
 
         #region State
@@ -37,6 +95,8 @@ namespace FieldDay.HID {
         private EventSystem m_EventSystem;
         private BaseInputModule m_DefaultInputModule;
         private ExposedPointerInputModule m_ExposedInputModule;
+        private NullInputStream m_NullInputStream;
+
         private uint m_ForceClickRecurseCounter;
         private RingBuffer<InputTimestamp> m_ClickTimestampBuffer = new RingBuffer<InputTimestamp>(2, RingBufferMode.Overwrite);
         private uint m_EventPauseCounter;
@@ -255,6 +315,8 @@ namespace FieldDay.HID {
             if (!m_DefaultInputModule) {
                 Log.Warn("[InputMgr] Could not find any input module");
                 m_DefaultInputModule = null;
+            } else {
+                m_NullInputStream = m_ExposedInputModule.gameObject.AddComponent<NullInputStream>();
             }
 
             GameLoop.OnGuiEvent.Register(OnGui);
@@ -348,7 +410,9 @@ namespace FieldDay.HID {
                 }
 #endif // DEVELOPMENT
                 m_EventSystem.SetSelectedGameObject(null);
-                m_DefaultInputModule?.DeactivateModule();
+                if (m_DefaultInputModule) {
+                    m_DefaultInputModule.inputOverride = m_NullInputStream;
+                }
                 NativeInput.SetEventSystemEnabled(false);
             }
         }
@@ -359,7 +423,9 @@ namespace FieldDay.HID {
         public void ResumeRaycasts() {
             Assert.True(m_EventPauseCounter > 0, "Unbalanced Pause Resume Raycasts.");
             if (m_EventPauseCounter-- == 1) {
-                m_DefaultInputModule?.ActivateModule();
+                if (m_DefaultInputModule) {
+                    m_DefaultInputModule.inputOverride = null;
+                }
                 NativeInput.SetEventSystemEnabled(true);
             }
         }
@@ -370,12 +436,16 @@ namespace FieldDay.HID {
                 m_DebugEventPauseOverride = debugPaused;
 
                 if (debugPaused) {
-                    m_DefaultInputModule?.ActivateModule();
+                    if (m_DefaultInputModule) {
+                        m_DefaultInputModule.inputOverride = null;
+                    }
                     NativeInput.SetEventSystemEnabled(true);
                 } else {
                     if (m_EventPauseCounter > 0) {
                         m_EventSystem.SetSelectedGameObject(null);
-                        m_DefaultInputModule?.DeactivateModule();
+                        if (m_DefaultInputModule) {
+                            m_DefaultInputModule.inputOverride = m_NullInputStream;
+                        }
                         NativeInput.SetEventSystemEnabled(false);
                     }
                 }
@@ -451,6 +521,10 @@ namespace FieldDay.HID {
         static private DMInfo CreateDebugMenu() {
             DMInfo input = new DMInfo("Input");
             DebugFlags.Menu.AddFlagToggle(input, "Display Pointer Info", DebuggingFlags.DisplayCurrentPointerInfo);
+            input.AddSelector("Hinted Cursor Visiblity",
+                () => (int)HintedCursor.Visibility,
+                (i) => HintedCursor.Visibility = (HintedCursor.VisiblityMode)i,
+                new string[] { "Invisible", "Interactive Only", "Always" });
             return input;
         }
 

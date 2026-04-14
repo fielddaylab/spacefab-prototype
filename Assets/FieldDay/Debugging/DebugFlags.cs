@@ -44,6 +44,27 @@ namespace FieldDay.Debugging {
 
         #endregion // Scene Launch
 
+        #region Console
+
+#if DEVELOPMENT
+        static private bool s_DebugConsoleisible;
+
+        static internal void SetDebugConsoleVisible(bool visible) {
+            s_DebugConsoleisible = visible;
+        }
+#endif // DEVELOPMENT
+
+#if DEVELOPMENT
+        static public bool IsConsoleOpen {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get { return s_DebugConsoleisible; }
+        }
+#else
+        public const bool IsConsoleOpen = false;
+#endif // DEVELOPMENT
+
+        #endregion // Console
+
         #region TimeScale Adjustments
 
 #if DEVELOPMENT

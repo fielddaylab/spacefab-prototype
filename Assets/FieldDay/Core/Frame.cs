@@ -4,6 +4,8 @@ using UnityEngine;
 using BeauUtil;
 using BeauUtil.Debugger;
 using System.Diagnostics;
+using Unity.IL2CPP.CompilerServices;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,6 +15,7 @@ namespace FieldDay {
     /// <summary>
     /// Frame tracker and per-frame allocations.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     static public class Frame {
         #region Index
 

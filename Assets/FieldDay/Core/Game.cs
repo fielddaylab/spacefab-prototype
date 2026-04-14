@@ -18,6 +18,7 @@ using FieldDay.Memory;
 using FieldDay.Perf;
 using FieldDay.Files;
 using FieldDay.Localization;
+using Unity.IL2CPP.CompilerServices;
 
 [assembly: InternalsVisibleTo("FieldDay.Core.Editor")]
 
@@ -25,6 +26,7 @@ namespace FieldDay {
     /// <summary>
     /// Maintains references to game engine components.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     public class Game {
 
         /// <summary>
@@ -81,6 +83,11 @@ namespace FieldDay {
         /// Rendering manager. Handles render state callbacks.
         /// </summary>
         static public RenderMgr Rendering { [MethodImpl(MethodImplOptions.AggressiveInlining)] get; internal set; }
+
+        /// <summary>
+        /// Shading manager. Handles shaders and materials.
+        /// </summary>
+        static public ShadingMgr Shading { [MethodImpl(MethodImplOptions.AggressiveInlining)] get; internal set; }
 
         /// <summary>
         /// Input manager. Maintains input state.

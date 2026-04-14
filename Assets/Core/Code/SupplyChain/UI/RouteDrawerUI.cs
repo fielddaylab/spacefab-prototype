@@ -9,15 +9,15 @@ using UnityEngine.UI;
 
 namespace SpaceFab.SupplyChain {
     public sealed class RouteDrawerUI : SharedPanel {
-        public CanvasGroup Group;
+        public CanvasGroup VisibleGroup;
         public Graphic Background;
 
         public override void Show() {
-            Group.gameObject.SetActive(true);
+            VisibleGroup.gameObject.SetActive(true);
         }
 
         public override void Hide() {
-            Group.gameObject.SetActive(false);
+            VisibleGroup.gameObject.SetActive(false);
         }
     }
 }

@@ -12,34 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d57d038f46f5c947b2157e21d6457c0, type: 3}
   m_Name: GalliumNitride
   m_EditorClassIdentifier: 
-  DisplayName: Gallium Nitride
-  UnknownDisplayName: Sample 71
-  Material: {fileID: 2100000, guid: 4fb7b43d540119f449d3d959cd9a170e, type: 2}
+  DisplayName: Gallium Arsenide
+  UnknownDisplayName: Sample 15
   ChemicalSymbol: GaN
-  SampleNumber: 71
+  SampleNumber: 15
   Atoms:
   - Size: 136
     ValenceElectrons: 3
-    Appearance: 3
+    Appearance: 4
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4286282619
+      rgba: 4289738402
     Symbol: Ga
   - Size: 56
     ValenceElectrons: 5
-    Appearance: 5
+    Appearance: 2
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4285923198
+      rgba: 4287947425
     Symbol: N
-  Parent:
-    m_HashValue: 0
-  Electrical: 3
-  Thermal: 1
-  SpecialTags: 4
+  ConductionMultiplier: 0.4
+  ThermalMultiplier: 2
+  MaxTemperature: 1
+  MaxVoltage: 1
+  SpecialTags: 1
   DopantType: 0
-  ConductionMultiplier: 1
   DopantN:
-    m_HashValue: 0
+    m_HashValue: 1163381446
   DopantP:
     m_HashValue: 336354447

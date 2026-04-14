@@ -6,7 +6,7 @@ namespace FieldDay.UI.Widgets {
         public GameObject[] EnabledObjects;
         public GameObject[] DisabledObjects;
 
-        public override void Populate(in int data) {
+        public override void Populate(in int data, GuiWidgetUpdateFlags flags) {
             Assert.True(data >= 0 && data <= EnabledObjects.Length && data <= DisabledObjects.Length);
             for(int i = 0; i < EnabledObjects.Length; i++) {
                 EnabledObjects[i].SetActive(data > i);

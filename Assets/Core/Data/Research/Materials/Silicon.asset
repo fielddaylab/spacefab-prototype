@@ -13,25 +13,24 @@ MonoBehaviour:
   m_Name: Silicon
   m_EditorClassIdentifier: 
   DisplayName: Silicon
-  UnknownDisplayName: Sample 7
-  Material: {fileID: 2100000, guid: 0aa939af7cb730b42a345ea7ab952b51, type: 2}
+  UnknownDisplayName: Sample 1
   ChemicalSymbol: Si
-  SampleNumber: 7
+  SampleNumber: 1
   Atoms:
   - Size: 111
     ValenceElectrons: 4
     Appearance: 1
+    Count: 1
     Color:
       serializedVersion: 2
       rgba: 4291809231
     Symbol: Si
-  Parent:
-    m_HashValue: 0
-  Electrical: 3
-  Thermal: 0
+  ConductionMultiplier: 0.4
+  ThermalMultiplier: 2
+  MaxTemperature: 0.6
+  MaxVoltage: 0.6
   SpecialTags: 0
   DopantType: 0
-  ConductionMultiplier: 1
   DopantN:
     m_HashValue: 541320182
   DopantP:

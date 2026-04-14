@@ -76,6 +76,8 @@ namespace FieldDay.Editor {
             removedCount += StripMissingPropertiesFromArray(savedPropertiesStruct.FindPropertyRelative("m_Ints"), sourceShader, removedProperties);
             removedCount += StripMissingPropertiesFromArray(savedPropertiesStruct.FindPropertyRelative("m_Floats"), sourceShader, removedProperties);
             removedCount += StripMissingPropertiesFromArray(savedPropertiesStruct.FindPropertyRelative("m_Colors"), sourceShader, removedProperties);
+            removedCount += StripKeywordsFromArray(serializedObj.FindProperty("m_InvalidKeywords"), sourceShader, removedProperties);
+
             serializedObj.ApplyModifiedProperties();
 
             if (removedCount > 0) {
@@ -114,6 +116,25 @@ namespace FieldDay.Editor {
             }
 
             return removedCount;
+        }
+
+        static private int StripKeywordsFromArray(SerializedProperty prop, Shader source, List<string> removedTracker) {
+            int count = prop.arraySize;
+
+            for (int i = count; i-- > 0;) {
+                SerializedProperty element = prop.GetArrayElementAtIndex(i);
+                //Debug.LogFormat("element at index {0} is {1} of type {2}", i, element.name, element.type);
+                //Debug.LogFormat("inner is {0} with type {1}", element.name, element.type);
+                string propertyName = element.stringValue;
+                if (removedTracker == null) {
+                    Debug.LogWarningFormat("keyword {0} is not found in shader {1}", propertyName, source.name);
+                } else {
+                    removedTracker.Add(propertyName);
+                }
+            }
+
+            prop.ClearArray();
+            return count;
         }
     }
 }

@@ -13,25 +13,23 @@ MonoBehaviour:
   m_Name: Level2
   m_EditorClassIdentifier: 
   Label: 
-  AvailableTools: 3
-  AvailableProperties: 3
+  AvailableTools: 2
+  AvailableProperties: 161517
+  StartingHypothesis: 22
   AvailableMaterials:
+  - m_HashValue: 1571298950
   - m_HashValue: 3821421172
-  - m_HashValue: 3383598718
   - m_HashValue: 1163381446
-  PrePopulate:
-  - MaterialId:
-      m_HashValue: 3821421172
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 3383598718
-    Knowledge: 1
+  PrePopulate: []
   Objectives:
-  - MaterialId:
-      m_HashValue: 1163381446
-    Knowledge: 1
-  - MaterialId:
-      m_HashValue: 1163381446
-    Knowledge: 2
+  - Chip: 22
+    ContextId:
+      m_HashValue: 0
+  - Chip: 23
+    ContextId:
+      m_HashValue: 0
+  - Chip: 21
+    ContextId:
+      m_HashValue: 0
   NextLevelId:
-    m_HashValue: 660313546
+    m_HashValue: 2687278129

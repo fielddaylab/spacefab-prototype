@@ -12,26 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d57d038f46f5c947b2157e21d6457c0, type: 3}
   m_Name: Boron
   m_EditorClassIdentifier: 
-  DisplayName: Boron
-  UnknownDisplayName: Sample 1
-  Material: {fileID: 2100000, guid: ec3ed3e944dfb2d4e96fcdc6dc308214, type: 2}
+  DisplayName: Phosphorus
+  UnknownDisplayName: Sample 10
   ChemicalSymbol: B
-  SampleNumber: 1
+  SampleNumber: 10
   Atoms:
   - Size: 87
     ValenceElectrons: 3
     Appearance: 1
+    Count: 1
     Color:
       serializedVersion: 2
-      rgba: 4288302080
+      rgba: 4293358201
     Symbol: B
-  Parent:
-    m_HashValue: 0
-  Electrical: 2
-  Thermal: 0
+  ConductionMultiplier: 0.1
+  ThermalMultiplier: 1
+  MaxTemperature: 0.6
+  MaxVoltage: 0.6
   SpecialTags: 0
-  DopantType: 2
-  ConductionMultiplier: 1
+  DopantType: 0
   DopantN:
     m_HashValue: 0
   DopantP:

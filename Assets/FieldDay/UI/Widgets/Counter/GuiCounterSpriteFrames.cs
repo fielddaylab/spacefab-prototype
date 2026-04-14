@@ -9,7 +9,7 @@ namespace FieldDay.UI.Widgets {
         [FormerlySerializedAs("Target")] public Image GuiSprite;
         public Sprite[] Values;
 
-        public override void Populate(in int data) {
+        public override void Populate(in int data, GuiWidgetUpdateFlags flags) {
             Assert.True(data >= 0 && data < Values.Length);
             Sprite spr = Values[data];
             if (Sprite) {

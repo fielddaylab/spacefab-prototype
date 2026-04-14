@@ -15,9 +15,6 @@ using BeauPools;
 using FieldDay.Debugging;
 using EasyAssetStreaming;
 
-using GlobalAssetIndex = BeauUtil.TypeIndex<FieldDay.Assets.IGlobalAsset>;
-using LiteAssetIndex = BeauUtil.TypeIndex<FieldDay.Assets.ILiteAsset>;
-using NamedAssetIndex = BeauUtil.TypeIndex<FieldDay.Assets.INamedAsset>;
 using NamedAssetCollection = FieldDay.Assets.AssetCollection<FieldDay.Assets.INamedAsset>;
 
 namespace FieldDay.Assets {
@@ -138,9 +135,10 @@ namespace FieldDay.Assets {
             Assert.False(id.IsEmpty);
 
             Type assetType = asset.GetType();
-            var typeIndices = NamedAssetIndex.GetAll(assetType);
-            foreach (var index in typeIndices) {
+            int index = NamedAssetIndex.Get(assetType);
+            while(index >= 0) {
                 GetNamedCollection(index, true).Register(id, asset);
+                index = NamedAssetIndex.GetParent(index);
             }
 
             RegistrationCallbacks.InvokeRegister(asset);
@@ -156,9 +154,10 @@ namespace FieldDay.Assets {
             Assert.False(id.IsEmpty);
 
             Type assetType = asset.GetType();
-            var typeIndices = NamedAssetIndex.GetAll(assetType);
-            foreach (var index in typeIndices) {
+            int index = NamedAssetIndex.Get(assetType);
+            while (index >= 0) {
                 GetNamedCollection(index, false)?.Deregister(id);
+                index = NamedAssetIndex.GetParent(index);
             }
 
             InvokeNamedCallbacks(m_NamedAssetUnloadCallbackTable, assetType, asset);
@@ -490,12 +489,13 @@ namespace FieldDay.Assets {
         }
 
         static private void InvokeNamedCallbacks(CastableAction<INamedAsset>[] assets, Type assetType, INamedAsset asset) {
-            var typeIndices = NamedAssetIndex.GetAll(assetType);
-            foreach (var index in typeIndices) {
+            int index = NamedAssetIndex.Get(assetType);
+            while (index >= 0) {
                 var action = assets[index];
                 if (!action.IsEmpty) {
                     action.Invoke(asset);
                 }
+                index = NamedAssetIndex.GetParent(index);
             }
         }
 

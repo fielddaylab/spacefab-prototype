@@ -10,6 +10,9 @@ namespace FieldDay.Rendering {
     [DefaultExecutionOrder(-10000)]
     public sealed class CameraClampToVirtualViewport : MonoBehaviour {
         public Rect Viewport = new Rect(0, 0, 1, 1);
+        public Vector2 MinPadding;
+        public Vector2 MaxPadding;
+
         [NonSerialized] private Camera m_Camera;
 
         public Camera Camera {

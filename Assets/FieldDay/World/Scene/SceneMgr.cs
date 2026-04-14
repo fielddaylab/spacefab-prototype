@@ -1495,6 +1495,9 @@ namespace FieldDay.Scenes {
                         foreach (var obj in args.Data.LateEnable) {
                             obj.SetActive(true);
                         }
+                        foreach (ISceneLateInitialize obj in args.Data.LateInitialize) {
+                            obj.LateInitialize();
+                        }
                         foreach (ISceneCustomData custom in args.Data.CustomData) {
                             custom.OnLateEnable();
                         }
@@ -1715,7 +1718,7 @@ namespace FieldDay.Scenes {
                 Log.Trace("[SceneMgr] Processing LateEnable...");
 
                 foreach (var data in linearizedScenes) {
-                    if (data.LateEnable.Length > 0 && !data.IsVisited(SceneDataExt.VisitFlags.LateEnabled)) {
+                    if ((data.LateEnable.Length > 0 || data.LateInitialize.Length > 0) && !data.IsVisited(SceneDataExt.VisitFlags.LateEnabled)) {
                         m_LateEnableQueue.PushBack(new LateEnableArgs() {
                             Data = data,
                             Counter = counter

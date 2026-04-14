@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using BeauUtil;
+using BeauUtil.Debugger;
+using Unity.IL2CPP.CompilerServices;
 
 namespace FieldDay {
     /// <summary>
     /// Game loop phase buckets.
     /// </summary>
+    [Il2CppEagerStaticClassConstruction]
     static internal class PhaseBuckets {
         private const GameLoopPhase MinPhase = GameLoopPhase.DebugUpdate;
         private const GameLoopPhase MaxPhase = GameLoopPhase.FrameAdvance;
@@ -123,6 +126,24 @@ namespace FieldDay {
 
         #endregion // Registration/Deregistration
 
+        #region Packing
+
+        /// <summary>
+        /// Packs a phase mask into a 16-bit value.
+        /// </summary>
+        static public ushort PackMask(GameLoopPhaseMask mask) {
+            return (ushort) (((uint)mask >> (int) MinPhase) & ((1 << MaxBuckets) - 1));
+        }
+
+        /// <summary>
+        /// Unpacks a packed 16-bit value to its corresponding phase mask.
+        /// </summary>
+        static public GameLoopPhaseMask UnpackMask(ushort packed) {
+            return (GameLoopPhaseMask)((uint)packed << (int)MinPhase);
+        }
+
+        #endregion // Packing
+
         public struct PhaseEnumerator : IEnumerator<GameLoopPhase>, IEnumerable<GameLoopPhase> {
             private uint m_Mask;
             private int m_Phase;
@@ -227,9 +248,9 @@ namespace FieldDay {
     /// </summary>
     internal struct PhaseBuckets<TData> {
         private RingBuffer<TData>[] m_Buckets;
-        private int m_DefaultCapacity;
         private BitSet32 m_BucketDirty;
         private BitSet32 m_BucketInit;
+        private unsafe fixed int m_DefaultCapacity[PhaseBuckets.MaxBuckets];
 
         public PhaseBuckets(int defaultCapacity) : this() {
             Create(defaultCapacity);
@@ -238,11 +259,30 @@ namespace FieldDay {
         /// <summary>
         /// Creates buckets.
         /// </summary>
-        public void Create(int defaultCapacity) {
+        public unsafe void Create(int defaultCapacity) {
+            Assert.True(defaultCapacity > 0, "Capacity must be greater than 0");
             m_Buckets = new RingBuffer<TData>[PhaseBuckets.MaxBuckets];
-            m_DefaultCapacity = defaultCapacity;
+            for(int i = 0; i < PhaseBuckets.MaxBuckets; i++) {
+                m_DefaultCapacity[i] = defaultCapacity;
+            }
             m_BucketDirty.Clear();
             m_BucketInit.Clear();
+        }
+
+        /// <summary>
+        /// Sets the default capacity for the given phase.
+        /// </summary>
+        public unsafe void SetDefaultCapacity(GameLoopPhase phase, int capacity) {
+            Assert.True(capacity > 0, "Capacity must be greater than 0");
+            int index = PhaseBuckets.PhaseToIndex(phase);
+            Assert.True(index >= 0 && index < PhaseBuckets.MaxBuckets);
+            m_DefaultCapacity[index] = capacity;
+            if (m_BucketInit[index]) {
+                var bucket = m_Buckets[index];
+                if (bucket.Capacity < capacity) {
+                    bucket.SetCapacity(capacity);
+                }
+            }
         }
 
         /// <summary>
@@ -287,10 +327,11 @@ namespace FieldDay {
             return m_BucketInit.IsSet(PhaseBuckets.PhaseToIndex(phase));
         }
 
-        private RingBuffer<TData> GetBucket(int index) {
+        private unsafe RingBuffer<TData> GetBucket(int index) {
             RingBuffer<TData> bucket;
             if (!m_BucketInit.IsSet(index)) {
-                bucket = m_Buckets[index] = new RingBuffer<TData>(m_DefaultCapacity, RingBufferMode.Expand);
+                Assert.True(index >= 0 && index < PhaseBuckets.MaxBuckets);
+                bucket = m_Buckets[index] = new RingBuffer<TData>(m_DefaultCapacity[index], RingBufferMode.Expand);
                 m_BucketInit.Set(index);
             } else {
                 bucket = m_Buckets[index];

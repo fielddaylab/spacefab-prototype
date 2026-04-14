@@ -423,7 +423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91976426764e030488fcd6b684875bd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Group: {fileID: 1211298124}
+  m_PanelGroup:
+    m_HashValue: 0
+  VisibleGroup: {fileID: 1211298124}
   Background: {fileID: 117062172}
 --- !u!1 &144691770
 GameObject:
@@ -520,20 +522,23 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 16
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -545,6 +550,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
+  m_maxLineWidth: 0
   m_margin: {x: 0, y: 0, z: 0, w: 8}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
@@ -756,6 +762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad10af9e8342104881f7e44d62eba26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_PanelGroup:
+    m_HashValue: 0
   ShipWidgets:
   - {fileID: 9061363882790368827}
   - {fileID: 239723713}
@@ -1740,7 +1748,6 @@ GameObject:
   - component: {fileID: 471059388}
   - component: {fileID: 471059390}
   - component: {fileID: 471059391}
-  - component: {fileID: 471059392}
   - component: {fileID: 471059393}
   - component: {fileID: 471059394}
   - component: {fileID: 471059395}
@@ -1837,18 +1844,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dbc8913cd33eea40afb51fe35ad7de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &471059392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 471059386}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d2fe0898961774595c14f546a65658, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &471059393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1885,7 +1880,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 455d1022cf3f0cc4487f1e939bca419c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InitialCapacity: 8
 --- !u!114 &471059396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2387,7 +2381,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1083877486}
-  - component: {fileID: 1083877485}
   - component: {fileID: 1083877484}
   - component: {fileID: 1083877488}
   - component: {fileID: 1083877487}
@@ -2416,18 +2409,6 @@ MonoBehaviour:
   Region: {fileID: 1009539853}
   InterpolationStrength: 10
   MovementSpeed: 6
---- !u!114 &1083877485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1083877483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9d2fe0898961774595c14f546a65658, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1083877486
 Transform:
   m_ObjectHideFlags: 0
@@ -2479,7 +2460,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 175f00a446e0ebf48982f69a817a5529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InitialCapacity: 8
 --- !u!4 &1139471344 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2730052152849183642, guid: d160000221c707d4e946de23106fe95f, type: 3}
@@ -3286,20 +3266,23 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
+  m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 0
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -3311,6 +3294,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
+  m_maxLineWidth: 0
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0

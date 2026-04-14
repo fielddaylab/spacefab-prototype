@@ -1,5 +1,6 @@
 using BeauRoutine.Extensions;
 using BeauUtil;
+using System;
 using UnityEngine;
 
 namespace FieldDay.UI {
@@ -11,7 +12,12 @@ namespace FieldDay.UI {
     public abstract class SharedPanel : MonoBehaviour, ISharedGuiPanel {
         public const int DefaultExecutionOrder = -100;
 
+        [SerializeField, PanelGroupName] private StringHash32 m_PanelGroup;
+
+        [NonSerialized] protected IInputLayer m_InputLayer;
+
         protected virtual void Awake() {
+            m_InputLayer = IInputLayer.Find(this);
             Game.Gui.RegisterPanel(this);
         }
 
@@ -25,6 +31,10 @@ namespace FieldDay.UI {
 
         public virtual Transform Root {
             get { return transform; }
+        }
+
+        public StringHash32 Group {
+            get { return m_PanelGroup; }
         }
 
         public virtual void Hide() {

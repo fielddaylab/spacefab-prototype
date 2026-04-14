@@ -9,23 +9,29 @@ using System;
 using UnityEngine;
 
 namespace SpaceFab.SupplyChain {
-    [SysUpdate(GameLoopPhase.LateUpdate, -100000)]
-    public sealed class CameraLerpSystem : SharedStateSystemBehaviour<CameraControlState> {
-        public override void ProcessWork(float deltaTime) {
-            Vector2 frameSize = CameraUtility.GetFrustumSize(m_State.Camera, 0);
-            Rect region = Geom.BoundsToRect(m_State.Region.bounds);
+    public sealed class CameraLerpSystem : SystemModule {
+        protected override unsafe void RegisterSystems(ref SystemRegistrationTable ecs) {
+            ecs.Register(&ProcessWork, new SysUpdate(GameLoopPhase.LateUpdate, -100000),
+                new SysPermissions().ReadWriteShared<CameraControlState>());
+        }
+        
+        static private void ProcessWork(float deltaTime) {
+            Find.State(out CameraControlState camState);
 
-            Vector2 currentPos = m_State.CameraPosition.position;
-            Vector2 targetPos = m_State.TargetPosition;
+            Vector2 frameSize = CameraUtility.GetFrustumSize(camState.Camera, 0);
+            Rect region = Geom.BoundsToRect(camState.Region.bounds);
+
+            Vector2 currentPos = camState.CameraPosition.position;
+            Vector2 targetPos = camState.TargetPosition;
             targetPos = Geom.Constrain(targetPos, frameSize, region);
 
-            m_State.TargetPosition = targetPos;
+            camState.TargetPosition = targetPos;
 
-            DebugDraw.AddPoint(m_State.TargetPosition, 0.05f, Color.red);
+            DebugDraw.AddPoint(camState.TargetPosition, 0.05f, Color.red);
 
-            currentPos = Vector2.LerpUnclamped(currentPos, targetPos, TweenUtil.Lerp(m_State.InterpolationStrength, 1, deltaTime));
+            currentPos = Vector2.LerpUnclamped(currentPos, targetPos, TweenUtil.Lerp(camState.InterpolationStrength, 1, deltaTime));
             currentPos = Geom.Constrain(currentPos, frameSize, region);
-            m_State.CameraPosition.SetPosition(currentPos, Axis.XY, Space.World);
+            camState.CameraPosition.SetPosition(currentPos, Axis.XY, Space.World);
         }
     }
 }
