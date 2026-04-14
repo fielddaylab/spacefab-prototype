@@ -157,7 +157,7 @@ MonoBehaviour:
   Icon: {fileID: 3233710428782509878}
   Label: {fileID: 7174501933656812388}
   Background: {fileID: 3312241963256851164}
-  Cursor: {fileID: 0}
+  Cursor: {fileID: 5395948871876993932}
   InputBlocker: {fileID: 0}
 --- !u!114 &8015219436152797951
 MonoBehaviour:
@@ -190,6 +190,7 @@ GameObject:
   - component: {fileID: 6675723190398974622}
   - component: {fileID: 2436878279513639425}
   - component: {fileID: 3312241963256851164}
+  - component: {fileID: 5395948871876993932}
   m_Layer: 0
   m_Name: BG
   m_TagString: Untagged
@@ -238,7 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 4bf7827f87effae4c87139268974fec1, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
+  m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 0
   m_OnCullStateChanged:
@@ -254,6 +255,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 2
+--- !u!114 &5395948871876993932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2571634870359281123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a59a59fc4e9a014c8fbb22f00e5eeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AlwaysFireClickEvents: 0
+  AcceptedMouseButtons: 1
+  CursorType:
+    m_HashValue: 2354262440
+  Flags: 0
+  TooltipHeader: 
+  Tooltip: 
+  TooltipFooter: 
 --- !u!1 &3555106081017503244
 GameObject:
   m_ObjectHideFlags: 0

@@ -96,6 +96,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.BaseConductivity,
                 Label = "Allows current flow",
+                Tooltip = "Current flows through this material",
                 Evaluator = (chip, material, context) => {
                     return material.ConductionMultiplier > 0.2f;
                 }
@@ -103,6 +104,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.BaseConductivity,
                 Label = "Blocks current flow",
+                Tooltip = "Current flows poorly through this material",
                 Evaluator = (chip, material, context) => {
                     return material.ConductionMultiplier <= 0.2f;
                 }
@@ -111,6 +113,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalConductivity,
                 Label = "Heat increases current",
+                Tooltip = "As the temperature is increased, the current flowing through this material increases",
                 Evaluator = (chip, material, context) => {
                     return material.ThermalMultiplier > 1;
                 }
@@ -118,6 +121,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalConductivity,
                 Label = "Heat decreases current",
+                Tooltip = "As the temperature is increased, the current flowing through this material decreases",
                 Evaluator = (chip, material, context) => {
                     return material.ThermalMultiplier < 1;
                 }
@@ -125,6 +129,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalConductivity,
                 Label = "Heat does not affect current",
+                Tooltip = "Increasing or decreasing the temperature does not affect the strength of the current",
                 Evaluator = (chip, material, context) => {
                     return material.ThermalMultiplier == 1;
                 }
@@ -133,6 +138,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalResistance,
                 Label = "Explodes under extreme heat",
+                Tooltip = "This material is unstable when exposed to extreme temperatures",
                 Evaluator = (chip, material, context) => {
                     return material.MaxTemperature < 0.8f;
                 }
@@ -140,6 +146,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.ThermalResistance,
                 Label = "Withstands extreme heat",
+                Tooltip = "This material is stable when exposed to extreme temperatures",
                 Evaluator = (chip, material, context) => {
                     return material.MaxTemperature >= 0.8f;
                 }
@@ -148,6 +155,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Radius,
                 Label = "Atomic radius less than {0}",
+                Tooltip = "This material's atomic radius is less than that of the specified other material",
                 Evaluator = (chip, material, context) => {
                     if (material.Atoms.Length > 1) {
                         return false;
@@ -165,6 +173,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Radius,
                 Label = "Atomic radius greater than {0}",
+                Tooltip = "This material's atomic radius is greater than that of the specified other material",
                 Evaluator = (chip, material, context) => {
                     if (material.Atoms.Length > 1) {
                         return false;
@@ -183,6 +192,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Valence,
                 Label = "1 less valence electron than {0}",
+                Tooltip = "This material has one less valence electron than the specified other material",
                 Evaluator = (chip, material, context) => {
                     if (material.Atoms.Length > 1) {
                         return false;
@@ -201,6 +211,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.Valence,
                 Label = "1 more valence electron than {0}",
+                Tooltip = "This material has one more valence electron than the specified other material",
                 Evaluator = (chip, material, context) => {
                     if (material.Atoms.Length > 1) {
                         return false;
@@ -252,6 +263,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.SpecialLight,
                 Label = "Diodes emit light",
+                Tooltip = "This material emits light when in a diode",
                 Evaluator = (chip, material, context) => {
                     return (material.SpecialTags & SpecialTag.LightEmitting) != 0;
                 }
@@ -260,6 +272,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.SpecialMobility,
                 Label = "Current is extremely strong",
+                Tooltip = "Current visibly passes through this material faster, indicated by a flow of particles",
                 Evaluator = (chip, material, context) => {
                     return (material.SpecialTags & SpecialTag.HighMobility) != 0;
                 }
@@ -268,6 +281,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.SpecialVoltage,
                 Label = "Withstands extreme voltage",
+                Tooltip = "This material is stable when exposed to extreme voltage",
                 Evaluator = (chip, material, context) => {
                     return (material.MaxVoltage) >= 0.8f;
                 }
@@ -276,12 +290,14 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyElectricNaive,
                 Label = "Conductor",
+                Tooltip = "This material conducts electricity",
 
                 DependencyA = ResearchChipId.CurrentFlows
             },
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyElectricNaive,
                 Label = "Insulator",
+                Tooltip = "This material conducts electricity poorly",
 
                 DependencyA = ResearchChipId.CurrentBlocked
             },
@@ -289,6 +305,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyElectric,
                 Label = "Insulator",
+                Tooltip = "This material conducts electricity poorly",
 
                 DependencyA = ResearchChipId.CurrentBlocked,
                 DependencyB = ResearchChipId.HeatDoesNotAffect,
@@ -296,6 +313,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyElectric,
                 Label = "Conductor",
+                Tooltip = "This material conducts electricity well, but conductivity decreases under higher temperatures",
 
                 DependencyA = ResearchChipId.CurrentFlows,
                 DependencyB = ResearchChipId.HeatDecreases,
@@ -303,6 +321,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyElectric,
                 Label = "Semiconductor",
+                Tooltip = "This material conducts electricity well, and conductivity increases under higher temperatures",
 
                 DependencyA = ResearchChipId.CurrentFlows,
                 DependencyB = ResearchChipId.HeatIncreases,
@@ -311,6 +330,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyThermal,
                 Label = "Hi-Temp Conductor",
+                Tooltip = "This conductor is stable at high temperatures",
 
                 DependencyA = ResearchChipId.Conductor,
                 DependencyB = ResearchChipId.ExtremeHeatResistant,
@@ -318,6 +338,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyThermal,
                 Label = "Hi-Temp Semiconductor",
+                Tooltip = "This semiconductor is stable at high temperatures",
 
                 DependencyA = ResearchChipId.Semiconductor,
                 DependencyB = ResearchChipId.ExtremeHeatResistant,
@@ -326,6 +347,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyDopantP,
                 Label = "P-Type Dopant for {0}",
+                Tooltip = "This material forms a P-Type Dopant with the specified other material",
 
                 DependencyA = ResearchChipId.AtomicRadiusLess,
                 DependencyB = ResearchChipId.ValenceOneLess,
@@ -334,6 +356,7 @@ namespace SpaceFab.Research {
                 Category = ResearchChipCategory.PropertyDopantP,
                 AliasFor = ResearchChipId.PTypeDopant,
                 Label = "P-Type Dopant for {0}",
+                Tooltip = "This material forms a P-Type Dopant with the specified other material",
 
                 DependencyA = ResearchChipId.ConductivityIncrease,
                 DependencyB = ResearchChipId.DiodeWithNType,
@@ -342,6 +365,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyDopantN,
                 Label = "N-Type Dopant for {0}",
+                Tooltip = "This material forms an N-Type Dopant with the specified other material",
 
                 DependencyA = ResearchChipId.AtomicRadiusLess,
                 DependencyB = ResearchChipId.ValenceOneMore,
@@ -349,7 +373,8 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertyDopantN,
                 AliasFor = ResearchChipId.NTypeDopant,
-                Label = "P-Type Dopant for {0}",
+                Label = "N-Type Dopant for {0}",
+                Tooltip = "This material forms an N-Type Dopant with the specified other material",
 
                 DependencyA = ResearchChipId.ConductivityIncrease,
                 DependencyB = ResearchChipId.DiodeWithPType,
@@ -358,6 +383,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertySpecial,
                 Label = "Light-Emitting Semiconductor",
+                Tooltip = "This semiconductor emits light particles when in a diode",
 
                 DependencyA = ResearchChipId.Semiconductor,
                 DependencyB = ResearchChipId.LightEmitting,
@@ -365,6 +391,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertySpecial,
                 Label = "High Voltage Semiconductor",
+                Tooltip = "This semiconductor is stable at high voltages",
 
                 DependencyA = ResearchChipId.Semiconductor,
                 DependencyB = ResearchChipId.VoltageResistant,
@@ -372,6 +399,7 @@ namespace SpaceFab.Research {
             new ResearchChipMetadata() {
                 Category = ResearchChipCategory.PropertySpecial,
                 Label = "High Mobility Semiconductor",
+                Tooltip = "Current passes through this semiconductor visibly faster",
 
                 DependencyA = ResearchChipId.Semiconductor,
                 DependencyB = ResearchChipId.ElectronMobility,

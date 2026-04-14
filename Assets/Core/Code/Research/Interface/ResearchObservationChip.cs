@@ -74,6 +74,8 @@ namespace SpaceFab.Research {
             } else {
                 chip.Label.SetText(meta.Label);
             }
+
+            chip.Cursor.Tooltip = meta.Tooltip;
         }
     }
 }

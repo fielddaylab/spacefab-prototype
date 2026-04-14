@@ -139,6 +139,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: Previous Hypothesis
   Tooltip: 
+  TooltipFooter: 
 --- !u!1 &3463275684219278082
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,6 +234,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: 
   Tooltip: 
+  TooltipFooter: 
 --- !u!1 &4350111032288664267
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +330,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: Next Hypothesis
   Tooltip: 
+  TooltipFooter: 
 --- !u!1 &4933016019017583315
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,8 +425,9 @@ MonoBehaviour:
   CursorType:
     m_HashValue: 0
   Flags: 0
-  TooltipHeader: Add Observation
-  Tooltip: 
+  TooltipHeader: Submit Observations
+  Tooltip: Evaluate your observations against the selected hypothesis
+  TooltipFooter: 
 --- !u!1 &5093850410242969664
 GameObject:
   m_ObjectHideFlags: 0
@@ -519,6 +523,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: Add Observation
   Tooltip: 
+  TooltipFooter: 
 --- !u!1 &6478925331913687341
 GameObject:
   m_ObjectHideFlags: 0
@@ -617,7 +622,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1589,10 +1594,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6806877789006650595}
     m_Modifications:
-    - target: {fileID: 919888581969013093, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 225
-      objectReference: {fileID: 0}
     - target: {fileID: 2803244867521883630, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
       propertyPath: Tooltip
       value: Select a hypothesis that is the best match for your observations.
@@ -1612,10 +1613,6 @@ PrefabInstance:
     - target: {fileID: 8359057068793511471, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
       propertyPath: m_Name
       value: HypothesisChip
-      objectReference: {fileID: 0}
-    - target: {fileID: 8637977799194614953, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 225
       objectReference: {fileID: 0}
     - target: {fileID: 8956996191565869632, guid: d137344f59a448b489abce4b09ddf2ea, type: 3}
       propertyPath: m_Pivot.y
@@ -2115,7 +2112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1455467017889461371, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 163
+      value: 162.99988
       objectReference: {fileID: 0}
     - target: {fileID: 1455467017889461371, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: m_AnchoredPosition.y

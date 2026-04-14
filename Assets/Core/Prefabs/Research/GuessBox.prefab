@@ -233,7 +233,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -350,7 +354,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -467,7 +475,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -584,7 +596,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -701,7 +717,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -818,7 +838,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -935,7 +959,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1052,7 +1080,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: Tooltip
-      value: Click to add observation to list
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: Click to add to Observations
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

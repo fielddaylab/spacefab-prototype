@@ -41,21 +41,19 @@ namespace SpaceFab.Research {
             }
 
             int rowCount = 0;
-            using(TempReferenceBuffer<RectTransform> rowLayoutRefs = TempReferenceBuffer<RectTransform>.Create(Rows.Length)) {
-                rowLayoutRefs.Add(GoalLabel.rectTransform);
-                foreach(var objective in Objectives) {
-                    ResearchGoalRow row = Rows[rowCount++];
-                    ResearchMaterialUtility.PopulateObservationChip(row.Display, objective.Chip, objective.ContextId);
-                    row.gameObject.SetActive(true);
-                    rowLayoutRefs.Add((RectTransform) row.transform);
-                }
-
-                float height = Positioning.VerticalLayout(rowLayoutRefs, ContentLayout, 0);
-                LayoutSizer.SetSize(0, height);
+            foreach(var objective in Objectives) {
+                ResearchGoalRow row = Rows[rowCount++];
+                ResearchMaterialUtility.PopulateObservationChip(row.Display, objective.Chip, objective.ContextId);
+                row.gameObject.SetActive(true);
             }
 
             for(int i = rowCount; i < Rows.Length; i++) {
                 Rows[i].gameObject.SetActive(false);
+            }
+
+            using(var layoutObjs = Positioning.QueryActiveChildren(LayoutSizer.Root)) {
+                float height = Positioning.VerticalLayout(layoutObjs, ContentLayout, 0);
+                LayoutSizer.SetSize(0, height);
             }
 
             if (rowCount == 0) {
@@ -92,7 +90,7 @@ namespace SpaceFab.Research {
                 
                 Completed.Set(i);
 
-                //Rows[i].Checkbox.SetAlpha(0.5f);
+                Rows[i].Display.Cursor.enabled = false;
                 Rows[i].CrossOff.enabled = true;
                 FlashAnim.Play(Rows[i].Flash, Color.white, FlashAnim.Default);
             }
@@ -105,7 +103,6 @@ namespace SpaceFab.Research {
         public IEnumerator<WorkSlicer.Result?> Preload() {
             if (ResearchGame.CurrentLevel != null) {
                 Objectives = ResearchGame.CurrentLevel.Objectives;
-                GoalLabel.SetText(ResearchGame.CurrentLevel.Label + " goals");
             }
             return null;
         }

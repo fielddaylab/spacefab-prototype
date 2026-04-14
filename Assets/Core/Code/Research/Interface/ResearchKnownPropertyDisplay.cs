@@ -71,7 +71,7 @@ namespace SpaceFab.Research {
         }
 
         private IEnumerator SubmitSequence() {
-            yield return 1;
+            yield return 0.8f;
 
             ResearchSelectionState selectionState = Find.State<ResearchSelectionState>();
             StringHash32 currentSelection = selectionState.Current.AssetId;
@@ -85,63 +85,96 @@ namespace SpaceFab.Research {
             ResearchObservationList obsList = ResearchMaterialUtility.GetObservations(currentSelection);
 
             bool hasDependencies = true;
+            bool hasDependency = false;
 
             ResearchChipId dependency = meta.DependencyA;
             ResearchChipMetadata dependencyMeta = ResearchChipUtility.Metadata(dependency);
+            ResearchObservationChip hypothesisDisplay = Hypothesizer.Chip.Dependencies[0];
+            ResearchObservationChip dependencyInList = GetChipForId(dependency);
+            hasDependency = true;
             if (dependency != ResearchChipId.None) {
+                yield return hypothesisDisplay.LayoutOffset.Offset0To(new Vector2(16, 0), 0.2f).Ease(Curve.CubeOut);
                 if (ResearchChipUtility.IsProperty(dependency)) {
                     if (knowledge.Has(dependency)) {
-                        // TODO: animate
+                        FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.White, FlashAnim.Default);
                     } else {
-                        hasDependencies = false;
+                        FlashAnim.Play(hypothesisDisplay.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
+                        hasDependency = false;
                     }
                 } else {
                     if (obsList.Has(dependency)) {
                         if (!dependencyMeta.Evaluator(dependency, selectionState.Current, selectionState.Context)) {
                             hasDependencies = false;
+                            FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
+                            yield return dependencyInList.LayoutOffset.Offset0To(new Vector2(4, 0), 0.2f).Wave(Wave.Function.CosFade, 3);
                             obsList.Remove(dependency);
                         } else {
-                            // TODO: animate
+                            FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.White, FlashAnim.Default);
                         }
                     } else {
-                        hasDependencies = false;
+                        hasDependency = false;
                         if (obsList.HasCategory(ResearchChipUtility.Category(dependency), out ResearchChipId found)) {
                             dependencyMeta = ResearchChipUtility.Metadata(found);
+                            dependencyInList = GetChipForId(found);
                             if (!dependencyMeta.Evaluator(found, selectionState.Current, selectionState.Context)) {
+                                FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
+                                yield return dependencyInList.LayoutOffset.Offset0To(new Vector2(4, 0), 0.2f).Wave(Wave.Function.CosFade, 3);
                                 obsList.Remove(found);
+                            } else {
+                                yield return dependencyInList.LayoutOffset.Offset0To(new Vector2(4, 0), 0.2f).Wave(Wave.Function.CosFade, 3);
                             }
+                        } else {
+                            FlashAnim.Play(hypothesisDisplay.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
                         }
                     }
                 }
+                hasDependencies &= hasDependency;
+                yield return hypothesisDisplay.LayoutOffset.Offset0To(default, 0.1f);
             }
 
             dependency = meta.DependencyB;
             dependencyMeta = ResearchChipUtility.Metadata(dependency);
+            hypothesisDisplay = Hypothesizer.Chip.Dependencies[1];
+            dependencyInList = GetChipForId(dependency);
+            hasDependency = true;
             if (dependency != ResearchChipId.None) {
+                yield return hypothesisDisplay.LayoutOffset.Offset0To(new Vector2(16, 0), 0.2f).Ease(Curve.CubeOut);
                 if (ResearchChipUtility.IsProperty(dependency)) {
                     if (knowledge.Has(dependency)) {
-                        // TODO: animate
+                        FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.White, FlashAnim.Default);
                     } else {
-                        hasDependencies = false;
+                        FlashAnim.Play(hypothesisDisplay.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
+                        hasDependency = false;
                     }
                 } else {
                     if (obsList.Has(dependency)) {
                         if (!dependencyMeta.Evaluator(dependency, selectionState.Current, selectionState.Context)) {
                             hasDependencies = false;
+                            FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
+                            yield return dependencyInList.LayoutOffset.Offset0To(new Vector2(4, 0), 0.2f).Wave(Wave.Function.CosFade, 3);
                             obsList.Remove(dependency);
                         } else {
-                            // TODO: animate
+                            FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.White, FlashAnim.Default);
                         }
                     } else {
-                        hasDependencies = false;
+                        hasDependency = false;
                         if (obsList.HasCategory(ResearchChipUtility.Category(dependency), out ResearchChipId found)) {
                             dependencyMeta = ResearchChipUtility.Metadata(found);
+                            dependencyInList = GetChipForId(found);
                             if (!dependencyMeta.Evaluator(found, selectionState.Current, selectionState.Context)) {
+                                FlashAnim.Play(dependencyInList.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
+                                yield return dependencyInList.LayoutOffset.Offset0To(new Vector2(4, 0), 0.2f).Wave(Wave.Function.CosFade, 3);
                                 obsList.Remove(found);
+                            } else {
+                                yield return dependencyInList.LayoutOffset.Offset0To(new Vector2(4, 0), 0.2f).Wave(Wave.Function.CosFade, 3);
                             }
+                        } else {
+                            FlashAnim.Play(hypothesisDisplay.InputBlocker, ColorBank.Red.WithAlpha(0.5f), FlashAnim.Default);
                         }
                     }
                 }
+                hasDependencies &= hasDependency;
+                yield return hypothesisDisplay.LayoutOffset.Offset0To(default, 0.1f);
             }
 
             if (hasDependencies) {
@@ -238,7 +271,7 @@ namespace SpaceFab.Research {
                 StringHash32 context = propList.Context(i);
                 ResearchObservationChip display = ChipList[chipIndex++];
                 display.gameObject.SetActive(true);
-                display.Cursor.Tooltip = string.Empty;
+                display.Cursor.TooltipFooter = string.Empty;
                 ResearchMaterialUtility.PopulateObservationChip(display, chip, context);
             }
 
@@ -247,7 +280,7 @@ namespace SpaceFab.Research {
             for (int i = 0; i < obsList.Count; i++) {
                 ResearchChipId chip = obsList[i];
                 ResearchObservationChip display = ChipList[chipIndex++];
-                display.Cursor.Tooltip = "Click to remove observation from list";
+                display.Cursor.TooltipFooter = "Click to remove from Observations";
                 display.gameObject.SetActive(true);
                 ResearchMaterialUtility.PopulateObservationChip(display, chip, selectionContext);
             }

@@ -1,16 +1,3 @@
-using BeauPools;
-using BeauRoutine;
-using BeauUtil;
-using BeauUtil.UI;
-using FieldDay;
-using FieldDay.Components;
-using FieldDay.HID;
-using FieldDay.SharedState;
-using FieldDay.UI;
-using SpaceFab.Research;
-using System;
-using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 

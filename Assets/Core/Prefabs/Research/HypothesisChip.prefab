@@ -96,6 +96,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: 
   Tooltip: 
+  TooltipFooter: 
 --- !u!1 &6126758029972746516
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +247,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 8956996191565869632}
     m_Modifications:
     - target: {fileID: 1604271252481478277, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
+      propertyPath: TooltipFooter
+      value: Match this with your observations
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604271252481478277, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: CursorType.m_HashValue
       value: 2354262440
       objectReference: {fileID: 0}
@@ -256,34 +261,6 @@ PrefabInstance:
     - target: {fileID: 4946626342380903748, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_Name
       value: KnowledgeChipSlot
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_Pivot.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_SizeDelta.y
@@ -315,10 +292,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
@@ -367,6 +340,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 8956996191565869632}
     m_Modifications:
     - target: {fileID: 1604271252481478277, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
+      propertyPath: TooltipFooter
+      value: Match this with your observations
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604271252481478277, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: CursorType.m_HashValue
       value: 2354262440
       objectReference: {fileID: 0}
@@ -381,26 +358,6 @@ PrefabInstance:
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_Pivot.y
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_SizeDelta.y
@@ -432,10 +389,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
-      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5541961893962109227, guid: 87002c64958391f4585dfae69c9fc34b, type: 3}
@@ -602,6 +555,10 @@ PrefabInstance:
     - target: {fileID: 3340728278362051831, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
+      propertyPath: TooltipFooter
+      value: <i>See which hypothesis aligns best to your observations
       objectReference: {fileID: 0}
     - target: {fileID: 5663381278024690645, guid: 14f9df00a75e03441a941819b98299b0, type: 3}
       propertyPath: CursorType.m_HashValue

@@ -3,12 +3,14 @@ using FieldDay.Components;
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace FieldDay.UI.Widgets {
     [RequireComponent(typeof(RectTransform))]
     public abstract class GuiWidget : BatchedComponent {
         [NonSerialized] private RectTransform m_RectTransform;
         [NonSerialized] private IGuiPanel m_Panel;
+        [NonSerialized] private LayoutOffset m_LayoutOffset;
 
         [SerializeField] private SerializedHash32 m_Id;
         [SerializeField] private SerializedHash32 m_Class;
@@ -51,6 +53,13 @@ namespace FieldDay.UI.Widgets {
         /// </summary>
         public IGuiPanel Panel {
             get { return ReferenceEquals(m_Panel, null) ? (m_Panel = GetComponentInParent<IGuiPanel>()) : m_Panel; }
+        }
+
+        /// <summary>
+        /// Layout position helper.
+        /// </summary>
+        public LayoutOffset LayoutOffset {
+            get { return ReferenceEquals(m_LayoutOffset, null) ? (m_LayoutOffset = GetComponent<LayoutOffset>()) : m_LayoutOffset; }
         }
     }
 }

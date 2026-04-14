@@ -91,7 +91,7 @@ namespace SpaceFab.Research {
 
         private void OnEnable() {
             Game.Gui.RegisterUpdate(this);
-            Find.State<ResearchSelectionState>().Locked = true;
+            //Find.State<ResearchSelectionState>().Locked = true;
             IsOpen = true;
         }
 
@@ -102,7 +102,7 @@ namespace SpaceFab.Research {
 
             ChipCount = 0;
             Game.Gui.DeregisterUpdate(this);
-            Find.State<ResearchSelectionState>().Locked = false;
+            //Find.State<ResearchSelectionState>().Locked = false;
             IsOpen = false;
         }
 

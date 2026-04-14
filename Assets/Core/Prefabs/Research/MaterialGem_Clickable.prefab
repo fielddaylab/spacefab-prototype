@@ -219,6 +219,7 @@ MonoBehaviour:
   Flags: 0
   TooltipHeader: Material Sample
   Tooltip: Click to lift/drop
+  TooltipFooter: 
 --- !u!1001 &9203477450459579635
 PrefabInstance:
   m_ObjectHideFlags: 0
