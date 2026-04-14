@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Label: 
   AvailableTools: 4294967295
-  AvailableProperties: 16151719181f1f1e20
+  AvailableProperties: 16151719181f1e20
   StartingHypothesis: 31
   AvailableMaterials:
   - m_HashValue: 1571298950
